@@ -1,15 +1,15 @@
 {
   "name": "8base-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "8base CLI",
   "author": "8base",
   "license": "MIT",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "jest --no-cache --coverage",    
+    "test": "jest --no-cache --coverage",
     "build": "tsc",
     "start": "npm run build -- --watch",
-    "tslint": "tslint -c tslint.json -p tsconfig.json --type-check",      
+    "tslint": "tslint -c tslint.json -p tsconfig.json --type-check",
     "preversion": "npm run tslint",
     "postversion": "git push --follow-tags"
   },
