@@ -1,0 +1,52 @@
+{
+  "name": "8base-cli",
+  "version": "0.0.1",
+  "description": "8base CLI",
+  "author": "Evgeny Antonevich",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "jest --no-cache --coverage",    
+    "build": "tsc",
+    "start": "npm run build -- --watch",
+    "tslint": "tslint -c tslint.json -p tsconfig.json --type-check",      
+    "preversion": "npm run tslint",
+    "postversion": "git push --follow-tags"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": [
+      "**/test/**/*.test.(ts|js)"
+    ],
+    "clearMocks": true
+  },
+  "dependencies": {
+    "graphql": "^0.10.5",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.74",
+    "awesome-typescript-loader": "^3.2.3",
+    "js-yaml": "^3.10.0",
+    "node-sass": "^4.5.2",
+    "nodemon": "^1.11.0",
+    "npm": "5.3.0",
+    "jest": "^21.2.1",
+    "ts-jest": "^21.2.2",
+    "tslib": "^1.8.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.1"
+  }
+}
