@@ -13,7 +13,7 @@
     "build": "tsc",
     "start": "npm run build -- --watch",
     "tslint": "tslint -c tslint.json -p tsconfig.json --type-check",
-    "upload": "npm version patch && npm publish && git push --follow-tags",
+    "upload": "npm version patch && git push --follow-tags",
     "preversion": "npm run tslint",
     "postversion": "git push --follow-tags"
   },
