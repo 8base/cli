@@ -22,5 +22,6 @@ publish:
     - docker    
 
 cache:
+  key: "$CI_PROJECT_PATH_SLUG"
   paths:
   - node_modules
