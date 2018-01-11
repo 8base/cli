@@ -1,14 +1,14 @@
-interface IProvider {
+interface IFileProvider {
     /*async*/ provide(): Promise<Map<string, string>>;
 }
 
-class StaticFileProvider implements IProvider {
+class StaticFileProvider implements IFileProvider {
 
     async provide(): Promise<Map<string, string>> {
-        return new Map<string, string>([["olo", "koko"]]);
+        return new Map<string, string>([["olo", "koko"], ["gfgf/fgfgf", "olololo"]]);
     }
 }
 
-export async function provideFiles() {
-    return new StaticFileProvider().provide();
+export function getFileProvider(): IFileProvider {
+    return new StaticFileProvider();
 }

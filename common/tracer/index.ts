@@ -8,4 +8,5 @@ export function trace(data: any) {
 
 export function debug(data: any) {
     tr.trace(TraceLevel.Debug, data);
+    // todo
 }

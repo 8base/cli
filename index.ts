@@ -1,26 +1,25 @@
 #!/usr/bin/env node
 
-import { run, ExecutionConfig, initializeCommand } from "./engine";
-import { trace, printHelp } from "./common";
+import { CommandManager } from "./engine";
+import { trace, printHelp, debug, ExecutionConfig } from "./common";
 
 
 // print copyright ?
-trace("start execution");
+trace("Welcome to 8base command line interface");
 
 let command;
 
 try {
     let config = new ExecutionConfig(process.argv);
 
-    trace("initialize command");
-
-    command = initializeCommand(config);
+    command = CommandManager.initialize(config);
 }
 catch(err) {
+    debug("Initialize error = " + err.message);
     printHelp();
-    throw err;
+    process.exit(0);
 }
 
-run(command)
-    .then(() => trace("execution complete successfull"))
+CommandManager.run(command)
+    .then(() => trace("Execution complete successfull"))
     .catch(err => { trace(err); });
