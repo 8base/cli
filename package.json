@@ -40,8 +40,10 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@types/node": "^9.3.0",
     "@types/lodash": "^4.14.74",
     "awesome-typescript-loader": "^3.2.3",
+    "path": "^0.12.7",
     "js-yaml": "^3.10.0",
     "node-sass": "^4.5.2",
     "nodemon": "^1.11.0",

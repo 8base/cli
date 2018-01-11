@@ -1,1 +1,3 @@
-export * from "./Command";
+export * from "./run";
+export * from "./config";
+export * from "./commandManager";
