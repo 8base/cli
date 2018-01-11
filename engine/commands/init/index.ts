@@ -1,7 +1,7 @@
 import { trace, debug, StaticConfig } from "../../../common";
 import { getFileProvider } from "./providers";
 import { BaseCommand } from "../base";
-import { ExecutionConfig } from "../../../engine";
+import { ExecutionConfig } from "../../../common";
 import * as _ from "lodash";
 import { installFiles } from "./installer";
 import * as path from "path";
