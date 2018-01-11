@@ -1,4 +1,4 @@
-import { ExecutionConfig } from "../../engine";
+import { ExecutionConfig } from "../../common";
 
 export abstract class BaseCommand {
     /*async*/ abstract run(): Promise<any>;
