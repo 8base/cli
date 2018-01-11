@@ -1,6 +1,6 @@
 {
   "name": "8base",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "8base CLI",
   "author": "8base",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "start": "npm run build -- --watch",
     "tslint": "tslint -c tslint.json -p tsconfig.json --type-check",
     "upload": "npm version patch && git push --follow-tags",
-    "preversion": "npm run tslint"    
+    "preversion": "npm run tslint"
   },
   "jest": {
     "globals": {
@@ -53,6 +53,6 @@
     "tslib": "^1.8.0",
     "tslint": "^5.7.0",
     "typescript": "^2.5.1",
-    "minimist":"^1.2.0"
+    "minimist": "^1.2.0"
   }
 }
