@@ -6,7 +6,7 @@ abstract class DisplayInfo {
     abstract onSuccess(): string;
 }
 
-export abstract class BaseCommand extends DisplayInfo{
+export abstract class BaseCommand extends DisplayInfo {
     /*async*/ abstract run(): Promise<any>;
 
     description(): string {
