@@ -6,14 +6,18 @@ import * as _ from "lodash";
 import { installFiles } from "./installer";
 import * as path from "path";
 import * as fs from "fs";
+import { Utils } from "../../../common";
 
 export default class Init extends BaseCommand {
+    onSuccess(): string {
+        return "Initialization repository with name \"" + this.repositoryName + "\" is complete successfully";
+    }
 
     private repositoryParameterName = 'r';
     private repositoryName: string;
     private config: ExecutionConfig;
 
-    protected usage(): string {
+    usage(): string {
         return "-r <string> - name of repository";
     }
 
@@ -35,15 +39,14 @@ export default class Init extends BaseCommand {
     }
 
     async run() {
-
-        let files = await getFileProvider().provide();
-
         try {
-            const fullPath = path.join(StaticConfig.root, this.repositoryName);
+            let files = await getFileProvider().provide();
+            
+            const fullPath = path.join(StaticConfig.rootExecutionDir, this.repositoryName);
 
-            trace("start initialize repository...");
+            trace("\nStart initialize repository with name \"" + this.repositoryName + "\" into path " + fullPath);
 
-            fs.mkdirSync(fullPath);
+            Utils.transformError(_.bind(fs.mkdirSync, fs, fullPath), "Repository \"" + this.repositoryName + "\" already exist");
 
             installFiles(fullPath, files);
         } catch(err) {

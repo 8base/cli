@@ -7,16 +7,16 @@ export class ExecutionConfig {
 
     private parameters = new Map<string, string>();
     private cmd: string;
-    private cmdParameterName = 'c';
+    private cmdParameterIndex = 0;
 
-    constructor(parameters: Array<string>) {
-        _.map(parseArgs(parameters), (value, key) => this.parameters.set(key, value));
-
-        this.cmd = this.parameters.get(this.cmdParameterName);
+    constructor(parameters: Array<string>) {        
+        this.cmd = parameters[this.cmdParameterIndex];
 
         if (_.isNil(this.cmd)) {
             throw new Error("command type not present");
         }
+
+        _.map(parseArgs(parameters), (value, key) => this.parameters.set(key, value));
     }
 
     get command() {
@@ -29,11 +29,16 @@ export class ExecutionConfig {
 }
 
 export class StaticConfig {
-    static get root(): string {
+
+    static get rootProjectDir(): string {
         return __dirname;
     }
 
+    static get rootExecutionDir(): string {
+        return process.cwd();
+    }
+
     static get commandsDir() {
-        return path.join(StaticConfig.root, '../engine/commands');
+        return path.join(StaticConfig.rootProjectDir, '../engine/commands');
     }
 }

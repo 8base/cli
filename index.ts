@@ -2,24 +2,28 @@
 
 import { CommandManager } from "./engine";
 import { trace, printHelp, debug, ExecutionConfig } from "./common";
+import { BaseCommand } from "./engine";
 
 
 // print copyright ?
-trace("Welcome to 8base command line interface");
+trace("\nWelcome to 8base command line interface");
 
-let command;
+let command: BaseCommand;
 
 try {
-    let config = new ExecutionConfig(process.argv);
+    let config = new ExecutionConfig(process.argv.slice(2));
 
     command = CommandManager.initialize(config);
 }
 catch(err) {
-    debug("Initialize error = " + err.message);
+    trace("Error = " + err.message);
     printHelp();
     process.exit(0);
 }
 
 CommandManager.run(command)
-    .then(() => trace("Execution complete successfull"))
-    .catch(err => { trace(err); });
+    .then(() => {
+        trace("\n" + command.onSuccess());
+    })
+    .catch(err => { trace("\nError = " + err.message); });
+    

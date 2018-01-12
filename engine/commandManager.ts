@@ -2,14 +2,18 @@ import { ExecutionConfig, StaticConfig } from "../common";
 import { debug, trace } from "../common";
 import * as path from 'path';
 import * as _ from "lodash";
-import { undefault } from "../common";
+import { Utils } from "../common";
 import * as fs from "fs";
 
 export class CommandManager {
 
     private static instanceCommand(fullPath: string): any {
-        let Command = undefault(require(require.resolve(fullPath)));
-        return new Command();
+        try {
+            let Command = Utils.undefault(require(require.resolve(fullPath)));
+            return new Command();
+        } catch(err) {
+            throw new Error("Command \"" + path.basename(fullPath) + "\" is invalid");
+        }        
     }
 
     static initialize(config: ExecutionConfig): any {
@@ -28,12 +32,10 @@ export class CommandManager {
             return Promise.reject("Logic error: command not present");
         }
 
-        await command.run();
-
-        debug("run command success");
+        return command.run();
     }
 
-    static enumerate(): any[] {
+    static enumerate(): any[] {        
         return _.transform(fs.readdirSync(StaticConfig.commandsDir), (commands, file) => {
             const p = path.join(StaticConfig.commandsDir, file);
             if (fs.statSync(p).isDirectory()) {
