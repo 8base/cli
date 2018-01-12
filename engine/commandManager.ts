@@ -13,7 +13,7 @@ export class CommandManager {
             return new Command();
         } catch(err) {
             throw new Error("Command \"" + path.basename(fullPath) + "\" is invalid");
-        }        
+        }
     }
 
     static initialize(config: ExecutionConfig): any {
@@ -35,7 +35,7 @@ export class CommandManager {
         return command.run();
     }
 
-    static enumerate(): any[] {        
+    static enumerate(): any[] {
         return _.transform(fs.readdirSync(StaticConfig.commandsDir), (commands, file) => {
             const p = path.join(StaticConfig.commandsDir, file);
             if (fs.statSync(p).isDirectory()) {

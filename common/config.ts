@@ -9,7 +9,7 @@ export class ExecutionConfig {
     private cmd: string;
     private cmdParameterIndex = 0;
 
-    constructor(parameters: Array<string>) {        
+    constructor(parameters: Array<string>) {
         this.cmd = parameters[this.cmdParameterIndex];
 
         if (_.isNil(this.cmd)) {

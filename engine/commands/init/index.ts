@@ -41,7 +41,7 @@ export default class Init extends BaseCommand {
     async run() {
         try {
             let files = await getFileProvider().provide();
-            
+
             const fullPath = path.join(StaticConfig.rootExecutionDir, this.repositoryName);
 
             trace("\nStart initialize repository with name \"" + this.repositoryName + "\" into path " + fullPath);

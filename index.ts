@@ -26,4 +26,3 @@ CommandManager.run(command)
         trace("\n" + command.onSuccess());
     })
     .catch(err => { trace("\nError = " + err.message); });
-    
