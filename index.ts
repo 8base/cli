@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { CommandManager } from "./engine";
-import { trace, printHelp, debug, ExecutionConfig } from "./common";
+import { trace, printHelp, debug, ExecutionConfig, setTraceLevel, TraceLevel } from "./common";
 import { BaseCommand } from "./engine";
 
 
@@ -12,6 +12,12 @@ let command: BaseCommand;
 
 try {
     let config = new ExecutionConfig(process.argv.slice(2));
+
+    if (config.getParameter('d')) {
+        setTraceLevel(TraceLevel.Debug);
+    } else {
+        setTraceLevel(TraceLevel.Trace);
+    }
 
     command = CommandManager.initialize(config);
 }

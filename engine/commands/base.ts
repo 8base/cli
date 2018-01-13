@@ -7,6 +7,10 @@ abstract class DisplayInfo {
 }
 
 export abstract class BaseCommand extends DisplayInfo {
+    /**
+     * @returns in case of success - command complete information
+     *          in case of error - Error
+     */
     /*async*/ abstract run(): Promise<any>;
 
     description(): string {

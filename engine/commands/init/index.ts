@@ -3,10 +3,11 @@ import { getFileProvider } from "./providers";
 import { BaseCommand } from "../base";
 import { ExecutionConfig } from "../../../common";
 import * as _ from "lodash";
-import { installFiles } from "./installer";
-import * as path from "path";
-import * as fs from "fs";
-import { Utils } from "../../../common";
+import { install } from "./installer";
+
+
+import { InvalidArgument } from "../../../errors/invalidArgument";
+
 
 export default class Init extends BaseCommand {
     onSuccess(): string {
@@ -31,7 +32,7 @@ export default class Init extends BaseCommand {
         this.repositoryName = config.getParameter('r');
 
         if (!_.isString(this.repositoryName)) {
-            throw new Error("Repository name is empty");
+            throw new InvalidArgument('repository name');
         }
 
         this.config = config;
@@ -43,14 +44,8 @@ export default class Init extends BaseCommand {
         try {
             let files = await getFileProvider().provide();
 
-            const fullPath = path.join(StaticConfig.rootExecutionDir, this.repositoryName);
-
-            trace("\nStart initialize repository with name \"" + this.repositoryName + "\" into path " + fullPath);
-
-            Utils.transformError(_.bind(fs.mkdirSync, fs, fullPath), "Repository \"" + this.repositoryName + "\" already exist");
-
             debug("try to install files");
-            installFiles(fullPath, files);
+            return install(StaticConfig.rootExecutionDir, this.repositoryName, files, this.config);
         } catch(err) {
             return Promise.reject(err);
         }

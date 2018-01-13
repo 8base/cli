@@ -9,14 +9,14 @@ class ToConsole  implements ITraceOutput {
 }
 
 export enum TraceLevel {
-    Trace, Debug
+    Disable, Trace, Debug
 }
 
 export class Tracer {
     private enableLevel: TraceLevel;
 
     constructor() {
-        this.enableLevel = TraceLevel.Trace;
+        this.enableLevel = TraceLevel.Disable;
         this.output = new ToConsole();
     }
 

@@ -10,6 +10,7 @@ export class Utils {
         try {
             return cmd();
         } catch(err) {
+            debug(err);
             throw new Error(error ? error : err);
         }
     }

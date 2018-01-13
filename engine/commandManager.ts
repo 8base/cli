@@ -37,7 +37,7 @@ export class CommandManager {
     }
 
     static enumerate(): any[] {
-        return _.transform(fs.readdirSync(StaticConfig.commandsDir), (commands, file) => {
+        return _.transform(fs.readdirSync(StaticConfig.commandsDir), (commands, file:string) => {
             const p = path.join(StaticConfig.commandsDir, file);
             if (fs.statSync(p).isDirectory()) {
                 commands.push(CommandManager.instanceCommand(p));
