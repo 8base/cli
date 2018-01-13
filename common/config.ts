@@ -34,6 +34,9 @@ export class ExecutionConfig {
 
 export class StaticConfig {
 
+    static get templatePath(): string {
+        return path.join(this.rootProjectDir, "../../template");
+    }
     static get rootProjectDir(): string {
         return __dirname;
     }

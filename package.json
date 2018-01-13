@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "graphql": "^0.10.5",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "readdir": "^0.0.13"
   },
   "devDependencies": {
     "@types/node": "^9.3.0",
@@ -53,7 +54,6 @@
     "tslib": "^1.8.0",
     "tslint": "^5.7.0",
     "typescript": "^2.5.1",
-    "minimist": "^1.2.0",
-    "readdir": "^0.0.13"
+    "minimist": "^1.2.0"
   }
 }

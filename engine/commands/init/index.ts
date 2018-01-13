@@ -49,6 +49,7 @@ export default class Init extends BaseCommand {
 
             Utils.transformError(_.bind(fs.mkdirSync, fs, fullPath), "Repository \"" + this.repositoryName + "\" already exist");
 
+            debug("try to install files");
             installFiles(fullPath, files);
         } catch(err) {
             return Promise.reject(err);

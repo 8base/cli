@@ -8,8 +8,8 @@ export function trace(data: any) {
     tr.trace(TraceLevel.Trace, data);
 }
 
-export function debug(data: any) {
-    tr.trace(TraceLevel.Debug, data);
+export function debug(data: string) {
+    tr.trace(TraceLevel.Debug, "debug: " + data);
 }
 
 export function setTraceLevel(level: TraceLevel) {
