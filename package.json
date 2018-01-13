@@ -1,6 +1,6 @@
 {
   "name": "8base",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "8base CLI",
   "author": "8base",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "lodash": "^4.17.4",
     "readdir": "^0.0.13",
     "async": "^2.5.0",
-    "find-up":"^2.1.0",
+    "find-up": "^2.1.0",
     "memfs": "^2.6.2"
   },
   "devDependencies": {
