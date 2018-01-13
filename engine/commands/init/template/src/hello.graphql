@@ -1,0 +1,7 @@
+type HelloResult {
+  message: String!
+}
+
+extend type Query {
+  hello(name: String): HelloResult
+}

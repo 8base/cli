@@ -12,6 +12,7 @@ export class CommandManager {
             let Command = Utils.undefault(require(require.resolve(fullPath)));
             return new Command();
         } catch(err) {
+            debug(err);
             throw new Error("Command \"" + path.basename(fullPath) + "\" is invalid");
         }
     }

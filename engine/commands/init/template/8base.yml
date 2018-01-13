@@ -1,0 +1,6 @@
+functions:
+  hello:
+    handler:
+      code: src/hello.js
+    type: resolver
+    schema: src/hello.graphql
