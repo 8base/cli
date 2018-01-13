@@ -13,13 +13,20 @@ export enum TraceLevel {
 }
 
 export class Tracer {
+    private enableLevel: TraceLevel;
+
     constructor() {
+        this.enableLevel = TraceLevel.Trace;
         this.output = new ToConsole();
     }
 
+    set level(level: TraceLevel) {
+        this.enableLevel = level;
+    }
+
     trace(level: TraceLevel, data: string) {
-        // todo check level
-        this.output.print(data);
+        if (level <= this.enableLevel)
+            this.output.print(data);
     }
 
     private output: ITraceOutput;

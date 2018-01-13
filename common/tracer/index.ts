@@ -1,5 +1,7 @@
 import { Tracer, TraceLevel } from "./tracerImpl";
 
+export { TraceLevel } from "./tracerImpl";
+
 let tr = new Tracer();
 
 export function trace(data: any) {
@@ -7,6 +9,9 @@ export function trace(data: any) {
 }
 
 export function debug(data: any) {
-    // tr.trace(TraceLevel.Debug, data);
-    // todo
+    tr.trace(TraceLevel.Debug, data);
+}
+
+export function setTraceLevel(level: TraceLevel) {
+    tr.level = level;
 }

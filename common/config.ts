@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as parseArgs from "minimist";
-import { trace } from '../common';
+import { trace, setTraceLevel, TraceLevel } from '../common';
 import * as _ from 'lodash';
 
 export class ExecutionConfig {
@@ -17,6 +17,10 @@ export class ExecutionConfig {
         }
 
         _.map(parseArgs(parameters), (value, key) => this.parameters.set(key, value));
+
+        if (this.parameters.get('d')) {
+            setTraceLevel(TraceLevel.Debug);
+        }
     }
 
     get command() {

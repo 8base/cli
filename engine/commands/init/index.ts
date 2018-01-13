@@ -29,7 +29,8 @@ export default class Init extends BaseCommand {
         debug("start initiailie init command");
 
         this.repositoryName = config.getParameter('r');
-        if (_.isNil(this.repositoryName)) {
+
+        if (!_.isString(this.repositoryName)) {
             throw new Error("Repository name is empty");
         }
 
