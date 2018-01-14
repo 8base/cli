@@ -70,4 +70,8 @@ export class StaticConfig {
     static get commandsDir() {
         return path.join(StaticConfig.rootProjectDir, '../engine/commands');
     }
+
+    static get homePath() {
+        return process.env.USERPROFILE;
+    }
 }
