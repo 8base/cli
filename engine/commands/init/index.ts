@@ -40,6 +40,9 @@ export default class Init extends BaseCommand {
         debug("initialize success: initilize repository = " + this.repositoryName);
     }
 
+    /**
+     * @returns path to installed repository
+     */
     async run() {
         try {
             let files = await getFileProvider().provide();

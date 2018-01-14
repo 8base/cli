@@ -1,25 +1,33 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, UserDataStorage } from "../../../common";
+import { ExecutionConfig, debug, getStorage, trace } from "../../../common";
 import { InvalidArgument } from "../../../errors/invalidArgument";
-import { getRemoteConnector } from "./remoteLogin";
+import { getRemoteConnector } from "./remoteConnector";
 import * as _ from "lodash";
 
 export default class Login extends BaseCommand {
     private user: string;
     private password: string;
+    private config: ExecutionConfig;
 
     async run(): Promise<any> {
-        const remoteConnector = getRemoteConnector();
+        const remoteConnector = getRemoteConnector(this.config);
         debug("receive remote connector, try to login");
 
-        const token = await remoteConnector.login(this.user, this.password);
+        let token = getStorage(this.config).getToken();
+        if (token && remoteConnector.checkToken(this.user, token)) {
+            trace("You are already logged into 8base account");
+            return token;
+        }
+
+        token = await remoteConnector.login(this.user, this.password);
 
         debug("receive token = " + token);
         debug("save token...");
 
-        UserDataStorage.saveToken(token);
+        getStorage(this.config).saveToken(token);
 
         debug("save token success");
+        return token;
     }
 
     init(config: ExecutionConfig) {
@@ -33,6 +41,8 @@ export default class Login extends BaseCommand {
         if (_.isNil(this.password)) {
             throw new InvalidArgument("password");
         }
+
+        this.config = config;
     }
 
     usage(): string {

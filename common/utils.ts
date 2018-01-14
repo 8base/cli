@@ -6,7 +6,7 @@ export class Utils {
         return m.default ? m.default : m;
     }
 
-    static transformError(cmd: any, error?: string): any {
+    static trycatch(cmd: any, error?: string): any {
         try {
             return cmd();
         } catch(err) {

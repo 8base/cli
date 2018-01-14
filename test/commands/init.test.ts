@@ -3,8 +3,6 @@ import { CommandManager, BaseCommand } from "../../engine";
 import { InvalidArgument } from "../../errors/invalidArgument";
 import { getFileProvider } from "../../engine";
 
-import * as fs from "fs";
-import * as readdir from "readdir";
 import * as path from "path";
 import * as _ from "lodash";
 
@@ -13,13 +11,13 @@ describe("install 8base template repository", () => {
 
   test("check correct parse command line", async () => {
     try {
-      expect(CommandManager.initialize(new ExecutionConfig([]))).toThrow(InvalidArgument);
+      CommandManager.initialize(new ExecutionConfig([]));
     } catch (er) {
       expect(er).toBeInstanceOf(InvalidArgument);
     }
 
     try {
-      expect(CommandManager.initialize(new ExecutionConfig(["init"]))).toThrow(InvalidArgument);
+      CommandManager.initialize(new ExecutionConfig(["init"]));
     } catch (er) {
       expect(er).toBeInstanceOf(InvalidArgument);
     }

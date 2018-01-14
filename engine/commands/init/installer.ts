@@ -28,7 +28,7 @@ class InstallToDirectory implements IInstaller {
 
         trace("\nStart initialize repository with name \"" + repositoryName + "\" into path " + fullPath);
 
-        Utils.transformError(_.bind(fs.mkdirSync, fs, fullPath), "Repository \"" + repositoryName + "\" already exist");
+        Utils.trycatch(_.bind(fs.mkdirSync, fs, fullPath), "Repository \"" + repositoryName + "\" already exist");
 
         return installFiles(fullPath, files, fs);
     }

@@ -9,10 +9,11 @@ export class CommandManager {
 
     private static instanceCommand(fullPath: string): any {
         try {
-            let Command = Utils.undefault(require(require.resolve(fullPath)));
+            debug("try init command path = " + fullPath);
+            const Command = Utils.undefault(require(require.resolve(fullPath)));
             return new Command();
-        } catch(err) {
-            debug(err);
+        } catch (error) {
+            debug(error);
             throw new Error("Command \"" + path.basename(fullPath) + "\" is invalid");
         }
     }
