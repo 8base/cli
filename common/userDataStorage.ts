@@ -65,7 +65,7 @@ class UserDataStorage implements IUserDataStorage {
 
     getToken(): string {
         const storage = Storage.getStorage();
-        debug("get storage data = " + Storage.toPrettyString(storage))
+        debug("get storage data = " + Storage.toPrettyString(storage));
         return storage.token;
     }
 }
