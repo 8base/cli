@@ -1,10 +1,8 @@
-const IUserDataStorage = jest.genMockFromModule<any>('../../interfaces/IUserDataStorage').default;
+const IUserDataStorage = jest.genMockFromModule<any>("../../interfaces/IUserDataStorage").default;
 
 let token: string;
 
-class MockUserDataStorage implements IUserDataStorage {
-
-
+class MockUserDataStorage extends IUserDataStorage {
 
     saveToken(token: string) {
         token = token;
