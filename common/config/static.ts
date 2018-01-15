@@ -45,4 +45,16 @@ export class StaticConfig {
     static get homePath() {
         return process.env.USERPROFILE || process.env.HOME || process.env.HOMEPATH;
     }
+
+    static get remoteServerEndPoint(): string {
+        return "http://localhost:3000"; // TODO
+    }
+
+    static get loginPath(): string {
+        return "/cli/login";
+    }
+
+    static get checkTokenPath(): string {
+        return "/cli/validate_token";
+    }
 }

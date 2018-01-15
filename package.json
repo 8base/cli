@@ -43,7 +43,8 @@
     "memfs": "^2.6.2",
     "minimist": "^1.2.0",
     "typescript": "^2.5.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
     "@types/node": "^9.3.0",

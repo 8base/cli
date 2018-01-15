@@ -14,7 +14,7 @@ export default class Login extends BaseCommand {
         debug("receive remote connector, try to login");
 
         let token = getStorage(this.config).getToken();
-        if (token && remoteConnector.checkToken(this.user, token)) {
+        if (token && await remoteConnector.checkToken(this.user, token)) {
             trace("You are already logged into 8base account");
             return token;
         }
