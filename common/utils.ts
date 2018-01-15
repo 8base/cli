@@ -1,5 +1,5 @@
 import { trace, debug } from "../common";
-
+import * as path from "path";
 
 export class Utils {
     static undefault (m: any) {
@@ -13,5 +13,18 @@ export class Utils {
             debug(err);
             throw new Error(error ? error : err);
         }
+    }
+
+    static installFiles(targetDirectory: string, files: Map<string, string>, fs: any): string {
+        files.forEach((data, name) => {
+            const fullName = path.join(targetDirectory, name);
+            const fullPath = path.dirname(fullName);
+            if (!fs.existsSync(fullPath)) {
+                fs.mkdirSync(fullPath);
+            }
+    
+            fs.writeFileSync(fullName, data);
+        });
+        return targetDirectory;
     }
 }

@@ -1,7 +1,7 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, getStorage, trace } from "../../../common";
 import { InvalidArgument } from "../../../errors/invalidArgument";
-import { getRemoteConnector } from "./remoteConnector";
+import { RemoteConnector } from "./remoteConnector";
 import * as _ from "lodash";
 
 export default class Login extends BaseCommand {
@@ -10,7 +10,7 @@ export default class Login extends BaseCommand {
     private config: ExecutionConfig;
 
     async run(): Promise<any> {
-        const remoteConnector = getRemoteConnector(this.config);
+        const remoteConnector = new RemoteConnector();
         debug("receive remote connector, try to login");
 
         let token = getStorage(this.config).getToken();

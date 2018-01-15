@@ -1,4 +1,4 @@
-import { ExecutionConfig, StaticConfig } from "../../common";
+import { ExecutionConfig, StaticConfig, setTraceLevel, TraceLevel, debug } from "../../common";
 import { CommandManager, BaseCommand } from "../../engine";
 import { InvalidArgument } from "../../errors/invalidArgument";
 import { getFileProvider } from "../../engine";
@@ -6,6 +6,8 @@ import { getFileProvider } from "../../engine";
 import * as path from "path";
 import * as _ from "lodash";
 
+
+jest.mock("../../engine/commands/init/installer");
 
 describe("install 8base template repository", () => {
 

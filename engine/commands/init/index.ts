@@ -19,7 +19,7 @@ export default class Init extends BaseCommand {
     private config: ExecutionConfig;
 
     usage(): string {
-        return "-r <string> - name of repository";
+        return "-r <repository_name>";
     }
 
     name(): string {
@@ -48,7 +48,7 @@ export default class Init extends BaseCommand {
             let files = await getFileProvider().provide();
 
             debug("try to install files");
-            return install(StaticConfig.rootExecutionDir, this.repositoryName, files, this.config);
+            return install(StaticConfig.rootExecutionDir, this.repositoryName, files);
         } catch(err) {
             return Promise.reject(err);
         }

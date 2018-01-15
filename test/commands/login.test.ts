@@ -3,6 +3,7 @@ import { ExecutionConfig, StaticConfig, setTraceLevel, TraceLevel } from "../../
 import { CommandManager, BaseCommand } from "../../engine";
 import { InvalidArgument } from "../../errors/invalidArgument";
 
+jest.mock("../../engine/commands/login/remoteConnector");
 
 describe("8base login", () => {
     beforeAll(async () => {
@@ -38,4 +39,5 @@ describe("8base login", () => {
         const token = await CommandManager.run(cmd);
         expect(token).toEqual(this.token);
     });
+    
 });
