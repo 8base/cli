@@ -53,8 +53,4 @@ export class StaticConfig {
     static get loginPath(): string {
         return "/cli/login";
     }
-
-    static get checkTokenPath(): string {
-        return "/cli/validate_token";
-    }
 }
