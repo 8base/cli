@@ -22,6 +22,7 @@ try {
     command = CommandManager.initialize(config);
 }
 catch(err) {
+    setTraceLevel(TraceLevel.Trace);
     trace("Error = " + err.message);
     printHelp();
     process.exit(0);
