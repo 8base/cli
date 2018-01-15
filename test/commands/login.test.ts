@@ -4,6 +4,7 @@ import { CommandManager, BaseCommand } from "../../engine";
 import { InvalidArgument } from "../../errors/invalidArgument";
 
 jest.mock("../../engine/commands/login/remoteConnector");
+jest.mock("../../common/userDataStorage");
 
 describe("8base login", () => {
     beforeAll(async () => {

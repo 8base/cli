@@ -1,6 +1,7 @@
 import { debug, trace, StaticConfig, ExecutionConfig } from "../common";
 import * as path from "path";
 import * as fs from "fs";
+import IUserDataStorage from "../interfaces/IUserDataStorage";
 
 class Storage {
     private static storageFileName = ".8baserc";
@@ -44,13 +45,7 @@ class Storage {
     }
 }
 
-
-interface IUserDataStorage {
-    saveToken(token: string): any;
-    getToken(): string;
-}
-
-class UserDataStorage implements IUserDataStorage {
+export class UserDataStorage implements IUserDataStorage {
 
     /**
      * Function is not thread safe !
@@ -68,27 +63,4 @@ class UserDataStorage implements IUserDataStorage {
         debug("get storage data = " + Storage.toPrettyString(storage));
         return storage.token;
     }
-}
-
-class MockUserDataStorage implements IUserDataStorage {
-    private config: ExecutionConfig;
-
-    constructor(config: ExecutionConfig) {
-        this.config = config;
-    }
-
-    saveToken(token: string) {
-    }
-
-    getToken(): string {
-        return this.config.mock.token;
-    }
-
-}
-
-export function getStorage(config: ExecutionConfig) {
-    if (config.mock.login) {
-        return new MockUserDataStorage(config);
-    }
-    return new UserDataStorage();
 }
