@@ -38,7 +38,7 @@ describe("install 8base template repository", () => {
   test("check install template repository", async () => {
     const fs = require("memfs");
     const repName = "ololorepa";
-    const cmd = CommandManager.initialize(new ExecutionConfig(["init", "-r", repName], { fs: true }));
+    const cmd = CommandManager.initialize(new ExecutionConfig(["init", "-r", repName]));
     const resPath = await CommandManager.run(cmd);
 
     expect(resPath).toBe(path.join("/", repName));

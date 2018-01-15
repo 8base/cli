@@ -29,13 +29,13 @@ describe("8base login", () => {
     });
 
     test("check correct login", async () => {
-        const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"], { login: true }));
+        const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
         this.token = await CommandManager.run(cmd);
         expect(this.token).toBeDefined();
     });
 
     test("check second login", async () => {
-        const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"], { login: true, token: this.token }));
+        const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"], { token: this.token }));
         const token = await CommandManager.run(cmd);
         expect(token).toEqual(this.token);
     });
