@@ -1,5 +1,5 @@
 import { ExecutionConfig } from "../../../common";
-import 'isomorphic-fetch'
+import 'isomorphic-fetch';
 import { StaticConfig, debug } from "../../../common";
 
 
@@ -33,10 +33,9 @@ class RemoteConnector extends IRemoteConnector {
             body: JSON.stringify({ user })
         });
 
-        debug("receive status = " + resp.status)
+        debug("receive status = " + resp.status);
         return resp.status == 200;
     }
-    
 }
 
 class MockConnector extends IRemoteConnector {
@@ -54,6 +53,6 @@ export function getRemoteConnector(config: ExecutionConfig): IRemoteConnector {
     if (config.mock.login) {
         return new MockConnector();
     }
-    
+
     return new RemoteConnector();
 }
