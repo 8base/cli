@@ -39,5 +39,4 @@ describe("8base login", () => {
         const token = await CommandManager.run(cmd);
         expect(token).toEqual(this.token);
     });
-    
 });

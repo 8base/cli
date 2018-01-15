@@ -22,7 +22,7 @@ export class Utils {
             if (!fs.existsSync(fullPath)) {
                 fs.mkdirSync(fullPath);
             }
-    
+
             fs.writeFileSync(fullName, data);
         });
         return targetDirectory;
