@@ -47,7 +47,7 @@ export default class Login extends BaseCommand {
     }
 
     usage(): string {
-        return " -u <username> -p <password>";
+        return "-u <username> -p <password>";
     }
 
     name(): string {
