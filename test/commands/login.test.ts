@@ -7,9 +7,6 @@ jest.mock("../../engine/commands/login/remoteConnector");
 jest.mock("../../common/userDataStorage");
 
 describe("8base login", () => {
-    beforeAll(async () => {
-        this.token = "";
-    });
 
     test("check correct login parameters", async () => {
         try {
@@ -31,13 +28,12 @@ describe("8base login", () => {
 
     test("check correct login", async () => {
         const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
-        this.token = await CommandManager.run(cmd);
-        expect(this.token).toBeDefined();
-    });
-
-    test("check second login", async () => {
-        const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"], { token: this.token }));
         const token = await CommandManager.run(cmd);
-        expect(token).toEqual(this.token);
+        expect(token).toBeDefined();
+
+        const cmdSecond = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
+        const tokenSecond = await CommandManager.run(cmdSecond);
+        expect(token).toEqual(tokenSecond);
+
     });
-});
+ );

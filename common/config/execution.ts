@@ -12,7 +12,7 @@ export class ExecutionConfig {
     private cmd: string;
     private cmdParameterIndex = 0;
 
-    constructor(parameters: Array<string>, mockOptions?: any) {
+    constructor(parameters: Array<string>) {
         this.cmd = parameters[this.cmdParameterIndex];
 
         if (_.isNil(this.cmd)) {
@@ -20,8 +20,6 @@ export class ExecutionConfig {
         }
 
         _.map(parseArgs(parameters), (value, key) => this.parameters.set(key, value));
-
-        this.mockOptions = _.isNil(mockOptions) ? {} : mockOptions;
     }
 
     get command() {
@@ -30,10 +28,6 @@ export class ExecutionConfig {
 
     getParameter(name: string): string {
         return this.parameters.get(name);
-    }
-
-    get mock() {
-        return this.mockOptions;
     }
 }
 
