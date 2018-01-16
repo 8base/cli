@@ -34,6 +34,5 @@ describe("8base login", () => {
         const cmdSecond = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
         const tokenSecond = await CommandManager.run(cmdSecond);
         expect(token).toEqual(tokenSecond);
-
     });
- );
+});
