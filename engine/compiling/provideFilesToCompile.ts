@@ -1,4 +1,3 @@
-import * as globby from "globby";
 
 const defaultGlobbyOptions = {
     dot: true,
@@ -9,5 +8,5 @@ const defaultGlobbyOptions = {
   };
 
 export async function provideFilesToCompile(): Promise<any> {
-    return globby(['**/*', '!.build', '!*.zip', '!build'], defaultGlobbyOptions);
+    // return globby(['**/*', '!.build', '!*.zip', '!build'], defaultGlobbyOptions);
 }

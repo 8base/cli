@@ -1,5 +1,6 @@
 import { BaseCommand } from "../base";
-import { compile, ExecutionConfig, debug, UserDataStorage, trace, checkCompilingDirectory } from "../../../common";
+import { ExecutionConfig, debug, UserDataStorage, trace } from "../../../common";
+import { checkCompilingDirectory } from "../../compiling";
 import { InvalidArgument } from "../../../errors/invalidArgument";
 import * as _ from "lodash";
 
