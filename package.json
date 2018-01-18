@@ -1,6 +1,6 @@
 {
   "name": "8base",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "8base CLI",
   "author": "8base",
   "license": "MIT",
@@ -47,7 +47,7 @@
     "path": "^0.12.7",
     "isomorphic-fetch": "^2.2.1",
     "globby": "^7.1.1",
-    "graceful-fs":"^4.1.11"
+    "graceful-fs": "^4.1.11"
   },
   "devDependencies": {
     "@types/node": "^9.3.0",
