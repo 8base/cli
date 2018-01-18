@@ -1,28 +1,12 @@
 import * as fs from "fs";
 import * as path from 'path';
 import { debug } from "../../common";
+import { PredefineData } from "./predefineData";
 
-class StaticData {
-    templatePath: string;
-    commandsPath: string;
-
-    private definePathToTemplate(): string {
-        return path.join(StaticConfig.rootProjectDir, "./template");
-    }
-
-    private defineCommandsPath(): string {
-        return path.join(StaticConfig.rootProjectDir, "./engine/commands");
-    }
-
-    constructor() {
-        this.templatePath = this.definePathToTemplate();
-        this.commandsPath = this.defineCommandsPath();
-    }
-}
 
 export class StaticConfig {
 
-    private static staticData = new StaticData();
+    private static staticData = new PredefineData();
 
     static get templatePath(): string {
         return this.staticData.templatePath;

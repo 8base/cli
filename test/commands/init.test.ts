@@ -9,6 +9,7 @@ import * as _ from "lodash";
 
 jest.mock("../../engine/commands/init/installer");
 
+
 describe("install 8base template repository", () => {
 
   test("check correct parse command line", async () => {

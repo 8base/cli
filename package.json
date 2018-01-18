@@ -33,7 +33,8 @@
     "testMatch": [
       "**/test/**/*.test.(ts|js)"
     ],
-    "clearMocks": true
+    "clearMocks": true,
+    "setupTestFrameworkScriptFile": "./test/setup.ts"
   },
   "dependencies": {
     "graphql": "^0.10.5",
