@@ -18,12 +18,12 @@ export class CommandManager {
         }
     }
 
-    static initialize(config: ExecutionConfig): any {
+    static async initialize(config: ExecutionConfig): Promise<any> {
         let fullPath = path.join(StaticConfig.commandsDir, config.command);
         debug("command manager: try to get command " + config.command + "; full path = " + fullPath);
 
         let cmd = CommandManager.instanceCommand(fullPath);
-        cmd.init(config);
+        await cmd.init(config);
         return cmd;
     }
 

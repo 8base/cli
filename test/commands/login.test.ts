@@ -10,28 +10,28 @@ describe("8base login", () => {
 
     test("check correct login parameters", async () => {
         try {
-            CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser"]));
+            await CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser"]));
         } catch(er) {
             expect(er).toBeInstanceOf(InvalidArgument);
         }
         try {
-            CommandManager.initialize(new ExecutionConfig(["login", "-p", "pass"]));
+            await CommandManager.initialize(new ExecutionConfig(["login", "-p", "pass"]));
         } catch(er) {
             expect(er).toBeInstanceOf(InvalidArgument);
         }
     });
 
     test("check correct instance login command", async () => {
-        const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
+        const cmd = await CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
         expect(cmd).toBeInstanceOf(BaseCommand);
     });
 
     test("check correct login", async () => {
-        const cmd = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
+        const cmd = await CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
         const token = await CommandManager.run(cmd);
         expect(token).toBeDefined();
 
-        const cmdSecond = CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
+        const cmdSecond = await CommandManager.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
         const tokenSecond = await CommandManager.run(cmdSecond);
         expect(token).toEqual(tokenSecond);
     });

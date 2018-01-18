@@ -13,20 +13,20 @@ describe("install 8base template repository", () => {
 
   test("check correct parse command line", async () => {
     try {
-      CommandManager.initialize(new ExecutionConfig([]));
+      await CommandManager.initialize(new ExecutionConfig([]));
     } catch (er) {
       expect(er).toBeInstanceOf(InvalidArgument);
     }
 
     try {
-      CommandManager.initialize(new ExecutionConfig(["init"]));
+      await CommandManager.initialize(new ExecutionConfig(["init"]));
     } catch (er) {
       expect(er).toBeInstanceOf(InvalidArgument);
     }
   });
 
   test("check correct instance init command", async () => {
-      const cmd = CommandManager.initialize(new ExecutionConfig(["init", "-r", "testrepname"]));
+      const cmd = await CommandManager.initialize(new ExecutionConfig(["init", "-r", "testrepname"]));
       expect(cmd).toBeInstanceOf(BaseCommand);
   });
 
@@ -38,7 +38,7 @@ describe("install 8base template repository", () => {
   test("check install template repository", async () => {
     const fs = require("memfs");
     const repName = "ololorepa";
-    const cmd = CommandManager.initialize(new ExecutionConfig(["init", "-r", repName]));
+    const cmd = await CommandManager.initialize(new ExecutionConfig(["init", "-r", repName]));
     const resPath = await CommandManager.run(cmd);
 
     expect(resPath).toBe(path.join("/", repName));

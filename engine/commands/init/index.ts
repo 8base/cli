@@ -26,7 +26,7 @@ export default class Init extends BaseCommand {
         return "init";
     }
 
-    init(config: ExecutionConfig) {
+    async init(config: ExecutionConfig): Promise<any> {
         debug("start initiailie init command");
 
         this.repositoryName = config.getParameter('r');

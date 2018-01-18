@@ -31,7 +31,7 @@ export default class Login extends BaseCommand {
         return token;
     }
 
-    init(config: ExecutionConfig) {
+    async init(config: ExecutionConfig): Promise<any> {
         this.user = config.getParameter('u');
         this.password = config.getParameter('p');
 

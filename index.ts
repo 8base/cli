@@ -10,25 +10,30 @@ trace("\nWelcome to 8base command line interface");
 
 let command: BaseCommand;
 
-try {
-    let config = new ExecutionConfig(process.argv.slice(2));
-
-    if (config.getParameter('d')) {
-        setTraceLevel(TraceLevel.Debug);
-    } else {
-        setTraceLevel(TraceLevel.Trace);
+async function initialize() {    
+    try {
+        let config = new ExecutionConfig(process.argv.slice(2));
+    
+        if (config.getParameter('d')) {
+            setTraceLevel(TraceLevel.Debug);
+        } else {
+            setTraceLevel(TraceLevel.Trace);
+        }
+    
+        return await CommandManager.initialize(config);
     }
-
-    command = CommandManager.initialize(config);
-}
-catch(err) {
-    setTraceLevel(TraceLevel.Trace);
-    trace("Error = " + err.message);
-    printHelp();
-    process.exit(0);
+    catch(err) {
+        setTraceLevel(TraceLevel.Trace);
+        trace("Error = " + err.message);
+        printHelp();
+        process.exit(0);
+    }        
 }
 
-CommandManager.run(command)
+initialize()
+    .then(() => {
+        CommandManager.run(command)
+    })
     .then(() => {
         trace("\n" + command.onSuccess());
     })
