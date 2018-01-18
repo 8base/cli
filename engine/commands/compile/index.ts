@@ -8,14 +8,11 @@ export default class Compile extends BaseCommand {
     private config: ExecutionConfig;
 
     async run(): Promise<any> {
-        
-
     }
 
-    
     async init(config: ExecutionConfig): Promise<any> {
         debug("init compilind command");
-        await checkCompilingDirectory()
+        await checkCompilingDirectory();
 
         this.config = config;
     }

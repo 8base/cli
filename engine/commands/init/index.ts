@@ -11,7 +11,7 @@ import { InvalidArgument } from "../../../errors/invalidArgument";
 
 export default class Init extends BaseCommand {
     onSuccess(): string {
-        return "Initialization repository with name \"" + this.repositoryName + "\" is complete successfully";
+        return "Initialization repository with name \"" + this.repositoryName + "\" complete successfully";
     }
 
     private repositoryParameterName = 'r';
@@ -46,6 +46,7 @@ export default class Init extends BaseCommand {
     async run() {
         try {
             let files = await getFileProvider().provide();
+            debug("files provided count = " + files.size);
 
             debug("try to install files");
             return install(StaticConfig.rootExecutionDir, this.repositoryName, files);

@@ -1,19 +1,17 @@
 import * as fs from "fs";
 import * as path from 'path';
+import { debug } from "../../common";
 
 class StaticData {
     templatePath: string;
     commandsPath: string;
 
     private definePathToTemplate(): string {
-        // TODO think about
-        const p = path.join(StaticConfig.rootProjectDir, "../../template");
-        return fs.existsSync(p) ? p : path.join(StaticConfig.rootProjectDir, "../template");
+        return path.join(StaticConfig.rootProjectDir, "./template");
     }
 
     private defineCommandsPath(): string {
-        const p = path.join(StaticConfig.rootProjectDir, "../../engine/commands");
-        return fs.existsSync(p) ? p : path.join(StaticConfig.rootProjectDir, "../engine/commands");
+        return path.join(StaticConfig.rootProjectDir, "./engine/commands");
     }
 
     constructor() {
@@ -31,7 +29,7 @@ export class StaticConfig {
     }
 
     static get rootProjectDir(): string {
-        return __dirname;
+        return path.join(__dirname, "../../");
     }
 
     static get rootExecutionDir(): string {

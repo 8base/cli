@@ -1,7 +1,8 @@
 import { provideFilesToCompile } from "./provideFilesToCompile";
-import * as path from 'path'
+import * as path from 'path';
 import { trace, debug, StaticConfig } from "../../common";
 import * as globby from "globby";
+// const debug = require('debug')('ts-builder')
 
 export async function compile() {
     const files = await provideFilesToCompile();
@@ -9,12 +10,19 @@ export async function compile() {
     debug(files);
 }
 
+const defaultGlobbyOptions = {
+    dot: true,
+    silent: true,
+    follow: true,
+    nosort: true,
+    mark: true
+  };
 
 export async function checkCompilingDirectory() {
     const requiredFiles = ["8base.yml"];
-    debug(await globby(["**/*", '!.build', '!*.zip', '!build']));
-    //StaticConfig.rootProjectDir
+    const files  = await globby(['./', '!./node_modules'], defaultGlobbyOptions);
+    debug(files.length);
 }
 
-//const debug = require('debug')('ts-builder')
+
 
