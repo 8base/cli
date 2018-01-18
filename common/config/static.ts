@@ -3,7 +3,6 @@ import * as path from 'path';
 import { debug } from "../../common";
 import { PredefineData } from "./predefineData";
 
-
 export class StaticConfig {
 
     private static staticData = new PredefineData();
@@ -13,11 +12,11 @@ export class StaticConfig {
     }
 
     static get rootProjectDir(): string {
-        return path.join(__dirname, "../../");
+        return this.staticData.projectDir;
     }
 
     static get rootExecutionDir(): string {
-        return process.cwd();
+        return this.staticData.executionDir;
     }
 
     static get commandsDir(): string {
