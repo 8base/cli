@@ -1,11 +1,12 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, UserDataStorage, trace } from "../../../common";
-import { checkCompilingDirectory } from "../../compiling";
+import { initializeCompilingProject, CompilingProject } from "../../compiling";
 import { InvalidArgument } from "../../../errors/invalidArgument";
 import * as _ from "lodash";
 
 export default class Compile extends BaseCommand {
 
+    private project: CompilingProject;
     private config: ExecutionConfig;
 
     async run(): Promise<any> {
@@ -13,7 +14,7 @@ export default class Compile extends BaseCommand {
 
     async init(config: ExecutionConfig): Promise<any> {
         debug("init compilind command");
-        await checkCompilingDirectory();
+        this.project = await initializeCompilingProject();
 
         this.config = config;
     }
