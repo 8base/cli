@@ -1,10 +1,11 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, UserDataStorage, trace } from "../../../common";
-import { CompileController, LambdaController, ArchiveController } from "../../controllers";
+import { ExecutionConfig, debug, trace } from "../../../common";
+import { CompileController, LambdaController, ArchiveController, ConnectionController } from "../../controllers";
 import { CompileProject } from "../../compiling";
-import { RemoteConnector } from "../../connectors";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
+import { di } from "../../../DI";
+import { IConnector } from "../../../interfaces";
 
 export default class Deploy extends BaseCommand {
 
@@ -20,17 +21,15 @@ export default class Deploy extends BaseCommand {
      */
     async run(): Promise<any> {
 
-        if (!UserDataStorage.isTokenExist()) {
-            // TODO autorization!
-        }
+        await ConnectionController.autorizate();
 
-        await CompileController.compile(this.project);
+        const build = await CompileController.compile(this.project);
 
-        await LambdaController.prepareAwsLambda();
+        const connector = di.getObject(IConnector) as IConnector;
 
-        await ArchiveController.archive();
+        const url = await connector.getTemporaryUrlToUpload();
 
-        await RemoteConnector.upload();
+        await connector.deploy(url, this.project, build);
     }
 
     async init(config: ExecutionConfig): Promise<any> {

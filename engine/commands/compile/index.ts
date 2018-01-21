@@ -1,6 +1,6 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, trace } from "../../../common";
-import { CompileController, LambdaController } from "../../controllers";
+import { CompileController } from "../../controllers";
 import { CompileProject } from "../../compiling";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
@@ -11,16 +11,12 @@ export default class Compile extends BaseCommand {
     private config: ExecutionConfig;
 
     async run(): Promise<any> {
-
-        await CompileController.compile(this.project);
-
-        await LambdaController.prepareAwsLambda();
+        const result = await CompileController.compile(this.project);
+        debug("result file = " + result);
     }
 
     async init(config: ExecutionConfig): Promise<any> {
-        debug("init compile command");
         this.project = await CompileController.initializeProject(config);
-
         this.config = config;
     }
 

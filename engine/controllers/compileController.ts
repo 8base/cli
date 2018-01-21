@@ -3,6 +3,7 @@ import * as path from 'path';
 import { trace, debug, StaticConfig, ExecutionConfig } from "../../common";
 import { CompileProject, resolveFunctionCode, FunctionDefinition, resolveCompiler } from "../compiling";
 import * as _ from 'lodash';
+import { LambdaController, ArchiveController } from "../controllers";
 
 export class CompileController {
 
@@ -21,18 +22,17 @@ export class CompileController {
 
         this.prepareForCompile();
 
-        let functions = project.functions;
-
         debug("resolve function code");
-        functions = resolveFunctionCode(functions);
 
         debug("resolve compilers");
-        const compiler = resolveCompiler(functions, StaticConfig.buildDir);
+        const compiler = resolveCompiler(resolveFunctionCode(project.functions), StaticConfig.buildDir);
 
         const createdFiles = await compiler.compile() as string[];
         debug("new files created count = " + createdFiles.length);
 
-        debug("compile complete");
+        await LambdaController.prepareAwsLambda(project);
+
+        return await ArchiveController.archive(StaticConfig.rootExecutionDir, StaticConfig.zipPath, ["*.zip"]);
     }
 
     static async initializeProject(config: ExecutionConfig): Promise<CompileProject> {

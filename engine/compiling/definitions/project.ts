@@ -66,9 +66,13 @@ export class CompileProject {
         return this.config.functions;
     }
 
+//    set functions(funcs: FunctionDefinition[]) {
+//        this.config.functions = funcs;
+//    }
+
     private validateFunction(func: FunctionDefinition) {
         if (_.isNil(func.handler.path)) {
-            // throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "function \"" + func.name + "\" must contain path property");
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "function \"" + func.name + "\" must contain path property");
         }
     }
 }

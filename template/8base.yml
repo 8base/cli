@@ -1,5 +1,5 @@
 functions:
-  hello:
+  hello_eug:
     handler:
       path: src/hello.js
     type: resolver
