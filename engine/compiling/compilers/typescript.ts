@@ -7,8 +7,11 @@ export class TypescriptCompiler implements ICompiler {
 
   private files: string[];
 
-  constructor(files: string[]) {
+  private buildFolder: string;
+
+  constructor(files: string[], buildFolder: string) {
     this.files = files;
+    this.buildFolder = buildFolder;
   }
 
   async compile(): Promise<any> {
@@ -21,19 +24,22 @@ export class TypescriptCompiler implements ICompiler {
 
     allDiagnostics.forEach(diagnostic => {
       if (!diagnostic.file) {
-        debug(diagnostic);
+        debug(JSON.stringify(diagnostic, null, 2));
       }
-      const {line, character} = diagnostic.file!.getLineAndCharacterOfPosition(diagnostic.start!);
-      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-      console.log(`${diagnostic.file!.fileName} (${line + 1},${character + 1}): ${message}`);
+      if (diagnostic.file) {
+        const {line, character} = diagnostic.file!.getLineAndCharacterOfPosition(diagnostic.start!);
+        const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+        debug(`${diagnostic.file!.fileName} (${line + 1},${character + 1}): ${message}`);
+      }
     });
 
     if (emitResult.emitSkipped) {
       throw new Error('Typescript compilation failed');
     }
 
+    debug(path.join(StaticConfig.rootProjectDir, '../node_modules/@types'));
+    debug(path.join(StaticConfig.rootProjectDir, './node_modules/@types'));
     return emitResult.emittedFiles;
-
   }
 
   private get config(): ts.CompilerOptions {
@@ -41,11 +47,10 @@ export class TypescriptCompiler implements ICompiler {
       ...baseCompilerOptions,
       lib: ['lib.es2017.d.ts'],
       rootDir: StaticConfig.rootExecutionDir,
-      outDir: path.join(StaticConfig.rootExecutionDir, StaticConfig.buildPath),
+      outDir: this.buildFolder,
       typeRoots: [
-        path.join('this-folder', 'does-not-exist'),
-        path.join(StaticConfig.rootProjectDir, '../../../../node_modules/@types'),
-        path.join(StaticConfig.rootProjectDir, '../../../../../../node_modules/@types'),
+        path.join(StaticConfig.rootProjectDir, '../node_modules/@types'),
+        path.join(StaticConfig.rootProjectDir, './node_modules/@types'),
         path.join(StaticConfig.rootExecutionDir,  'typings'),
         path.join(StaticConfig.rootExecutionDir,  'node_modules/@types'),
       ]

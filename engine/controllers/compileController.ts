@@ -1,10 +1,8 @@
+import * as fs from 'fs-extra';
 import * as path from 'path';
 import { trace, debug, StaticConfig, ExecutionConfig } from "../../common";
 import { CompileProject, resolveFunctionCode, FunctionDefinition, resolveCompiler } from "../compiling";
 import * as _ from 'lodash';
-import {  } from 'src/engine';
-
-// const debug = require('debug')('ts-builder')
 
 export class CompileController {
 
@@ -19,7 +17,9 @@ export class CompileController {
      *
      * @param project
      */
-    static async compile(project: CompileProject) {
+    static async compile(project: CompileProject): Promise<any> {
+
+        this.prepareForCompile();
 
         let functions = project.functions;
 
@@ -27,9 +27,10 @@ export class CompileController {
         functions = resolveFunctionCode(functions);
 
         debug("resolve compilers");
-        const compiler = resolveCompiler(functions);
+        const compiler = resolveCompiler(functions, StaticConfig.buildDir);
 
-        compiler.compile();
+        const createdFiles = await compiler.compile() as string[];
+        debug("new files created count = " + createdFiles.length);
 
         debug("compile complete");
     }
@@ -40,6 +41,10 @@ export class CompileController {
         return project;
     }
 
+    private static prepareForCompile() {
+        fs.removeSync(StaticConfig.dotBuildDir);
+        fs.mkdirpSync(StaticConfig.buildDir);
+    }
 }
 
 

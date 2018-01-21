@@ -1,9 +1,8 @@
-import { ExecutionConfig } from "../../../common";
+import { ExecutionConfig } from "../../common";
 import 'isomorphic-fetch';
-import { StaticConfig, debug } from "../../../common";
-import IRemoteConnector from "../../../interfaces/IRemoteConnector";
+import { StaticConfig, debug } from "../../common";
 
-export class RemoteConnector extends IRemoteConnector {
+export class RemoteConnector {
 
     /**
      * @param user user name
@@ -11,7 +10,7 @@ export class RemoteConnector extends IRemoteConnector {
      *
      * @returns token
      */
-    async login(user: string, password: string): Promise<string> {
+    static async login(user: string, password: string): Promise<string> {
         debug("login token process");
         const resp = await fetch(StaticConfig.remoteServerEndPoint + StaticConfig.loginPath, {
             method: 'post',
@@ -23,5 +22,9 @@ export class RemoteConnector extends IRemoteConnector {
 
         const responce = await resp.json();
         return responce.token;
+    }
+
+    static async upload() {
+
     }
 }

@@ -21,12 +21,6 @@
             ]
         }
     },
-    "include": [
-        "errors/**/*",
-        "common/**/*",
-        "engine/**/*",
-        "interfaces/**/*"
-    ],
     "exclude": [
         "node_modules",
         "dist",

@@ -1,7 +1,6 @@
 import { debug, trace, StaticConfig, ExecutionConfig } from "../common";
 import * as path from "path";
 import * as fs from "fs";
-import IUserDataStorage from "../interfaces/IUserDataStorage";
 
 class Storage {
     private static storageFileName = ".8baserc";
@@ -45,22 +44,27 @@ class Storage {
     }
 }
 
-export class UserDataStorage implements IUserDataStorage {
+export class UserDataStorage {
 
     /**
      * Function is not thread safe !
      * @param token - user token
      */
-    saveToken(token: string) {
+    static saveToken(token: string) {
         const storage = Storage.getStorage();
         storage.token = token;
         debug("data to save = " + Storage.toPrettyString(storage));
         Storage.saveStorage(storage);
     }
 
-    getToken(): string {
+    static getToken(): string {
         const storage = Storage.getStorage();
         debug("get storage data = " + Storage.toPrettyString(storage));
         return storage.token;
+    }
+
+    static isTokenExist(): boolean {
+        const storage = Storage.getStorage();
+        return !!storage.token;
     }
 }
