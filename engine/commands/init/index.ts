@@ -6,7 +6,7 @@ import * as _ from "lodash";
 import { install } from "./installer";
 
 
-import { InvalidArgument } from "../../../errors/invalidArgument";
+import { InvalidArgument } from "../../../errors";
 
 
 export default class Init extends BaseCommand {
@@ -48,10 +48,23 @@ export default class Init extends BaseCommand {
             let files = await getFileProvider().provide();
             debug("files provided count = " + files.size);
 
+            files.set(StaticConfig.packageFileName,
+                this.replaceServiceName(files.get(StaticConfig.packageFileName)));
+
             debug("try to install files");
             return install(StaticConfig.rootExecutionDir, this.repositoryName, files);
         } catch(err) {
             return Promise.reject(err);
         }
+    }
+
+    private replaceServiceName(packageFile: string) {
+        let packagedata = JSON.parse(packageFile);
+        packagedata.name = this.repositoryName;
+        return JSON.stringify(packagedata, null, 2);
+    }
+
+    private checkForMandatoryFiles(files: Map<string, string>) {
+        return files.get(StaticConfig.serviceConfigFileName) && files.get(StaticConfig.packageFileName);
     }
 }

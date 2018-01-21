@@ -1,9 +1,9 @@
 import { trace } from "./tracer";
-import { CommandManager } from "../engine";
+import { CommandController } from "../engine";
 
 export function printHelp() {
     trace("\n8base command line usage: ");
-    CommandManager.enumerate().map((cmd) => {
+    CommandController.enumerate().map((cmd) => {
         trace("     " + cmd.description());
     });
 }

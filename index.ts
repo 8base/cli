@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { CommandManager } from "./engine";
+import { CommandController } from "./engine";
 import { trace, printHelp, debug, ExecutionConfig, setTraceLevel, TraceLevel } from "./common";
 import { BaseCommand } from "./engine";
 
@@ -20,7 +20,7 @@ async function initialize(): Promise<any> {
             setTraceLevel(TraceLevel.Trace);
         }
 
-        return await CommandManager.initialize(config);
+        return await CommandController.initialize(config);
     }
     catch(err) {
         setTraceLevel(TraceLevel.Trace);
@@ -32,7 +32,7 @@ async function initialize(): Promise<any> {
 initialize()
     .then((cmd) => {
         command = cmd;
-        return CommandManager.run(command);
+        return CommandController.run(command);
     })
     .then(() => {
         trace("\n" + command.onSuccess());

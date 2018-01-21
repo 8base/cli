@@ -2,7 +2,7 @@
 import * as parseArgs from "minimist";
 import { debug } from '../../common';
 import * as _ from 'lodash';
-import { InvalidArgument } from '../../errors/invalidArgument';
+import { InvalidArgument } from '../../errors';
 
 
 export class ExecutionConfig {

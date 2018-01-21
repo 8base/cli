@@ -1,11 +1,9 @@
-import { ExecutionConfig, StaticConfig } from "../common";
-import { debug, trace } from "../common";
+import { debug, trace, Utils, ExecutionConfig, StaticConfig } from "../../common";
 import * as path from 'path';
 import * as _ from "lodash";
-import { Utils } from "../common";
 import * as fs from "fs";
 
-export class CommandManager {
+export class CommandController {
 
     private static instanceCommand(fullPath: string): any {
         try {
@@ -22,7 +20,7 @@ export class CommandManager {
         let fullPath = path.join(StaticConfig.commandsDir, config.command);
         debug("command manager: try to get command " + config.command + "; full path = " + fullPath);
 
-        let cmd = CommandManager.instanceCommand(fullPath);
+        let cmd = this.instanceCommand(fullPath);
         await cmd.init(config);
         return cmd;
     }
@@ -41,7 +39,7 @@ export class CommandManager {
         return _.transform(fs.readdirSync(StaticConfig.commandsDir), (commands, file:string) => {
             const p = path.join(StaticConfig.commandsDir, file);
             if (fs.statSync(p).isDirectory()) {
-                commands.push(CommandManager.instanceCommand(p));
+                commands.push(this.instanceCommand(p));
             }
         }, []);
     }

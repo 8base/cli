@@ -21,10 +21,12 @@
             ]
         }
     },
-    //"include": [
-        // "src/**/*",
-        // "__mocks__/**/*"
-    // ],
+    "include": [
+        "errors/**/*",
+        "common/**/*",
+        "engine/**/*",
+        "interfaces/**/*"
+    ],
     "exclude": [
         "node_modules",
         "dist",

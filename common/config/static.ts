@@ -34,4 +34,16 @@ export class StaticConfig {
     static get loginPath(): string {
         return "/cli/login";
     }
+
+    static get serviceConfigFileName(): string {
+        return "8base.yml";
+    }
+
+    static get packageFileName(): string {
+        return "package.json";
+    }
+
+    static get buildPath(): string {
+        return "./build";
+    }
 }

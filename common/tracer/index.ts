@@ -8,7 +8,7 @@ export function trace(data: any) {
     tr.trace(TraceLevel.Trace, data);
 }
 
-export function debug(data: string) {
+export function debug(data: any) {
     tr.trace(TraceLevel.Debug, "debug: " + data);
 }
 

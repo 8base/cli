@@ -1,6 +1,6 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, UserDataStorage, trace } from "../../../common";
-import { InvalidArgument } from "../../../errors/invalidArgument";
+import { InvalidArgument } from "../../../errors";
 import { RemoteConnector } from "./remoteConnector";
 import * as _ from "lodash";
 

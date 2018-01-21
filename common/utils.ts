@@ -24,6 +24,7 @@ export class Utils {
             }
 
             fs.writeFileSync(fullName, data);
+            debug("install file = " + fullName);
         });
         return targetDirectory;
     }
