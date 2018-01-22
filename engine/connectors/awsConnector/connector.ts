@@ -15,7 +15,7 @@ aws.config.loadFromPath(path.join(StaticConfig.rootProjectDir, "../engine/connec
 
 export class AwsConnector extends IConnector {
 
-    private bucket = "";
+    private bucket = "kokokotest";
 
     private zipFile: string;
 
@@ -31,6 +31,7 @@ export class AwsConnector extends IConnector {
     }
 
     async deploy(url: string, project: CompileProject, sourceFile: string): Promise<any> {
+        this.zipFile = sourceFile;
         debug("aws connector: start upload");
         await Promise.all(_.map(project.functions, async (func) => {
             await this.uploadFunction(func);
@@ -50,9 +51,9 @@ export class AwsConnector extends IConnector {
                 S3Bucket: this.bucket,
                 S3Key: func.name,
                 // S3ObjectVersion: "",
-                ZipFile: fs.readdirSync(this.zipFile)
+                ZipFile: fs.readFileSync(this.zipFile)
             },
-            MemorySize: 100
+            MemorySize: 150
         };
 
         const lambda = new aws.Lambda();

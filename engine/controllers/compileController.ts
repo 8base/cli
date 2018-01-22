@@ -22,8 +22,6 @@ export class CompileController {
 
         this.prepareForCompile();
 
-        debug("resolve function code");
-
         debug("resolve compilers");
         const compiler = resolveCompiler(resolveFunctionCode(project.functions), StaticConfig.buildDir);
 
@@ -32,7 +30,7 @@ export class CompileController {
 
         await LambdaController.prepareAwsLambda(project);
 
-        return await ArchiveController.archive(StaticConfig.rootExecutionDir, StaticConfig.zipPath, ["*.zip"]);
+        return await ArchiveController.archive(StaticConfig.dotBuildDir, StaticConfig.zipPath, ["*.zip", "*.yml", "*.graphql"]);
     }
 
     static async initializeProject(config: ExecutionConfig): Promise<CompileProject> {

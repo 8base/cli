@@ -21,9 +21,6 @@ export class ArchiveController {
 
         files.forEach((file: any) => {
             debug("archive files = " + file);
-
-//            const fileName = path.join(this.buildDir, file);
-//            debug('adding', fileName, file);
             zip.file(file, { name: path.basename(file) });
         });
 
