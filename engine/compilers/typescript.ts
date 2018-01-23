@@ -1,22 +1,19 @@
 import * as path from "path";
 import * as ts from 'typescript';
-import { ICompiler } from "../../../interfaces/ICompiler";
-import { StaticConfig, debug } from "../../../common";
+import { ICompiler } from "../../interfaces/ICompiler";
+import { StaticConfig, debug } from "../../common";
 
 export class TypescriptCompiler implements ICompiler {
 
   private files: string[];
 
-  private buildFolder: string;
-
-  constructor(files: string[], buildFolder: string) {
+  constructor(files: string[]) {
     this.files = files;
-    this.buildFolder = buildFolder;
   }
 
-  async compile(): Promise<any> {
+  async compile(buildDir: string): Promise<string[]> {
     debug("compile files count = " + this.files.length);
-    const program = ts.createProgram(this.files, this.config);
+    const program = ts.createProgram(this.files, this.config(buildDir));
 
     const emitResult = program.emit();
 
@@ -42,12 +39,12 @@ export class TypescriptCompiler implements ICompiler {
     return emitResult.emittedFiles;
   }
 
-  private get config(): ts.CompilerOptions {
+  private config(buildDir: string): ts.CompilerOptions {
     return {
       ...baseCompilerOptions,
       lib: ['lib.es2017.d.ts'],
       rootDir: StaticConfig.rootExecutionDir,
-      outDir: this.buildFolder,
+      outDir: buildDir,
       typeRoots: [
         path.join(StaticConfig.rootProjectDir, '../node_modules/@types'),
         path.join(StaticConfig.rootProjectDir, './node_modules/@types'),

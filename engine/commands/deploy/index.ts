@@ -1,7 +1,6 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, trace } from "../../../common";
-import { CompileController, LambdaController, ArchiveController, ConnectionController } from "../../controllers";
-import { CompileProject } from "../../compiling";
+import { ExecutionConfig, debug, trace, StaticConfig } from "../../../common";
+import { ProjectController, CompileController, LambdaController, ArchiveController, ConnectionController, ProjectDefinition } from "../../../engine";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
 import { di } from "../../../DI";
@@ -9,7 +8,8 @@ import { IConnector } from "../../../interfaces";
 
 export default class Deploy extends BaseCommand {
 
-    private project: CompileProject;
+    private project: ProjectDefinition;
+
     private config: ExecutionConfig;
 
     /**
@@ -23,18 +23,24 @@ export default class Deploy extends BaseCommand {
 
         await ConnectionController.autorizate();
 
-        const build = await CompileController.compile(this.project);
+        const files = ProjectController.getFunctionFiles(this.project);
 
-        const connector = di.getObject(IConnector) as IConnector;
+        const result = await CompileController.compile(files, StaticConfig.buildDir);
 
-        const url = await connector.getTemporaryUrlToUpload();
+        await LambdaController.prepareAwsLambda(StaticConfig.buildDir);
 
-        await connector.deploy(url, this.project, build);
+
+        const resultArchive = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.zipPath, ["*.zip"]);
+
+
+        const connector = di.instance(IConnector) as IConnector;
+
+        await connector.upload(resultArchive);
     }
 
     async init(config: ExecutionConfig): Promise<any> {
-        this.project = await CompileController.initializeProject(config);
         this.config = config;
+        this.project = await ProjectController.initialize(config);
     }
 
     usage(): string {

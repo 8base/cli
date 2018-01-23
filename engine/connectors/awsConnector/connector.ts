@@ -5,7 +5,7 @@ import * as path from "path";
 import { FunctionDefinition, CompileProject } from "../../../engine";
 import * as _ from "lodash";
 import * as fs from "fs";
-
+import * as unzip from "unzip";
 
 /**
  * class use for develop. to avoid server, directly call to aws
@@ -26,11 +26,11 @@ export class AwsConnector extends IConnector {
         return "";
     }
 
-    async getTemporaryUrlToUpload(): Promise<string> {
+    private async getTemporaryUrlToUpload(): Promise<string> {
         return "";
     }
 
-    async deploy(url: string, project: CompileProject, sourceFile: string): Promise<any> {
+    async upload(url: string, project: CompileProject, sourceFile: string): Promise<any> {
         this.zipFile = sourceFile;
         debug("aws connector: start upload");
         await Promise.all(_.map(project.functions, async (func) => {
@@ -42,16 +42,20 @@ export class AwsConnector extends IConnector {
 
     private async uploadFunction(func: FunctionDefinition) {
         let req: aws.Lambda.Types.CreateFunctionRequest;
+        debug(this.zipFile);
+
+        debug(fs.readFileSync(this.zipFile).length);
+
         req = {
-            FunctionName: func.name,
+            FunctionName: "ggg2",
             Runtime: "nodejs6.10",
             Role: "arn:aws:iam::005301729547:role/testservice-dev-us-east-1-lambdaRole",
-            Handler: func.name,
+            Handler: "hello_eug_koko",
             Code: {
-                S3Bucket: this.bucket,
-                S3Key: func.name,
+                 S3Bucket: this.bucket,
+                 S3Key: "build.zip",
                 // S3ObjectVersion: "",
-                ZipFile: fs.readFileSync(this.zipFile)
+                // ZipFile: fs.readFileSync("/home/eugene/git_source/8base/source/test/testrepo/.build/build.zip")//.toString('base64')
             },
             MemorySize: 150
         };

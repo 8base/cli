@@ -46,7 +46,9 @@ export class StaticConfig {
     /**
      * Compiler paths
      */
-    static dotBuildDir = path.join(StaticConfig.rootExecutionDir, '.build/');
-    static buildDir = path.join(StaticConfig.dotBuildDir, 'dist/');
-    static zipPath = path.join(StaticConfig.dotBuildDir, 'build.zip');
+    static buildDir = path.join(StaticConfig.rootExecutionDir, '.build/');
+
+    static zipPath = path.join(StaticConfig.buildDir, 'build.zip');
+
+    static supportedCompileExtension = new Set<string>([".ts", ".js"]);
 }

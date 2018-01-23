@@ -6,7 +6,7 @@ import { IConnector } from "../../interfaces";
 export class ConnectionController {
 
     static async upload(project: CompileProject, config: ExecutionConfig) {
-        di.getObject(IConnector).upload(project);
+        di.instance(IConnector).upload(project);
     }
 
     static async autorizate(user?: string, password?: string) {

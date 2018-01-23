@@ -16,7 +16,12 @@ class DI {
             throw new Error("DI Error: object type \"" + type + "\" not present");
         }
 
-        return new constr();
+        return constr;
+    }
+
+    instance<T>(type: T): any {
+        const Constr = this.getObject(type);
+        return new Constr();
     }
 
     private findByType(type: any) {

@@ -1,19 +1,20 @@
 import { StaticConfig, debug, ExecutionConfig } from "../../common";
 import 'isomorphic-fetch';
 import { IConnector } from "../../interfaces";
-import { CompileProject } from "../compiling";
+
 
 export class ServerConnector extends IConnector {
+
+    private async getTemporaryUrlToUpload(): Promise<string> {
+        throw new Error("Method not implemented.");
+    }
 
     async invoke(): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
-    async getTemporaryUrlToUpload(): Promise<string> {
-        throw new Error("Method not implemented.");
-    }
 
-    abstract async deploy(url: string, project: CompileProject, sourceFile: string): Promise<any> {
+    async upload(url: string, blob: any, sourceFile: string): Promise<any> {
         throw new Error("Method not implemented.");
     }
 

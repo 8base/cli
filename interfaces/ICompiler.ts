@@ -1,5 +1,5 @@
 
-export interface ICompiler {
+export abstract class ICompiler {
 
-    /*async*/ compile(): Promise<any>;
+    async abstract compile(buildDir: string): Promise<string[]>;
 }

@@ -1,6 +1,6 @@
 functions:
   hello_eug:
     handler:
-      path: src/hello.js
+      code: src/hello.js
     type: resolver
     schema: src/hello.graphql
