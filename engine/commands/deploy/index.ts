@@ -13,12 +13,15 @@ export default class Deploy extends BaseCommand {
     private config: ExecutionConfig;
 
     /**
-     * 1. compile project
-     * 2. ensure token
-     * 3. zip files
-     * 4. get temporary url
-     * 5. upload zip to remote host
+     * 1. ensure token
+     * 2. compile project
+     * 3. define function to compile
+     * 4. compile it
+     * 5. prepare labmda
+     * 6. zip all
+     * 7. upload zip to remote host
      */
+
     async run(): Promise<any> {
 
         await ConnectionController.autorizate();
@@ -27,7 +30,7 @@ export default class Deploy extends BaseCommand {
 
         const result = await CompileController.compile(files, StaticConfig.buildDir);
 
-        await LambdaController.prepareAwsLambda(StaticConfig.buildDir);
+        await LambdaController.prepareLambda(StaticConfig.buildDir);
 
 
         const resultArchive = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.zipPath, ["*.zip"]);

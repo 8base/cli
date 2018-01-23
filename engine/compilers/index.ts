@@ -1,4 +1,4 @@
-import { ICompiler } from "../../../interfaces/ICompiler";
+import { ICompiler } from "../../interfaces";
 import { TypescriptCompiler } from "./typescript";
 import * as _ from "lodash";
 
