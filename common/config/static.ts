@@ -1,7 +1,8 @@
 import * as fs from "fs";
-import * as path from 'path';
-import { debug } from "../../common";
+import * as path from "path";
+import { debug } from "../tracer";
 import { PredefineData } from "./predefineData";
+
 
 export class StaticConfig {
 

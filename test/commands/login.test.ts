@@ -1,9 +1,9 @@
 
 import { InvalidArgument } from "../../errors";
-import { ExecutionConfig, StaticConfig, setTraceLevel, TraceLevel } from "../../common";
+import { ExecutionConfig } from "../../common";
 import { CommandController, BaseCommand } from "../../engine";
 
-jest.mock("../../engine/commands/login/remoteConnector");
+jest.mock("../../engine/connectors/serverConnector");
 jest.mock("../../common/userDataStorage");
 
 describe("8base login", () => {

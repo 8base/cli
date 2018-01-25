@@ -4,6 +4,14 @@ import { IConnector } from "../../interfaces";
 
 
 export class ServerConnector extends IConnector {
+    
+    upload(sourceFilePath: string): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
+
+    updateConfiguration(): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
 
     private async getTemporaryUrlToUpload(): Promise<string> {
         throw new Error("Method not implemented.");
@@ -13,10 +21,6 @@ export class ServerConnector extends IConnector {
         throw new Error("Method not implemented.");
     }
 
-
-    async upload(url: string, blob: any, sourceFile: string): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
 
     /**
      * @param user user name

@@ -4,7 +4,11 @@ import { trace, debug, StaticConfig, ExecutionConfig } from "../../../common";
 
 export class LambdaController {
 
-    static async prepareLambda(sourcePath: string) {
+    /**
+     * 
+     * @param buildDir - directory of compiled project 
+     */
+    static async prepareLambdaHandlers(buildDir: string, functionNames: string[]) {
         // TODO
         // at moment uploaded function must be description as aws standart. no like graphcool
     }

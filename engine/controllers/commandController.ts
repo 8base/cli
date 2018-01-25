@@ -1,5 +1,5 @@
 import { debug, trace, Utils, ExecutionConfig, StaticConfig } from "../../common";
-import * as path from 'path';
+import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
 

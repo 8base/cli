@@ -4,5 +4,7 @@ export abstract class IConnector {
 
     abstract async upload(sourceFilePath: string): Promise<any>;
 
+    abstract async updateConfiguration(): Promise<any>;
+
     abstract async invoke(): Promise<any>;
 }

@@ -1,12 +1,10 @@
-import { CompileProject } from "../../engine";
 import { debug, trace, ExecutionConfig, UserDataStorage } from "../../common";
-import { di } from "../../DI";
-import { IConnector } from "../../interfaces";
+import { getConnector } from "../../engine";
+
 
 export class ConnectionController {
 
-    static async upload(project: CompileProject, config: ExecutionConfig) {
-        di.instance(IConnector).upload(project);
+    static async upload() {
     }
 
     static async autorizate(user?: string, password?: string) {
@@ -16,7 +14,7 @@ export class ConnectionController {
             return token;
         }
 
-        token = await di.getObject(IConnector).upload(user, password);
+        token = await getConnector().login("");
 
         debug("receive token = " + token);
         debug("save token...");

@@ -1,18 +1,15 @@
-import * as fs from 'fs-extra';
+import * as fs from "fs";
 import * as path from 'path';
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
-import { trace, debug, StaticConfig, ExecutionConfig } from "../../common";
-import { FunctionDefinition, ProjectDefinition, FunctionType } from "../../engine";
+import { FunctionDefinition, ProjectDefinition, FunctionType, trace, debug, StaticConfig, ExecutionConfig } from "../../common";
 import { InvalidConfiguration } from "../../errors";
-import { ICompiler };
+
 
 export class ProjectController {
 
     private static configFileName = "./8base.yml";
-
-    private static pathToYmlConfig = path.join(StaticConfig.rootExecutionDir, ProjectController.configFileName);
 
     static async initialize(config: ExecutionConfig): Promise<ProjectDefinition> {
 
@@ -40,17 +37,22 @@ export class ProjectController {
         }, []);
     }
 
+    static getFunctionNames(project: ProjectDefinition): string[] {
+        return [];
+    }
+
     private static loadConfigFile(): any {
+        const pathToYmlConfig = path.join(StaticConfig.rootExecutionDir, ProjectController.configFileName);
 
-        debug("check exist yaml file = " + ProjectController.pathToYmlConfig);
+        debug("check exist yaml file = " + pathToYmlConfig);
 
-        if (!fs.existsSync(this.pathToYmlConfig)) {
+        if (!fs.existsSync(pathToYmlConfig)) {
             throw new Error("Main configuration file \"" + ProjectController.configFileName + "\" is absent.");
         }
 
         debug("load yaml file");
 
-        return yaml.safeLoad(fs.readFileSync(this.pathToYmlConfig, 'utf8'));
+        return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
     }
 
     private static loadFunctions(config: any): FunctionDefinition[] {

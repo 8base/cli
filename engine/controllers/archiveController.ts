@@ -4,8 +4,6 @@ import * as fs from "fs";
 import * as readdir from "recursive-readdir";
 import * as path from "path";
 
-const zip = require('node-zip');
-
 export class ArchiveController {
 
     private static async createZip(files: any, targetFile: string) {

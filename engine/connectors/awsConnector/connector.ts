@@ -1,19 +1,30 @@
 import { IConnector } from "../../../interfaces";
 import * as aws from "aws-sdk";
-import { StaticConfig, debug } from "../../../common";
+import { FunctionDefinition, StaticConfig, debug } from "../../../common";
 import * as path from "path";
-import { FunctionDefinition, CompileProject } from "../../../engine";
 import * as _ from "lodash";
 import * as fs from "fs";
-import * as unzip from "unzip";
 
 /**
  * class use for develop. to avoid server, directly call to aws
  */
 
-aws.config.loadFromPath(path.join(StaticConfig.rootProjectDir, "../engine/connectors/awsConnector/configAws.json"));
+// aws.config.loadFromPath(path.join(StaticConfig.rootProjectDir, "../engine/connectors/awsConnector/configAws.json"));
 
 export class AwsConnector extends IConnector {
+    async upload(sourceFilePath: string): Promise<any> {
+        this.zipFile = sourceFilePath;
+        debug("aws connector: start upload");
+        /*
+        await Promise.all(_.map(project.functions, async (func) => {
+            await this.uploadFunction(func);
+        }));
+        */
+        debug("aws connector: upload complete");
+    }
+    async updateConfiguration(): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
 
     private bucket = "kokokotest";
 
@@ -28,16 +39,6 @@ export class AwsConnector extends IConnector {
 
     private async getTemporaryUrlToUpload(): Promise<string> {
         return "";
-    }
-
-    async upload(url: string, project: CompileProject, sourceFile: string): Promise<any> {
-        this.zipFile = sourceFile;
-        debug("aws connector: start upload");
-        await Promise.all(_.map(project.functions, async (func) => {
-            await this.uploadFunction(func);
-        }));
-
-        debug("aws connector: upload complete");
     }
 
     private async uploadFunction(func: FunctionDefinition) {

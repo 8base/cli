@@ -1,10 +1,9 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, trace, StaticConfig } from "../../../common";
-import { ProjectController, CompileController, LambdaController, ArchiveController, ConnectionController, ProjectDefinition } from "../../../engine";
+import { getConnector, ProjectController, CompileController, LambdaController, ArchiveController, ConnectionController, ProjectDefinition } from "../../../engine";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
-import { di } from "../../../DI";
-import { IConnector } from "../../../interfaces";
+
 
 export default class Deploy extends BaseCommand {
 
@@ -27,18 +26,20 @@ export default class Deploy extends BaseCommand {
         await ConnectionController.autorizate();
 
         const files = ProjectController.getFunctionFiles(this.project);
+        const funcNames = ProjectController.getFunctionNames(this.project);
 
-        const result = await CompileController.compile(files, StaticConfig.buildDir);
+        const distPath = await CompileController.compile(files, StaticConfig.buildDir);
 
-        await LambdaController.prepareLambda(StaticConfig.buildDir);
+        await LambdaController.prepareLambdaHandlers(distPath, funcNames);
 
 
         const resultArchive = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.zipPath, ["*.zip"]);
 
-
-        const connector = di.instance(IConnector) as IConnector;
+        const connector = getConnector();
 
         await connector.upload(resultArchive);
+
+        await connector.updateConfiguration();
     }
 
     async init(config: ExecutionConfig): Promise<any> {
