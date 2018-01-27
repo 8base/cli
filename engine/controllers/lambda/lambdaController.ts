@@ -5,8 +5,8 @@ import { trace, debug, StaticConfig, ExecutionConfig } from "../../../common";
 export class LambdaController {
 
     /**
-     * 
-     * @param buildDir - directory of compiled project 
+     *
+     * @param buildDir - directory of compiled project
      */
     static async prepareLambdaHandlers(buildDir: string, functionNames: string[]) {
         // TODO

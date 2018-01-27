@@ -3,7 +3,6 @@
 import { CommandController } from "./engine";
 import { trace, printHelp, debug, ExecutionConfig, setTraceLevel, TraceLevel } from "./common";
 import { BaseCommand } from "./engine";
-import { setDevEnvironment } from "./DI";
 
 // print copyright ?
 trace("\nWelcome to 8base command line interface");
@@ -20,10 +19,6 @@ async function initialize(): Promise<any> {
             setTraceLevel(TraceLevel.Debug);
         } else {
             setTraceLevel(TraceLevel.Trace);
-        }
-
-        if (config.getParameter('dev')) {
-            setDevEnvironment();
         }
 
         return await CommandController.initialize(config);

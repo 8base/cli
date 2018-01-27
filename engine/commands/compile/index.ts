@@ -1,6 +1,6 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, trace, StaticConfig } from "../../../common";
-import { CompileController, ProjectController, ProjectDefinition } from "../../../engine";
+import { ExecutionConfig, debug, trace, StaticConfig, ProjectDefinition } from "../../../common";
+import { CompileController, ProjectController } from "../../../engine";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
 

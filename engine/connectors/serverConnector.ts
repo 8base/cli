@@ -4,7 +4,7 @@ import { IConnector } from "../../interfaces";
 
 
 export class ServerConnector extends IConnector {
-    
+
     upload(sourceFilePath: string): Promise<any> {
         throw new Error("Method not implemented.");
     }
