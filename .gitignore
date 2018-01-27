@@ -15,8 +15,6 @@ pids
 *.pid
 *.seed
 *.pid.lock
-
-package-lock.json
  
 # Dependency directory
 node_modules
