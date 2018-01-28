@@ -1,8 +1,12 @@
-import { IConnector } from "../../interfaces";
+import { ICliConnector, ICloudConnector } from "../../interfaces";
 import { ServerConnector } from "./serverConnector";
 
-export function getConnector(): IConnector {
+export function getCliConnector(): ICliConnector {
     return new ServerConnector();
+}
+
+export function getCloudConnector(): ICloudConnector {
+    return new; 
 }
 
 

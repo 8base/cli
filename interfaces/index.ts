@@ -1,2 +1,3 @@
 export * from "./ICompiler";
-export * from "./IConnector";
+export * from "./ICliConnector";
+export * from "./ICloudConnector";

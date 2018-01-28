@@ -28,12 +28,8 @@ export class StaticConfig {
         return process.env.USERPROFILE || process.env.HOME || process.env.HOMEPATH;
     }
 
-    static get remoteServerEndPoint(): string {
-        return "http://localhost:3000"; // TODO
-    }
-
-    static get loginPath(): string {
-        return "/cli/login";
+    static get remoteServerCliEndPoint(): string {
+        return "http://localhost:3000/cli"; // TODO
     }
 
     static get serviceConfigFileName(): string {
