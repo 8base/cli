@@ -25,18 +25,17 @@ export default class Deploy extends BaseCommand {
 
         const account = await RemoteActionController.autorizate();
 
-        const files = ProjectController.getFunctionFiles(this.project);
-
-        const funcNames = ProjectController.getFunctionNames(this.project);
+        const files = ProjectController.getFunctionHandlers(this.project);
 
         CompileController.clean(StaticConfig.buildRootDir);
         await CompileController.compile(files, StaticConfig.buildDir);
 
-        await LambdaController.prepareLambdaHandlers(StaticConfig.buildDir, funcNames);
+        const functions = ProjectController.getFunctions(this.project);
+        await LambdaController.prepareFunctionHandlers(StaticConfig.buildDir, functions);
 
-        const archivePath = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.buildRootDir);
+        const buildPath = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.buildRootDir);
 
-        await RemoteActionController.deployArchive(archivePath, CompileController.generateBuildName(), account.accountId);
+        await RemoteActionController.deployBuild(buildPath, CompileController.generateBuildName(), account.accountId);
 
         debug("deploy success");
     }

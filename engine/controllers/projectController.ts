@@ -31,14 +31,14 @@ export class ProjectController {
         return project;
     }
 
-    static getFunctionFiles(project: ProjectDefinition): string[] {
+    static getFunctionHandlers(project: ProjectDefinition): string[] {
         return _.transform<FunctionDefinition, string>(project.functions, (result, f) => {
             result.push(f.handler.code);
         }, []);
     }
 
-    static getFunctionNames(project: ProjectDefinition): string[] {
-        return [];
+    static getFunctions(project: ProjectDefinition): FunctionDefinition[] {
+        return project.functions;
     }
 
     private static loadConfigFile(): any {

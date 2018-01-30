@@ -40,6 +40,9 @@ export class StaticConfig {
         return "package.json";
     }
 
+    static get lambdaHandlerPath(): string {
+        return path.join(StaticConfig.rootProjectDir, "/common/lambdaHandler.js");
+    }
     /**
      * Compiler paths
      */

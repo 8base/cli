@@ -21,7 +21,7 @@ import * as uuid from "uuid";
 
 export class RemoteActionController {
 
-    static async deployArchive(archivePath: string, build: string, accountId: number) {
+    static async deployBuild(archivePath: string, build: string, accountId: number) {
 
         const cliConnector = getCliConnector();
 
