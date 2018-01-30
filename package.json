@@ -54,6 +54,8 @@
     "@types/lodash": "^4.14.74",
     "@types/jest": "^20.0.8",
     "@types/supertest": "^2.0.3",
+    "@types/ws": "^3.2.0",
+    "@types/zen-observable": "0.5.3",
     "awesome-typescript-loader": "^3.2.3",
     "jest": "^21.0.1",
     "jest-cli": "^21.2.1",
@@ -69,6 +71,8 @@
     "fs-extra": "^5.0.0",
     "aws-sdk": "^2.185.0",
     "archiver": "^2.1.1",
-    "recursive-readdir": "^2.2.1"
+    "recursive-readdir": "^2.2.1",
+    "request": "^2.83.0",
+    "uuid": "^3.2.1"
   }
 }

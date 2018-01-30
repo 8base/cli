@@ -8,9 +8,8 @@ import { resolveCompiler } from "../../engine";
 export class CompileController {
 
     static async compile(files: string[], buildDir: string): Promise<any> {
-        const distPath = path.join(buildDir, '/dist');
 
-        this.prepareForCompile(buildDir, distPath);
+        this.prepareForCompile(buildDir);
 
         debug("resolve compilers");
         const compiler = resolveCompiler(files);
@@ -18,12 +17,20 @@ export class CompileController {
         const createdFiles = await compiler.compile(buildDir) as string[];
         debug("new files created count = " + createdFiles.length);
 
-        return distPath;
+        return buildDir;
     }
 
-    private static prepareForCompile(buildDir: string, distPath: string) {
+    static generateBuildName(): string {
+        return `build_${Date.now()}`;
+    }
+
+    static clean(buildDir: string) {
         fs.removeSync(buildDir);
-        fs.mkdirpSync(distPath);
+    }
+
+    private static prepareForCompile(buildDir: string) {
+        fs.removeSync(buildDir);
+        fs.mkdirpSync(buildDir);
     }
 }
 

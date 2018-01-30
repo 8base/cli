@@ -1,7 +1,7 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, UserDataStorage, trace } from "../../../common";
 import { InvalidArgument } from "../../../errors";
-import { ConnectionController } from "../../controllers";
+import { RemoteActionController } from "../../controllers";
 import * as _ from "lodash";
 
 export default class Login extends BaseCommand {
@@ -10,7 +10,7 @@ export default class Login extends BaseCommand {
     private config: ExecutionConfig;
 
     async run(): Promise<any> {
-        return await ConnectionController.autorizate(this.user, this.password);
+        return await RemoteActionController.autorizate(this.user, this.password);
     }
 
     async init(config: ExecutionConfig): Promise<any> {

@@ -1,9 +1,9 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, trace, StaticConfig, ProjectDefinition } from "../../../common";
-import { getConnector, ProjectController, CompileController, LambdaController, ArchiveController, ConnectionController } from "../../../engine";
+import { ProjectController, CompileController, LambdaController, ArchiveController, RemoteActionController } from "../../../engine";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
-
+import * as path from "path";
 
 export default class Deploy extends BaseCommand {
 
@@ -23,23 +23,22 @@ export default class Deploy extends BaseCommand {
 
     async run(): Promise<any> {
 
-        await ConnectionController.autorizate();
+        const account = await RemoteActionController.autorizate();
 
         const files = ProjectController.getFunctionFiles(this.project);
+
         const funcNames = ProjectController.getFunctionNames(this.project);
 
-        const distPath = await CompileController.compile(files, StaticConfig.buildDir);
+        CompileController.clean(StaticConfig.buildRootDir);
+        await CompileController.compile(files, StaticConfig.buildDir);
 
-        await LambdaController.prepareLambdaHandlers(distPath, funcNames);
+        await LambdaController.prepareLambdaHandlers(StaticConfig.buildDir, funcNames);
 
+        const archivePath = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.buildRootDir);
 
-        const resultArchive = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.zipPath, ["*.zip"]);
+        await RemoteActionController.deployArchive(archivePath, CompileController.generateBuildName(), account.accountId);
 
-        const connector = getConnector();
-
-        await connector.upload(resultArchive);
-
-        await connector.updateConfiguration();
+        debug("deploy success");
     }
 
     async init(config: ExecutionConfig): Promise<any> {

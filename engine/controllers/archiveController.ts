@@ -39,9 +39,10 @@ export class ArchiveController {
         });
     }
 
-    static async archive(sourcePath: string, targetFile: string, filters: string[]) {
+    static async archive(sourcePath: string, outDir: string, filters?: string[]) {
+        const fullPath = path.join(outDir, 'archive.zip');
         const files = await readdir(sourcePath, filters);
-        await ArchiveController.createZip(files, targetFile);
-        return targetFile;
+        await ArchiveController.createZip(files, fullPath);
+        return fullPath;
     }
 }

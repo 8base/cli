@@ -10,8 +10,4 @@ class UserDataStorage {
     static getToken(): string {
         return this.token;
     }
-
-    static isTokenExist(): boolean {
-        return !!this.token;
-    }
 }

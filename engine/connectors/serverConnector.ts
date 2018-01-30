@@ -1,4 +1,4 @@
-import { StaticConfig, debug, ExecutionConfig, UserDataStorage } from "../../common";
+import { StaticConfig, debug, ExecutionConfig, UserDataStorage, AccountLoginData } from "../../common";
 import 'isomorphic-fetch';
 import { ICliConnector } from "../../interfaces";
 import { GraphQLClient, request } from "graphql-request";
@@ -6,18 +6,25 @@ import * as _ from "lodash";
 
 export class ServerConnector extends ICliConnector {
 
-    async getDeployUrl(sourceFilePath: string): Promise<any> {
+    async getDeployUrl(build: string, account: number): Promise<any> {
         debug("upload process start");
         const result = await this.graphqlClient(`mutation {
-                        generateDeployUrl(filename:"${sourceFilePath}") {
-                            id, url, fields
-                        }
+                        generateDeployUrl(filename:"${build}", account:${account})
                     }`);
-        return _.assign(_.pick(result, ["id", "url"]), JSON.parse(result.fields));
+        const data = result.generateDeployUrl;
+        debug("receive url = " + data);
+        return data;
     }
 
-    async registrateShema(filename: string): Promise<any> {
-        throw new Error("Method not implemented.");
+    async registrateShema(build: string, account: number): Promise<any> {
+        debug("registrate schema process start");
+        const result = await this.graphqlClient(`mutation {
+            registrateShema(buildName:"${build}", account:${account}) {
+                    success
+                }
+            }
+        `);
+        return "";
     }
 
     private async getTemporaryUrlToUpload(): Promise<string> {
@@ -35,28 +42,38 @@ export class ServerConnector extends ICliConnector {
      *
      * @returns token
      */
-    async login(user?: string, password?: string): Promise<string> {
+    async login(user?: string, password?: string): Promise<AccountLoginData> {
         // TODO !! just for developing => have to be on frontend side!
         debug("login token process");
         const result = await this.graphqlClient(`mutation {
             accountLogin(data:{email: "${user}", password: "${password}"}) {
-                success, token
+                account, token, success
             }
         }`);
-        debug("responce = " + JSON.stringify(result, null, 2));
-        return result.accountLogin.token as string;
+
+        if (!result.accountLogin.success) {
+            throw new Error("Login error!");
+        }
+
+        return {
+            accountId: result.accountLogin.account,
+            token: result.accountLogin.token
+        };
     }
 
     private async graphqlClient(query: any, variables?: any): Promise<any> {
         debug('create graphql client ' + StaticConfig.remoteServerCliEndPoint);
+
+        // todo token format?
         const localClient = new GraphQLClient(StaticConfig.remoteServerCliEndPoint, {
           headers: {
             Authorization: `Bearer ${UserDataStorage.getToken()}`,
           },
         });
 
-        debug('Sending query');
+        debug('Sending query:');
         debug(query);
+        debug('Variables:');
         debug(variables);
         try {
             return await localClient.request(query, variables);
