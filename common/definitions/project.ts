@@ -2,31 +2,29 @@
  * Must be send to different git repository, cause server use it too
  */
 
-export interface Schema {
-    path: string;
-  }
 
-  export interface FunctionHandler {
-    code: string;
-  }
 
-  export enum FunctionType {
-    resolver, trigger
-  }
+export interface FunctionHandler {
+  code: string;
+}
 
-  export interface FunctionDefinition {
-    name: string;
+export enum FunctionType {
+  resolver, trigger
+}
 
-    handler: FunctionHandler;
+export interface FunctionDefinition {
+  name: string;
 
-    type: FunctionType;
+  handler: FunctionHandler;
 
-    schema: Schema;
-  }
+  type: FunctionType;
 
-  export interface ProjectDefinition {
+  schema: string;
+}
 
-    name: string;
-    functions: FunctionDefinition[];
-  }
+export interface ProjectDefinition {
+
+  name: string;
+  functions: FunctionDefinition[];
+}
 

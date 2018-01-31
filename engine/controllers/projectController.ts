@@ -65,7 +65,7 @@ export class ProjectController {
                 name: funcname,
                 type: func.type as FunctionType,
                 handler: { code: func.handler.code },
-                schema: { path: func.schema }
+                schema: func.schema
              });
         }, []);
     }

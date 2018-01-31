@@ -1,6 +1,5 @@
-export * from "./compileController";
+export * from "./buildController";
 export * from "./commandController";
-export * from "./lambdaController";
 export * from "./archiveController";
 export * from "./remoteActionController";
 export * from "./projectController";

@@ -10,7 +10,7 @@ export class LabmdaDefinitions {
 
 export interface AccountLoginData {
 
-    accountId: number;
+    accountId: string;
 
     token: string;
 }

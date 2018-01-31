@@ -1,6 +1,6 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, trace, StaticConfig, ProjectDefinition } from "../../../common";
-import { ProjectController, CompileController, LambdaController, ArchiveController, RemoteActionController } from "../../../engine";
+import { ProjectController, BuildController, ArchiveController, RemoteActionController } from "../../../engine";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
 import * as path from "path";
@@ -25,17 +25,24 @@ export default class Deploy extends BaseCommand {
 
         const account = await RemoteActionController.autorizate();
 
-        const files = ProjectController.getFunctionHandlers(this.project);
+        const buildDir = await BuildController.compile(this.project);
+        debug("build dir = " + buildDir);
 
-        CompileController.clean(StaticConfig.buildRootDir);
-        await CompileController.compile(files, StaticConfig.buildDir);
+        const archiveBuildPath = await ArchiveController.archive(
+                buildDir.build,
+                StaticConfig.buildRootDir,
+                "build");
 
-        const functions = ProjectController.getFunctions(this.project);
-        await LambdaController.prepareFunctionHandlers(StaticConfig.buildDir, functions);
+        const archiveSummaryPath = await ArchiveController.archive(
+            buildDir.summary,
+            StaticConfig.buildRootDir,
+            "summary");
 
-        const buildPath = await ArchiveController.archive(StaticConfig.buildDir, StaticConfig.buildRootDir);
-
-        await RemoteActionController.deployBuild(buildPath, CompileController.generateBuildName(), account.accountId);
+        await RemoteActionController.deploy(
+            archiveBuildPath,
+            archiveSummaryPath,
+            BuildController.generateBuildName(),
+            account.accountId);
 
         debug("deploy success");
     }

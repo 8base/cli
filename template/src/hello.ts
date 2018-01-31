@@ -3,5 +3,5 @@ export default async event => {
     data: {
       message: `Hello ${event.data.name}`
     }
-  }
-}
+  };
+};

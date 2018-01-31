@@ -40,16 +40,25 @@ export class StaticConfig {
         return "package.json";
     }
 
-    static get lambdaHandlerPath(): string {
-        return path.join(StaticConfig.rootProjectDir, "/common/lambdaHandler.js");
+    static get functionWrapperPath(): string {
+        return path.join(StaticConfig.rootProjectDir, "/common/functions/wrapper.js");
     }
+
+    static get functionHandlerPath(): string {
+        return path.join(StaticConfig.rootProjectDir, "/common/functions/handler.js");
+    }
+
     /**
      * Compiler paths
      */
 
     static buildRootDir = path.join(StaticConfig.rootExecutionDir, '.build');
 
+    static compileDir = path.join(StaticConfig.buildRootDir, '/compiled');
+
     static buildDir = path.join(StaticConfig.buildRootDir, '/dist');
+
+    static summaryDir = path.join(StaticConfig.buildRootDir, '/summary');
 
     static supportedCompileExtension = new Set<string>([".ts", ".js"]);
 }

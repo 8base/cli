@@ -21,15 +21,22 @@ import * as uuid from "uuid";
 
 export class RemoteActionController {
 
-    static async deployBuild(archivePath: string, build: string, accountId: number) {
+    static async deploy(archiveBuildPath: string, archiveSummaryPath: string, build: string, accountId: string) {
 
         const cliConnector = getCliConnector();
 
-        const url = await cliConnector.getDeployUrl(build, accountId);
+        const urls = await cliConnector.getDeployUrl(build, accountId);
 
-        await getCloudConnector().upload(url, archivePath);
+        const cloudConnector = getCloudConnector();
+        await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
+        await cloudConnector.upload(urls.summaryDataUrl, archiveSummaryPath);
 
-        await cliConnector.registrateShema(build, accountId);
+        const registerResult = await cliConnector.registrateShema(build, accountId);
+
+        if (!registerResult) {
+            throw new Error("invalid regostration schema");
+        }
+
     }
 
     static async autorizate(user?: string, password?: string): Promise<AccountLoginData> {

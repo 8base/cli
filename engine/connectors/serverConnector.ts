@@ -6,25 +6,28 @@ import * as _ from "lodash";
 
 export class ServerConnector extends ICliConnector {
 
-    async getDeployUrl(build: string, account: number): Promise<any> {
+    async getDeployUrl(build: string, account: string): Promise<any> {
         debug("upload process start");
         const result = await this.graphqlClient(`mutation {
-                        generateDeployUrl(filename:"${build}", account:${account})
+                        generateDeployUrl(build:"${build}", account:"${account}") {
+                            buildUrl, summaryDataUrl
+                        }
                     }`);
         const data = result.generateDeployUrl;
         debug("receive url = " + data);
         return data;
     }
 
-    async registrateShema(build: string, account: number): Promise<any> {
+    async registrateShema(build: string, account: string): Promise<any> {
         debug("registrate schema process start");
         const result = await this.graphqlClient(`mutation {
-            registrateShema(buildName:"${build}", account:${account}) {
+            registrateShema(build:"${build}", account:"${account}") {
                     success
                 }
             }
         `);
-        return "";
+        debug(JSON.stringify(result, null, 2));
+        return result.registrateShema.success;
     }
 
     private async getTemporaryUrlToUpload(): Promise<string> {
