@@ -31,10 +31,10 @@ export class RemoteActionController {
         await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
         await cloudConnector.upload(urls.summaryDataUrl, archiveSummaryPath);
 
-        const registerResult = await cliConnector.registrateShema(build, accountId);
+        const result = await cliConnector.registrateShema(build, accountId);
 
-        if (!registerResult) {
-            throw new Error("invalid regostration schema");
+        if (!result.success) {
+            throw new Error(result.message);
         }
 
     }

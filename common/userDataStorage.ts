@@ -61,13 +61,17 @@ export class UserDataStorage {
     static getData(): AccountLoginData {
         const storage = Storage.getStorage();
         return storage.accountId && storage.token ? {
-            accountId: storage.accountId as number,
+            accountId: storage.accountId as string,
             token: storage.token as string
         }
         : null;
     }
 
-    static getToken(): string {
+    static get token(): string {
         return Storage.getStorage().token;
+    }
+
+    static get accountId(): string {
+        return Storage.getStorage().accountId;
     }
 }

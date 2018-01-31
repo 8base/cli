@@ -1,13 +1,13 @@
 
 class UserDataStorage {
 
-    private static token: string;
+    private static savedtoken: string;
 
     static saveToken(token: string) {
-        this.token = token;
+        this.savedtoken = token;
     }
 
-    static getToken(): string {
-        return this.token;
+    static get token(): string {
+        return this.savedtoken;
     }
 }

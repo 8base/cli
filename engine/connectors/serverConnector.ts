@@ -14,20 +14,30 @@ export class ServerConnector extends ICliConnector {
                         }
                     }`);
         const data = result.generateDeployUrl;
-        debug("receive url = " + data);
+        debug("receive url = " + JSON.stringify(data, null, 2));
         return data;
     }
 
+    /**
+     *
+     * @param build
+     * @param account
+     *
+     * @returns { success, message }
+     */
     async registrateShema(build: string, account: string): Promise<any> {
         debug("registrate schema process start");
         const result = await this.graphqlClient(`mutation {
             registrateShema(build:"${build}", account:"${account}") {
-                    success
+                    success, message
                 }
             }
         `);
         debug(JSON.stringify(result, null, 2));
-        return result.registrateShema.success;
+        return {
+            success: result.registrateShema.success,
+            message: result.registrateShema.message
+        };
     }
 
     private async getTemporaryUrlToUpload(): Promise<string> {
@@ -70,7 +80,8 @@ export class ServerConnector extends ICliConnector {
         // todo token format?
         const localClient = new GraphQLClient(StaticConfig.remoteServerCliEndPoint, {
           headers: {
-            Authorization: `Bearer ${UserDataStorage.getToken()}`,
+              "account-id": UserDataStorage.accountId,
+              Authorization: `Bearer ${UserDataStorage.token}`,
           },
         });
 

@@ -43,7 +43,7 @@ export class BuildController {
 
         debug("compiled file map " + JSON.stringify(compiledFilesMap, null, 2));
 
-        let summarySchema: string;
+        let summarySchema = "";
         let summaryFuncInfo = <any>[];
 
         functions.forEach(func => {
@@ -51,6 +51,11 @@ export class BuildController {
 
             debug("concat shema = " + func.schema);
             const schemaPath = path.join(StaticConfig.rootExecutionDir, func.schema);
+
+            if (!fs.existsSync(schemaPath)) {
+                throw new Error("Schema path \"" + schemaPath + "\" not present");
+            }
+
             summarySchema += fs.readFileSync(schemaPath) + "\n";
 
             summaryFuncInfo.push({
@@ -86,6 +91,8 @@ export class BuildController {
     }
 
     private static processFunction(func: FunctionDefinition, compiledFiles: any, outDir: string) {
+        // TODO separate function!
+
         debug("process function = " + func.name);
         const nameNoExt = path.basename(func.handler.code, path.extname(func.handler.code));
 
