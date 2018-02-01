@@ -23,7 +23,7 @@ export default class Deploy extends BaseCommand {
 
     async run(): Promise<any> {
 
-        const account = await RemoteActionController.autorizate();
+        await RemoteActionController.autorizate();
 
         const buildDir = await BuildController.compile(this.project);
         debug("build dir = " + buildDir);
@@ -41,8 +41,7 @@ export default class Deploy extends BaseCommand {
         await RemoteActionController.deploy(
             archiveBuildPath,
             archiveSummaryPath,
-            BuildController.generateBuildName(),
-            account.accountId);
+            BuildController.generateBuildName());
 
         debug("deploy success");
     }

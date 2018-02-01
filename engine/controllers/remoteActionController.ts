@@ -21,17 +21,17 @@ import * as uuid from "uuid";
 
 export class RemoteActionController {
 
-    static async deploy(archiveBuildPath: string, archiveSummaryPath: string, build: string, accountId: string) {
+    static async deploy(archiveBuildPath: string, archiveSummaryPath: string, build: string) {
 
         const cliConnector = getCliConnector();
 
-        const urls = await cliConnector.getDeployUrl(build, accountId);
+        const urls = await cliConnector.getDeployUrl(build);
 
         const cloudConnector = getCloudConnector();
         await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
         await cloudConnector.upload(urls.summaryDataUrl, archiveSummaryPath);
 
-        const result = await cliConnector.registrateShema(build, accountId);
+        const result = await cliConnector.registrateShema(build);
 
         if (!result.success) {
             throw new Error(result.message);

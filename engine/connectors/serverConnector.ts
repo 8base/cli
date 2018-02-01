@@ -6,10 +6,10 @@ import * as _ from "lodash";
 
 export class ServerConnector extends ICliConnector {
 
-    async getDeployUrl(build: string, account: string): Promise<any> {
+    async getDeployUrl(build: string): Promise<any> {
         debug("upload process start");
         const result = await this.graphqlClient(`mutation {
-                        generateDeployUrl(build:"${build}", account:"${account}") {
+                        generateDeployUrl(build:"${build}") {
                             buildUrl, summaryDataUrl
                         }
                     }`);
@@ -25,18 +25,18 @@ export class ServerConnector extends ICliConnector {
      *
      * @returns { success, message }
      */
-    async registrateShema(build: string, account: string): Promise<any> {
+    async registrateShema(build: string): Promise<any> {
         debug("registrate schema process start");
         const result = await this.graphqlClient(`mutation {
-            registrateShema(build:"${build}", account:"${account}") {
+            registrateSchema(build:"${build}") {
                     success, message
                 }
             }
         `);
         debug(JSON.stringify(result, null, 2));
         return {
-            success: result.registrateShema.success,
-            message: result.registrateShema.message
+            success: result.registrateSchema.success,
+            message: result.registrateSchema.message
         };
     }
 
