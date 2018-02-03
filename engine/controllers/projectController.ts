@@ -3,13 +3,18 @@ import * as path from 'path';
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
-import { FunctionDefinition, ProjectDefinition, FunctionType, trace, debug, StaticConfig, ExecutionConfig } from "../../common";
+import { FunctionDefinition, ProjectDefinition, FunctionType, trace, debug, StaticConfig, ExecutionConfig, GraphQlFunctionType } from "../../common";
 import { InvalidConfiguration } from "../../errors";
+import { GraphqlController } from "../../engine";
 
 
 export class ProjectController {
 
     private static configFileName = "./8base.yml";
+
+    /**
+     * public functions
+     */
 
     static async initialize(config: ExecutionConfig): Promise<ProjectDefinition> {
 
@@ -18,7 +23,9 @@ export class ProjectController {
 
         let project: ProjectDefinition = {
             functions: [],
-            name
+            name,
+            rootPath: StaticConfig.rootExecutionDir,
+            gqlSchema: ""
         };
 
         const data = ProjectController.loadConfigFile();
@@ -28,6 +35,13 @@ export class ProjectController {
 
         debug("load functions count = " + project.functions.length);
 
+        project.gqlSchema = GraphqlController.loadSchema(project);
+
+        const functionGqlTypes = GraphqlController.defineGqlFunctionsType(project);
+
+        ProjectController.setGqlFunctionTypes(project, functionGqlTypes);
+
+        debug("load project comlete");
         return project;
     }
 
@@ -39,6 +53,20 @@ export class ProjectController {
 
     static getFunctions(project: ProjectDefinition): FunctionDefinition[] {
         return project.functions;
+    }
+
+    /**
+     * private functions
+     */
+
+    private static setGqlFunctionTypes(project: ProjectDefinition, types: any) {
+        ProjectController.getFunctions(project).forEach(func => {
+            const type = types[func.name];
+            if (_.isNil(type)) {
+                throw new Error("Cannot define graphql type for function \"" + func.name + "\"");
+            }
+            func.gqlType = type;
+        });
     }
 
     private static loadConfigFile(): any {
@@ -65,7 +93,7 @@ export class ProjectController {
                 name: funcname,
                 type: func.type as FunctionType,
                 handler: { code: func.handler.code },
-                schema: func.schema
+                gqlschemaPath: func.schema
              });
         }, []);
     }

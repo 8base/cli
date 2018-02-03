@@ -29,5 +29,9 @@ export class ExecutionConfig {
     getParameter(name: string): string {
         return this.parameters.get(name);
     }
+
+    isParameterPresent(name: string): boolean {
+        return !!this.parameters.get(name);
+    }
 }
 

@@ -6,7 +6,7 @@ export abstract class ICliConnector {
 
     abstract async getDeployUrl(sourceFilePath: string): Promise<any>;
 
-    abstract async registrateShema(build: string): Promise<any>;
+    abstract async deployShema(build: string): Promise<any>;
 
     abstract async invoke(): Promise<any>;
 }

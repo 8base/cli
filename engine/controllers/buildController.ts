@@ -28,11 +28,21 @@ export class BuildController {
 
         BuildController.prepareFunctionHandlers(compiledFiles, ProjectController.getFunctions(project), StaticConfig.buildDir);
 
+        BuildController.saveSchema(project);
+
+        BuildController.saveHandler(StaticConfig.buildDir);
+
+        BuildController.saveFunctionMetaData(project);
+
         return {
             build: StaticConfig.buildDir,
             summary: StaticConfig.summaryDir
         };
     }
+
+    /**
+     * Private functions
+     */
 
     private static prepareFunctionHandlers(compiledFiles: string[], functions: FunctionDefinition[], outDir: string) {
 
@@ -43,43 +53,31 @@ export class BuildController {
 
         debug("compiled file map " + JSON.stringify(compiledFilesMap, null, 2));
 
-        let summarySchema = "";
-        let summaryFuncInfo = <any>[];
+        functions.forEach(func => BuildController.processFunction(func, compiledFilesMap, outDir));
+    }
 
-        functions.forEach(func => {
-            const funcname = BuildController.processFunction(func, compiledFilesMap, outDir);
+    private static saveSchema(project: ProjectDefinition) {
+        const graphqlFilePath = path.join(StaticConfig.summaryDir, 'schema.graphql');
+        fs.writeFileSync(graphqlFilePath, project.gqlSchema);
+    }
 
-            debug("concat shema = " + func.schema);
-            const schemaPath = path.join(StaticConfig.rootExecutionDir, func.schema);
-
-            if (!fs.existsSync(schemaPath)) {
-                throw new Error("Schema path \"" + schemaPath + "\" not present");
-            }
-
-            summarySchema += fs.readFileSync(schemaPath) + "\n";
-
-            summaryFuncInfo.push({
+    private static saveFunctionMetaData(project: ProjectDefinition) {
+        const data = _.transform(project.functions, (res, func) => {
+            res.push({
                 name: func.name,
                 type: func.type.toString(),
+                gqlType: func.gqlType,
                 handler: func.name + ".handler"
             });
-        });
+        }, []);
 
-        debug("process functions complete");
+        const summaryFile = path.join(StaticConfig.summaryDir, '__summary__functions.json');
+        fs.writeFileSync(summaryFile, JSON.stringify(data, null, 2));
+    }
 
-        // write base handler
+    private static saveHandler(outDir: string) {
         const handlerFile = path.join(outDir, path.basename(StaticConfig.functionHandlerPath));
         fs.copyFileSync(StaticConfig.functionHandlerPath, handlerFile);
-
-
-        // write summary schema
-        const graphqlFilePath = path.join(StaticConfig.summaryDir, 'schema.graphql');
-        fs.writeFileSync(graphqlFilePath, summarySchema);
-
-
-        // write summary function data
-        const summaryFile = path.join(StaticConfig.summaryDir, '__summary__functions.json');
-        fs.writeFileSync(summaryFile, JSON.stringify(summaryFuncInfo, null, 2));
     }
 
     static generateBuildName(): string {
@@ -91,7 +89,7 @@ export class BuildController {
     }
 
     private static processFunction(func: FunctionDefinition, compiledFiles: any, outDir: string) {
-        // TODO separate function!
+        // TODO separate function! too hard
 
         debug("process function = " + func.name);
         const nameNoExt = path.basename(func.handler.code, path.extname(func.handler.code));

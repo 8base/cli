@@ -25,8 +25,11 @@ export class AwsConnector implements ICloudConnector {
                 }
             },
             (err: any, res: any, body: any) => {
+                if (err) {
+                    return reject(err);
+                }
                 if (res && res.statusCode !== 200 ) {
-                    reject(new Error(res.body));
+                    return reject(new Error(res.body));
                 }
                 debug("upload file \"" + filepath + "\" success");
                 resolve(path.basename(filepath));

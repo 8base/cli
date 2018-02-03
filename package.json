@@ -37,7 +37,8 @@
     "setupTestFrameworkScriptFile": "./test/setup.ts"
   },
   "dependencies": {
-    "graphql": "^0.10.5",
+    "graphql": "^0.12.3",
+    "graphql-tools": "^2.12.0",
     "lodash": "^4.17.4",
     "readdir": "^0.0.13",
     "async": "^2.5.0",
@@ -54,6 +55,7 @@
     "@types/lodash": "^4.14.74",
     "@types/jest": "^20.0.8",
     "@types/supertest": "^2.0.3",
+    "@types/graphql": "^0.12.1",
     "@types/ws": "^3.2.0",
     "@types/zen-observable": "0.5.3",
     "awesome-typescript-loader": "^3.2.3",

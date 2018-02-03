@@ -1,11 +1,11 @@
 functions:
-  hello_name:
+  hello:
     handler:
       code: src/hello.ts
     type: resolver
     schema: src/hello.graphql
 
-  hello_name2:
+  hello:
     handler:
       code: src/hello2.ts
     type: resolver

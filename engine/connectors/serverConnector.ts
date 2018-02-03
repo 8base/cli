@@ -25,18 +25,18 @@ export class ServerConnector extends ICliConnector {
      *
      * @returns { success, message }
      */
-    async registrateShema(build: string): Promise<any> {
-        debug("registrate schema process start");
+    async deployShema(build: string): Promise<any> {
+        debug("deploy schema process start");
         const result = await this.graphqlClient(`mutation {
-            registrateSchema(build:"${build}") {
+            deploySchema(build:"${build}") {
                     success, message
                 }
             }
         `);
         debug(JSON.stringify(result, null, 2));
         return {
-            success: result.registrateSchema.success,
-            message: result.registrateSchema.message
+            success: result.deploySchema.success,
+            message: result.deploySchema.message
         };
     }
 

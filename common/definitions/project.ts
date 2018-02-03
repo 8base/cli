@@ -9,7 +9,11 @@ export interface FunctionHandler {
 }
 
 export enum FunctionType {
-  resolver, trigger
+  Resolver, Trigger
+}
+
+export enum GraphQlFunctionType {
+  Mutation, Query
 }
 
 export interface FunctionDefinition {
@@ -19,12 +23,16 @@ export interface FunctionDefinition {
 
   type: FunctionType;
 
-  schema: string;
+  gqlType?: GraphQlFunctionType;
+
+  gqlschemaPath: string;
 }
 
 export interface ProjectDefinition {
 
   name: string;
   functions: FunctionDefinition[];
+  rootPath: string;
+  gqlSchema: string;
 }
 

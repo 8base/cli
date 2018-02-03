@@ -8,7 +8,7 @@ import * as uuid from "uuid";
  * deploy:
  *  1. get url and token for upload to aws
  *  2. upload to aws. receive guid of uploaded build,
- *  3. send command to remote cli point registrate uploaded schema.
+ *  3. send command to remote cli point deploy uploaded schema.
  *
  * autorizate
  *  At moment implementation is developed for tests.
@@ -31,7 +31,7 @@ export class RemoteActionController {
         await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
         await cloudConnector.upload(urls.summaryDataUrl, archiveSummaryPath);
 
-        const result = await cliConnector.registrateShema(build);
+        const result = await cliConnector.deployShema(build);
 
         if (!result.success) {
             throw new Error(result.message);
