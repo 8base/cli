@@ -14,21 +14,29 @@ export default class Graphql extends BaseCommand {
 
     private validate: boolean;
 
+    private outDir = StaticConfig.summaryDir;
+
     async run(): Promise<any> {
         if (this.validate) {
             debug("validate schemas");
             GraphqlController.validateSchema(this.project);
         }
+
+        ProjectController.saveSchema(this.project, this.outDir);
+
+        ProjectController.saveFunctionMetaData(this.project, this.outDir);
     }
 
     async init(config: ExecutionConfig): Promise<any> {
         this.validate = config.isParameterPresent("validate_schema");
         this.config = config;
         this.project = await ProjectController.initialize(config);
+        this.outDir = config.getParameter("o");
     }
 
     usage(): string {
-        return "";
+        return `--validate_schema - check for schema syntax
+                -o <outputpath> generate summary graphql schema and function metadata (optional, default ${StaticConfig.summaryDir}`;
     }
 
     name(): string {

@@ -33,7 +33,7 @@ export class StaticConfig {
     }
 
     static get serviceConfigFileName(): string {
-        return "8base.yml";
+        return path.join(this.staticData.executionDir, "8base.yml");
     }
 
     static get packageFileName(): string {
@@ -41,11 +41,11 @@ export class StaticConfig {
     }
 
     static get functionWrapperPath(): string {
-        return path.join(StaticConfig.rootProjectDir, "/common/functions/wrapper.js");
+        return this.staticData.functionWrapperPath;
     }
 
     static get functionHandlerPath(): string {
-        return path.join(StaticConfig.rootProjectDir, "/common/functions/handler.js");
+        return this.staticData.functionHandlerPath;
     }
 
     /**

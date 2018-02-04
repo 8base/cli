@@ -5,7 +5,7 @@ functions:
     type: resolver
     schema: src/hello.graphql
 
-  hello:
+  hello2:
     handler:
       code: src/hello2.ts
     type: resolver

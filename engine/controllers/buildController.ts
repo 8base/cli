@@ -28,11 +28,11 @@ export class BuildController {
 
         BuildController.prepareFunctionHandlers(compiledFiles, ProjectController.getFunctions(project), StaticConfig.buildDir);
 
-        BuildController.saveSchema(project);
-
         BuildController.saveHandler(StaticConfig.buildDir);
 
-        BuildController.saveFunctionMetaData(project);
+        ProjectController.saveFunctionMetaData(project, StaticConfig.summaryDir);
+
+        ProjectController.saveSchema(project, StaticConfig.summaryDir);
 
         return {
             build: StaticConfig.buildDir,
@@ -54,25 +54,6 @@ export class BuildController {
         debug("compiled file map " + JSON.stringify(compiledFilesMap, null, 2));
 
         functions.forEach(func => BuildController.processFunction(func, compiledFilesMap, outDir));
-    }
-
-    private static saveSchema(project: ProjectDefinition) {
-        const graphqlFilePath = path.join(StaticConfig.summaryDir, 'schema.graphql');
-        fs.writeFileSync(graphqlFilePath, project.gqlSchema);
-    }
-
-    private static saveFunctionMetaData(project: ProjectDefinition) {
-        const data = _.transform(project.functions, (res, func) => {
-            res.push({
-                name: func.name,
-                type: func.type.toString(),
-                gqlType: func.gqlType,
-                handler: func.name + ".handler"
-            });
-        }, []);
-
-        const summaryFile = path.join(StaticConfig.summaryDir, '__summary__functions.json');
-        fs.writeFileSync(summaryFile, JSON.stringify(data, null, 2));
     }
 
     private static saveHandler(outDir: string) {

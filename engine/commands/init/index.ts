@@ -63,8 +63,4 @@ export default class Init extends BaseCommand {
         packagedata.name = this.repositoryName;
         return JSON.stringify(packagedata, null, 2);
     }
-
-    private checkForMandatoryFiles(files: Map<string, string>) {
-        return files.get(StaticConfig.serviceConfigFileName) && files.get(StaticConfig.packageFileName);
-    }
 }

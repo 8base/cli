@@ -5,4 +5,6 @@ export class PredefineData {
     executionDir = process.cwd();
     templatePath = path.join(this.projectDir, "../template");
     commandsPath = path.join(this.projectDir, "./engine/commands");
+    functionHandlerPath = path.join(this.projectDir, "/common/functions/handler.js");
+    functionWrapperPath = path.join(this.projectDir, "/common/functions/wrapper.js");
 }
