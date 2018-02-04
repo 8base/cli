@@ -3,7 +3,6 @@ import { ProjectController } from "../../engine";
 import * as _ from "lodash";
 import * as fs from "fs";
 import * as path from "path";
-import gql from "graphql-tag";
 import { makeExecutableSchema } from "graphql-tools";
 import { buildSchema, buildClientSchema, parse, FieldDefinitionNode } from "graphql";
 import { OperationDefinitionNode, ObjectTypeExtensionNode } from "graphql/language/ast";
