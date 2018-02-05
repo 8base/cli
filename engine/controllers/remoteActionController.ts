@@ -1,7 +1,6 @@
 import { debug, trace, ExecutionConfig, UserDataStorage, AccountLoginData } from "../../common";
 import { getCliConnector, getCloudConnector } from "../../engine";
 import * as path from "path";
-import * as uuid from "uuid";
 
 /**
  * class implement scope of remote cli graphql actions.
