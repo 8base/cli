@@ -1,8 +1,9 @@
-import { StaticConfig, debug, ExecutionConfig, UserDataStorage, AccountLoginData } from "../../common";
+import { StaticConfig, debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq, RefreshTokenDataResp } from "../../common";
 import 'isomorphic-fetch';
 import { ICliConnector } from "../../interfaces";
 import { GraphQLClient, request } from "graphql-request";
 import * as _ from "lodash";
+import * as uuid from "uuid";
 
 export class ServerConnector extends ICliConnector {
 
@@ -40,14 +41,23 @@ export class ServerConnector extends ICliConnector {
         };
     }
 
-    private async getTemporaryUrlToUpload(): Promise<string> {
-        throw new Error("Method not implemented.");
-    }
-
     async invoke(): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
+    async reauth(data: RefreshTokenDataReq): Promise<RefreshTokenDataResp> {
+        const result = await this.graphqlClient(`
+        mutation {
+            userRefreshToken(data:{refreshToken: ${data.refreshToken}, email: ${data.email}}) {
+            refreshToken, idToken
+          }
+        }
+        `);
+
+        return {
+            token: result.userRefreshToken.token
+        };
+    }
 
     /**
      * @param user user name
@@ -55,24 +65,42 @@ export class ServerConnector extends ICliConnector {
      *
      * @returns token
      */
-    async login(user?: string, password?: string): Promise<AccountLoginData> {
-        // TODO !! just for developing => have to be on frontend side!
-        debug("login token process");
-        const result = await this.graphqlClient(`mutation {
-            accountLogin(data:{email: "${user}", password: "${password}"}) {
-                account, token, success
-            }
+    async login(session: string, email?: string, password?: string): Promise<any> {
+
+        const result = await this.graphqlClient(`
+        mutation {
+            userLogin(data:{email:"${email}", password: "${password}", sessionID:"${session}"}) {
+            success, message
+          }
         }`);
 
-        if (!result.accountLogin.success) {
-            throw new Error("Login error!");
-        }
-
         return {
-            accountId: result.accountLogin.account,
-            token: result.accountLogin.token
+            success: result.userLogin.success,
+            message: result.userLogin.message
         };
     }
+
+    async getUserLoginToken(session: string): Promise<any> {
+        const resp = await this.graphqlClient(`
+        mutation {
+            getUserLoginToken(loginSessionId:"${session}") {
+                success, accessToken, tokenId, refreshToken
+          }
+        }
+        `);
+
+        return {
+            success: resp.getUserLoginToken.success,
+            email: resp.getUserLoginToken.email,
+            accessToken: resp.getUserLoginToken.accessToken,
+            refreshToken: resp.getUserLoginToken.refreshToken,
+            tokenId: resp.getUserLoginToken.tokenId
+        };
+    }
+
+    /*
+        Private functions
+    */
 
     private async graphqlClient(query: any, variables?: any): Promise<any> {
         debug('create graphql client ' + StaticConfig.remoteServerCliEndPoint);

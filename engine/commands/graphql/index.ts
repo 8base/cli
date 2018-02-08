@@ -35,8 +35,9 @@ export default class Graphql extends BaseCommand {
     }
 
     usage(): string {
-        return `--validate_schema - check for schema syntax
-                -o <outputpath> generate summary graphql schema and function metadata (optional, default ${StaticConfig.summaryDir}`;
+        return `
+            --validate_schema - check for schema syntax
+            -o <outputpath> generate summary graphql schema and function metadata (optional)`;
     }
 
     name(): string {

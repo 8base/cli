@@ -1,4 +1,4 @@
-import { debug, trace, StaticConfig, ExecutionConfig, AccountLoginData } from "../common";
+import { debug, trace, StaticConfig, ExecutionConfig, UserLoginData } from "../common";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -50,25 +50,33 @@ export class UserDataStorage {
      * Function is not thread safe !
      * @param token - user token
      */
-    static save(data: AccountLoginData) {
+    static saveAuth(data: UserLoginData) {
         const storage = Storage.getStorage();
-        storage.token = data.token;
-        storage.accountId = data.accountId;
+        storage.auth = data;
         debug("data to save = " + Storage.toPrettyString(storage));
         Storage.saveStorage(storage);
     }
 
-    static getData(): AccountLoginData {
+    static saveAccount(accountId: string) {
         const storage = Storage.getStorage();
-        return storage.accountId && storage.token ? {
-            accountId: storage.accountId as string,
-            token: storage.token as string
-        }
-        : null;
+        storage.accountId = accountId;
+        debug("data to save = " + Storage.toPrettyString(storage));
+        Storage.saveStorage(storage);
+    }
+
+    static getData(): UserLoginData {
+        const storage = Storage.getStorage();
+        return storage.auth ? storage.auth : null;
     }
 
     static get token(): string {
-        return Storage.getStorage().token;
+        const storage = Storage.getStorage();
+        return storage.auth ? storage.auth.token : null;
+    }
+
+    static get refreshToken(): string {
+        const storage = Storage.getStorage();
+        return storage.auth ? storage.auth.refreshToken : null;
     }
 
     static get accountId(): string {

@@ -8,9 +8,24 @@ export class LabmdaDefinitions {
 
 }
 
-export interface AccountLoginData {
+export interface UserLoginData {
 
-    accountId: string;
+    email: string;
+
+    accessToken: string;
+
+    refreshToken: string;
+
+    tokenId: string;
+}
+
+export interface RefreshTokenDataReq {
+    email: string;
+
+    refreshToken: string;
+}
+
+export interface RefreshTokenDataResp {
 
     token: string;
 }

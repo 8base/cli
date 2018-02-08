@@ -1,8 +1,13 @@
-import { AccountLoginData } from "../common";
+import { UserLoginData, RefreshTokenDataReq, RefreshTokenDataResp } from "../common";
+
 
 export abstract class ICliConnector {
 
-    abstract async login(user?: string, password?: string): Promise<AccountLoginData>;
+    abstract async login(session: string, email?: string, password?: string): Promise<any>;
+
+    abstract async getUserLoginToken(session: string): Promise<any>;
+
+    abstract async reauth(data: RefreshTokenDataReq): Promise<RefreshTokenDataResp>;
 
     abstract async getDeployUrl(sourceFilePath: string): Promise<any>;
 

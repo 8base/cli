@@ -27,7 +27,7 @@ export class GraphqlController {
     static defineGqlFunctionsType(project: ProjectDefinition) {
         // bad solution, I think
         const parsedSchema = parse(project.gqlSchema);
-        return _.transform(parsedSchema.definitions, (res, data) => {
+        return _.transform(parsedSchema.definitions, (res: any, data: any) => {
             switch(data.kind) {
                 case "ObjectTypeExtension": {
                     const extension = data as ObjectTypeExtensionNode;
@@ -61,14 +61,14 @@ export class GraphqlController {
      */
 
     private static processFields(fields: FieldDefinitionNode[]): string[] {
-        return _.transform(fields, (res, f) => {
+        return _.transform(fields, (res: any[], f: any) => {
             res.push(f.name.value);
         }, []);
     }
 
     private static readGraphqlFiles(dir: string): string[] {
         debug("read all from " + dir);
-        return _.transform(fs.readdirSync(dir), (files, file: string) => {
+        return _.transform(fs.readdirSync(dir), (files: any[], file: string) => {
             const p = path.join(dir, file);
             if (fs.statSync(p).isFile() && path.extname(p) === ".graphql") {
                 files.push(p);
