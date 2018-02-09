@@ -1,5 +1,5 @@
 
-import { AccountLoginData } from "../../common";
+import { UserLoginData } from "../../common";
 
 export class UserDataStorage {
 
@@ -13,10 +13,11 @@ export class UserDataStorage {
         return this.savedtoken;
     }
 
-    static getData(): AccountLoginData {
+    static getData(): UserLoginData {
         return {
-            accountId: "1",
-            token: this.savedtoken
+            accessToken: this.savedtoken,
+            refreshToken: "refresh",
+            idToken: this.savedtoken
         };
     }
 }

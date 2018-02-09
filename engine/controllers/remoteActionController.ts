@@ -48,7 +48,7 @@ export class RemoteActionController {
         const loginData = await this.waitForUserLogin(session);
 
         debug("save token...");
-        
+
         UserDataStorage.auth = { email, ...loginData };
         UserDataStorage.email = loginData.email;
 
@@ -121,7 +121,7 @@ export class RemoteActionController {
         if (!res.success) {
             throw new Error(res.message);
         }
-        
+
         return _.pick(res, ["email", "refreshToken", "idToken", "accessToken"]);
     }
 }

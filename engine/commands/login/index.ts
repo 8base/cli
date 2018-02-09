@@ -6,7 +6,7 @@ import * as _ from "lodash";
 
 /*
     Problems:
-        1. 
+        1.
 */
 
 export default class Login extends BaseCommand {
