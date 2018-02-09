@@ -8,7 +8,7 @@ import * as path from "path";
 export default class Clear extends BaseCommand {
 
     async run(): Promise<any> {
-        UserDataStorage.saveAuth(null);
+        UserDataStorage.auth = null;
     }
 
     async init(config: ExecutionConfig): Promise<any> {

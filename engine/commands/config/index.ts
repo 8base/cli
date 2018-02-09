@@ -8,21 +8,29 @@ import * as path from "path";
 export default class Use extends BaseCommand {
 
     private accountId: string;
+    private email: string;
 
     async run(): Promise<any> {
-        UserDataStorage.saveAccount(this.accountId);
+        if (this.accountId) {
+            UserDataStorage.account = this.accountId;
+        }
+        if (this.email) {
+            UserDataStorage.email = this.email;
+        }
     }
 
     async init(config: ExecutionConfig): Promise<any> {
-        this.accountId = config.getParameter("a");
+        this.accountId = config.getParameter("acount");
+        this.email = config.getParameter("email");
     }
 
     usage(): string {
-        return `-a <account_id> set account id to use`;
+        return `--account <account_id> set account
+                --email <email> set email`;
     }
 
     name(): string {
-        return "use";
+        return "config";
     }
 
     onSuccess(): string {

@@ -10,22 +10,15 @@ export class LabmdaDefinitions {
 
 export interface UserLoginData {
 
-    email: string;
-
     accessToken: string;
 
     refreshToken: string;
 
-    tokenId: string;
+    idToken: string;
 }
 
 export interface RefreshTokenDataReq {
     email: string;
 
     refreshToken: string;
-}
-
-export interface RefreshTokenDataResp {
-
-    token: string;
 }

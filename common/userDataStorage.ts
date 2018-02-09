@@ -50,17 +50,21 @@ export class UserDataStorage {
      * Function is not thread safe !
      * @param token - user token
      */
-    static saveAuth(data: UserLoginData) {
+    static set auth(data: UserLoginData) {
         const storage = Storage.getStorage();
         storage.auth = data;
-        debug("data to save = " + Storage.toPrettyString(storage));
         Storage.saveStorage(storage);
     }
 
-    static saveAccount(accountId: string) {
+    static set account(accountId: string) {
         const storage = Storage.getStorage();
         storage.accountId = accountId;
-        debug("data to save = " + Storage.toPrettyString(storage));
+        Storage.saveStorage(storage);
+    }
+
+    static set email(email: string) {
+        const storage = Storage.getStorage();
+        storage.email = email;
         Storage.saveStorage(storage);
     }
 
@@ -71,7 +75,11 @@ export class UserDataStorage {
 
     static get token(): string {
         const storage = Storage.getStorage();
-        return storage.auth ? storage.auth.token : null;
+        return storage.auth ? storage.auth.idToken : null;
+    }
+
+    static get email(): string {
+        return Storage.getStorage().email;
     }
 
     static get refreshToken(): string {

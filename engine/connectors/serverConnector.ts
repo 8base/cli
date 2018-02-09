@@ -1,4 +1,4 @@
-import { StaticConfig, debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq, RefreshTokenDataResp } from "../../common";
+import { StaticConfig, debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq } from "../../common";
 import 'isomorphic-fetch';
 import { ICliConnector } from "../../interfaces";
 import { GraphQLClient, request } from "graphql-request";
@@ -8,15 +8,12 @@ import * as uuid from "uuid";
 export class ServerConnector extends ICliConnector {
 
     async getDeployUrl(build: string): Promise<any> {
-        debug("upload process start");
         const result = await this.graphqlClient(`mutation {
                         generateDeployUrl(build:"${build}") {
                             buildUrl, summaryDataUrl
                         }
                     }`);
-        const data = result.generateDeployUrl;
-        debug("receive url = " + JSON.stringify(data, null, 2));
-        return data;
+        return result.generateDeployUrl;
     }
 
     /**
@@ -26,43 +23,37 @@ export class ServerConnector extends ICliConnector {
      *
      * @returns { success, message }
      */
-    async deployShema(build: string): Promise<any> {
-        debug("deploy schema process start");
+    async deployBuild(build: string): Promise<any> {
         const result = await this.graphqlClient(`mutation {
             deploySchema(build:"${build}") {
                     success, message
                 }
             }
         `);
-        debug(JSON.stringify(result, null, 2));
-        return {
-            success: result.deploySchema.success,
-            message: result.deploySchema.message
-        };
+
+        return result.deploySchema;
     }
 
     async invoke(): Promise<any> {
         throw new Error("Method not implemented.");
     }
 
-    async reauth(data: RefreshTokenDataReq): Promise<RefreshTokenDataResp> {
-        const result = await this.graphqlClient(`
+    async reauth(data: RefreshTokenDataReq): Promise<UserLoginData> {
+        const res = await this.graphqlClient(`
         mutation {
-            userRefreshToken(data:{refreshToken: ${data.refreshToken}, email: ${data.email}}) {
-            refreshToken, idToken
+            refreshToken(data:{refreshToken: "${data.refreshToken}", email: "${data.email}"}) {
+                refreshToken, idToken, accessToken
           }
         }
         `);
 
-        return {
-            token: result.userRefreshToken.token
-        };
+        return res.refreshToken;
     }
 
     /**
      * @param user user name
      * @param password
-     *
+     * @param session - uuid session
      * @returns token
      */
     async login(session: string, email?: string, password?: string): Promise<any> {
@@ -74,28 +65,19 @@ export class ServerConnector extends ICliConnector {
           }
         }`);
 
-        return {
-            success: result.userLogin.success,
-            message: result.userLogin.message
-        };
+        return result.userLogin;
     }
 
     async getUserLoginToken(session: string): Promise<any> {
         const resp = await this.graphqlClient(`
         mutation {
             getUserLoginToken(loginSessionId:"${session}") {
-                success, accessToken, tokenId, refreshToken
+                complete, success, accessToken, idToken, refreshToken, email, message
           }
         }
         `);
 
-        return {
-            success: resp.getUserLoginToken.success,
-            email: resp.getUserLoginToken.email,
-            accessToken: resp.getUserLoginToken.accessToken,
-            refreshToken: resp.getUserLoginToken.refreshToken,
-            tokenId: resp.getUserLoginToken.tokenId
-        };
+        return resp.getUserLoginToken;
     }
 
     /*
@@ -109,7 +91,7 @@ export class ServerConnector extends ICliConnector {
         const localClient = new GraphQLClient(StaticConfig.remoteServerCliEndPoint, {
           headers: {
               "account-id": UserDataStorage.accountId,
-              Authorization: `Bearer ${UserDataStorage.token}`,
+              Authorization: UserDataStorage.token,
           },
         });
 

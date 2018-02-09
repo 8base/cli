@@ -29,8 +29,6 @@ export default class Deploy extends BaseCommand {
             GraphqlController.validateSchema(this.project);
         }
 
-        await RemoteActionController.autorizate();
-
         const buildDir = await BuildController.compile(this.project);
         debug("build dir = " + buildDir);
 

@@ -13,7 +13,6 @@ import * as uuid from "uuid";
  *  3. send command to remote cli point deploy uploaded schema.
  *
  * autorizate
- *  At moment implementation is developed for tests.
  *  For the future: we have to login through frontend (like graphcool)
  *  1. send to the server command with generated guid that some user is going to login
  *  2. open browser with generated guid
@@ -43,17 +42,15 @@ export class RemoteActionController {
         const resp = await getCliConnector().login(session, email, password);
 
         // TODO open browser and login from it
-        if (!resp.success) {
-            throw new Error("login error = " + resp.message);
-        }
 
-        debug("login success, try to get token data");
+        debug("try to get token data");
 
         const loginData = await this.waitForUserLogin(session);
 
         debug("save token...");
-
-        UserDataStorage.saveAuth(loginData);
+        
+        UserDataStorage.auth = { email, ...loginData };
+        UserDataStorage.email = loginData.email;
 
         return loginData;
     }
@@ -63,18 +60,31 @@ export class RemoteActionController {
         Private functions
     */
 
+    /*
+        Function call reauth cli function and save received data to local db
+    */
 
     private static async reauth() {
-
+        const res = await getCliConnector().reauth({ email: UserDataStorage.email, refreshToken: UserDataStorage.refreshToken });
+        UserDataStorage.auth = res;
     }
 
+    /*
+        Function reauthenticate in case of failed action by token reason
+    */
     private static async remoteActionWrap(action: any) {
         try {
-            action();
+            await action();
         } catch(ex) {
-            // if ex is auth error
-            this.reauth();
-            action();
+            if (ex.response
+                && _.isArray(ex.response.errors)
+                && ex.response.errors.find((e: any) => e.code === "InvalidTokenError" || e.code == "TokenExpiredError")) {
+
+                    trace("action auth error = " + ex.message);
+                    await this.reauth();
+                    return await action();
+            }
+            throw ex;
         }
     }
 
@@ -87,26 +97,31 @@ export class RemoteActionController {
         await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
         await cloudConnector.upload(urls.summaryDataUrl, archiveSummaryPath);
 
-        const result = await cliConnector.deployShema(build);
+        const result = await cliConnector.deployBuild(build);
 
         if (!result.success) {
             throw new Error(result.message);
         }
     }
 
-    private static async waitForUserLogin(session: string): Promise<UserLoginData> {
+    private static async waitForUserLogin(session: string): Promise<any> {
         let complete = false;
         const cliConnector = getCliConnector();
         let res: any;
         let counter = 100;
         while(!complete && --counter >= 0) {
             res = await cliConnector.getUserLoginToken(session);
-            complete = res.success;
+            complete = res.complete;
         }
 
         if (counter < 0) {
             throw new Error("Max retry count reached!");
         }
-        return res;
+
+        if (!res.success) {
+            throw new Error(res.message);
+        }
+        
+        return _.pick(res, ["email", "refreshToken", "idToken", "accessToken"]);
     }
 }
