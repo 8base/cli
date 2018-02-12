@@ -3,9 +3,10 @@ import * as path from 'path';
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
-import { FunctionDefinition, ProjectDefinition, FunctionType, trace, debug, StaticConfig, ExecutionConfig, GraphQlFunctionType } from "../../common";
+import { FunctionDefinition, ProjectDefinition, FunctionType, trace, debug, StaticConfig, ExecutionConfig, GraphQlFunctionType, FunctionHandlerCode, FunctionHandlerWebhook } from "../../common";
 import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine";
+import { FunctionHandlerType, IFunctionHandler } from '../../common/definitions/project';
 
 
 export class ProjectController {
@@ -43,14 +44,11 @@ export class ProjectController {
         return project;
     }
 
-    static getFunctionHandlers(project: ProjectDefinition): string[] {
-        return _.transform<FunctionDefinition, string>(project.functions, (result, f) => {
-            result.push(path.join(StaticConfig.rootExecutionDir, f.handler.code));
+    static getFunctionSourceCode(project: ProjectDefinition): string[] {
+        const nativeFunctions = project.functions.filter(f => f.handler.type() === FunctionHandlerType.Code);
+        return _.transform<FunctionDefinition, string>(nativeFunctions, (result, f) => {
+            result.push(path.join(StaticConfig.rootExecutionDir, f.handler.value()));
         }, []);
-    }
-
-    static getFunctions(project: ProjectDefinition): FunctionDefinition[] {
-        return project.functions;
     }
 
     static saveSchema(project: ProjectDefinition, outDir: string) {
@@ -72,12 +70,26 @@ export class ProjectController {
         fs.writeFileSync(summaryFile, JSON.stringify(data, null, 2));
     }
 
+    static getSchemaPaths(project: ProjectDefinition): string[] {
+        return _.transform(project.functions, (res, f) => {
+            const p = path.join(project.rootPath, f.gqlschemaPath);
+            if (!fs.existsSync(p)) {
+                throw new Error("schema path \"" + p + "\" not present");
+            }
+            res.push(p);
+        }, []);
+    }
+
+    static getFunctions(project: ProjectDefinition): FunctionDefinition[] {
+        return project.functions;
+    }
+
     /**
      * private functions
      */
 
     private static setGqlFunctionTypes(project: ProjectDefinition, types: any) {
-        ProjectController.getFunctions(project).forEach(func => {
+        project.functions.forEach(func => {
             const type = types[func.name];
             if (_.isNil(type)) {
                 throw new Error("Cannot define graphql type for function \"" + func.name + "\"");
@@ -109,14 +121,27 @@ export class ProjectController {
             result.push({
                 name: funcname,
                 type: func.type as FunctionType,
-                handler: { code: func.handler.code },
+                handler: ProjectController.resolveHandler(funcname, func.handler),
                 gqlschemaPath: func.schema
              });
         }, []);
     }
 
+    private static resolveHandler(name: string, handler: any): IFunctionHandler {
+        if (handler.code) {
+            return new FunctionHandlerCode(handler.code);
+        } else if (handler.webhook) {
+            return new FunctionHandlerWebhook(handler.webhook);
+        }
+        throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "handler is invalid for function \"" + name + "\"");
+    }
+
     private static validateFunction(func: any, name: string) {
-        if (_.isNil(func.handler.code) || !fs.existsSync(path.join(StaticConfig.rootExecutionDir, func.handler.code))) {
+        if (_.isNil(func.handler)) {
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "handler is absent for function \"" + name + "\"");
+        }
+
+        if (func.handler.code && !fs.existsSync(path.join(StaticConfig.rootExecutionDir, func.handler.code))) {
             throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "unnable to determine function \"" + name + "\" source code");
         }
 

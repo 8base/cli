@@ -16,7 +16,7 @@ export class BuildController {
 
         BuildController.clean();
 
-        const files = ProjectController.getFunctionHandlers(project);
+        const files = ProjectController.getFunctionSourceCode(project);
 
         BuildController.prepare();
 
@@ -73,7 +73,7 @@ export class BuildController {
         // TODO separate function! too hard
 
         debug("process function = " + func.name);
-        const nameNoExt = path.basename(func.handler.code, path.extname(func.handler.code));
+        const nameNoExt = path.basename(func.handler.value(), path.extname(func.handler.value()));
 
         const compiledSource = compiledFiles[nameNoExt];
 

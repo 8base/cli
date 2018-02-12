@@ -2,11 +2,9 @@
  * Must be send to different git repository, cause server use it too
  */
 
+import { IFunctionHandler } from "./handler";
 
 
-export interface FunctionHandler {
-  code: string;
-}
 
 export enum FunctionType {
   Resolver, Trigger
@@ -19,13 +17,15 @@ export enum GraphQlFunctionType {
 export interface FunctionDefinition {
   name: string;
 
-  handler: FunctionHandler;
+  handler: IFunctionHandler;
 
   type: FunctionType;
 
   gqlType?: GraphQlFunctionType;
 
   gqlschemaPath: string;
+
+  environments?: Map<string, string>
 }
 
 export interface ProjectDefinition {
@@ -36,3 +36,4 @@ export interface ProjectDefinition {
   gqlSchema: string;
 }
 
+export * from "./handler";

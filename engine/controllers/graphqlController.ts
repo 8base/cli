@@ -82,15 +82,7 @@ export class GraphqlController {
     }
 
     private static getSchemas(project: ProjectDefinition): string[] {
-        const funcs = ProjectController.getFunctions(project);
-        const schemas = _.transform(funcs, (res, f) => {
-            const p = path.join(project.rootPath, f.gqlschemaPath);
-            if (!fs.existsSync(p)) {
-                throw new Error("schema path \"" + p + "\" not present");
-            }
-            res.push(p);
-        }, []);
-
+        const schemas = ProjectController.getSchemaPaths(project);
         return schemas.length === 0 ? GraphqlController.readGraphqlFiles(project.rootPath) : schemas;
     }
 }
