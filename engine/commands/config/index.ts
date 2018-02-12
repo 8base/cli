@@ -25,8 +25,9 @@ export default class Use extends BaseCommand {
     }
 
     usage(): string {
-        return `--account <account_id> set account
-                --email <email> set email`;
+        return `
+            --account <account_id> set account
+            --email <email> set email`;
     }
 
     name(): string {

@@ -19,7 +19,7 @@ export default class Clear extends BaseCommand {
     }
 
     name(): string {
-        return "use";
+        return "clear";
     }
 
     onSuccess(): string {

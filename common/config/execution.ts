@@ -26,7 +26,7 @@ export class ExecutionConfig {
         return this.cmd;
     }
 
-    getParameter(name: string): string {
+    getParameter(name: string): any {
         return this.parameters.get(name);
     }
 

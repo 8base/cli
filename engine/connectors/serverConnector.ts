@@ -53,8 +53,8 @@ export class ServerConnector extends ICliConnector {
     /**
      * @param user user name
      * @param password
-     * @param session - uuid session
-     * @returns token
+     * @param session - uuid login session
+     * @returns success, message
      */
     async login(session: string, email?: string, password?: string): Promise<any> {
 

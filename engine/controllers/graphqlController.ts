@@ -6,6 +6,7 @@ import * as path from "path";
 import { makeExecutableSchema } from "graphql-tools";
 import { parse, FieldDefinitionNode } from "graphql";
 import { OperationDefinitionNode, ObjectTypeExtensionNode } from "graphql/language/ast";
+import { graphqlLambda } from 'graphql-server-lambda';
 
 
 export class GraphqlController {
@@ -54,6 +55,10 @@ export class GraphqlController {
                 Query: {}
             }
         });
+    }
+
+    static lambda(schema: any, context: any, event: any, callback: any) {
+        return graphqlLambda( { schema, context })(event, context, callback);
     }
 
     /**
