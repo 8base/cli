@@ -90,4 +90,16 @@ export class UserDataStorage {
     static get accountId(): string {
         return Storage.getStorage().accountId;
     }
+
+    static clearAll() {
+        const storage = Storage.getStorage();
+        delete storage.auth;
+        delete storage.email;
+        delete storage.accountId;
+        Storage.saveStorage(storage);
+    }
+
+    static toString(): string {
+        return Storage.toPrettyString(Storage.getStorage());
+    }
 }

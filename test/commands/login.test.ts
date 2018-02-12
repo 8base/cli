@@ -29,10 +29,14 @@ describe("8base login", () => {
     test("check correct login", async () => {
         const cmd = await CommandController.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
         const token = await CommandController.run(cmd);
-        expect(token).toBeDefined();
+        expect(token.accessToken).toEqual("accesstesttoken");
+        expect(token.refreshToken).toEqual("refreshToken");
+        expect(token.idToken).toEqual("testidtoken");
 
         const cmdSecond = await CommandController.initialize(new ExecutionConfig(["login", "-u", "testuser", "-p", "password"]));
         const tokenSecond = await CommandController.run(cmdSecond);
-        expect(token).toEqual(tokenSecond);
+        expect(token.accessToken).toEqual(tokenSecond.accessToken);
+        expect(token.refreshToken).toEqual(tokenSecond.refreshToken);
+        expect(token.idToken).toEqual(tokenSecond.idToken);
     });
 });

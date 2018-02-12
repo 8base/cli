@@ -3,21 +3,21 @@ import { UserLoginData } from "../../common";
 
 export class UserDataStorage {
 
-    private static savedtoken: string;
+    private static data = {} as any;
 
-    static saveToken(token: string) {
-        this.savedtoken = token;
+    static set auth(data: UserLoginData) {
+        this.data.auth = data;
     }
 
-    static get token(): string {
-        return this.savedtoken;
+    static set email(email: string) {
+        this.data.email = email;
+    }
+
+    static get email(): string {
+        return this.data.email;
     }
 
     static getData(): UserLoginData {
-        return {
-            accessToken: this.savedtoken,
-            refreshToken: "refresh",
-            idToken: this.savedtoken
-        };
+        return this.data.auth;
     }
 }

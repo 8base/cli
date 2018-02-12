@@ -23,6 +23,8 @@ export class ServerConnector extends ICliConnector {
      *
      * @returns { success, message }
      */
+
+    // TODO rename deploySchema to deployBuild
     async deployBuild(build: string): Promise<any> {
         const result = await this.graphqlClient(`mutation {
             deploySchema(build:"${build}") {

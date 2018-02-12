@@ -7,15 +7,31 @@ import * as path from "path";
 
 export default class Clear extends BaseCommand {
 
+    private auth: boolean;
+    private email: boolean;
+    private all: boolean;
+
+
     async run(): Promise<any> {
-        UserDataStorage.auth = null;
+        if (this.all) {
+            return UserDataStorage.clearAll();
+        }
+
+        if (this.auth) {
+            UserDataStorage.auth = null;
+            return;
+        }
     }
 
     async init(config: ExecutionConfig): Promise<any> {
+        this.all = config.isParameterPresent("all");
+        this.auth = config.isParameterPresent("auth");
     }
 
     usage(): string {
-        return `clear auth data`;
+        return `
+            --all - clear all config data
+            --auth - clear auth data`;
     }
 
     name(): string {
@@ -23,7 +39,13 @@ export default class Clear extends BaseCommand {
     }
 
     onSuccess(): string {
-        return "auth data has been cleared";
+        if (this.all) {
+            return "all data has been cleared";
+        }
+
+        if (this.auth) {
+            return "auth data has been cleared";
+        }
     }
 
 }

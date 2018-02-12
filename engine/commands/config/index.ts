@@ -1,5 +1,5 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, UserDataStorage } from "../../../common";
+import { ExecutionConfig, UserDataStorage, trace } from "../../../common";
 import { ProjectController, GraphqlController } from "../../../engine";
 import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
@@ -11,6 +11,10 @@ export default class Use extends BaseCommand {
     private email: string;
 
     async run(): Promise<any> {
+        if (_.isNil(this.accountId) && _.isNil(this.email)) {
+            return trace(UserDataStorage.toString());
+        }
+
         if (this.accountId) {
             UserDataStorage.account = this.accountId;
         }
@@ -20,14 +24,15 @@ export default class Use extends BaseCommand {
     }
 
     async init(config: ExecutionConfig): Promise<any> {
-        this.accountId = config.getParameter("acount");
+        this.accountId = config.getParameter("account");
         this.email = config.getParameter("email");
     }
 
     usage(): string {
         return `
-            --account <account_id> set account
-            --email <email> set email`;
+            no parameters - print config
+            --account <account_id> set account (optional)
+            --email <email> set email (optional)`;
     }
 
     name(): string {
@@ -35,7 +40,14 @@ export default class Use extends BaseCommand {
     }
 
     onSuccess(): string {
-        return "use account = " + this.accountId;
+        let res = "";
+        if (this.accountId) {
+            res += "use account " + this.accountId + "\n";
+        }
+        if (this.email) {
+            res += "use email " + this.email + "\n";
+        }
+        return res;
     }
 
 }
