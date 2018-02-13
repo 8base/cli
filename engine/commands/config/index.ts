@@ -10,8 +10,10 @@ export default class Use extends BaseCommand {
     private accountId: string;
     private email: string;
 
+    private remote: string;
+
     async run(): Promise<any> {
-        if (_.isNil(this.accountId) && _.isNil(this.email)) {
+        if (_.isNil(this.accountId) && _.isNil(this.email) && _.isNil(this.remote)) {
             return trace(UserDataStorage.toString());
         }
 
@@ -21,18 +23,24 @@ export default class Use extends BaseCommand {
         if (this.email) {
             UserDataStorage.email = this.email;
         }
+
+        if (this.remote) {
+            UserDataStorage.remoteCliAddress = this.remote;
+        }
     }
 
     async init(config: ExecutionConfig): Promise<any> {
         this.accountId = config.getParameter("account");
         this.email = config.getParameter("email");
+        this.remote = config.getParameter("remote");
     }
 
     usage(): string {
         return `
             no parameters - print config
             --account <account_id> set account (optional)
-            --email <email> set email (optional)`;
+            --email <email> set email (optional)
+            --remote <address> set remote cli endpoint (optional)`;
     }
 
     name(): string {
@@ -46,6 +54,9 @@ export default class Use extends BaseCommand {
         }
         if (this.email) {
             res += "use email " + this.email + "\n";
+        }
+        if (this.remote) {
+            res += "use remote cli endpoint " + this.remote + "\n";
         }
         return res;
     }

@@ -82,6 +82,16 @@ export class UserDataStorage {
         return Storage.getStorage().email;
     }
 
+    static set remoteCliAddress(address: string) {
+        const storage = Storage.getStorage();
+        storage.remoteCliEndpoint = address;
+        Storage.saveStorage(storage);
+    }
+
+    static get remoteCliAddress(): string {
+        return Storage.getStorage().remoteCliEndpoint;
+    }
+
     static get refreshToken(): string {
         const storage = Storage.getStorage();
         return storage.auth ? storage.auth.refreshToken : null;
@@ -96,6 +106,7 @@ export class UserDataStorage {
         delete storage.auth;
         delete storage.email;
         delete storage.accountId;
+        delete storage.remoteCliEndpoint;
         Storage.saveStorage(storage);
     }
 

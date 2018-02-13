@@ -25,7 +25,7 @@ export interface FunctionDefinition {
 
   gqlschemaPath: string;
 
-  environments?: Map<string, string>
+  environments?: Map<string, string>;
 }
 
 export interface ProjectDefinition {

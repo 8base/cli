@@ -87,10 +87,10 @@ export class ServerConnector extends ICliConnector {
     */
 
     private async graphqlClient(query: any, variables?: any): Promise<any> {
-        debug('create graphql client ' + StaticConfig.remoteServerCliEndPoint);
+        debug('create graphql client ' + StaticConfig.remoteCliAddress);
 
         // todo token format?
-        const localClient = new GraphQLClient(StaticConfig.remoteServerCliEndPoint, {
+        const localClient = new GraphQLClient(StaticConfig.remoteCliAddress, {
           headers: {
               "account-id": UserDataStorage.accountId,
               Authorization: UserDataStorage.token,

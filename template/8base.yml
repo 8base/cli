@@ -7,6 +7,6 @@ functions:
 
   hello2:
     handler:
-      code: src/hello2.ts
+      code: src/hello2.js
     type: resolver
     schema: src/hello2.graphql
