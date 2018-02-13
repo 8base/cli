@@ -93,10 +93,10 @@ export class BuildController {
 
         debug("read function wrapper");
         let wrapper = fs.readFileSync(StaticConfig.functionWrapperPath);
-        wrapper = wrapper.toString().replace("__functionname__", handlerFuncName);
+        const updatedWrapper = wrapper.toString().replace("__functionname__", handlerFuncName);
         debug("prepare wrapper complete");
 
-        fs.writeFileSync(fullFuncPath, wrapper);
+        fs.writeFileSync(fullFuncPath, updatedWrapper);
         debug("write func wrapper compete = " + fullFuncPath);
 
         fs.copyFileSync(compiledSource, fullFuncHandlerPath);
