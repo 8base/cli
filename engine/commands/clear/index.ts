@@ -23,7 +23,7 @@ export default class Clear extends BaseCommand {
         }
     }
 
-    async init(config: ExecutionConfig): Promise<any> {
+    async commandInit(config: ExecutionConfig): Promise<any> {
         this.all = config.isParameterPresent("all");
         this.auth = config.isParameterPresent("auth");
     }

@@ -16,7 +16,6 @@ export default class Init extends BaseCommand {
 
     private repositoryParameterName = 'r';
     private repositoryName: string;
-    private config: ExecutionConfig;
 
     usage(): string {
         return "-r <repository_name>";
@@ -26,7 +25,7 @@ export default class Init extends BaseCommand {
         return "init";
     }
 
-    async init(config: ExecutionConfig): Promise<any> {
+    async commandInit(config: ExecutionConfig): Promise<any> {
         debug("start initiailie init command");
 
         this.repositoryName = config.getParameter('r');
@@ -34,8 +33,6 @@ export default class Init extends BaseCommand {
         if (!_.isString(this.repositoryName)) {
             throw new InvalidArgument('repository name');
         }
-
-        this.config = config;
 
         debug("initialize success: initilize repository = " + this.repositoryName);
     }

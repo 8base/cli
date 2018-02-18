@@ -27,7 +27,8 @@ export class ExecutionConfig {
     }
 
     getParameter(name: string): any {
-        return this.parameters.get(name);
+        const res = this.parameters.get(name);
+        return _.isNil(res) || _.isEmpty(res) ? null : res;
     }
 
     isParameterPresent(name: string): boolean {

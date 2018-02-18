@@ -9,8 +9,6 @@ export default class Deploy extends BaseCommand {
 
     private project: ProjectDefinition;
 
-    private config: ExecutionConfig;
-
     private schemaValidate: boolean;
 
     /**
@@ -50,8 +48,7 @@ export default class Deploy extends BaseCommand {
         debug("deploy success");
     }
 
-    async init(config: ExecutionConfig): Promise<any> {
-        this.config = config;
+    async commandInit(config: ExecutionConfig): Promise<any> {
         this.schemaValidate = config.isParameterPresent("validate_schema");
         this.project = await ProjectController.initialize(config);
     }

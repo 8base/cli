@@ -29,7 +29,7 @@ export default class Use extends BaseCommand {
         }
     }
 
-    async init(config: ExecutionConfig): Promise<any> {
+    async commandInit(config: ExecutionConfig): Promise<any> {
         this.accountId = config.getParameter("account");
         this.email = config.getParameter("email");
         this.remote = config.getParameter("remote");

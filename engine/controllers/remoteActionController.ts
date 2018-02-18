@@ -4,6 +4,7 @@ import { ICliConnector } from "../../interfaces";
 import * as path from "path";
 import _ = require("lodash");
 import * as uuid from "uuid";
+import { InvalidArgument } from '../../errors';
 
 /**
  * class implement scope of remote cli graphql actions.
@@ -22,9 +23,14 @@ import * as uuid from "uuid";
 
 export class RemoteActionController {
 
+    static async invoke(functionName: string, args: string): Promise<any> {
+        const func = _.bind(RemoteActionController.invokeInternal, this, functionName, args);
+        return await this.remoteActionWrap(func);
+    }
+
     static async deploy(archiveBuildPath: string, archiveSummaryPath: string, build: string) {
-        await this.remoteActionWrap(
-            _.bind(RemoteActionController.deployInternal, this, archiveBuildPath, archiveSummaryPath, build));
+        const func = _.bind(RemoteActionController.deployInternal, this, archiveBuildPath, archiveSummaryPath, build);
+        await this.remoteActionWrap(func);
     }
 
     static async autorizate(email?: string, password?: string): Promise<UserLoginData> {
@@ -74,7 +80,7 @@ export class RemoteActionController {
     */
     private static async remoteActionWrap(action: any) {
         try {
-            await action();
+            return await action();
         } catch(ex) {
             if (ex.response
                 && _.isArray(ex.response.errors)
@@ -102,6 +108,20 @@ export class RemoteActionController {
         if (!result.success) {
             throw new Error(result.message);
         }
+    }
+
+    static async invokeInternal(functionName: string, args: string): Promise<any> {
+        debug("input args = " + args);
+        const strResp = await getCliConnector().invoke(functionName, args);
+
+        debug("invoke string response = " + strResp);
+        const resp = JSON.parse(strResp);
+
+        if (resp.errorMessage) {
+            throw new Error(resp.errorMessage);
+        }
+
+        return resp;
     }
 
     private static async waitForUserLogin(session: string): Promise<any> {

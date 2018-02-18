@@ -36,8 +36,26 @@ export class ServerConnector extends ICliConnector {
         return result.deploySchema;
     }
 
-    async invoke(): Promise<any> {
-        throw new Error("Method not implemented.");
+    async invoke(functionName: string, args: string): Promise<string> {
+        const result = await this.graphqlClient(`mutation {
+            invoke(functionName: "${functionName}", inputArgs:"${args}") {
+                responseData
+            }
+        }
+        `);
+
+        return result.invoke.responseData;
+    }
+
+    async listFunctions(): Promise<string[]> {
+        const result = await this.graphqlClient(`
+        query {
+            listFunctions {
+                functions
+            }
+        }
+        `);
+        return result.invoke;
     }
 
     async reauth(data: RefreshTokenDataReq): Promise<UserLoginData> {

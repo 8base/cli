@@ -17,5 +17,20 @@ export abstract class BaseCommand extends DisplayInfo {
         return "    Command \"" + this.name() + "\" " + this.usage();
     }
 
-    abstract async init(config: ExecutionConfig): Promise<any>;
+    async init(config: ExecutionConfig): Promise<any> {
+        await this.baseInit(config);
+        await this.commandInit(config);
+    }
+
+    protected abstract async commandInit(config: ExecutionConfig): Promise<any>;
+
+    private baseInit(config: ExecutionConfig) {
+        this._config = config;
+    }
+
+    protected get config(): ExecutionConfig {
+        return this._config;
+    }
+
+    private _config: ExecutionConfig;
 }

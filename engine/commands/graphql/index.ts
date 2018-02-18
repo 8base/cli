@@ -10,8 +10,6 @@ export default class Graphql extends BaseCommand {
 
     private project: ProjectDefinition;
 
-    private config: ExecutionConfig;
-
     private validate: boolean;
 
     private outDir = StaticConfig.summaryDir;
@@ -27,9 +25,8 @@ export default class Graphql extends BaseCommand {
         ProjectController.saveFunctionMetaData(this.project, this.outDir);
     }
 
-    async init(config: ExecutionConfig): Promise<any> {
+    async commandInit(config: ExecutionConfig): Promise<any> {
         this.validate = config.isParameterPresent("validate_schema");
-        this.config = config;
         this.project = await ProjectController.initialize(config);
         this.outDir = config.getParameter("o");
     }

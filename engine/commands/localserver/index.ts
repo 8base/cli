@@ -7,22 +7,19 @@ import * as _ from "lodash";
 export default class LocalServer extends BaseCommand {
     private port: string;
 
-    private config: ExecutionConfig;
-
     private server: LocalServerExpress;
 
     async run(): Promise<any> {
         this.server.start();
     }
 
-    async init(config: ExecutionConfig): Promise<any> {
+    async commandInit(config: ExecutionConfig): Promise<any> {
         const port = config.getParameter("p") as number;
         if (!_.isNumber(port) || port < 1025) {
             throw new InvalidArgument("port");
         }
 
         this.server = new LocalServerExpress(port);
-        this.config = config;
     }
 
     usage(): string {

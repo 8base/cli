@@ -13,5 +13,7 @@ export abstract class ICliConnector {
 
     abstract async deployBuild(build: string): Promise<any>;
 
-    abstract async invoke(): Promise<any>;
+    abstract async invoke(functionName: string, args: string): Promise<string>;
+
+    abstract async listFunctions(): Promise<string[]>;
 }

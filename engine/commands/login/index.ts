@@ -7,13 +7,11 @@ import * as _ from "lodash";
 export default class Login extends BaseCommand {
     private user: string;
     private password: string;
-    private config: ExecutionConfig;
-
     async run(): Promise<any> {
         return await RemoteActionController.autorizate(this.user, this.password);
     }
 
-    async init(config: ExecutionConfig): Promise<any> {
+    async commandInit(config: ExecutionConfig): Promise<any> {
         this.user = config.getParameter('u');
         this.password = config.getParameter('p');
 
@@ -24,8 +22,6 @@ export default class Login extends BaseCommand {
         if (_.isNil(this.password)) {
             throw new InvalidArgument("password");
         }
-
-        this.config = config;
     }
 
     usage(): string {
