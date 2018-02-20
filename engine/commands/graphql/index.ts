@@ -22,7 +22,7 @@ export default class Graphql extends BaseCommand {
 
         ProjectController.saveSchema(this.project, this.outDir);
 
-        ProjectController.saveFunctionMetaData(this.project, this.outDir);
+        ProjectController.saveMetaDataFile(this.project, this.outDir);
     }
 
     async commandInit(config: ExecutionConfig): Promise<any> {

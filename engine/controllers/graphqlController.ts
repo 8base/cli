@@ -1,4 +1,4 @@
-import { ProjectDefinition, debug, rootGraphqlSchema } from "../../common";
+import { ProjectDefinition, debug, rootGraphqlSchema, GraphQlFunctionType } from "../../common";
 import { ProjectController } from "../../engine";
 import * as _ from "lodash";
 import * as fs from "fs";
@@ -25,8 +25,9 @@ export class GraphqlController {
      * @param project
      * @return { funcname: "Query/Mutation" }
      */
-    static defineGqlFunctionsType(project: ProjectDefinition) {
+    static defineGqlFunctionsType(project: ProjectDefinition): {[functionName: string]: GraphQlFunctionType} {
         // bad solution, I think
+        // parse graphql file and get function type for all each function
         const parsedSchema = parse(project.gqlSchema);
         return _.transform(parsedSchema.definitions, (res: any, data: any) => {
             switch(data.kind) {

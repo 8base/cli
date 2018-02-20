@@ -5,6 +5,7 @@ import * as path from "path";
 import _ = require("lodash");
 import * as uuid from "uuid";
 import { InvalidArgument } from '../../errors';
+import * as jwtDecode from "jwt-decode";
 
 /**
  * class implement scope of remote cli graphql actions.
@@ -72,6 +73,7 @@ export class RemoteActionController {
 
     private static async reauth() {
         const res = await getCliConnector().reauth({ email: UserDataStorage.email, refreshToken: UserDataStorage.refreshToken });
+        debug("reuath complete successfull");
         UserDataStorage.auth = res;
     }
 
@@ -79,6 +81,8 @@ export class RemoteActionController {
         Function reauthenticate in case of failed action by token reason
     */
     private static async remoteActionWrap(action: any) {
+        this.validateToken();
+
         try {
             return await action();
         } catch(ex) {
@@ -92,6 +96,16 @@ export class RemoteActionController {
             }
             throw ex;
         }
+    }
+
+    private static validateToken() {
+        try {
+            const decoded = jwtDecode(UserDataStorage.auth.idToken);
+            debug(decoded);
+            // return typeof decoded.iat === 'number' && typeof decoded.clientId === 'string';
+          } catch (e) {
+            return false;
+          }
     }
 
     private static async deployInternal(archiveBuildPath: string, archiveSummaryPath: string, build: string) {

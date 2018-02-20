@@ -3,15 +3,18 @@
  */
 
 import { IFunctionHandler } from "./handler";
-
+import { TriggerDefinition } from './trigger';
 
 
 export enum FunctionType {
-  Resolver, Trigger
+  resolver = "Resolver",
+  trigger = "Trigger"
 }
 
 export enum GraphQlFunctionType {
-  Mutation, Query
+  Mutation = "Mutation",
+  Query = "Query",
+  NotGraphQl = "NoGraphQL"
 }
 
 export interface FunctionDefinition {
@@ -32,8 +35,10 @@ export interface ProjectDefinition {
 
   name: string;
   functions: FunctionDefinition[];
+  triggers: TriggerDefinition[];
   rootPath: string;
   gqlSchema: string;
 }
 
 export * from "./handler";
+export * from "./trigger";

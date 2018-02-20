@@ -19,9 +19,8 @@ class Storage {
      */
     private static checkStorageExist() {
         const storagePath = this.pathToStorage;
-        debug("storage instance by path = " + storagePath);
         if (!fs.existsSync(storagePath)) {
-            debug("create new storage");
+            debug("create new storage path = "  + storagePath);
             fs.writeFileSync(storagePath, "{}");
         }
     }

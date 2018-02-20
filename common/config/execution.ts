@@ -14,7 +14,6 @@ export class ExecutionConfig {
 
     constructor(parameters: Array<string>) {
         this.cmd = parameters[this.cmdParameterIndex];
-
         if (_.isNil(this.cmd)) {
             throw new InvalidArgument("command");
         }

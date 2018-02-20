@@ -30,7 +30,7 @@ export class BuildController {
 
         BuildController.saveHandler(StaticConfig.buildDir);
 
-        ProjectController.saveFunctionMetaData(project, StaticConfig.summaryDir);
+        ProjectController.saveMetaDataFile(project, StaticConfig.summaryDir);
 
         ProjectController.saveSchema(project, StaticConfig.summaryDir);
 

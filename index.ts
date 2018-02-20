@@ -13,14 +13,16 @@ let command: BaseCommand;
 
 async function initialize(): Promise<any> {
     try {
+
         let config = new ExecutionConfig(process.argv.slice(2));
 
-        if (config.getParameter('d')) {
+        if (config.isParameterPresent('d')) {
             setTraceLevel(TraceLevel.Debug);
         } else {
             setTraceLevel(TraceLevel.Trace);
         }
 
+        debug("start init");
         return await CommandController.initialize(config);
     }
     catch(err) {

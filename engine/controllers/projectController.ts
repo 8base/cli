@@ -3,10 +3,24 @@ import * as path from 'path';
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
-import { FunctionDefinition, ProjectDefinition, FunctionType, trace, debug, StaticConfig, ExecutionConfig, GraphQlFunctionType, FunctionHandlerCode, FunctionHandlerWebhook } from "../../common";
-import { InvalidConfiguration } from "../../errors";
+import { FunctionDefinition,
+    ProjectDefinition,
+    FunctionType,
+    trace,
+    debug,
+    StaticConfig,
+    ExecutionConfig,
+    GraphQlFunctionType,
+    FunctionHandlerCode,
+    FunctionHandlerWebhook,
+    FunctionHandlerType,
+    IFunctionHandler,
+    TriggerDefinition,
+    TriggerStageType,
+    TriggerType } from "../../common";
+import { InvalidConfiguration, InvalidArgument } from "../../errors";
 import { GraphqlController } from "../../engine";
-import { FunctionHandlerType, IFunctionHandler } from '../../common/definitions/project';
+
 
 
 export class ProjectController {
@@ -20,25 +34,26 @@ export class ProjectController {
         const name = path.basename(StaticConfig.rootExecutionDir);
         debug("start initialize project \"" + name + "\"");
 
-        let project: ProjectDefinition = {
-            functions: [],
-            name,
-            rootPath: StaticConfig.rootExecutionDir,
-            gqlSchema: ""
-        };
+        let project = ProjectController.initCleanProject(name);
 
+        debug("load main yml file");
         const data = ProjectController.loadConfigFile();
 
         debug("load functions");
-        project.functions = ProjectController.loadFunctions(data);
+        project.functions = FunctionUtils.load(data);
 
         debug("load functions count = " + project.functions.length);
 
+        debug("load schema");
         project.gqlSchema = GraphqlController.loadSchema(project);
 
+        debug("resolve function graphql types");
         const functionGqlTypes = GraphqlController.defineGqlFunctionsType(project);
 
-        ProjectController.setGqlFunctionTypes(project, functionGqlTypes);
+        FunctionUtils.resolveGqlFunctionTypes(project, functionGqlTypes);
+
+        debug("load triggers");
+        project.triggers = TriggerUtils.mergeStages(TriggerUtils.load(data));
 
         debug("initialize project comlete");
         return project;
@@ -56,8 +71,8 @@ export class ProjectController {
         fs.writeFileSync(graphqlFilePath, project.gqlSchema);
     }
 
-    static saveFunctionMetaData(project: ProjectDefinition, outDir: string) {
-        const data = _.transform(project.functions, (res, func) => {
+    static saveMetaDataFile(project: ProjectDefinition, outDir: string) {
+        const functions = _.transform(project.functions, (res, func) => {
             res.push({
                 name: func.name,
                 type: func.type.toString(),
@@ -67,11 +82,14 @@ export class ProjectController {
         }, []);
 
         const summaryFile = path.join(outDir, '__summary__functions.json');
-        fs.writeFileSync(summaryFile, JSON.stringify(data, null, 2));
+        fs.writeFileSync(summaryFile, JSON.stringify({ functions, triggers: project.triggers }, null, 2));
     }
 
     static getSchemaPaths(project: ProjectDefinition): string[] {
         return _.transform(project.functions, (res, f) => {
+            if (!_.isString(f.gqlschemaPath)) {
+                return;
+            }
             const p = path.join(project.rootPath, f.gqlschemaPath);
             if (!fs.existsSync(p)) {
                 throw new Error("schema path \"" + p + "\" not present");
@@ -88,16 +106,6 @@ export class ProjectController {
      * private functions
      */
 
-    private static setGqlFunctionTypes(project: ProjectDefinition, types: any) {
-        project.functions.forEach(func => {
-            const type = types[func.name];
-            if (_.isNil(type)) {
-                throw new Error("Cannot define graphql type for function \"" + func.name + "\"");
-            }
-            func.gqlType = type;
-        });
-    }
-
     private static loadConfigFile(): any {
         const pathToYmlConfig = StaticConfig.serviceConfigFileName;
 
@@ -109,25 +117,44 @@ export class ProjectController {
 
         debug("load yaml file");
 
-        return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
+        try {
+            return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
+        }
+        catch(ex) {
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, ex.message);
+        }
     }
 
-    private static loadFunctions(config: any): FunctionDefinition[] {
+    private static initCleanProject(name: string): ProjectDefinition {
+        return {
+            functions: [],
+            name,
+            rootPath: StaticConfig.rootExecutionDir,
+            gqlSchema: "",
+            triggers: []
+        };
+    }
+}
+
+
+namespace FunctionUtils {
+
+    export function load(config: any): FunctionDefinition[] {
 
         return _.transform<any, FunctionDefinition>(config.functions, (result, func, funcname: string) => {
 
-            this.validateFunction(func, funcname);
+            FunctionUtils.validateFunctionDefinition(func, funcname);
 
             result.push({
                 name: funcname,
-                type: func.type as FunctionType,
-                handler: ProjectController.resolveHandler(funcname, func.handler),
+                type: FunctionUtils.resolveFunctionType(func.type, funcname),
+                handler: resolveHandler(funcname, func.handler),
                 gqlschemaPath: func.schema
              });
         }, []);
     }
 
-    private static resolveHandler(name: string, handler: any): IFunctionHandler {
+    export function resolveHandler(name: string, handler: any): IFunctionHandler {
         if (handler.code) {
             return new FunctionHandlerCode(handler.code);
         } else if (handler.webhook) {
@@ -136,7 +163,25 @@ export class ProjectController {
         throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "handler is invalid for function \"" + name + "\"");
     }
 
-    private static validateFunction(func: any, name: string) {
+    /**
+     * @argument types project, { funcname: type }
+     * Function resolve graphql type for each function.
+     * we have to know function type (mutation, query) for compile schema on the server side
+     */
+    export function resolveGqlFunctionTypes(project: ProjectDefinition, types: {[functionName: string]: GraphQlFunctionType} ) {
+      project.functions.forEach(func => {
+          if (func.type === FunctionType.trigger) {
+              return func.gqlType = GraphQlFunctionType.NotGraphQl;
+          }
+          const type = types[func.name];
+          if (_.isNil(type)) {
+              throw new Error("Cannot define graphql type for function \"" + func.name + "\"");
+          }
+          func.gqlType = type;
+      });
+    }
+
+    export function validateFunctionDefinition(func: any, name: string) {
         if (_.isNil(func.handler)) {
             throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "handler is absent for function \"" + name + "\"");
         }
@@ -149,6 +194,81 @@ export class ProjectController {
             throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "function \"" + name + "\" have unsupported file extension");
         }
     }
+
+    /**
+     *
+     * @param type "resolve", "trigger.before", "trigger.after", "subscription"
+     * @return FunctionType
+     */
+    export function resolveFunctionType(type: string, functionName: string): FunctionType {
+        const funcType = type.split(".")[0];
+        const resolvedType = (<any> FunctionType)[funcType];
+        if (_.isNil(resolvedType)) {
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Invalid function type " + type + " in function " + functionName);
+        }
+
+        return <FunctionType> resolvedType;
+    }
 }
 
+namespace TriggerUtils {
 
+    export function load(config: any): TriggerDefinition[] {
+        return _.transform<any, TriggerDefinition>(config.functions, (result, trigger, name: string) => {
+            if (FunctionUtils.resolveFunctionType(trigger.type, trigger.name) !== FunctionType.trigger) {
+                return;
+            }
+
+            if (_.isNil(trigger.operation)) {
+                throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "operation field not present in trigger " + name);
+            }
+
+            const operation = trigger.operation.split("."); // TableName.TriggerType
+
+            result.push({
+                name: TriggerUtils.resolveTriggerType(operation[1], name),
+                table: operation[0],
+                stages: [ { stageName: TriggerUtils.resolveTriggerStage(trigger.type, name) , functionName: name }]
+            });
+        }, []);
+    }
+
+    export function mergeStages(triggers: TriggerDefinition[]): TriggerDefinition[] {
+        return _.transform<TriggerDefinition, TriggerDefinition>(triggers, (res, trigger) => {
+            const triggerPresent = _.find(res, r => r.table === trigger.table && r.name === trigger.name);
+            if (triggerPresent) {
+                return triggerPresent.stages = _.union(triggerPresent.stages, trigger.stages);
+            }
+            res.push(trigger);
+        }, []);
+    }
+
+    export function resolveTriggerType(type: string, funcName: string): TriggerType {
+        const resolvedType = (<any> TriggerType)[type];
+        if (_.isNil(resolvedType)) {
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Invalid trigger type " + type + " in function " + funcName);
+        }
+
+        return <TriggerType> resolvedType;
+    }
+
+    /**
+     *
+     * @param type "resolve", "trigger.before", "trigger.after", "subscription"
+     * @return TriggerStageType
+     */
+    export function resolveTriggerStage(type: string, functionName: string): TriggerStageType {
+        if (FunctionUtils.resolveFunctionType(type, functionName) === FunctionType.resolver) {
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Cann't resolve trigger type in function = " + functionName);
+        }
+
+        const triggerType = type.split(".")[1];
+        const resolvedType = (<any> TriggerStageType)[triggerType];
+        if (_.isNil(resolvedType)) {
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Invalid trigger type " + type + " in function " + functionName);
+        }
+
+        return <TriggerStageType> resolvedType;
+    }
+
+}
