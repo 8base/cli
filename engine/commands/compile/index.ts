@@ -37,7 +37,7 @@ export default class Compile extends BaseCommand {
     async commandInit(config: ExecutionConfig): Promise<any> {
         this.schemaValidate = config.isParameterPresent("validate_schema");
         this.project = await ProjectController.initialize(config);
-        this.archive = !!config.getParameter('a');
+        this.archive = config.isParameterPresent('a');
     }
 
     usage(): string {
