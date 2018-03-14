@@ -13,10 +13,13 @@ export default class Invoke extends BaseCommand {
 
     private args: any;
 
+    private async: boolean;
+
     private response: any;
 
     async commandInit(config: ExecutionConfig): Promise<any> {
         this.functionName = config.getParameter("f");
+        this.async = config.isParameterPresent("async");
 
         if (_.isNil(this.functionName)) {
             throw new InvalidArgument("function name");
@@ -32,7 +35,7 @@ export default class Invoke extends BaseCommand {
     }
 
     async run(): Promise<any> {
-        this.response = await RemoteActionController.invoke(this.functionName, this.args);
+        this.response = await RemoteActionController.invoke(this.functionName, this.args, this.async);
     }
 
     onSuccess(): string {

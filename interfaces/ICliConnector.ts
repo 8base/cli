@@ -15,5 +15,7 @@ export abstract class ICliConnector {
 
     abstract async invoke(functionName: string, args: string): Promise<string>;
 
+    abstract async invokeAsync(functionName: string, args: string): Promise<{ success: boolean, message: string }>;
+
     abstract async listFunctions(): Promise<string[]>;
 }

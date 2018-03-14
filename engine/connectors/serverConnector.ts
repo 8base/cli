@@ -7,6 +7,17 @@ import * as uuid from "uuid";
 
 export class ServerConnector extends ICliConnector {
 
+    async invokeAsync(functionName: string, args: string): Promise<{ success: boolean, message: string }> {
+        const result = await this.graphqlClient(`mutation {
+            invokeAsync(functionName: "${functionName}", inputArgs:"${args}") {
+                success, message
+            }
+        }
+        `);
+
+        return result.invokeAsync;
+    }
+
     async getDeployUrl(build: string): Promise<any> {
         const result = await this.graphqlClient(`mutation {
                         generateDeployUrl(build:"${build}") {
