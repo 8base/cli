@@ -24,11 +24,8 @@ import * as jwtDecode from "jwt-decode";
 
 export class RemoteActionController {
 
-    static async invoke(functionName: string, args: string, async: boolean): Promise<any> {
-        const func = async
-        ? _.bind(RemoteActionController.invokeAsyncInternal, this, functionName, args)
-        : _.bind(RemoteActionController.invokeInternal, this, functionName, args);
-
+    static async invoke(functionName: string, args: string): Promise<any> {
+        const func = _.bind(RemoteActionController.invokeInternal, this, functionName, args);
         return await this.remoteActionWrap(func);
     }
 
@@ -129,26 +126,18 @@ export class RemoteActionController {
 
     static async invokeInternal(functionName: string, args: string): Promise<any> {
         debug("input args = " + args);
-        const strResp = await getCliConnector().invoke(functionName, args);
+        const resp = await getCliConnector().invoke(functionName, args);
 
-        debug("invoke string response = " + strResp);
-        const resp = JSON.parse(strResp);
+        debug("invoke string response = " + resp);
+        // const resp = JSON.parse(strResp);
 
-        if (resp.errorMessage) {
-            throw new Error(resp.errorMessage);
-        }
+        // if (resp.errorMessage) {
+        //     throw new Error(resp.errorMessage);
+        // }
 
         return resp;
     }
 
-    static async invokeAsyncInternal(functionName: string, args: string): Promise<string> {
-        debug("invoke func async; input args = " + args);
-        const resp = await getCliConnector().invokeAsync(functionName, args);
-        if (!resp.success) {
-            throw new Error(resp.message);
-        }
-        return "async call success";
-    }
 
     private static async waitForUserLogin(session: string): Promise<any> {
         let complete = false;
