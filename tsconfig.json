@@ -23,7 +23,6 @@
     },
     "exclude": [
         "dist",
-        "template",
-        "node_modules"
+        "template"
     ]
 }
