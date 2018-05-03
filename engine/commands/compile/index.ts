@@ -13,7 +13,7 @@ export default class Compile extends BaseCommand {
 
     private schemaValidate: boolean;
 
-    async run(): Promise<any> {
+    async run(): Promise<any>   {
         if (this.schemaValidate) {
             GraphqlController.validateSchema(this.project);
         }
@@ -23,12 +23,12 @@ export default class Compile extends BaseCommand {
 
         if (this.archive) {
             await ArchiveController.archive(
-                    [buildDir.build, StaticConfig.modules],
+                    [ { source: buildDir.build, dist: "" }, { source: StaticConfig.modules, dist: "node_modules" } ],
                     StaticConfig.buildRootDir,
                     "build");
 
             await ArchiveController.archive(
-                    [buildDir.summary],
+                    [{ source: buildDir.summary, dist: "" }],
                     StaticConfig.buildRootDir,
                     "summary");
         }

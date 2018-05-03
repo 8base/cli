@@ -30,12 +30,12 @@ export default class Deploy extends BaseCommand {
         debug("build dir = " + buildDir);
 
         const archiveBuildPath = await ArchiveController.archive(
-                [buildDir.build, StaticConfig.modules],
+                [ { source: buildDir.build, dist: "" }, { source: StaticConfig.modules, dist: "node_modules" } ],
                 StaticConfig.buildRootDir,
                 "build");
 
         const archiveSummaryPath = await ArchiveController.archive(
-            [buildDir.summary],
+            [{ source: buildDir.summary, dist: "" }],
             StaticConfig.buildRootDir,
             "summary");
 
