@@ -15,7 +15,7 @@ export class ArchiveController {
 
             files.forEach((file: any) => {
                 debug("archive files = " + file);
-                zip.file(file, { name: path.basename(file) });
+                zip.file(file, { name: path.basename(file), prefix: "node" });
             });
 
             zip.on('error', (err: any) => {
@@ -40,12 +40,20 @@ export class ArchiveController {
         });
     }
 
-    static async archive(sourcePath: string, outDir: string, buildName: string, filters?: string[]) {
-        debug("archive source path = " + sourcePath);
+    static async archive(sourcePaths: string[], outDir: string, buildName: string, filters?: string[]) {
+        sourcePaths.map(p => debug("archive source path = " + p));
+
         const fullPath = path.join(outDir, buildName + '.zip');
 
         debug("archive dest path = " + fullPath);
-        const files = await readdir(sourcePath, filters);
+        const files = ( await Promise.all( sourcePaths.map( async (p) => {
+            return await readdir(p, filters);
+        })))
+            .reduce<string[]>((res, f) => {
+                return res.concat(f);
+            }, []);
+
+        console.log("files count = " + files.length);
         await ArchiveController.createZip(files, fullPath);
         return fullPath;
     }

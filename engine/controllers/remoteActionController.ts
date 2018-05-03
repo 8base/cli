@@ -1,6 +1,5 @@
 import { debug, trace, ExecutionConfig, UserDataStorage, UserLoginData } from "../../common";
-import { getCliConnector, getCloudConnector } from "../../engine";
-import { ICliConnector } from "../../interfaces";
+import { ServerConnector, getCloudConnector } from "../../engine";
 import * as path from "path";
 import _ = require("lodash");
 import * as uuid from "uuid";
@@ -46,7 +45,7 @@ export class RemoteActionController {
         }
 
         const session = uuid.v4();
-        const resp = await getCliConnector().login(session, email, password);
+        const resp = await ServerConnector().login(session, email, password);
 
         // TODO open browser and login from it
 
@@ -72,7 +71,7 @@ export class RemoteActionController {
     */
 
     private static async reauth() {
-        const res = await getCliConnector().reauth({ email: UserDataStorage.email, refreshToken: UserDataStorage.refreshToken });
+        const res = await ServerConnector().reauth({ email: UserDataStorage.email, refreshToken: UserDataStorage.refreshToken });
         debug("reuath complete successfull");
         UserDataStorage.auth = res;
     }
@@ -109,7 +108,7 @@ export class RemoteActionController {
     }
 
     private static async deployInternal(archiveBuildPath: string, archiveSummaryPath: string, build: string) {
-        const cliConnector = getCliConnector();
+        const cliConnector = ServerConnector();
 
         const urls = await cliConnector.getDeployUrl(build);
 
@@ -126,7 +125,7 @@ export class RemoteActionController {
 
     static async invokeInternal(functionName: string, args: string): Promise<any> {
         debug("input args = " + args);
-        const resp = await getCliConnector().invoke(functionName, args);
+        const resp = await ServerConnector().invoke(functionName, args);
 
         debug("invoke string response = " + resp);
         // const resp = JSON.parse(strResp);
@@ -141,7 +140,7 @@ export class RemoteActionController {
 
     private static async waitForUserLogin(session: string): Promise<any> {
         let complete = false;
-        const cliConnector = getCliConnector();
+        const cliConnector = ServerConnector();
         let res: any;
         let counter = 100;
         while(!complete && --counter >= 0) {

@@ -1,7 +1,7 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, trace, StaticConfig, ProjectDefinition } from "../../../common";
+import { ExecutionConfig, debug, StaticConfig, ProjectDefinition } from "../../../common";
 import { BuildController, ProjectController, ArchiveController, GraphqlController } from "../../../engine";
-import { InvalidArgument } from "../../../errors";
+
 import * as _ from "lodash";
 
 
@@ -23,12 +23,12 @@ export default class Compile extends BaseCommand {
 
         if (this.archive) {
             await ArchiveController.archive(
-                    buildDir.build,
+                    [buildDir.build, StaticConfig.modules],
                     StaticConfig.buildRootDir,
                     "build");
 
             await ArchiveController.archive(
-                    buildDir.summary,
+                    [buildDir.summary],
                     StaticConfig.buildRootDir,
                     "summary");
         }

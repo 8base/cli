@@ -1,7 +1,6 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, trace, StaticConfig, ProjectDefinition } from "../../../common";
+import { ExecutionConfig, debug, StaticConfig, ProjectDefinition } from "../../../common";
 import { ProjectController, BuildController, ArchiveController, RemoteActionController, GraphqlController } from "../../../engine";
-import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
 import * as path from "path";
 
@@ -31,12 +30,12 @@ export default class Deploy extends BaseCommand {
         debug("build dir = " + buildDir);
 
         const archiveBuildPath = await ArchiveController.archive(
-                buildDir.build,
+                [buildDir.build, StaticConfig.modules],
                 StaticConfig.buildRootDir,
                 "build");
 
         const archiveSummaryPath = await ArchiveController.archive(
-            buildDir.summary,
+            [buildDir.summary],
             StaticConfig.buildRootDir,
             "summary");
 

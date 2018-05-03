@@ -41,6 +41,10 @@ export class StaticConfig {
         return "package.json";
     }
 
+    static get modules(): string {
+        return path.join(this.staticData.executionDir, "node_modules");
+    }
+
     static get functionWrapperPath(): string {
         return this.staticData.functionWrapperPath;
     }

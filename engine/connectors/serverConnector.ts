@@ -1,11 +1,10 @@
 import { StaticConfig, debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq } from "../../common";
 import 'isomorphic-fetch';
-import { ICliConnector } from "../../interfaces";
 import { GraphQLClient, request } from "graphql-request";
 import * as _ from "lodash";
 import * as uuid from "uuid";
 
-export class ServerConnector extends ICliConnector {
+class ServerConnectorImpl {
 
     async invokeAsync(functionName: string, args: string): Promise<{ success: boolean, message: string }> {
         const result = await this.graphqlClient(`mutation {
@@ -137,3 +136,7 @@ export class ServerConnector extends ICliConnector {
         }
     }
 }
+
+export const ServerConnector = (): ServerConnectorImpl => {
+    return new ServerConnectorImpl();
+};
