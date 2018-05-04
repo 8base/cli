@@ -23,12 +23,12 @@ export default class Compile extends BaseCommand {
 
         if (this.archive) {
             await ArchiveController.archive(
-                    [ { source: buildDir.build, dist: "" }, { source: StaticConfig.modules, dist: "node_modules" } ],
+                    [ { source: buildDir.build }, { source: StaticConfig.modules, dist: "node_modules" } ],
                     StaticConfig.buildRootDir,
                     "build");
 
             await ArchiveController.archive(
-                    [{ source: buildDir.summary, dist: "" }],
+                    [{ source: buildDir.summary }],
                     StaticConfig.buildRootDir,
                     "summary");
         }
