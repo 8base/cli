@@ -1,6 +1,6 @@
 {
   "name": "8base",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "8base CLI",
   "author": "8base",
   "license": "MIT",
@@ -66,7 +66,7 @@
     "@types/lodash": "^4.14.74",
     "@types/jest": "^20.0.8",
     "@types/supertest": "^2.0.3",
-    "@types/aws-lambda": "^0.0.27",
+    "@types/aws-lambda": "^8.10.0",
     "@types/graphql": "^0.12.1",
     "@types/ws": "^3.2.0",
     "@types/zen-observable": "^0.5.3",
