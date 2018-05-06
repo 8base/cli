@@ -6,7 +6,7 @@ import * as path from "path";
 
 export class ArchiveController {
 
-    static async archive(sourceDirectories: { source: string, dist: string } [], outDir: string, buildName: string, filters?: string[]): Promise<string> {
+    static async archive(sourceDirectories: { source: string, dist?: string } [], outDir: string, buildName: string, filters?: string[]): Promise<string> {
         const fullPath = path.join(outDir, buildName + '.zip');
 
         sourceDirectories.map(p => debug("archive source path = " + p));
@@ -19,8 +19,8 @@ export class ArchiveController {
             zip.pipe(write);
 
             sourceDirectories.forEach((directory) => {
-                debug("archive files from directory = " + directory.source + " to " + directory.dist);
-                zip.directory(directory.source, directory.dist);
+                debug("archive files from directory = " + directory.source);
+                zip.directory(directory.source, directory.dist ? directory.dist : "");
             });
 
             zip.on('error', (err: any) => {
