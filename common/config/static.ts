@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-import { debug } from "../tracer";
 import { PredefineData } from "./predefineData";
 import { UserDataStorage } from '../userDataStorage';
 
@@ -58,8 +57,6 @@ export class StaticConfig {
      */
 
     static buildRootDir = path.join(StaticConfig.rootExecutionDir, '.build');
-
-    static compileDir = path.join(StaticConfig.buildRootDir, '/compiled');
 
     static buildDir = path.join(StaticConfig.buildRootDir, '/dist');
 
