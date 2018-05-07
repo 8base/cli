@@ -1,10 +1,9 @@
-import { trace, debug, StaticConfig, ExecutionConfig } from "../../../common";
+import { ExecutionConfig } from "../../../common";
 import { BaseCommand } from "../base";
 import { RemoteActionController } from "../../controllers";
 import * as _ from "lodash";
 import { InvalidArgument } from '../../../errors';
 import * as fs from "fs";
-import { getCliConnector } from "../../connectors";
 
 
 export default class Invoke extends BaseCommand {

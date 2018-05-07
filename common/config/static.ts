@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-import { debug } from "../tracer";
 import { PredefineData } from "./predefineData";
 import { UserDataStorage } from '../userDataStorage';
 
@@ -41,6 +40,10 @@ export class StaticConfig {
         return "package.json";
     }
 
+    static get modules(): string {
+        return path.join(this.staticData.executionDir, "node_modules");
+    }
+
     static get functionWrapperPath(): string {
         return this.staticData.functionWrapperPath;
     }
@@ -54,8 +57,6 @@ export class StaticConfig {
      */
 
     static buildRootDir = path.join(StaticConfig.rootExecutionDir, '.build');
-
-    static compileDir = path.join(StaticConfig.buildRootDir, '/compiled');
 
     static buildDir = path.join(StaticConfig.buildRootDir, '/dist');
 

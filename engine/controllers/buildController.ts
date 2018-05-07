@@ -1,7 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
 import { debug, FunctionDefinition, ProjectDefinition, StaticConfig } from "../../common";
-import * as _ from 'lodash';
 import { resolveCompiler, ProjectController } from "../../engine";
 
 
@@ -23,10 +22,10 @@ export class BuildController {
         debug("resolve compilers");
         const compiler = resolveCompiler(files);
 
-        const compiledFiles = await compiler.compile(StaticConfig.compileDir) as string[];
+        const compiledFiles = await compiler.compile(StaticConfig.buildDir);
         debug("compiled files = " + compiledFiles);
 
-        BuildController.prepareFunctionHandlers(compiledFiles, ProjectController.getFunctions(project), StaticConfig.buildDir);
+        BuildController.makeFunctionHandlers(ProjectController.getFunctions(project));
 
         BuildController.saveHandler(StaticConfig.buildDir);
 
@@ -44,16 +43,29 @@ export class BuildController {
      * Private functions
      */
 
-    private static prepareFunctionHandlers(compiledFiles: string[], functions: FunctionDefinition[], outDir: string) {
+    private static makeFunctionHandlers(functions: FunctionDefinition[]) {
 
-        const compiledFilesMap = _.transform(compiledFiles, (res, file: string, index: number) => {
-            const name = path.basename(file, path.extname(file));
-            res[name] = file;
-        }, {});
+        functions.forEach(func => {
+            debug("process function = " + func.name);
 
-        debug("compiled file map " + JSON.stringify(compiledFilesMap, null, 2));
+            const targetFunctionPath = path.join(StaticConfig.buildDir, func.handler.value());
 
-        functions.forEach(func => BuildController.processFunction(func, compiledFilesMap, outDir));
+            if (!fs.existsSync(targetFunctionPath)) {
+                throw new Error("target compiled file " + targetFunctionPath + " not exist");
+            }
+
+            const fullWrapperFuncPath = path.join(StaticConfig.buildDir, path.basename(func.handler.value()));
+
+            debug("full function path = " + fullWrapperFuncPath);
+
+            debug("read function wrapper");
+            let wrapper = fs.readFileSync(StaticConfig.functionWrapperPath);
+            const updatedWrapper = wrapper.toString().replace("__functionname__", func.handler.value() );
+            debug("prepare wrapper complete");
+
+            fs.writeFileSync(fullWrapperFuncPath, updatedWrapper);
+            debug("write func wrapper compete = " + fullWrapperFuncPath);
+        });
     }
 
     private static saveHandler(outDir: string) {
@@ -69,44 +81,9 @@ export class BuildController {
         fs.removeSync(StaticConfig.buildRootDir);
     }
 
-    private static processFunction(func: FunctionDefinition, compiledFiles: any, outDir: string) {
-        // TODO separate function! too hard
-
-        debug("process function = " + func.name);
-        const nameNoExt = path.basename(func.handler.value(), path.extname(func.handler.value()));
-
-        const compiledSource = compiledFiles[nameNoExt];
-
-        if (!compiledSource) {
-            throw new Error("compile error!");
-        }
-
-        debug("found compiled source for name " + nameNoExt);
-
-        const funcName = func.name + ".js"; // ?
-        const fullFuncPath = path.join(outDir, funcName);
-
-        debug("full function path = " + fullFuncPath);
-
-        const handlerFuncName = func.name + "-handler.js";
-        const fullFuncHandlerPath = path.join(outDir, handlerFuncName);
-
-        debug("read function wrapper");
-        let wrapper = fs.readFileSync(StaticConfig.functionWrapperPath);
-        const updatedWrapper = wrapper.toString().replace("__functionname__", handlerFuncName);
-        debug("prepare wrapper complete");
-
-        fs.writeFileSync(fullFuncPath, updatedWrapper);
-        debug("write func wrapper compete = " + fullFuncPath);
-
-        fs.copyFileSync(compiledSource, fullFuncHandlerPath);
-        debug("write func handler compete = " + fullFuncHandlerPath);
-    }
-
     private static prepare() {
         fs.mkdirpSync(StaticConfig.buildDir);
         fs.mkdirpSync(StaticConfig.summaryDir);
-        fs.mkdirpSync(StaticConfig.compileDir);
     }
 }
 

@@ -1,7 +1,7 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, trace, StaticConfig, ProjectDefinition } from "../../../common";
+import { ExecutionConfig, debug, StaticConfig, ProjectDefinition } from "../../../common";
 import { BuildController, ProjectController, ArchiveController, GraphqlController } from "../../../engine";
-import { InvalidArgument } from "../../../errors";
+
 import * as _ from "lodash";
 
 
@@ -13,7 +13,7 @@ export default class Compile extends BaseCommand {
 
     private schemaValidate: boolean;
 
-    async run(): Promise<any> {
+    async run(): Promise<any>   {
         if (this.schemaValidate) {
             GraphqlController.validateSchema(this.project);
         }
@@ -23,12 +23,12 @@ export default class Compile extends BaseCommand {
 
         if (this.archive) {
             await ArchiveController.archive(
-                    buildDir.build,
+                    [ { source: buildDir.build }, { source: StaticConfig.modules, dist: "node_modules" } ],
                     StaticConfig.buildRootDir,
                     "build");
 
             await ArchiveController.archive(
-                    buildDir.summary,
+                    [{ source: buildDir.summary }],
                     StaticConfig.buildRootDir,
                     "summary");
         }

@@ -6,16 +6,21 @@ import * as path from "path";
 
 export class ArchiveController {
 
-    private static async createZip(files: any, targetFile: string): Promise<any> {
-        return new Promise((resolve, reject) => {
+    static async archive(sourceDirectories: { source: string, dist?: string } [], outDir: string, buildName: string, filters?: string[]): Promise<string> {
+        const fullPath = path.join(outDir, buildName + '.zip');
+
+        sourceDirectories.map(p => debug("archive source path = " + p));
+        debug("archive dest path = " + fullPath);
+
+        return new Promise<string>((resolve, reject) => {
             const zip = archiver("zip", {});
-            const write = fs.createWriteStream(targetFile);
+            const write = fs.createWriteStream(fullPath);
 
             zip.pipe(write);
 
-            files.forEach((file: any) => {
-                debug("archive files = " + file);
-                zip.file(file, { name: path.basename(file) });
+            sourceDirectories.forEach((directory) => {
+                debug("archive files from directory = " + directory.source);
+                zip.directory(directory.source, directory.dist ? directory.dist : "");
             });
 
             zip.on('error', (err: any) => {
@@ -33,20 +38,10 @@ export class ArchiveController {
 
             zip.on('end', (err: any) => {
                 debug('end');
-                resolve();
+                resolve(fullPath);
             });
 
             zip.finalize(); // ?????
         });
-    }
-
-    static async archive(sourcePath: string, outDir: string, buildName: string, filters?: string[]) {
-        debug("archive source path = " + sourcePath);
-        const fullPath = path.join(outDir, buildName + '.zip');
-
-        debug("archive dest path = " + fullPath);
-        const files = await readdir(sourcePath, filters);
-        await ArchiveController.createZip(files, fullPath);
-        return fullPath;
     }
 }

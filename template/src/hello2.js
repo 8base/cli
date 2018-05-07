@@ -1,6 +1,8 @@
 module.exports = async event => {
-    return {
-      message: `Hello ${event.data.name}`
-    };
+  return event && event.data ? {
+    message: `Hello ${event.data.name}`
+  } : {
+    message: "Hello world!"
   };
+};
   

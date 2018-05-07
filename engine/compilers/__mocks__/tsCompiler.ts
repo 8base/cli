@@ -6,8 +6,8 @@ import * as path from "path";
 export class TypescriptCompiler implements ICompiler {
 
     async compile(buildDir: string): Promise<string[]> {
-        const hello = path.join(StaticConfig.compileDir, "hello.js");
-        const hello2 = path.join(StaticConfig.compileDir, "hello2.js");
+        const hello = path.join(StaticConfig.buildDir, "hello.js");
+        const hello2 = path.join(StaticConfig.buildDir, "hello2.js");
 
         fs.writeFileSync(hello, `
             const handler = require('./handler');
