@@ -22,7 +22,7 @@ export class BuildController {
         debug("resolve compilers");
         const compiler = resolveCompiler(files);
 
-        const compiledFiles = await compiler.compile(StaticConfig.buildDir) as string[];
+        const compiledFiles = await compiler.compile(StaticConfig.buildDir);
         debug("compiled files = " + compiledFiles);
 
         BuildController.makeFunctionHandlers(ProjectController.getFunctions(project));
