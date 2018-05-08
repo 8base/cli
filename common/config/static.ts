@@ -60,6 +60,8 @@ export class StaticConfig {
 
     static buildDir = path.join(StaticConfig.buildRootDir, '/dist');
 
+    static FunctionHandlerExt = ".js";
+
     static summaryDir = path.join(StaticConfig.buildRootDir, '/summary');
 
     static supportedCompileExtension = new Set<string>([".ts", ".js"]);
