@@ -33,7 +33,7 @@ export class RemoteActionController {
         await this.remoteActionWrap(func);
     }
 
-    static async autorizate(email?: string, password?: string): Promise<UserLoginData> {
+    static async authorize(email?: string, password?: string): Promise<UserLoginData> {
 
         let data = UserDataStorage.getData();
 

@@ -2,6 +2,7 @@ import * as fs from "fs-extra";
 import * as path from 'path';
 import { debug, FunctionDefinition, ProjectDefinition, StaticConfig } from "../../common";
 import { resolveCompiler, ProjectController } from "../../engine";
+import * as glob from "glob";
 
 
 export class BuildController {
@@ -48,24 +49,32 @@ export class BuildController {
         functions.forEach(func => {
             debug("process function = " + func.name);
 
-            const targetFunctionPath = path.join(StaticConfig.buildDir, func.handler.value());
+            const handler = func.handler.value();
+            const ext = path.parse(handler).ext;
 
-            if (!fs.existsSync(targetFunctionPath)) {
-                throw new Error("target compiled file " + targetFunctionPath + " not exist");
+            const mask = path.join(StaticConfig.buildDir, handler.replace(ext, "*"));
+
+            if (glob.sync(mask).length !== 1) {
+                throw new Error("target compiled file " + handler + " not exist");
             }
 
-            const fullWrapperFuncPath = path.join(StaticConfig.buildDir, path.basename(func.handler.value()));
-
-            debug("full function path = " + fullWrapperFuncPath);
-
-            debug("read function wrapper");
-            let wrapper = fs.readFileSync(StaticConfig.functionWrapperPath);
-            const updatedWrapper = wrapper.toString().replace("__functionname__", func.handler.value() );
-            debug("prepare wrapper complete");
-
-            fs.writeFileSync(fullWrapperFuncPath, updatedWrapper);
-            debug("write func wrapper compete = " + fullWrapperFuncPath);
+            BuildController.makeFunctionWrapper(func.name, handler.replace(ext, ""));
         });
+    }
+
+    private static makeFunctionWrapper(name: string, functionPath: string) {
+
+        const fullWrapperFuncPath = path.join(StaticConfig.buildDir, name.concat(StaticConfig.FunctionHandlerExt));
+
+        debug("full function path = " + fullWrapperFuncPath);
+
+        debug("read function wrapper");
+        let wrapper = fs.readFileSync(StaticConfig.functionWrapperPath);
+        const updatedWrapper = wrapper.toString().replace("__functionname__", functionPath );
+        debug("prepare wrapper complete");
+
+        fs.writeFileSync(fullWrapperFuncPath, updatedWrapper);
+        debug("write func wrapper compete = " + fullWrapperFuncPath);
     }
 
     private static saveHandler(outDir: string) {
