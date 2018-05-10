@@ -1,4 +1,4 @@
-import { StaticConfig, debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq } from "../../common";
+import { debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq } from "../../common";
 import 'isomorphic-fetch';
 import { GraphQLClient, request } from "graphql-request";
 import * as _ from "lodash";
@@ -115,9 +115,9 @@ class ServerConnectorImpl {
     */
 
     private async graphqlClient(query: any, variables?: any): Promise<any> {
-        debug('create graphql client ' + StaticConfig.remoteCliAddress);
+        debug('create graphql client ' + UserDataStorage.remoteCliAddress);
 
-        const localClient = new GraphQLClient(StaticConfig.remoteCliAddress, {
+        const localClient = new GraphQLClient(UserDataStorage.remoteCliAddress, {
           headers: {
               "account-id": UserDataStorage.accountId,
               Authorization: UserDataStorage.token,

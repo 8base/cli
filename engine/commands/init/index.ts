@@ -1,4 +1,4 @@
-import { trace, debug, StaticConfig } from "../../../common";
+import { debug, StaticConfig } from "../../../common";
 import { getFileProvider } from "./providers";
 import { BaseCommand } from "../base";
 import { ExecutionConfig } from "../../../common";

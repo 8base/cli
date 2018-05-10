@@ -1,7 +1,6 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, trace, StaticConfig, ProjectDefinition } from "../../../common";
+import { ExecutionConfig, debug, StaticConfig, ProjectDefinition } from "../../../common";
 import { ProjectController, GraphqlController } from "../../../engine";
-import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
 import * as path from "path";
 

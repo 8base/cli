@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
-import { debug, FunctionDefinition, ProjectDefinition, StaticConfig } from "../../common";
+import { debug, FunctionDefinition, ProjectDefinition, StaticConfig, UserDataStorage } from "../../common";
 import { resolveCompiler, ProjectController } from "../../engine";
 import * as glob from "glob";
 
@@ -68,18 +68,28 @@ export class BuildController {
 
         debug("full function path = " + fullWrapperFuncPath);
 
-        debug("read function wrapper");
-        let wrapper = fs.readFileSync(StaticConfig.functionWrapperPath);
-        const updatedWrapper = wrapper.toString().replace("__functionname__", functionPath );
-        debug("prepare wrapper complete");
+        fs.writeFileSync(
 
-        fs.writeFileSync(fullWrapperFuncPath, updatedWrapper);
-        debug("write func wrapper compete = " + fullWrapperFuncPath);
+            fullWrapperFuncPath,
+
+            fs.readFileSync(StaticConfig.functionWrapperPath)
+                .toString()
+                .replace("__functionname__", functionPath)
+        );
+
+        debug("write func wrapper compete");
     }
 
     private static saveHandler(outDir: string) {
-        const handlerFile = path.join(outDir, path.basename(StaticConfig.functionHandlerPath));
-        fs.copyFileSync(StaticConfig.functionHandlerPath, handlerFile);
+
+        fs.writeFileSync(
+
+            path.join(outDir, path.basename(StaticConfig.functionHandlerPath)),
+
+            fs.readFileSync(StaticConfig.functionHandlerPath)
+                .toString()
+                .replace("__endpoint__", UserDataStorage.remoteAddress)
+        );
     }
 
     static generateBuildName(): string {
