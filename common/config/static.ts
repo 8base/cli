@@ -64,4 +64,6 @@ export class StaticConfig {
     static summaryDir = path.join(StaticConfig.buildRootDir, '/summary');
 
     static supportedCompileExtension = new Set<string>([".ts", ".js"]);
+
+    static serverGqlFunctionHandlerName = "graphql-api-prod-graphql";
 }

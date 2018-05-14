@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
-import { debug, FunctionDefinition, ProjectDefinition, StaticConfig, UserDataStorage } from "../../common";
+import { debug, FunctionDefinition, ProjectDefinition, StaticConfig } from "../../common";
 import { resolveCompiler, ProjectController } from "../../engine";
 import * as glob from "glob";
 
@@ -88,7 +88,7 @@ export class BuildController {
 
             fs.readFileSync(StaticConfig.functionHandlerPath)
                 .toString()
-                .replace("__endpoint__", UserDataStorage.remoteAddress)
+                .replace("__gql__handle__function_name__", StaticConfig.serverGqlFunctionHandlerName)
         );
     }
 
