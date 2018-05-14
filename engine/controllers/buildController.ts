@@ -52,7 +52,7 @@ export class BuildController {
             const handler = func.handler.value();
             const ext = path.parse(handler).ext;
 
-            const mask = path.join(StaticConfig.buildDir, handler.replace(ext, "*"));
+            const mask = path.join(StaticConfig.buildDir, handler.replace(ext, ".*"));
 
             if (glob.sync(mask).length !== 1) {
                 throw new Error("target compiled file " + handler + " not exist");

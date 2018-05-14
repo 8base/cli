@@ -16,9 +16,9 @@ module.exports = function handler(event, cloudContext, cb, funcname) {
     }
 
     const context = {
-      gqlRequest: (query, variables, headers) => {
+      gqlRequest: (query, variables, headers) =>  {
      
-        const resp = Promise.resolve(
+        return Promise.resolve(
           (new GraphQLClient(endpoint, {
             headers: {
               "account-id": "5ae34c916e7d7f72ba38871d",
@@ -28,9 +28,6 @@ module.exports = function handler(event, cloudContext, cb, funcname) {
           }))
           .request(query, variables)
         );
-
-        console.log("handler resp = ", resp)
-        return resp;
       }
     }
 
