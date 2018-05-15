@@ -7,6 +7,7 @@ const toGqlFormat = (query, variables, headers) => {
     body: JSON.stringify({
       query, variables,
     }),
+    httpMethod: "POST",
     headers
   };
 }
@@ -22,34 +23,26 @@ const requestLambda = (funcName, payload, cloudContext) => {
     })).toString('base64')
   };
 
-  console.log("invoke!")
-
-  return lambda.invoke(req).promise()
+  return lambda.invoke(req)
+    .promise()
     .then(result => {
-      console.log("result ", result)
       const response = result.$response;
   
       if (response.error) {
         throw new Error(response.error);
       }
     
-      console.log("call result = ", response.data);
-      return response.data;    
+      return JSON.parse(JSON.parse(response.data.Payload).body);
     })
     .catch(err => {
-      console.log("catch = ", err.message);
       throw err;
     });
 }
 
-//5ae34c916e7d7f72ba38871d_mockFunc2
 
 module.exports = function handler(event, cloudContext, cb, funcname) {
 
   // TODO: check it token: add middleware!
-
-  console.log("event " , event);
-  console.log("cloudContext " , cloudContext);
 
   cloudContext.callbackWaitsForEmptyEventLoop = false;
 
@@ -71,9 +64,15 @@ module.exports = function handler(event, cloudContext, cb, funcname) {
         // Function call graphql function 
 
         gqlRequest: (query, variables) =>  {
-          const payload = JSON.stringify(toGqlFormat(query, variables, event.headers));
-          console.log("payload ", payload)
-          return requestLambda(gqlHandleFuncName, payload, cloudContext);
+          return requestLambda(
+            gqlHandleFuncName,
+            JSON.stringify(toGqlFormat(query, variables, event.headers)),
+            cloudContext
+          );
+        },
+
+        request: (functionName, args) => {
+          throw new Error("Method is not implemented");
         }
       }
     }
