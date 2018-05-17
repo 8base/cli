@@ -88,7 +88,7 @@ export class BuildController {
 
             fs.readFileSync(StaticConfig.functionHandlerPath)
                 .toString()
-                .replace("__gql__handle__function_name__", StaticConfig.serverGqlFunctionHandlerName)
+                .replace("__remote_server_endpoint__", StaticConfig.remoteAddress)
         );
     }
 
