@@ -1,5 +1,9 @@
 {
   "name": "[PROJECT_NAME]",
   "version": "1.0.0",
-  "description": "8base Custom Logic"
+  "description": "8base Custom Logic",
+  "dependencies": {
+    "graphql-request": "^1.6.0",
+    "path": "^0.12.7"
+  }
 }
