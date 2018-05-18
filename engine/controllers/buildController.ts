@@ -52,7 +52,7 @@ export class BuildController {
             const handler = func.handler.value();
             const ext = path.parse(handler).ext;
 
-            const mask = path.join(StaticConfig.buildDir, handler.replace(ext, "*"));
+            const mask = path.join(StaticConfig.buildDir, handler.replace(ext, ".*"));
 
             if (glob.sync(mask).length !== 1) {
                 throw new Error("target compiled file " + handler + " not exist");
@@ -68,18 +68,28 @@ export class BuildController {
 
         debug("full function path = " + fullWrapperFuncPath);
 
-        debug("read function wrapper");
-        let wrapper = fs.readFileSync(StaticConfig.functionWrapperPath);
-        const updatedWrapper = wrapper.toString().replace("__functionname__", functionPath );
-        debug("prepare wrapper complete");
+        fs.writeFileSync(
 
-        fs.writeFileSync(fullWrapperFuncPath, updatedWrapper);
-        debug("write func wrapper compete = " + fullWrapperFuncPath);
+            fullWrapperFuncPath,
+
+            fs.readFileSync(StaticConfig.functionWrapperPath)
+                .toString()
+                .replace("__functionname__", functionPath)
+        );
+
+        debug("write func wrapper compete");
     }
 
     private static saveHandler(outDir: string) {
-        const handlerFile = path.join(outDir, path.basename(StaticConfig.functionHandlerPath));
-        fs.copyFileSync(StaticConfig.functionHandlerPath, handlerFile);
+
+        fs.writeFileSync(
+
+            path.join(outDir, path.basename(StaticConfig.functionHandlerPath)),
+
+            fs.readFileSync(StaticConfig.functionHandlerPath)
+                .toString()
+                .replace("__remote_server_endpoint__", StaticConfig.remoteAddress)
+        );
     }
 
     static generateBuildName(): string {

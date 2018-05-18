@@ -113,8 +113,11 @@ export class RemoteActionController {
         const urls = await cliConnector.getDeployUrl(build);
 
         const cloudConnector = getCloudConnector();
-        await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
         await cloudConnector.upload(urls.summaryDataUrl, archiveSummaryPath);
+        debug("upload summary data complete");
+
+        await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
+        debug("upload source code complete");
 
         const result = await cliConnector.deployBuild(build);
 

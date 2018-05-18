@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import { PredefineData } from "./predefineData";
-import { UserDataStorage } from '../userDataStorage';
 
 
 export class StaticConfig {
@@ -28,8 +27,8 @@ export class StaticConfig {
         return process.env.USERPROFILE || process.env.HOME || process.env.HOMEPATH;
     }
 
-    static get remoteCliAddress(): string {
-        return UserDataStorage.remoteCliAddress || this.staticData.remoteCliAddress;
+    static get remoteAddress(): string {
+        return this.staticData.remoteAddress;
     }
 
     static get serviceConfigFileName(): string {

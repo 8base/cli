@@ -1,7 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
 import { debug } from "../../common";
-import * as _ from 'lodash';
 import { resolveCompiler } from "../../engine";
 
 

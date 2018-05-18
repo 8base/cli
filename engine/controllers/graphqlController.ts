@@ -5,7 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { makeExecutableSchema } from "graphql-tools";
 import { parse, FieldDefinitionNode } from "graphql";
-import { OperationDefinitionNode, ObjectTypeExtensionNode } from "graphql/language/ast";
+import { ObjectTypeExtensionNode } from "graphql/language/ast";
 import { graphqlLambda } from 'graphql-server-lambda';
 
 
