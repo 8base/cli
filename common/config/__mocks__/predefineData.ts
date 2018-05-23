@@ -5,6 +5,5 @@ export class PredefineData {
     commandsPath = path.join(__dirname, "../../../engine/commands");
     projectDir = path.join(__dirname, "../../");
     executionDir = "/";
-    functionHandlerPath = "/handler.js";
     functionWrapperPath = "/wrapper.js";
 }
