@@ -28,8 +28,6 @@ export class BuildController {
 
         BuildController.makeFunctionHandlers(ProjectController.getFunctions(project));
 
-        BuildController.saveHandler(StaticConfig.buildDir);
-
         ProjectController.saveMetaDataFile(project, StaticConfig.summaryDir);
 
         ProjectController.saveSchema(project, StaticConfig.summaryDir);
@@ -75,21 +73,10 @@ export class BuildController {
             fs.readFileSync(StaticConfig.functionWrapperPath)
                 .toString()
                 .replace("__functionname__", functionPath)
+                .replace("__remote_server_endpoint__", StaticConfig.remoteAddress)
         );
 
         debug("write func wrapper compete");
-    }
-
-    private static saveHandler(outDir: string) {
-
-        fs.writeFileSync(
-
-            path.join(outDir, path.basename(StaticConfig.functionHandlerPath)),
-
-            fs.readFileSync(StaticConfig.functionHandlerPath)
-                .toString()
-                .replace("__remote_server_endpoint__", StaticConfig.remoteAddress)
-        );
     }
 
     static generateBuildName(): string {

@@ -47,10 +47,6 @@ export class StaticConfig {
         return this.staticData.functionWrapperPath;
     }
 
-    static get functionHandlerPath(): string {
-        return this.staticData.functionHandlerPath;
-    }
-
     /**
      * Compiler paths
      */
