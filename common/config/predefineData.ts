@@ -6,5 +6,5 @@ export class PredefineData {
     templatePath = path.join(this.projectDir, "../template");
     commandsPath = path.join(this.projectDir, "./engine/commands");
     functionWrapperPath = path.join(this.projectDir, "/common/functions/wrapper.js");
-    remoteCliAddress = "http://localhost:3000/cli";
+    remoteAddress = "http://localhost:3000";
 }

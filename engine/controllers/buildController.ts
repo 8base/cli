@@ -74,7 +74,6 @@ export class BuildController {
                 .toString()
                 .replace("__functionname__", functionPath)
                 .replace("__remote_server_endpoint__", StaticConfig.remoteAddress)
-
         );
 
         debug("write func wrapper compete");

@@ -1,7 +1,5 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, UserDataStorage, trace } from "../../../common";
-import { ProjectController, GraphqlController } from "../../../engine";
-import { InvalidArgument } from "../../../errors";
 import * as _ from "lodash";
 import * as path from "path";
 
@@ -25,7 +23,7 @@ export default class Use extends BaseCommand {
         }
 
         if (this.remote) {
-            UserDataStorage.remoteCliAddress = this.remote;
+            UserDataStorage.remoteAddress = this.remote;
         }
     }
 

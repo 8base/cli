@@ -1,8 +1,5 @@
-import { trace, debug, StaticConfig } from "../../../common";
 import { BaseCommand } from "../base";
 import { ExecutionConfig } from "../../../common";
-import * as _ from "lodash";
-import { InvalidArgument } from '../../../errors';
 import * as fs from "fs";
 
 

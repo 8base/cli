@@ -1,7 +1,6 @@
 import { BaseCommand } from "../base";
 import { ExecutionConfig, debug, StaticConfig, ProjectDefinition } from "../../../common";
 import { ProjectController, BuildController, ArchiveController, RemoteActionController, GraphqlController } from "../../../engine";
-import * as _ from "lodash";
 import * as path from "path";
 
 export default class Deploy extends BaseCommand {

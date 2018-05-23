@@ -1,4 +1,4 @@
-import { debug, trace, StaticConfig, ExecutionConfig, UserLoginData } from "../common";
+import { debug, StaticConfig, UserLoginData } from "../common";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -81,15 +81,25 @@ export class UserDataStorage {
         return Storage.getStorage().email;
     }
 
-    static set remoteCliAddress(address: string) {
+    static set remoteAddress(address: string) {
         const storage = Storage.getStorage();
-        storage.remoteCliEndpoint = address;
+        storage.remoteAddress = address;
         Storage.saveStorage(storage);
     }
 
-    static get remoteCliAddress(): string {
-        return Storage.getStorage().remoteCliEndpoint;
+    static get remoteAddress(): string {
+        const account = UserDataStorage.accountId;
+        return account ? `${UserDataStorage.remoteAddressBase}/${account}` : UserDataStorage.remoteAddressBase;
     }
+
+    static get remoteCliAddress(): string {
+        return `${UserDataStorage.remoteAddressBase}/cli`;
+    }
+
+    private static get remoteAddressBase(): string {
+        return Storage.getStorage().remoteAddress || StaticConfig.remoteAddress;
+    }
+
 
     static get refreshToken(): string {
         const storage = Storage.getStorage();

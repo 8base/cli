@@ -13,7 +13,7 @@ export class ArchiveController {
         debug("archive dest path = " + fullPath);
 
         return new Promise<string>((resolve, reject) => {
-            const zip = archiver("zip", {});
+            const zip = archiver("zip", { zlib: { level: 8 } });
             const write = fs.createWriteStream(fullPath);
 
             zip.pipe(write);
