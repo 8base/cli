@@ -1,13 +1,11 @@
 const handler = require('./handler');
 
-const filename = "__functionname__";
-
 module.exports.handler = (event, context, callback) => {
     return handler(
         event,
         context,
         callback,
-        filename,
+        "__functionname__",
         {
            remoteAddress: "__remote_server_endpoint__"
         }
