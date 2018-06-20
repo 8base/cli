@@ -4,11 +4,12 @@
 
 import { IFunctionHandler } from "./handler";
 import { TriggerDefinition } from './trigger';
-
+import { WebhookDefinition } from "./webhook";
 
 export enum FunctionType {
-  resolver = "Resolver",
-  trigger = "Trigger"
+  resolver = "resolver",
+  trigger = "trigger",
+  webhook = "webhook"
 }
 
 export enum GraphQlFunctionType {
@@ -36,9 +37,11 @@ export interface ProjectDefinition {
   name: string;
   functions: FunctionDefinition[];
   triggers: TriggerDefinition[];
+  webhooks: WebhookDefinition[];
   rootPath: string;
   gqlSchema: string;
 }
 
 export * from "./handler";
 export * from "./trigger";
+export * from "./webhook";

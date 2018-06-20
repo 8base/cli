@@ -12,11 +12,11 @@ import { FunctionDefinition,
     ExecutionConfig,
     GraphQlFunctionType,
     FunctionHandlerCode,
-    FunctionHandlerWebhook,
     FunctionHandlerType,
     IFunctionHandler,
     TriggerDefinition,
     TriggerStageType,
+    WebhookDefinition,
     TriggerType } from "../../common";
 import { InvalidConfiguration, InvalidArgument } from "../../errors";
 import { GraphqlController } from "../../engine";
@@ -55,6 +55,8 @@ export class ProjectController {
         debug("load triggers");
         project.triggers = TriggerUtils.mergeStages(TriggerUtils.load(data));
 
+        project.webhooks = WebhookUtils.load(data);
+
         debug("initialize project comlete");
         return project;
     }
@@ -82,7 +84,15 @@ export class ProjectController {
         }, []);
 
         const summaryFile = path.join(outDir, '__summary__functions.json');
-        fs.writeFileSync(summaryFile, JSON.stringify({ functions, triggers: project.triggers }, null, 2));
+        fs.writeFileSync(summaryFile, JSON.stringify(
+            {
+                functions,
+                triggers: project.triggers,
+                webhooks: project.webhooks
+            },
+            null,
+            2
+        ));
     }
 
     static getSchemaPaths(project: ProjectDefinition): string[] {
@@ -131,7 +141,8 @@ export class ProjectController {
             name,
             rootPath: StaticConfig.rootExecutionDir,
             gqlSchema: "",
-            triggers: []
+            triggers: [],
+            webhooks: []
         };
     }
 }
@@ -157,8 +168,6 @@ namespace FunctionUtils {
     export function resolveHandler(name: string, handler: any): IFunctionHandler {
         if (handler.code) {
             return new FunctionHandlerCode(handler.code);
-        } else if (handler.webhook) {
-            return new FunctionHandlerWebhook(handler.webhook);
         }
         throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "handler is invalid for function \"" + name + "\"");
     }
@@ -170,7 +179,7 @@ namespace FunctionUtils {
      */
     export function resolveGqlFunctionTypes(project: ProjectDefinition, types: {[functionName: string]: GraphQlFunctionType} ) {
       project.functions.forEach(func => {
-          if (func.type === FunctionType.trigger) {
+          if (func.type === FunctionType.trigger || func.type === FunctionType.webhook) {
               return func.gqlType = GraphQlFunctionType.NotGraphQl;
           }
           const type = types[func.name];
@@ -197,7 +206,7 @@ namespace FunctionUtils {
 
     /**
      *
-     * @param type "resolve", "trigger.before", "trigger.after", "subscription"
+     * @param type "resolve", "trigger.before", "trigger.after", "subscription", "webhook"
      * @return FunctionType
      */
     export function resolveFunctionType(type: string, functionName: string): FunctionType {
@@ -271,4 +280,19 @@ namespace TriggerUtils {
         return <TriggerStageType> resolvedType;
     }
 
+}
+
+namespace WebhookUtils {
+    export function load(config: any): WebhookDefinition[] {
+        return _.transform<any, WebhookDefinition>(config.functions, (result, webhook, name: string) => {
+            if (FunctionUtils.resolveFunctionType(webhook.type, webhook.name) !== FunctionType.webhook) {
+                return;
+            }
+
+            result.push({
+                name,
+                funcName: name
+            });
+        }, []);
+    }
 }
