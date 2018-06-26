@@ -1,5 +1,7 @@
 
 export interface WebhookDefinition {
   name: string;
-  funcName: string;
+  functionName: string;
+  httpMethod: string;
+  path: string;
 }

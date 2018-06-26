@@ -289,9 +289,15 @@ namespace WebhookUtils {
                 return;
             }
 
+            if (!webhook.method) {
+                throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Http method in webhook " + name + " is absent.");
+            }
+
             result.push({
                 name,
-                funcName: name
+                functionName: name,
+                httpMethod: webhook.method,
+                path: webhook.path ? webhook.path : name
             });
         }, []);
     }

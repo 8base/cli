@@ -57,15 +57,26 @@ class ServerConnectorImpl {
         return result.invoke.responseData;
     }
 
-    async listFunctions(): Promise<string[]> {
+    async describeBuild(): Promise< {
+        functions: { name: string, gqlType: string }[],
+        webhooks: { path: string, httpMethod: string }[],
+        triggers: { table: string, action: string, stage: string }[] }> {
         const result = await this.graphqlClient(`
-        query {
-            listFunctions {
-                functions
+        query{
+            describeBuild {
+              functions {
+                name, gqlType
+              }
+              webhooks{
+                path httpMethod
+              }
+              triggers {
+                table action stage
+              }
             }
-        }
+          }
         `);
-        return result.invoke;
+        return result.describeBuild;
     }
 
     async reauth(data: RefreshTokenDataReq): Promise<UserLoginData> {
