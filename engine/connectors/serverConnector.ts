@@ -1,5 +1,13 @@
-import { debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq } from "../../common";
-import 'isomorphic-fetch';
+import {
+    debug,
+    ExecutionConfig,
+    UserDataStorage,
+    UserLoginData,
+    RefreshTokenDataReq,
+    RelativeWebhookDefinition,
+    ResolverDefinition,
+    TriggerDefinition
+} from "../../common";
 import { GraphQLClient, request } from "graphql-request";
 import * as _ from "lodash";
 import * as uuid from "uuid";
@@ -36,14 +44,11 @@ class ServerConnectorImpl {
 
     // TODO rename deploySchema to deployBuild
     async deployBuild(build: string): Promise<any> {
-        const result = await this.graphqlClient(`mutation {
-            deploySchema(build:"${build}") {
-                    success, message
-                }
-            }
+        const result = await this.graphqlClient(`
+        mutation {
+            deploySchema(build:"${build}")
+        }
         `);
-
-        return result.deploySchema;
     }
 
     async invoke(functionName: string, args: string): Promise<string> {
@@ -58,9 +63,9 @@ class ServerConnectorImpl {
     }
 
     async describeBuild(): Promise< {
-        functions: { name: string, gqlType: string }[],
-        webhooks: { path: string, httpMethod: string }[],
-        triggers: { table: string, action: string, stage: string }[] }> {
+        functions: ResolverDefinition[],
+        webhooks: RelativeWebhookDefinition[],
+        triggers: TriggerDefinition[] }> {
         const result = await this.graphqlClient(`
         query{
             describeBuild {
@@ -68,7 +73,7 @@ class ServerConnectorImpl {
                 name, gqlType
               }
               webhooks{
-                path httpMethod
+                accountRelativePath httpMethod name
               }
               triggers {
                 table action stage

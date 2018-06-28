@@ -1,8 +1,11 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig } from "../../../common";
+import {
+    ExecutionConfig,
+    trace
+} from "../../../common";
 import * as fs from "fs";
 import { ServerConnector } from "../../connectors";
-import { trace } from '../../../common/tracer';
+import { WebhookController } from "../../controllers";
 
 export default class Invoke extends BaseCommand {
 
@@ -22,20 +25,22 @@ export default class Invoke extends BaseCommand {
 
     async run(): Promise<any> {
         const result = await ServerConnector().describeBuild();
-        if (this.allPrint) {
-            trace(result);
+
+        if (this.functions || this.allPrint) {
+            trace("Functions: ");
+            trace(JSON.stringify(result.functions, null, 2));
+            trace("");
         }
 
-        if (this.functions) {
-            trace(result.functions);
+        if (this.webhooks || this.allPrint) {
+            trace("Webhooks: ");
+            trace(JSON.stringify(WebhookController.resolve(result.webhooks), null, 2));
+            trace("");
         }
 
-        if (this.webhooks) {
-            trace(result.webhooks);
-        }
-
-        if (this.triggers) {
-            trace(result.triggers);
+        if (this.triggers || this.allPrint) {
+            trace("Triggers: ");
+            trace(JSON.stringify(result.triggers, null, 2));
         }
     }
 
@@ -44,11 +49,11 @@ export default class Invoke extends BaseCommand {
     }
 
     usage(): string {
-        return "-f <function_name>";
+        return "";
     }
 
     name(): string {
-        return "invoke";
+        return "describe";
     }
 
 }

@@ -45,3 +45,4 @@ export interface ProjectDefinition {
 export * from "./handler";
 export * from "./trigger";
 export * from "./webhook";
+export * from "./resolver";
