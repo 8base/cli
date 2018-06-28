@@ -28,6 +28,9 @@ export class GraphqlController {
     static defineGqlFunctionsType(project: ProjectDefinition): {[functionName: string]: GraphQlFunctionType} {
         // bad solution, I think
         // parse graphql file and get function type for all each function
+        if (!project.gqlSchema) {
+            return;
+        }
         const parsedSchema = parse(project.gqlSchema);
         return _.transform(parsedSchema.definitions, (res: any, data: any) => {
             switch(data.kind) {
