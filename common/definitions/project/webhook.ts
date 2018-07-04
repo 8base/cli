@@ -4,6 +4,7 @@ export interface WebhookDefinition {
   functionName: string;
   httpMethod: string;
   path: string;
+  appId: string;
 }
 
 

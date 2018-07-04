@@ -297,7 +297,8 @@ namespace WebhookUtils {
                 name,
                 functionName: name,
                 httpMethod: webhook.method,
-                path: webhook.path ? webhook.path : name
+                path: webhook.path ? webhook.path : name,
+                appId: StaticConfig.applicationId
             });
         }, []);
     }

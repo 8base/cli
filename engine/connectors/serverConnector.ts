@@ -73,7 +73,7 @@ class ServerConnectorImpl {
                 name, gqlType
               }
               webhooks{
-                accountRelativePath httpMethod name
+                accountRelativePath httpMethod name appId
               }
               triggers {
                 table action stage

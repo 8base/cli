@@ -47,6 +47,10 @@ export class StaticConfig {
         return this.staticData.functionWrapperPath;
     }
 
+    static get applicationId(): string {
+        return "mockApp";
+    }
+
     /**
      * Compiler paths
      */
