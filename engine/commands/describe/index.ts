@@ -7,7 +7,7 @@ import * as fs from "fs";
 import { ServerConnector } from "../../connectors";
 import { WebhookController } from "../../controllers";
 
-export default class Invoke extends BaseCommand {
+export default class Describe extends BaseCommand {
 
     private functions: boolean;
     private webhooks: boolean;
