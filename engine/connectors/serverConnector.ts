@@ -132,11 +132,14 @@ class ServerConnectorImpl {
 
     private async graphqlClient(query: any, variables?: any): Promise<any> {
         debug('create graphql client ' + UserDataStorage.remoteCliAddress);
+        debug('account id ' + UserDataStorage.accountId);
+        debug('token ' + UserDataStorage.token);
 
         const localClient = new GraphQLClient(UserDataStorage.remoteCliAddress, {
           headers: {
               "account-id": UserDataStorage.accountId,
-              Authorization: UserDataStorage.token,
+          //   Authorization: UserDataStorage.token,
+          //   on the server side auth is turn off => TODO: turn on!!!
           },
         });
 
