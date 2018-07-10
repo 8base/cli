@@ -1,6 +1,6 @@
 import {
   RelativeWebhookDefinition,
-  StaticConfig,
+  UserDataStorage,
   ResolvedRelativeWebhookDefinition
 } from "../../common";
 
@@ -15,7 +15,7 @@ export class WebhookController {
   static resolveSingle(webhook: RelativeWebhookDefinition): ResolvedRelativeWebhookDefinition {
     return {
       ...webhook,
-      resolvedAccountRelativePath: url.resolve(StaticConfig.remoteAddress, webhook.accountRelativePath)
+      resolvedAccountRelativePath: url.resolve(UserDataStorage.remoteAddress, webhook.accountRelativePath)
     };
   }
 }
