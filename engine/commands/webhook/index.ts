@@ -1,15 +1,10 @@
 import {
   ExecutionConfig,
-  trace,
   debug
 } from "../../../common";
 import { BaseCommand } from "../base";
-import { RemoteActionController } from "../../controllers";
-import * as _ from "lodash";
 import { InvalidArgument } from '../../../errors';
-import * as fs from "fs";
 import 'isomorphic-fetch';
-import { WebhookController } from "../../controllers";
 import { ServerConnector } from "../../connectors";
 import * as request from "request";
 
@@ -35,13 +30,12 @@ export default class Webhook extends BaseCommand {
         throw new InvalidArgument(`webhook ${this.invokeWebhookName} is absent.`);
       }
 
-      const resolved = WebhookController.resolveSingle(webhook);
-      debug("find webhook = " + resolved.name + " path = " + resolved.resolvedAccountRelativePath);
+      debug("find webhook = " + webhook.name + " path = " + webhook.resolvedPath);
 
       return new Promise<any>((resolve, reject) => {
         request({
-            method: resolved.httpMethod,
-            url: resolved.resolvedAccountRelativePath
+            method: webhook.resolvedHttpMethod,
+            url: webhook.resolvedPath
         },
         (err: any, res: any, body: any) => {
             if (err) {

@@ -81,7 +81,11 @@ class ServerConnectorImpl {
             }
           }
         `);
-        return result.describeBuild;
+        return {
+            functions: result.describeBuild.functions,
+            triggers: result.describeBuild.triggers,
+            webhooks: result.describeBuild.webhooks.map((w:any) => new RelativeWebhookDefinition(w)),
+        };
     }
 
     async reauth(data: RefreshTokenDataReq): Promise<UserLoginData> {

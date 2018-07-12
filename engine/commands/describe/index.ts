@@ -3,9 +3,7 @@ import {
     ExecutionConfig,
     trace
 } from "../../../common";
-import * as fs from "fs";
 import { ServerConnector } from "../../connectors";
-import { WebhookController } from "../../controllers";
 
 export default class Describe extends BaseCommand {
 
@@ -34,7 +32,7 @@ export default class Describe extends BaseCommand {
 
         if (this.webhooks || this.allPrint) {
             trace("Webhooks: ");
-            trace(JSON.stringify(WebhookController.resolve(result.webhooks), null, 2));
+            trace(JSON.stringify(result.webhooks, null, 2));
             trace("");
         }
 
