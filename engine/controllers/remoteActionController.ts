@@ -119,11 +119,7 @@ export class RemoteActionController {
         await cloudConnector.upload(urls.buildUrl, archiveBuildPath);
         debug("upload source code complete");
 
-        const result = await cliConnector.deployBuild(build);
-
-        if (!result.success) {
-            throw new Error(result.message);
-        }
+        await cliConnector.deployBuild(build);
     }
 
     static async invokeInternal(functionName: string, args: string): Promise<any> {

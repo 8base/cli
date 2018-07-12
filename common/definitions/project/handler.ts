@@ -22,17 +22,3 @@ export class FunctionHandlerCode implements IFunctionHandler {
     return FunctionHandlerType.Code;
   }
 }
-
-export class FunctionHandlerWebhook implements IFunctionHandler {
-  private url: string;
-  constructor(url: string) {
-    this.url = url;
-  }
-
-  value(): string {
-    return this.url;
-  }
-  type(): FunctionHandlerType {
-    return FunctionHandlerType.Webhook;
-  }
-}

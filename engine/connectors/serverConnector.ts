@@ -1,5 +1,13 @@
-import { debug, ExecutionConfig, UserDataStorage, UserLoginData, RefreshTokenDataReq } from "../../common";
-import 'isomorphic-fetch';
+import {
+    debug,
+    ExecutionConfig,
+    UserDataStorage,
+    UserLoginData,
+    RefreshTokenDataReq,
+    RelativeWebhookDefinition,
+    ResolverDefinition,
+    TriggerDefinition
+} from "../../common";
 import { GraphQLClient, request } from "graphql-request";
 import * as _ from "lodash";
 import * as uuid from "uuid";
@@ -36,14 +44,11 @@ class ServerConnectorImpl {
 
     // TODO rename deploySchema to deployBuild
     async deployBuild(build: string): Promise<any> {
-        const result = await this.graphqlClient(`mutation {
-            deploySchema(build:"${build}") {
-                    success, message
-                }
-            }
+        const result = await this.graphqlClient(`
+        mutation {
+            deploySchema(build:"${build}")
+        }
         `);
-
-        return result.deploySchema;
     }
 
     async invoke(functionName: string, args: string): Promise<string> {
@@ -57,15 +62,30 @@ class ServerConnectorImpl {
         return result.invoke.responseData;
     }
 
-    async listFunctions(): Promise<string[]> {
+    async describeBuild(): Promise< {
+        functions: ResolverDefinition[],
+        webhooks: RelativeWebhookDefinition[],
+        triggers: TriggerDefinition[] }> {
         const result = await this.graphqlClient(`
-        query {
-            listFunctions {
-                functions
+        query{
+            describeBuild {
+              functions {
+                name, gqlType
+              }
+              webhooks{
+                accountRelativePath httpMethod name appId
+              }
+              triggers {
+                table action stage
+              }
             }
-        }
+          }
         `);
-        return result.invoke;
+        return {
+            functions: result.describeBuild.functions,
+            triggers: result.describeBuild.triggers,
+            webhooks: result.describeBuild.webhooks.map((w:any) => new RelativeWebhookDefinition(w)),
+        };
     }
 
     async reauth(data: RefreshTokenDataReq): Promise<UserLoginData> {
@@ -116,11 +136,14 @@ class ServerConnectorImpl {
 
     private async graphqlClient(query: any, variables?: any): Promise<any> {
         debug('create graphql client ' + UserDataStorage.remoteCliAddress);
+        debug('account id ' + UserDataStorage.accountId);
+        debug('token ' + UserDataStorage.token);
 
         const localClient = new GraphQLClient(UserDataStorage.remoteCliAddress, {
           headers: {
               "account-id": UserDataStorage.accountId,
-              Authorization: UserDataStorage.token,
+          //   Authorization: UserDataStorage.token,
+          //   on the server side auth is turn off => TODO: turn on!!!
           },
         });
 
