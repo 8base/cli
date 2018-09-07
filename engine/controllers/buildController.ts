@@ -1,9 +1,13 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
-import { debug, FunctionDefinition, ProjectDefinition, StaticConfig, UserDataStorage } from "../../common";
-import { resolveCompiler, ProjectController } from "../../engine";
+import { debug, StaticConfig, UserDataStorage, Utils } from "../../common";
+import { resolveCompiler } from "../../engine";
 import * as glob from "glob";
+import { FunctionDefinition } from "../../interfaces/Extensions";
+import { ProjectDefinition } from "../../interfaces/Project";
+import { ProjectController } from "./projectController";
 
+const { Client } = require("@8base/api-client");
 
 export class BuildController {
 
@@ -26,7 +30,7 @@ export class BuildController {
         const compiledFiles = await compiler.compile(StaticConfig.buildDir);
         debug("compiled files = " + compiledFiles);
 
-        BuildController.makeFunctionHandlers(ProjectController.getFunctions(project));
+        BuildController.makeFunctionHandlers(project.extensions.functions);
 
         ProjectController.saveMetaDataFile(project, StaticConfig.summaryDir);
 
@@ -38,6 +42,22 @@ export class BuildController {
         };
     }
 
+    static async deploy(archiveBuildPath: string, archiveSummaryPath: string) {
+
+        const client = new Client();
+
+        console.log(client.request);
+        // const data = await cliConnector.prepareDeploy();
+
+        // await Utils.upload(data.summaryDataUrl, archiveSummaryPath);
+        // debug("upload summary data complete");
+
+        // await Utils.upload(data.buildUrl, archiveBuildPath);
+        // debug("upload source code complete");
+
+        // await cliConnector.deploy(data.build, UserDataStorage.applicationId);
+    }
+
     /**
      * Private functions
      */
@@ -47,16 +67,15 @@ export class BuildController {
         functions.forEach(func => {
             debug("process function = " + func.name);
 
-            const handler = func.handler.value();
-            const ext = path.parse(handler).ext;
+            const ext = path.parse(func.pathToFunction).ext;
 
-            const mask = path.join(StaticConfig.buildDir, handler.replace(ext, ".*"));
+            const mask = path.join(StaticConfig.buildDir, func.pathToFunction.replace(ext, ".*"));
 
             if (glob.sync(mask).length !== 1) {
-                throw new Error("target compiled file " + handler + " not exist");
+                throw new Error("target compiled file " + func.pathToFunction + " not exist");
             }
 
-            BuildController.makeFunctionWrapper(func.name, handler.replace(ext, ""));
+            BuildController.makeFunctionWrapper(func.name, func.pathToFunction.replace(ext, ""));
         });
     }
 
@@ -77,10 +96,6 @@ export class BuildController {
         );
 
         debug("write func wrapper compete");
-    }
-
-    static generateBuildName(): string {
-        return `build_${Date.now()}`;
     }
 
     private static clean() {

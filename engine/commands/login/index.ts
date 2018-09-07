@@ -1,39 +1,17 @@
-import { BaseCommand } from "../base";
-import { ExecutionConfig } from "../../../common";
-import { InvalidArgument } from "../../../errors";
-import { RemoteActionController } from "../../controllers";
 import * as _ from "lodash";
+import { GraphqlActions } from "../../../common";
+import { Context } from "../../../common/Context";
+import { UserDataStorage } from "../../../common/userDataStorage";
 
-export default class Login extends BaseCommand {
-    private user: string;
-    private password: string;
-    async run(): Promise<any> {
-        return await RemoteActionController.authorize(this.user, this.password);
-    }
+export default {
+  name: "login",
+  handler: async (params: any, context: Context) => {
+    const result = await context.request(GraphqlActions.login, { data: { email: params.u, password: params.p } });
 
-    async commandInit(config: ExecutionConfig): Promise<any> {
-        this.user = config.getParameter('u');
-        this.password = config.getParameter('p');
+    UserDataStorage.refreshToken = result.userLogin.auth.refreshToken;
+    UserDataStorage.idToken = result.userLogin.auth.idToken;
 
-        if (_.isNil(this.user)) {
-            throw new InvalidArgument("user");
-        }
-
-        if (_.isNil(this.password)) {
-            throw new InvalidArgument("password");
-        }
-    }
-
-    usage(): string {
-        return "-u <username> -p <password>";
-    }
-
-    name(): string {
-        return "login";
-    }
-
-    onSuccess(): string {
-        return "login complete successfully";
-    }
-
-}
+    console.log(typeof result);
+    console.log(result);
+  }
+};

@@ -1,7 +1,11 @@
 import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, StaticConfig, ProjectDefinition } from "../../../common";
-import { ProjectController, BuildController, ArchiveController, RemoteActionController, GraphqlController } from "../../../engine";
+import { ExecutionConfig, debug, StaticConfig } from "../../../common";
 import * as path from "path";
+import { GraphqlController } from "../../controllers/graphqlController";
+import { ProjectDefinition } from "../../../interfaces/Project";
+import { ProjectController } from "../../controllers/projectController";
+import { BuildController } from "../../controllers/buildController";
+import { archive } from "../../utils/archive";
 
 export default class Deploy extends BaseCommand {
 
@@ -28,27 +32,28 @@ export default class Deploy extends BaseCommand {
         const buildDir = await BuildController.compile(this.project);
         debug("build dir = " + buildDir);
 
-        const archiveBuildPath = await ArchiveController.archive(
+        const archiveBuildPath = await archive(
                 [ { source: buildDir.build }, { source: StaticConfig.modules, dist: "node_modules" } ],
                 StaticConfig.buildRootDir,
                 "build");
 
-        const archiveSummaryPath = await ArchiveController.archive(
+        const archiveSummaryPath = await archive(
             [{ source: buildDir.summary }],
             StaticConfig.buildRootDir,
             "summary");
 
-        await RemoteActionController.deploy(
+        await BuildController.deploy(
             archiveBuildPath,
-            archiveSummaryPath,
-            BuildController.generateBuildName());
+            archiveSummaryPath);
 
         debug("deploy success");
     }
 
     async commandInit(config: ExecutionConfig): Promise<any> {
         this.schemaValidate = config.isParameterPresent("validate_schema");
-        this.project = await ProjectController.initialize(config);
+        this.project = await ProjectController.initialize();
+
+        console.log(JSON.stringify(this.project, null, 2));
     }
 
     usage(): string {

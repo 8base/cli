@@ -1,4 +1,4 @@
-import { debug, StaticConfig, UserLoginData } from "../common";
+import { debug, StaticConfig } from "../common";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -49,10 +49,26 @@ export class UserDataStorage {
      * Function is not thread safe !
      * @param token - user token
      */
-    static set auth(data: UserLoginData) {
+    static set refreshToken(token: string) {
         const storage = Storage.getStorage();
-        storage.auth = data;
+        storage.refreshToken = token;
         Storage.saveStorage(storage);
+    }
+
+    static get refreshToken(): string {
+        const storage = Storage.getStorage();
+        return storage ? storage.refreshToken : null;
+    }
+
+    static set idToken(token: string) {
+        const storage = Storage.getStorage();
+        storage.idToken = token;
+        Storage.saveStorage(storage);
+    }
+
+    static get idToken(): string {
+        const storage = Storage.getStorage();
+        return storage ? storage.idToken : null;
     }
 
     static set account(accountId: string) {
@@ -61,24 +77,8 @@ export class UserDataStorage {
         Storage.saveStorage(storage);
     }
 
-    static set email(email: string) {
-        const storage = Storage.getStorage();
-        storage.email = email;
-        Storage.saveStorage(storage);
-    }
-
-    static getData(): UserLoginData {
-        const storage = Storage.getStorage();
-        return storage.auth ? storage.auth : null;
-    }
-
-    static get token(): string {
-        const storage = Storage.getStorage();
-        return storage.auth ? storage.auth.idToken : null;
-    }
-
-    static get email(): string {
-        return Storage.getStorage().email;
+    static get account(): string {
+        return Storage.getStorage().accountId;
     }
 
     static set remoteAddress(address: string) {
@@ -88,12 +88,8 @@ export class UserDataStorage {
     }
 
     static get remoteAddress(): string {
-        const account = UserDataStorage.accountId;
+        const account = UserDataStorage.account;
         return account ? `${UserDataStorage.remoteAddressBase}/${account}` : UserDataStorage.remoteAddressBase;
-    }
-
-    static get remoteCliAddress(): string {
-        return `${UserDataStorage.remoteAddressBase}/cli`;
     }
 
     private static get remoteAddressBase(): string {
@@ -101,14 +97,6 @@ export class UserDataStorage {
     }
 
 
-    static get refreshToken(): string {
-        const storage = Storage.getStorage();
-        return storage.auth ? storage.auth.refreshToken : null;
-    }
-
-    static get accountId(): string {
-        return Storage.getStorage().accountId;
-    }
 
     static clearAll() {
         const storage = Storage.getStorage();

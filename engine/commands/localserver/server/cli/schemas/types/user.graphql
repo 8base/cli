@@ -1,4 +1,0 @@
-type Response {
-  success: Boolean!
-  message: String!
-}

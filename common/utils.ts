@@ -1,5 +1,7 @@
-import { trace, debug } from "../common";
+import { debug } from "../common";
 import * as path from "path";
+import 'isomorphic-fetch';
+import * as request from "request";
 
 export class Utils {
     static undefault (m: any) {
@@ -27,5 +29,30 @@ export class Utils {
             debug("install file = " + fullName);
         });
         return targetDirectory;
+    }
+
+    static async upload(url: any, filepath: any): Promise<any> {
+        const data = fs.readFileSync(filepath);
+        debug("start upload file....");
+        return new Promise<any>((resolve, reject) => {
+            request({
+                method: "PUT",
+                url: url,
+                body: data,
+                headers: {
+                    'Content-Length': data.length
+                }
+            },
+            (err: any, res: any, body: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                if (res && res.statusCode !== 200 ) {
+                    return reject(new Error(res.body));
+                }
+                debug("upload file \"" + filepath + "\" success");
+                resolve(path.basename(filepath));
+            });
+        });
     }
 }
