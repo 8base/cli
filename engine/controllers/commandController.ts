@@ -19,7 +19,7 @@ export class CommandController {
   }
 
   static errorHandler = (error: any) => {
-    console.log(error.response);
+    console.log(JSON.stringify(error.response, null, 2));
     // if (error instanceof GraphQLError) {
     //   const gqlError = <GraphQLError>error;
     //   console.log(gqlError.nodes);

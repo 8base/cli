@@ -49,52 +49,52 @@ export class UserDataStorage {
      * Function is not thread safe !
      * @param token - user token
      */
-    static set refreshToken(token: string) {
+    static setValue(name: string, value: string) {
         const storage = Storage.getStorage();
-        storage.refreshToken = token;
+        storage[name] = value;
         Storage.saveStorage(storage);
     }
 
-    static get refreshToken(): string {
+    static getValue(name: string): string {
         const storage = Storage.getStorage();
-        return storage ? storage.refreshToken : null;
+        return storage ? storage[name] : null;
     }
 
-    static set idToken(token: string) {
-        const storage = Storage.getStorage();
-        storage.idToken = token;
-        Storage.saveStorage(storage);
-    }
+    // static set idToken(token: string) {
+    //     const storage = Storage.getStorage();
+    //     storage.idToken = token;
+    //     Storage.saveStorage(storage);
+    // }
 
-    static get idToken(): string {
-        const storage = Storage.getStorage();
-        return storage ? storage.idToken : null;
-    }
+    // static get idToken(): string {
+    //     const storage = Storage.getStorage();
+    //     return storage ? storage.idToken : null;
+    // }
 
-    static set account(accountId: string) {
-        const storage = Storage.getStorage();
-        storage.accountId = accountId;
-        Storage.saveStorage(storage);
-    }
+    // static set account(accountId: string) {
+    //     const storage = Storage.getStorage();
+    //     storage.accountId = accountId;
+    //     Storage.saveStorage(storage);
+    // }
 
-    static get account(): string {
-        return Storage.getStorage().accountId;
-    }
+    // static get account(): string {
+    //     return Storage.getStorage().accountId;
+    // }
 
-    static set remoteAddress(address: string) {
-        const storage = Storage.getStorage();
-        storage.remoteAddress = address;
-        Storage.saveStorage(storage);
-    }
+    // static set remoteAddress(address: string) {
+    //     const storage = Storage.getStorage();
+    //     storage.remoteAddress = address;
+    //     Storage.saveStorage(storage);
+    // }
 
-    static get remoteAddress(): string {
-        const account = UserDataStorage.account;
-        return account ? `${UserDataStorage.remoteAddressBase}/${account}` : UserDataStorage.remoteAddressBase;
-    }
+    // static get remoteAddress(): string {
+    //     const account = UserDataStorage.account;
+    //     return account ? `${UserDataStorage.remoteAddressBase}/${account}` : UserDataStorage.remoteAddressBase;
+    // }
 
-    private static get remoteAddressBase(): string {
-        return Storage.getStorage().remoteAddress || StaticConfig.remoteAddress;
-    }
+    // private static get remoteAddressBase(): string {
+    //     return Storage.getStorage().remoteAddress || StaticConfig.remoteAddress;
+    // }
 
 
 
