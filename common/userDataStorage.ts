@@ -49,9 +49,9 @@ export class UserDataStorage {
      * Function is not thread safe !
      * @param token - user token
      */
-    static setValue(name: string, value: string) {
+    static setValues(data: { name: string, value: string} []) {
         const storage = Storage.getStorage();
-        storage[name] = value;
+        data.map(d => storage[d.name] = d.value);
         Storage.saveStorage(storage);
     }
 

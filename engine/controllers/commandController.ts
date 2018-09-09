@@ -28,11 +28,11 @@ export class CommandController {
 
   static wrapHandler = (handler: CommandHandler) => {
     return async (params: any) => {
-      try {
+      // try {
         await handler(params, new Context(params));
-      } catch(ex) {
-        return CommandController.errorHandler(ex);
-      }
+      // } catch(ex) {
+      //   return CommandController.errorHandler(ex);
+      // }
     };
   };
 
