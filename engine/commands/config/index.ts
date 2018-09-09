@@ -8,11 +8,8 @@ import * as yargs from "yargs";
 export default {
   name: "config",
   handler: async (params: any, context: Context) => {
-    // const result = await context.request(GraphqlActions.login, { data: { email: params.u, password: params.p } });
 
     UserDataStorage.getValue("accounts");
-    // UserDataStorage.setValue("idToken", result.userLogin.auth.idToken);
-    // UserDataStorage.setValue("accounts", result.userLogin.accounts);
 
   },
   describe: 'Advanced configuation',
@@ -22,8 +19,11 @@ export default {
       .option("workspace", {
         alias: 'w',
         describe: "select workspace",
-        demand: true,
         type: "string"
+      })
+      .option("show", {
+        alias: 's',
+        describe: "show advanced configuration",
       })
       .help()
       .version(false);

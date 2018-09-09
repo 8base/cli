@@ -6,7 +6,9 @@ const { Client } = require("@8base/api-client");
 export class Context {
 
   constructor(params: any) {
-    setTraceLevel(TraceLevel.Debug);
+    if (params.d) {
+      setTraceLevel(TraceLevel.Debug);
+    }
   }
   request(query: string, variables: any): Promise<any> {
     debug("query = ");

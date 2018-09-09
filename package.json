@@ -62,7 +62,8 @@
     "readdir": "^0.0.13",
     "recursive-readdir": "^2.2.1",
     "request": "^2.83.0",
-    "typescript": "^2.5.1"
+    "typescript": "^2.5.1",
+    "prompt":"^1.0.0"
   },
   "devDependencies": {
     "@types/archiver": "^2.1.0",
@@ -98,3 +99,4 @@
     "tslint": "^5.7.0"
   }
 }
+

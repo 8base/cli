@@ -19,20 +19,20 @@ export class CommandController {
   }
 
   static errorHandler = (error: any) => {
-    console.log(JSON.stringify(error.response, null, 2));
-    // if (error instanceof GraphQLError) {
-    //   const gqlError = <GraphQLError>error;
-    //   console.log(gqlError.nodes);
-    // }
+    console.log(error);
+    if (error instanceof GraphQLError) {
+      const gqlError = <GraphQLError>error;
+      console.log(gqlError.nodes);
+    }
   }
 
   static wrapHandler = (handler: CommandHandler) => {
     return async (params: any) => {
-      // try {
+      try {
         await handler(params, new Context(params));
-      // } catch(ex) {
-      //   return CommandController.errorHandler(ex);
-      // }
+      } catch(ex) {
+        return CommandController.errorHandler(ex);
+      }
     };
   };
 

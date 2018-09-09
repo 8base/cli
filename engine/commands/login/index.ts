@@ -3,11 +3,37 @@ import { GraphqlActions } from "../../../common";
 import { Context } from "../../../common/Context";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
+import { waitForAnswer } from "../../../common/prompt";
 
 export default {
   name: "login",
   handler: async (params: any, context: Context) => {
-    const result = await context.request(GraphqlActions.login, { data: { email: params.u, password: params.p } });
+
+    let data = {
+      email: params.e,
+      password: params.p
+    };
+
+    const schema: any = {
+      properties: {}
+    };
+    if (!params.e) {
+      schema.properties["email"] = {
+        message: "8base email",
+      };
+    }
+
+    if (!params.e) {
+      schema.properties["password"] = {
+        hidden: true
+      };
+    }
+
+    if (Object.keys(schema.properties).length > 0) {
+      data = await waitForAnswer<{ email: string, password: string }>(schema);
+    }
+
+    const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } });
 
     UserDataStorage.setValues([
       {
@@ -30,13 +56,11 @@ export default {
       .option("email", {
         alias: 'e',
         describe: "user email",
-        demand: true,
         type: "string"
       })
       .option("password", {
         alias: 'p',
         describe: "user password",
-        demand: true,
         type: "string"
       })
       .help()

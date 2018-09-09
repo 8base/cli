@@ -19,4 +19,8 @@ CommandController.enumerate()
 yargs
   .alias('h', 'help')
   .alias('v', 'version')
+  .option('d', {
+    alias: "debug",
+    describe: "turn on debug logs"
+  })
   .argv;
