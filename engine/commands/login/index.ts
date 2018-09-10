@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { trace } from "../../../common";
+import { trace, Utils } from "../../../common";
 import { Context } from "../../../common/Context";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
@@ -48,6 +48,14 @@ export default {
         name: StorageParameters.workspaces,
         value: result.userLogin.accounts
       }]);
+
+    if (result.userLogin.accounts.length > 1) {
+      Utils.selectWorkspace(null, context);
+    } else if (result.userLogin.accounts.length === 1) {
+      Utils.selectWorkspace({ w: result.userLogin.accounts[0].account }, context);
+    } else {
+      throw new Error("Internal error");
+    }
 
     trace("Login success");
   },

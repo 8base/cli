@@ -1,4 +1,4 @@
-import { StaticConfig, ExecutionConfig, debug } from "../../../../common";
+import { StaticConfig, debug } from "../../../../common";
 import * as path from "path";
 import * as readdir from "readdir";
 import * as _ from "lodash";

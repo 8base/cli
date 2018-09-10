@@ -1,4 +1,3 @@
-import { PrintHelp } from "../common";
 
 export default {
   login: {

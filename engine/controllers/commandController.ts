@@ -2,8 +2,8 @@ import { debug, Utils, StaticConfig } from "../../common";
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
-import { CommandHandler } from "../../interfaces/IBaseCommand";
 import { Context } from "../../common/Context";
+import { GraphQLError } from "graphql";
 
 
 export class CommandController {
@@ -24,13 +24,14 @@ export class CommandController {
   }
 
   static errorHandler = (error: any) => {
-    console.log(error);
-    // if (error instanceof GraphQLError) {
-    //   console.log(error.message, null, 2);
-    // }
+    if (error instanceof GraphQLError) {
+      console.log(error.message, null, 2);
+    } else {
+      console.log(error.message);
+    }
   }
 
-  static wrapHandler = (handler: CommandHandler) => {
+  static wrapHandler = (handler: Function) => {
     return async (params: any) => {
       try {
         await handler(params, new Context(params));

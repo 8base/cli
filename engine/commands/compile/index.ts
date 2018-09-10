@@ -8,7 +8,7 @@ export default {
   handler: async (params: any, context: Context) => {
 
     const buildDir = await BuildController.compile(context.project);
-    debug("build dir = " + buildDir);
+    debug("build dir = " + JSON.stringify(buildDir, null, 2));
 
     if (params.a) {
       await Utils.archive(

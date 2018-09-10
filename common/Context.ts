@@ -59,8 +59,6 @@ export class Context {
       client.setAccountId(workspaceId);
     }
 
-
-
     return client.request(query, variables);
   }
 

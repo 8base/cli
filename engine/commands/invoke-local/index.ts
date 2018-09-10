@@ -6,7 +6,7 @@ import { InvalidArgument } from "../../../errors/invalidArgument";
 export default {
   name: "invoke-local",
   handler: async (params: any, context: Context) => {
-
+    throw new Error("not implemented");
   },
   describe: 'Invoke function locally',
   builder: (args: yargs.Argv): yargs.Argv => {

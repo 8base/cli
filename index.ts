@@ -21,7 +21,8 @@ yargs
   .alias('v', 'version')
   .option('d', {
     alias: "debug",
-    describe: "turn on debug logs"
+    describe: "turn on debug logs",
+    type: "boolean"
   })
   .recommendCommands()
   .strict()

@@ -2,31 +2,28 @@ import * as yargs from "yargs";
 import { Context } from "../../../common/Context";
 import _ = require("lodash");
 import { InvalidArgument } from "../../../errors/invalidArgument";
+import { GraphqlActions } from "../../../consts/GraphqlActions";
+import { trace } from "../../../common";
 
 export default {
   name: "invoke",
   handler: async (params: any, context: Context) => {
+    const args = params.i ? params.i
+      : params.p ? fs.readFileSync(params.p) : null;
 
-    console.log(params);
-    // const functionName = params.f;
+    const serilizedArgs = _.escape(JSON.stringify(JSON.parse(args)));
 
-    // if (_.isNil(functionName)) {
-    //   throw new InvalidArgument("function name");
-    // }
+    const result = await context.request(GraphqlActions.invoke, { data: { functionName: params.n, inputArgs: serilizedArgs } });
 
-    // this.args = params("data");
-    // if (_.isNil(this.args)) {
-    //   const p = config.getParameter("args_path");
-    //   this.args = _.isNil(p) ? null : fs.readFileSync(p);
-    // }
-
-    // this.args = _.escape(JSON.stringify(JSON.parse(this.args)));
+    trace(_.unescape(result.invoke.responseData));
   },
   describe: 'Invoke function remotely',
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .option("n", {
         alias: 'name',
+        require: true,
+        type: "string",
         describe: "function name"
       })
       .option("i", {

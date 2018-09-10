@@ -16,6 +16,19 @@ invoke: `mutation Invoke($data: InvokeData) {
     responseData
   }
 }`,
+logs: `query Logs(
+  $functionName: String!,
+  $limit: Int,
+  $startTime: DateTime,
+  $endTime: DateTime){
+
+    logs (
+      functionName:$functionName
+      limit: $limit
+      startTime: $startTime
+      endTime: $endTime
+    )
+}`,
 prepareDeploy: `mutation PrepareDeploy {
   prepareDeploy {
     uploadBuildUrl uploadMetaDataUrl buildId
@@ -25,19 +38,19 @@ deploy: `mutation Deploy($data: DeployData) {
   deploy(data: $data)
 }`,
 describe: `query {
-  describeBuild {
-      functions {
-        name, gqlType, remoteName
-      }
-      webhooks{
-        accountRelativePath httpMethod name appId
-      }
-      triggers {
-        table action stage
-      }
-      resolvers {
-        name, gqlType
-      }
+  describeExtensions {
+    resolvers {
+      name gqlType
     }
-  }`
+    webhooks  {
+      name httpMethod accountRelativePath
+    }
+    triggers {
+      stage table action
+    }
+    functions {
+      handler remoteName name
+    }
+  }
+}`
 };
