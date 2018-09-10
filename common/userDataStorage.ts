@@ -55,7 +55,7 @@ export class UserDataStorage {
         Storage.saveStorage(storage);
     }
 
-    static getValue(name: string): string {
+    static getValue(name: string): any {
         const storage = Storage.getStorage();
         return storage ? storage[name] : null;
     }
