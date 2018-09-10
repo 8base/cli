@@ -4,8 +4,8 @@ import { parse, FieldDefinitionNode } from "graphql";
 import { ObjectTypeExtensionNode } from "graphql/language/ast";
 import { GraphQLFunctionType } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
-import { rootGraphqlSchema } from "../../common";
 import { makeExecutableSchema } from "graphql-tools";
+import { rootGraphqlSchema } from "../../consts/RootSchema";
 
 
 export class GraphqlController {

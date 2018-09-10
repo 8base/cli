@@ -1,7 +1,7 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
 import { debug } from "../../common";
-import { resolveCompiler } from "../../engine";
+import { getCompiler } from "../compilers";
 
 
 export class CompileController {
@@ -11,7 +11,7 @@ export class CompileController {
         this.prepareForCompile(buildDir);
 
         debug("resolve compilers");
-        const compiler = resolveCompiler(files);
+        const compiler = getCompiler(files);
 
         const createdFiles = await compiler.compile(buildDir) as string[];
         debug("new files created count = " + createdFiles.length);

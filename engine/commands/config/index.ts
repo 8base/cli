@@ -1,51 +1,82 @@
 import * as _ from "lodash";
-import { GraphqlActions } from "../../../common";
 import { Context } from "../../../common/Context";
-import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
-import { waitForAnswer } from "../../../common/prompt";
+import { Interactive } from "../../../common/interactive";
+import { StorageParameters } from "../../../consts/StorageParameters";
+
+
+type workspace = { name: string, account: string };
+
+const promptWorkspace = async (accounts: workspace[]): Promise<workspace> => {
+  return (await Interactive.ask({
+    name: "workspace",
+    type: "select",
+    message: "choose workspace",
+    choices: accounts.map(account => { return {
+      title: account.name,
+      value: account.account
+    }; })
+  })).workspace;
+};
+
+const promptServer = async (context: Context): Promise<workspace> => {
+  return (await Interactive.ask({
+    name: "server",
+    type: "text",
+    message: "Server address:",
+    initial: context.storage.user.getValue(StorageParameters.serverAddress) || context.storage.static.remoteAddress
+  })).server;
+};
+
+const selectWorkspace = async (accounts: any[], params: any): Promise<workspace> => {
+  if (_.isEmpty(accounts)) {
+    return null;
+  }
+
+  const workspaceId = params.w ? params.w : await promptWorkspace(accounts);
+
+  const activeWorkspace = accounts.find(account => account.account === workspaceId);
+  if (!activeWorkspace) {
+    throw new Error("Workspace " + workspaceId + " is absent");
+  }
+  return activeWorkspace;
+};
 
 export default {
   name: "config",
   handler: async (params: any, context: Context) => {
 
-    const accounts = UserDataStorage.getValue("accounts");
-    if (!_.isArray(accounts) || _.isEmpty(accounts)) {
-      throw new Error("You should login.");
-    }
+    const accounts = context.storage.user.getValue(StorageParameters.workspaces);
 
-    let data = {
-      workspace: params.w
-    };
+    const server = params.s ? params.s : await promptServer(context);
 
-    const schema: any = {
-      properties: {}
-    };
-
-    if (!params.w) {
-      schema.properties["workspace"] = {
-        message: "choose workspace",
-      };
-    }
-
-    if (Object.keys(schema.properties).length > 0) {
-      data = await waitForAnswer<{ workspace: string }>(schema);
-    }
-
+    context.storage.user.setValues([
+      {
+        name: StorageParameters.activeWorkspace,
+        value: await selectWorkspace(accounts, params)
+      },
+      {
+        name: StorageParameters.serverAddress,
+        value: server
+      }
+    ]);
   },
+
   describe: 'Advanced configuation',
+
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage("8base config [OPTIONS]")
       .option("workspace", {
         alias: 'w',
-        describe: "select workspace",
+        describe: "workspace id",
         type: "string"
       })
-      // .option("show", {
-      //   alias: 's',
-      //   describe: "show advanced configuration",
-      // })
+      .option("server", {
+        alias: 's',
+        describe: "server address",
+        type: "string"
+      })
       .help()
       .version(false);
   }

@@ -11,7 +11,7 @@
   "scripts": {
     "test": "jest --no-cache --coverage",
     "build": "tsc",
-    "start": "npm run build -- --watch",
+    "watch": "npm run build -- --watch",
     "tslint": "tslint -c tslint.json -p tsconfig.json --type-check",
     "upload": "npm version patch && git push --follow-tags",
     "preversion": "npm run tslint"
@@ -63,7 +63,7 @@
     "recursive-readdir": "^2.2.1",
     "request": "^2.83.0",
     "typescript": "^2.5.1",
-    "prompt":"^1.0.0"
+    "prompts":"^1.1.0"
   },
   "devDependencies": {
     "@types/archiver": "^2.1.0",

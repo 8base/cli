@@ -1,17 +1,22 @@
-import { debug, Utils, ExecutionConfig, StaticConfig } from "../../common";
+import { debug, Utils, StaticConfig } from "../../common";
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
 import { CommandHandler } from "../../interfaces/IBaseCommand";
 import { Context } from "../../common/Context";
-import { GraphQLError } from "graphql";
+
 
 export class CommandController {
 
   private static instanceCommand(fullPath: string): any {
     try {
       debug("try init command path = " + fullPath);
-      return Utils.undefault(require(require.resolve(fullPath)));
+      try {
+        return Utils.undefault(require(require.resolve(fullPath)));
+      } catch(ex) {
+        console.log(ex.message);
+      }
+
     } catch (error) {
       debug(error);
       throw new Error("Command \"" + path.basename(fullPath) + "\" is invalid");
@@ -20,10 +25,9 @@ export class CommandController {
 
   static errorHandler = (error: any) => {
     console.log(error);
-    if (error instanceof GraphQLError) {
-      const gqlError = <GraphQLError>error;
-      console.log(gqlError.nodes);
-    }
+    // if (error instanceof GraphQLError) {
+    //   console.log(error.message, null, 2);
+    // }
   }
 
   static wrapHandler = (handler: CommandHandler) => {
@@ -35,25 +39,6 @@ export class CommandController {
       }
     };
   };
-
-  // static async initialize(config: ExecutionConfig): Promise<any> {
-  //   let fullPath = path.join(StaticConfig.commandsDir, config.command);
-  //   debug("command manager: try to get command " + config.command + "; full path = " + fullPath);
-
-  //   let cmd = this.instanceCommand(fullPath);
-  //   await cmd.init(config);
-  //   return cmd;
-  // }
-
-  // static async run(command: any) {
-  //   debug("start run internal");
-
-  //   if (_.isNil(command)) {
-  //     return Promise.reject("Logic error: command not present");
-  //   }
-
-  //   return command.run();
-  // }
 
   static enumerate(): any[] {
     return _.transform(fs.readdirSync(StaticConfig.commandsDir), (commands, file: string) => {

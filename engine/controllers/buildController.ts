@@ -1,13 +1,12 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
 import { debug, StaticConfig, UserDataStorage, Utils } from "../../common";
-import { resolveCompiler } from "../../engine";
 import * as glob from "glob";
 import { FunctionDefinition } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
 import { ProjectController } from "./projectController";
+import { getCompiler } from "../compilers";
 
-const { Client } = require("@8base/api-client");
 
 export class BuildController {
 
@@ -25,7 +24,7 @@ export class BuildController {
         BuildController.prepare();
 
         debug("resolve compilers");
-        const compiler = resolveCompiler(files);
+        const compiler = getCompiler(files);
 
         const compiledFiles = await compiler.compile(StaticConfig.buildDir);
         debug("compiled files = " + compiledFiles);
@@ -40,22 +39,6 @@ export class BuildController {
             build: StaticConfig.buildDir,
             summary: StaticConfig.summaryDir
         };
-    }
-
-    static async deploy(archiveBuildPath: string, archiveSummaryPath: string) {
-
-        const client = new Client();
-
-        console.log(client.request);
-        // const data = await cliConnector.prepareDeploy();
-
-        // await Utils.upload(data.summaryDataUrl, archiveSummaryPath);
-        // debug("upload summary data complete");
-
-        // await Utils.upload(data.buildUrl, archiveBuildPath);
-        // debug("upload source code complete");
-
-        // await cliConnector.deploy(data.build, UserDataStorage.applicationId);
     }
 
     /**
@@ -92,7 +75,7 @@ export class BuildController {
             fs.readFileSync(StaticConfig.functionWrapperPath)
                 .toString()
                 .replace("__functionname__", functionPath)
-                .replace("__remote_server_endpoint__", UserDataStorage.remoteAddress)
+                .replace("__remote_server_endpoint__", UserDataStorage.getValue("remoteAddress"))
         );
 
         debug("write func wrapper compete");

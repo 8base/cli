@@ -1,7 +1,7 @@
-import { ICompiler } from "../../interfaces";
+import { ICompiler } from "../../interfaces/ICompiler";
 import { TypescriptCompiler } from "./tsCompiler";
 import * as _ from "lodash";
 
-export function resolveCompiler(files: string[]): ICompiler {
+export function getCompiler(files: string[]): ICompiler {
     return new TypescriptCompiler(files);
 }

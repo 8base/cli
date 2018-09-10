@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
-import { UserDataStorage, debug, StaticConfig, ExecutionConfig } from "../../common";
+import { debug, StaticConfig } from "../../common";
 import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
 import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerStageType, TriggerType, ResolverDefinition } from "../../interfaces/Extensions";
@@ -17,7 +17,7 @@ export class ProjectController {
      * public functions
      */
 
-    static async initialize(): Promise<ProjectDefinition> {
+    static initialize(): ProjectDefinition {
 
         const name = path.basename(StaticConfig.rootExecutionDir);
         debug("start initialize project \"" + name + "\"");
@@ -163,8 +163,7 @@ export class ProjectController {
                         name: functionName,
                         functionName,
                         httpMethod: data.method,
-                        path: data.path ? data.path : functionName,
-                        appId: UserDataStorage.applicationId
+                        path: data.path ? data.path : functionName
                     });
                     break;
 
