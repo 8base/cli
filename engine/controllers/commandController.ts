@@ -22,10 +22,10 @@ export class CommandController {
   }
 
   static parseError = (error: any) => {
-    if (error.response) {
-      console.log(error.response.errors);
+    if (error.response && error.response.errors.length > 0 && error.response.errors[0].message) {
+      return error.response.errors[0].message;
     } else {
-      console.log(error);
+      return error.message;
     }
   }
 
@@ -41,13 +41,18 @@ export class CommandController {
 
         const start = Date.now();
         await handler(params, context);
+        context.spinner.stop();
+
         const time = Date.now() - start;
 
         context.logger.info(context.i18n.t("success_command_end", { command, time }));
 
       } catch(ex) {
-        context.logger.error(context.i18n.t("error_command_end", { error: CommandController.parseError(ex) }));
+        context.spinner.stop();
+        context.logger.error(context.i18n.t("error_command_end", { command, error: CommandController.parseError(ex) }));
       }
+
+
     };
   };
 

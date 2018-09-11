@@ -38,8 +38,6 @@ export default {
     context.logger.debug("upload source code complete");
 
     await context.request(GraphqlActions.deploy, { data: { buildId: prepareDeploy.buildId } });
-
-    context.spinner.stop();
   },
   describe: 'Deploy project',
   builder: (args: yargs.Argv): yargs.Argv => {

@@ -7,6 +7,9 @@ import { GraphqlActions } from "../../../consts/GraphqlActions";
 export default {
   name: "invoke",
   handler: async (params: any, context: Context) => {
+
+    context.spinner.start(context.i18n.t("invoke_in_progress"));
+
     const args = params.j ? params.j
       : params.p ? fs.readFileSync(params.p) : null;
 
