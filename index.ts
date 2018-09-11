@@ -31,8 +31,7 @@ yargs
   .option('d', {
     alias: "debug",
     describe: "turn on debug logs",
-    type: "boolean",
-    // global: false
+    type: "boolean"
   })
   .recommendCommands()
   .strict()
@@ -50,7 +49,6 @@ yargs
       console.error(actual.message);
     }
 
-    // exit non-zero so the CLI can be usefully chained
-    // cli.exit(actual.code || 1, actual);
+    process.exit(0);
   })
   .argv;

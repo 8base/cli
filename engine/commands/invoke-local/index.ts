@@ -12,18 +12,20 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage("8base invoke-local [OPTIONS]")
-      .option("n", {
-        alias: 'name',
-        describe: "function name"
+      .option("f", {
+        alias: 'function',
+        require: true,
+        type: "string",
+        describe: "function to invoke"
       })
-      .option("i", {
-        alias: 'input',
-        describe: "function input data",
+      .option("j", {
+        alias: 'data-json',
+        describe: "input JSON",
         type: "string"
       })
       .option("p", {
-        alias: 'path',
-        describe: "path to file with function input data",
+        alias: 'data-path',
+        describe: "path to input JSON",
         type: "string"
       });
   }
