@@ -7,10 +7,7 @@ import { GraphqlActions } from "../../../consts/GraphqlActions";
 export default {
   name: "logs",
   handler: async (params: any, context: Context) => {
-
     const result = await context.request(GraphqlActions.logs, { functionName: params.f, limit: params.n });
-
-    // context.logger.info(JSON.stringify(JSON.parse(_.unescape(result.invoke.responseData)).data, null, 2));
     context.logger.info(result.logs);
   },
   describe: 'Invoke function remotely',
