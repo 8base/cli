@@ -1,4 +1,4 @@
-import { debug, StaticConfig, Utils } from "../../../common";
+import { debug, StaticConfig, Utils, trace } from "../../../common";
 import { GraphqlController } from "../../controllers/graphqlController";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
@@ -13,7 +13,7 @@ export default {
       GraphqlController.validateSchema(context.project);
     }
 
-    const buildDir = await BuildController.compile(context.project);
+    const buildDir = await BuildController.compile(context);
     debug("build dir = " + buildDir);
 
     const archiveBuildPath = await Utils.archive(
@@ -35,12 +35,12 @@ export default {
     debug("upload source code complete");
 
     await context.request(GraphqlActions.deploy, { data: { buildId: prepareDeploy.buildId } });
-    debug("deploy success");
+    trace("deploy success");
   },
   describe: 'Deploy project',
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage("8base deploy")
+      .usage("8base deploy [OPTIONS]")
       .help()
       .version(false);
   }

@@ -6,6 +6,7 @@ import { FunctionDefinition } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
 import { ProjectController } from "./projectController";
 import { getCompiler } from "../compilers";
+import { Context } from "../../common/Context";
 
 
 export class BuildController {
@@ -15,11 +16,11 @@ export class BuildController {
      * @param buildDir output build directory
      * @return list of compiled files
      */
-    static async compile(project: ProjectDefinition): Promise<any> {
+    static async compile(context: Context): Promise<any> {
 
         BuildController.clean();
 
-        const files = ProjectController.getFunctionSourceCode(project);
+        const files = ProjectController.getFunctionSourceCode(context);
 
         BuildController.prepare();
 
@@ -29,11 +30,11 @@ export class BuildController {
         const compiledFiles = await compiler.compile(StaticConfig.buildDir);
         debug("compiled files = " + compiledFiles);
 
-        BuildController.makeFunctionHandlers(project.extensions.functions);
+        BuildController.makeFunctionHandlers(context.project.extensions.functions);
 
-        ProjectController.saveMetaDataFile(project, StaticConfig.summaryDir);
+        ProjectController.saveMetaDataFile(context.project, StaticConfig.summaryDir);
 
-        ProjectController.saveSchema(project, StaticConfig.summaryDir);
+        ProjectController.saveSchema(context.project, StaticConfig.summaryDir);
 
         return {
             build: StaticConfig.buildDir,

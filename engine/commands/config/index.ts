@@ -8,6 +8,13 @@ export default {
   name: "config",
   handler: async (params: any, context: Context) => {
 
+    if (params.v) {
+      for(const key of Object.keys(StorageParameters)) {
+        trace(key + ": " + JSON.stringify(context.storage.user.getValue((<any>StorageParameters)[key]), null, 2));
+        trace("");
+      }
+      return;
+    }
     if (params.s) {
       context.storage.user.setValues([
         {
@@ -35,6 +42,11 @@ export default {
       .option("s", {
         alias: 'server',
         type: "string",
+        hidden: true
+      })
+      .option("v", {
+        alias: 'view',
+        type: "boolean",
         hidden: true
       })
       .help()

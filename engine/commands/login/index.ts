@@ -9,14 +9,14 @@ import { StorageParameters } from "../../../consts/StorageParameters";
 import logout from "../logout";
 
 const promptEmail = async (): Promise<string> => {
-  return (await Interactive.ask({ type: "text", name: "email", message: "Email" })).email;
+  return (await Interactive.ask({ type: "text", name: "email", message: "Email:" })).email;
 };
 
 const promptPassword = async (): Promise<string> => {
   return (await Interactive.ask(
     {
       name: "password",
-      message: "Password",
+      message: "Password:",
       type: "password"
     }
   )).password;
@@ -33,7 +33,7 @@ export default {
 
     await logout.handler(params, context);
 
-    const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } });
+    const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } }, false);
 
     UserDataStorage.setValues([
       {
@@ -49,6 +49,7 @@ export default {
         value: result.userLogin.accounts
       }]);
 
+      // result.userLogin.accounts.push({ name: "kokoko", account: "ololo"});
     if (result.userLogin.accounts.length > 1) {
       Utils.selectWorkspace(null, context);
     } else if (result.userLogin.accounts.length === 1) {

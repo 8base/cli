@@ -27,7 +27,7 @@ export class Context {
     };
   }
 
-  request(query: string, variables: any = null): Promise<any> {
+  request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
 
     const remoteAddress = this.storage.user.getValue(StorageParameters.serverAddress) || this.storage.static.remoteAddress;
     debug("remote address = " + remoteAddress);
@@ -59,12 +59,16 @@ export class Context {
       client.setAccountId(workspaceId);
     }
 
+    if (isLoginRequred && (_.isEmpty(idToken) || _.isEmpty(idToken) || _.isEmpty(workspaceId))) {
+      throw new Error("You are logout");
+    }
+
     return client.request(query, variables);
   }
 
   get project(): ProjectDefinition {
     if (_.isNil(this._project)) {
-      this._project = ProjectController.initialize();
+      this._project = ProjectController.initialize(this);
     }
     return this._project;
   }

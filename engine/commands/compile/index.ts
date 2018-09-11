@@ -7,7 +7,7 @@ export default {
   name: "compile",
   handler: async (params: any, context: Context) => {
 
-    const buildDir = await BuildController.compile(context.project);
+    const buildDir = await BuildController.compile(context);
     debug("build dir = " + JSON.stringify(buildDir, null, 2));
 
     if (params.a) {
@@ -27,7 +27,7 @@ export default {
   describe: 'Compile project',
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage("8base deploy")
+      .usage("8base compile [OPTIONS]")
       .option("a", {
         alias: 'archive',
         describe: "archive project"

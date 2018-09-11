@@ -24,10 +24,10 @@ export class CommandController {
   }
 
   static errorHandler = (error: any) => {
-    if (error instanceof GraphQLError) {
-      console.log(error.message, null, 2);
+    if (error.response) {
+      console.log(error.response.errors);
     } else {
-      console.log(error.message);
+      console.log(error);
     }
   }
 

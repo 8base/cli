@@ -19,48 +19,22 @@ export default {
 
     const result = (await context.request(GraphqlActions.describe)).describeExtensions;
 
-    if (params.f || params.a) {
-      trace("Resolvers: ");
-      trace(JSON.stringify(result.resolvers, null, 2));
-      trace("");
-    }
+    trace("Resolvers: ");
+    trace(JSON.stringify(result.resolvers, null, 2));
+    trace("");
 
-    if (params.w || params.a) {
-      const webhooks = result.webhooks ? result.webhooks.map((w: any) => transformWebhook(w, context)) : [];
-      trace("Webhooks: ");
-      trace(JSON.stringify(webhooks, null, 2));
-      trace("");
-    }
+    const webhooks = result.webhooks ? result.webhooks.map((w: any) => transformWebhook(w, context)) : [];
+    trace("Webhooks: ");
+    trace(JSON.stringify(webhooks, null, 2));
+    trace("");
 
-    if (params.t || params.a) {
-      trace("Triggers: ");
-      trace(JSON.stringify(result.triggers, null, 2));
-    }
+    trace("Triggers: ");
+    trace(JSON.stringify(result.triggers, null, 2));
   },
   describe: 'Describe project',
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage("8base describe [OPTIONS]")
-      .option("a", {
-        alias: 'all',
-        type: "boolean",
-        describe: "show all"
-      })
-      .option("r", {
-        alias: 'resolvers',
-        type: "boolean",
-        describe: "show resolvers"
-      })
-      .option("t", {
-        alias: 'triggers',
-        type: "boolean",
-        describe: "show triggers"
-      })
-      .option("w", {
-        alias: 'webhook',
-        type: "boolean",
-        describe: "show webhooks"
-      })
+      .usage("8base describe")
       .help()
       .version(false);
   }

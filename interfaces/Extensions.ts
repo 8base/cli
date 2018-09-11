@@ -43,7 +43,7 @@ export interface TriggerStage {
 
 export interface TriggerDefinition {
     name: string;
-    table: string;
+    tableName: string;
     stages: TriggerStage[];
 }
 
