@@ -12,6 +12,9 @@ CommandController.enumerate()
       builder: cmd.builder,
       describe: cmd.describe,
       handler: CommandController.wrapHandler(cmd.handler)
+    })
+    .option('d', {
+      hidden: true
     });
   }
 );
@@ -29,7 +32,7 @@ yargs
     alias: "debug",
     describe: "turn on debug logs",
     type: "boolean",
-    global: false
+    // global: false
   })
   .recommendCommands()
   .strict()

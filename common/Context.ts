@@ -7,6 +7,7 @@ import { StorageParameters } from "../consts/StorageParameters";
 import * as winston from "winston";
 import { Utils } from "./utils";
 import * as i18next       from "i18next";
+import * as Ora from "ora";
 
 const { Client } = require("@8base/api-client");
 
@@ -18,12 +19,17 @@ export class Context {
 
   i18n: i18next.i18n;
 
+  spinner = new Ora({
+    color: "red",
+    text: "\n"
+  });
+
   constructor(params: any) {
     this.logger = winston.createLogger({
       level: params.d ? "debug" : 'info',
-      format: winston.format.json(),
+      format: winston.format.cli(),
       transports: [
-        new winston.transports.Console({ format: winston.format.simple() }),
+        new winston.transports.Console({ format: winston.format.cli() }),
       ]
     });
   }
@@ -43,14 +49,12 @@ export class Context {
   request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
 
     const remoteAddress = this.storage.user.getValue(StorageParameters.serverAddress) || this.storage.static.remoteAddress;
-    this.logger.debug("remote address = " + remoteAddress);
+    this.logger.debug(`remote address: ${remoteAddress}`);
+
     const client = new Client(remoteAddress);
 
-    this.logger.debug("query = ");
-    this.logger.debug(query);
-
-    this.logger.debug("vaiables = ");
-    this.logger.debug(JSON.stringify(variables));
+    this.logger.debug(`query: ${query}`);
+    this.logger.debug(`vaiables: ${JSON.stringify(variables)}`);
 
     const refreshToken = this.storage.user.getValue(StorageParameters.refreshToken);
     if (refreshToken) {

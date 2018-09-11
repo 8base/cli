@@ -32,16 +32,19 @@ export class CommandController {
   static wrapHandler = (handler: Function) => {
     return async (params: any) => {
       const command = params._[0];
+
+
       const context = new Context(params);
       await context.init();
+
       try {
+
         const start = Date.now();
-
         await handler(params, context);
-
         const time = Date.now() - start;
 
         context.logger.info(context.i18n.t("success_command_end", { command, time }));
+
       } catch(ex) {
         context.logger.error(context.i18n.t("error_command_end", { error: CommandController.parseError(ex) }));
       }

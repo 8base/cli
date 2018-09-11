@@ -8,6 +8,7 @@ import { GraphqlActions } from "../../../consts/GraphqlActions";
 export default {
   name: "deploy",
   handler: async (params: any, context: Context) => {
+    context.spinner.start(context.i18n.t("deploy_in_progress"));
 
     if (params["validate_schema"]) {
       GraphqlController.validateSchema(context.project);
@@ -37,6 +38,8 @@ export default {
     context.logger.debug("upload source code complete");
 
     await context.request(GraphqlActions.deploy, { data: { buildId: prepareDeploy.buildId } });
+
+    context.spinner.stop();
   },
   describe: 'Deploy project',
   builder: (args: yargs.Argv): yargs.Argv => {
