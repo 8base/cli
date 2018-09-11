@@ -1,18 +1,21 @@
 import * as path from "path";
 import * as ts from 'typescript';
 import { ICompiler } from "../../interfaces/ICompiler";
-import { StaticConfig, debug } from "../../common";
+import { StaticConfig } from "../../common";
+import { Context } from "../../common/Context";
 
 export class TypescriptCompiler implements ICompiler {
 
   private files: string[];
+  private context: Context;
 
-  constructor(files: string[]) {
+  constructor(files: string[], context: Context) {
     this.files = files;
+    this.context = context;
   }
 
   async compile(buildDir: string): Promise<string[]> {
-    debug("compile files count = " + this.files.length);
+    this.context.logger.debug("compile files count = " + this.files.length);
     const program = ts.createProgram(this.files, this.config(buildDir));
 
     const emitResult = program.emit();
@@ -21,12 +24,12 @@ export class TypescriptCompiler implements ICompiler {
 
     allDiagnostics.forEach(diagnostic => {
       if (!diagnostic.file) {
-        debug(JSON.stringify(diagnostic, null, 2));
+        this.context.logger.debug(JSON.stringify(diagnostic, null, 2));
       }
       if (diagnostic.file) {
         const {line, character} = diagnostic.file!.getLineAndCharacterOfPosition(diagnostic.start!);
         const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-        debug(`${diagnostic.file!.fileName} (${line + 1},${character + 1}): ${message}`);
+        this.context.logger.debug(`${diagnostic.file!.fileName} (${line + 1},${character + 1}): ${message}`);
       }
     });
 
@@ -34,8 +37,8 @@ export class TypescriptCompiler implements ICompiler {
       throw new Error('Typescript compilation failed');
     }
 
-    debug(path.join(StaticConfig.rootProjectDir, '../node_modules/@types'));
-    debug(path.join(StaticConfig.rootProjectDir, './node_modules/@types'));
+    this.context.logger.debug(path.join(StaticConfig.rootProjectDir, '../node_modules/@types'));
+    this.context.logger.debug(path.join(StaticConfig.rootProjectDir, './node_modules/@types'));
     return emitResult.emittedFiles;
   }
 

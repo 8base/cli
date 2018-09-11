@@ -1,13 +1,17 @@
-import { debug, trace } from "../common";
 import * as path from "path";
 import 'isomorphic-fetch';
 import * as request from "request";
 import * as fs from "fs";
 import * as archiver from "archiver";
 import { Interactive } from "./interactive";
-import _ = require("lodash");
+import * as _ from "lodash";
 import { Context } from "./Context";
 import { StorageParameters } from "../consts/StorageParameters";
+
+
+import { i18n } from "i18next";
+import locales from "../locales";
+
 
 type workspace = { name: string, account: string };
 
@@ -23,7 +27,6 @@ export namespace Utils {
         error: null
       };
     } catch (err) {
-      debug(err);
       return {
         result: null,
         error: err
@@ -31,7 +34,7 @@ export namespace Utils {
     }
   };
 
-  export const installFiles = (targetDirectory: string, files: Map<string, string>, fs: any): string => {
+  export const installFiles = (targetDirectory: string, files: Map<string, string>, fs: any, context: Context): string => {
     files.forEach((data, name) => {
       const fullName = path.join(targetDirectory, name);
       const fullPath = path.dirname(fullName);
@@ -40,16 +43,16 @@ export namespace Utils {
       }
 
       fs.writeFileSync(fullName, data);
-      debug("install file = " + fullName);
+      context.logger.debug("install file = " + fullName);
     });
     return targetDirectory;
   };
 
-  export const upload = async (url: any, filepath: any): Promise<any> => {
+  export const upload = async (url: any, filepath: any, context: Context): Promise<any> => {
     const data = fs.readFileSync(filepath);
-    debug("start upload file");
-    debug("url: " + url);
-    debug("filepath: " + filepath);
+    context.logger.debug("start upload file");
+    context.logger.debug("url: " + url);
+    context.logger.debug("filepath: " + filepath);
     return new Promise<any>((resolve, reject) => {
       request({
         method: "PUT",
@@ -66,7 +69,7 @@ export namespace Utils {
           if (res && res.statusCode !== 200) {
             return reject(new Error(res.body));
           }
-          debug("upload file \"" + filepath + "\" success");
+          context.logger.debug("upload file \"" + filepath + "\" success");
           resolve(path.basename(filepath));
         });
     });
@@ -76,11 +79,11 @@ export namespace Utils {
     sourceDirectories: { source: string, dist?: string }[],
     outDir: string,
     buildName: string,
-    filters?: string[]): Promise<string> => {
+    context: Context): Promise<string> => {
     const fullPath = path.join(outDir, buildName + '.zip');
 
-    sourceDirectories.map(p => debug("archive source path = " + p));
-    debug("archive dest path = " + fullPath);
+    sourceDirectories.map(p => context.logger.debug("archive source path = " + p));
+    context.logger.debug("archive dest path = " + fullPath);
 
     return new Promise<string>((resolve, reject) => {
       const zip = archiver("zip", { zlib: { level: 8 } });
@@ -89,25 +92,25 @@ export namespace Utils {
       zip.pipe(write);
 
       sourceDirectories.forEach((directory) => {
-        debug("archive files from directory = " + directory.source);
+        context.logger.debug("archive files from directory = " + directory.source);
         zip.directory(directory.source, directory.dist ? directory.dist : "");
       });
 
       zip.on('error', (err: any) => {
-        debug('Error while zipping build: ' + err);
+        context.logger.debug('Error while zipping build: ' + err);
         reject();
       });
 
       zip.on('finish', (err: any) => {
-        debug('finish');
+        context.logger.debug('finish');
       });
 
       zip.on('close', (err: any) => {
-        debug('close');
+        context.logger.debug('close');
       });
 
       zip.on('end', (err: any) => {
-        debug('end');
+        context.logger.debug('end');
         resolve(fullPath);
       });
 
@@ -152,6 +155,37 @@ export namespace Utils {
       }
     ]);
 
-    trace("Workspace " + activeWorkspace.name + " is active");
+    context.logger.info("Workspace " + activeWorkspace.name + " is active");
   };
+
+
+
+  // const format = (value: string, format: string, lng: string) => {
+  //   logger().debug("formatting value = %s, format = %s, lng = %s", value, format, lng);
+
+  //   if (format === "capitalizeFirstLetter") {
+  //     return _.upperFirst(value);
+  //   }
+
+  //   return value;
+  // };
+
+  export const initTranslations = async (i18next: i18n) => {
+    return new Promise((resolve, reject) => {
+      i18next.init({
+        fallbackLng: "en",
+        debug: false,
+        defaultNS: "default",
+        resources: locales
+        // interpolation: {
+        //   format: format
+        // }
+      }, (err, t) => {
+        if (err) return reject(err);
+
+        resolve();
+      });
+    });
+  };
+
 }

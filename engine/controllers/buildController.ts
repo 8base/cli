@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
-import { debug, StaticConfig, UserDataStorage, Utils } from "../../common";
+import { StaticConfig, UserDataStorage } from "../../common";
 import * as glob from "glob";
 import { FunctionDefinition } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
@@ -24,13 +24,13 @@ export class BuildController {
 
         BuildController.prepare();
 
-        debug("resolve compilers");
-        const compiler = getCompiler(files);
+        context.logger.debug("resolve compilers");
+        const compiler = getCompiler(files, context);
 
         const compiledFiles = await compiler.compile(StaticConfig.buildDir);
-        debug("compiled files = " + compiledFiles);
+        context.logger.debug("compiled files = " + compiledFiles);
 
-        BuildController.makeFunctionHandlers(context.project.extensions.functions);
+        BuildController.makeFunctionHandlers(context.project.extensions.functions, context);
 
         ProjectController.saveMetaDataFile(context.project, StaticConfig.summaryDir);
 
@@ -46,10 +46,10 @@ export class BuildController {
      * Private functions
      */
 
-    private static makeFunctionHandlers(functions: FunctionDefinition[]) {
+    private static makeFunctionHandlers(functions: FunctionDefinition[], context: Context) {
 
         functions.forEach(func => {
-            debug("process function = " + func.name);
+            context.logger.debug("process function = " + func.name);
 
             const ext = path.parse(func.pathToFunction).ext;
 
@@ -59,15 +59,15 @@ export class BuildController {
                 throw new Error("target compiled file " + func.pathToFunction + " not exist");
             }
 
-            BuildController.makeFunctionWrapper(func.name, func.pathToFunction.replace(ext, ""));
+            BuildController.makeFunctionWrapper(func.name, func.pathToFunction.replace(ext, ""), context);
         });
     }
 
-    private static makeFunctionWrapper(name: string, functionPath: string) {
+    private static makeFunctionWrapper(name: string, functionPath: string, context: Context) {
 
         const fullWrapperFuncPath = path.join(StaticConfig.buildDir, name.concat(StaticConfig.FunctionHandlerExt));
 
-        debug("full function path = " + fullWrapperFuncPath);
+        context.logger.debug("full function path = " + fullWrapperFuncPath);
 
         fs.writeFileSync(
 
@@ -79,7 +79,7 @@ export class BuildController {
                 .replace("__remote_server_endpoint__", UserDataStorage.getValue("remoteAddress"))
         );
 
-        debug("write func wrapper compete");
+        context.logger.debug("write func wrapper compete");
     }
 
     private static clean() {

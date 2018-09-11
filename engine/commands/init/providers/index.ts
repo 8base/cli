@@ -1,4 +1,4 @@
-import { StaticConfig, debug } from "../../../../common";
+import { StaticConfig } from "../../../../common";
 import * as path from "path";
 import * as readdir from "readdir";
 import * as _ from "lodash";
@@ -10,7 +10,6 @@ interface IFileProvider {
 
 class StaticFileProvider implements IFileProvider {
     async provide(): Promise<Map<string, string>> {
-        debug("get files from path = " + StaticConfig.templatePath);
         return _.reduce<string, Map<string, string>>(readdir.readSync(StaticConfig.templatePath), (result, file) => {
             return result.set(file, fs.readFileSync(path.join(StaticConfig.templatePath, file)).toString());
         }, new Map<string, string>());

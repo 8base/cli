@@ -63,7 +63,9 @@
     "recursive-readdir": "^2.2.1",
     "request": "^2.83.0",
     "typescript": "^2.5.1",
-    "prompts":"^1.1.0"
+    "prompts":"^1.1.0",
+    "winston": "^3.1.0",
+    "i18next": "^11.8.0"
   },
   "devDependencies": {
     "@types/archiver": "^2.1.0",
@@ -86,6 +88,8 @@
     "@types/ws": "^3.2.0",
     "@types/yargs": "^11.1.1",
     "@types/zen-observable": "^0.5.3",
+    "@types/winston": "^2.4.4",
+    "@types/i18next": "^8.4.5",
     "awesome-typescript-loader": "^3.2.3",
     "jest": "^21.0.1",
     "jest-cli": "^21.2.1",

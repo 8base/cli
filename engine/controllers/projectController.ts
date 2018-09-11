@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
-import { debug, StaticConfig } from "../../common";
+import { StaticConfig } from "../../common";
 import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
 import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerStageType, TriggerType, ResolverDefinition } from "../../interfaces/Extensions";
@@ -21,26 +21,26 @@ export class ProjectController {
   static initialize(context: Context): ProjectDefinition {
 
     const name = path.basename(context.storage.static.rootExecutionDir);
-    debug("start initialize project \"" + name + "\"");
+    context.logger.debug("start initialize project \"" + name + "\"");
 
-    debug("load main yml file");
-    const config = ProjectController.loadConfigFile();
+    context.logger.debug("load main yml file");
+    const config = ProjectController.loadConfigFile(context);
 
-    debug("load extensions");
+    context.logger.debug("load extensions");
     const extensions = ProjectController.loadExtensions(config);
 
     const gqlSchema = GraphqlController.loadSchema(ProjectController.getSchemaPaths(extensions));
 
-    debug("load functions count = " + extensions.functions.length);
+    context.logger.debug("load functions count = " + extensions.functions.length);
 
-    debug("resolve function graphql types");
+    context.logger.debug("resolve function graphql types");
     const functionGqlTypes = GraphqlController.defineGqlFunctionsType(gqlSchema);
     extensions.resolvers = ResolverUtils.resolveGqlFunctionTypes(extensions.resolvers, functionGqlTypes);
 
-    debug("merge trigger types");
+    context.logger.debug("merge trigger types");
     extensions.triggers = TriggerUtils.mergeStages(extensions.triggers);
 
-    debug("initialize project comlete");
+    context.logger.debug("initialize project comlete");
     return {
       extensions,
       name,
@@ -100,16 +100,16 @@ export class ProjectController {
    * private functions
    */
 
-  private static loadConfigFile(): any {
+  private static loadConfigFile(context: Context): any {
     const pathToYmlConfig = StaticConfig.serviceConfigFileName;
 
-    debug("check exist yaml file = " + pathToYmlConfig);
+    context.logger.debug("check exist yaml file = " + pathToYmlConfig);
 
     if (!fs.existsSync(pathToYmlConfig)) {
       throw new Error("Main configuration file \"" + StaticConfig.serviceConfigFileName + "\" is absent.");
     }
 
-    debug("load yaml file");
+    context.logger.debug("load yaml file");
 
     try {
       return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));

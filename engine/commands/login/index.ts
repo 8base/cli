@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { trace, Utils } from "../../../common";
+import { Utils } from "../../../common";
 import { Context } from "../../../common/Context";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
@@ -49,7 +49,6 @@ export default {
         value: result.userLogin.accounts
       }]);
 
-      // result.userLogin.accounts.push({ name: "kokoko", account: "ololo"});
     if (result.userLogin.accounts.length > 1) {
       Utils.selectWorkspace(null, context);
     } else if (result.userLogin.accounts.length === 1) {
@@ -57,8 +56,6 @@ export default {
     } else {
       throw new Error("Internal error");
     }
-
-    trace("Login success");
   },
 
   describe: 'Login with your 8base credentials',
@@ -75,8 +72,6 @@ export default {
         alias: 'password',
         describe: "user password",
         type: "string"
-      })
-      .help()
-      .version(false);
+      });
   }
 };

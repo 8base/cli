@@ -3,7 +3,7 @@
 import * as yargs from "yargs";
 import { CommandController } from "./engine/controllers/commandController";
 
-yargs.usage("Usage: 8base <command> [options]");
+yargs.usage("Usage: 8base <command> [OPTIONS]");
 
 CommandController.enumerate()
   .map(cmd => {
@@ -18,11 +18,18 @@ CommandController.enumerate()
 
 yargs
   .alias('h', 'help')
+  .option('h', {
+    global: false
+  })
   .alias('v', 'version')
+  .option('v', {
+    global: false
+  })
   .option('d', {
     alias: "debug",
     describe: "turn on debug logs",
-    type: "boolean"
+    type: "boolean",
+    global: false
   })
   .recommendCommands()
   .strict()

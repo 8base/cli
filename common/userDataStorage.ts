@@ -1,4 +1,4 @@
-import { debug, StaticConfig } from "../common";
+import { StaticConfig } from "../common";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -20,7 +20,6 @@ class Storage {
     private static checkStorageExist() {
         const storagePath = this.pathToStorage;
         if (!fs.existsSync(storagePath)) {
-            debug("create new storage path = "  + storagePath);
             fs.writeFileSync(storagePath, "{}");
         }
     }

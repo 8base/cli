@@ -1,10 +1,12 @@
 import { UserDataStorage } from "./userDataStorage";
-import { setTraceLevel, TraceLevel, debug } from "./tracer";
 import { StaticConfig } from ".";
 import { ProjectDefinition } from "../interfaces/Project";
 import _ = require("lodash");
 import { ProjectController } from "../engine/controllers/projectController";
 import { StorageParameters } from "../consts/StorageParameters";
+import * as winston from "winston";
+import { Utils } from "./utils";
+import * as i18next       from "i18next";
 
 const { Client } = require("@8base/api-client");
 
@@ -12,12 +14,23 @@ export class Context {
 
   private _project: ProjectDefinition = null;
 
+  logger: winston.Logger;
+
+  i18n: i18next.i18n;
+
   constructor(params: any) {
-    if (params.d) {
-      setTraceLevel(TraceLevel.Debug);
-    } else {
-      setTraceLevel(TraceLevel.Trace);
-    }
+    this.logger = winston.createLogger({
+      level: params.d ? "debug" : 'info',
+      format: winston.format.json(),
+      transports: [
+        new winston.transports.Console({ format: winston.format.simple() }),
+      ]
+    });
+  }
+
+  async init() {
+    await Utils.initTranslations(i18next);
+    this.i18n = i18next.cloneInstance({initImmediate: false});
   }
 
   get storage(): { static: typeof StaticConfig, user: typeof UserDataStorage } {
@@ -30,24 +43,24 @@ export class Context {
   request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
 
     const remoteAddress = this.storage.user.getValue(StorageParameters.serverAddress) || this.storage.static.remoteAddress;
-    debug("remote address = " + remoteAddress);
+    this.logger.debug("remote address = " + remoteAddress);
     const client = new Client(remoteAddress);
 
-    debug("query = ");
-    debug(query);
+    this.logger.debug("query = ");
+    this.logger.debug(query);
 
-    debug("vaiables = ");
-    debug(JSON.stringify(variables));
+    this.logger.debug("vaiables = ");
+    this.logger.debug(JSON.stringify(variables));
 
     const refreshToken = this.storage.user.getValue(StorageParameters.refreshToken);
     if (refreshToken) {
-      debug("set refresh token");
+      this.logger.debug("set refresh token");
       client.setRefreshToken(refreshToken);
     }
 
     const idToken = this.storage.user.getValue(StorageParameters.idToken);
     if (idToken) {
-      debug("set id token");
+      this.logger.debug("set id token");
       client.setIdToken(idToken);
     }
 
@@ -55,7 +68,7 @@ export class Context {
     const workspaceId = workspace ? workspace.account : null;
 
     if (workspaceId) {
-      debug("set workspace id = " + workspaceId);
+      this.logger.debug("set workspace id = " + workspaceId);
       client.setAccountId(workspaceId);
     }
 

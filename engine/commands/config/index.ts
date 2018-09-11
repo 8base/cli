@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { Context } from "../../../common/Context";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
-import { trace, Utils } from "../../../common";
+import { Utils } from "../../../common";
 
 export default {
   name: "config",
@@ -10,8 +10,7 @@ export default {
 
     if (params.v) {
       for(const key of Object.keys(StorageParameters)) {
-        trace(key + ": " + JSON.stringify(context.storage.user.getValue((<any>StorageParameters)[key]), null, 2));
-        trace("");
+        context.logger.info("%s: %s\n", key, JSON.stringify(context.storage.user.getValue((<any>StorageParameters)[key]), null, 2));
       }
       return;
     }
@@ -22,7 +21,7 @@ export default {
           value: params.s
         }
       ]);
-      trace("set remote address = " + params.s);
+      context.logger.info("set remote address: %s", params.s);
       return;
     }
 
@@ -48,8 +47,6 @@ export default {
         alias: 'view',
         type: "boolean",
         hidden: true
-      })
-      .help()
-      .version(false);
+      });
   }
 };

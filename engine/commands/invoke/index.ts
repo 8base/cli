@@ -1,9 +1,8 @@
 import * as yargs from "yargs";
 import { Context } from "../../../common/Context";
 import _ = require("lodash");
-import { InvalidArgument } from "../../../errors/invalidArgument";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-import { trace } from "../../../common";
+
 
 export default {
   name: "invoke",
@@ -15,11 +14,12 @@ export default {
 
     const result = await context.request(GraphqlActions.invoke, { data: { functionName: params.n, inputArgs: serilizedArgs } });
 
-    trace(_.unescape(result.invoke.responseData));
+    context.logger.info(_.unescape(result.invoke.responseData));
   },
   describe: 'Invoke function remotely',
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
+      .usage("8base invoke [OPTIONS]")
       .option("n", {
         alias: 'name',
         require: true,
@@ -35,9 +35,6 @@ export default {
         alias: 'path',
         describe: "path to file with function input data",
         type: "string"
-      })
-      .usage("8base invoke")
-      .help()
-      .version(false);
+      });
   }
 };

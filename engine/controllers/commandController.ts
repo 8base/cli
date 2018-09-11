@@ -1,4 +1,4 @@
-import { debug, Utils, StaticConfig } from "../../common";
+import { Utils, StaticConfig } from "../../common";
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
@@ -10,7 +10,6 @@ export class CommandController {
 
   private static instanceCommand(fullPath: string): any {
     try {
-      debug("try init command path = " + fullPath);
       try {
         return Utils.undefault(require(require.resolve(fullPath)));
       } catch(ex) {
@@ -18,7 +17,6 @@ export class CommandController {
       }
 
     } catch (error) {
-      debug(error);
       throw new Error("Command \"" + path.basename(fullPath) + "\" is invalid");
     }
   }
@@ -33,10 +31,19 @@ export class CommandController {
 
   static wrapHandler = (handler: Function) => {
     return async (params: any) => {
+      const command = params._[0];
+      const context = new Context(params);
+      await context.init();
       try {
-        await handler(params, new Context(params));
+        const start = Date.now();
+
+        const result = await handler(params, new Context(params));
+
+        const time = Date.now() - start;
+
+        context.logger.info(context.i18n.t("success_command_end", { command, time }));
       } catch(ex) {
-        return CommandController.errorHandler(ex);
+        const error = CommandController.errorHandler(ex);
       }
     };
   };

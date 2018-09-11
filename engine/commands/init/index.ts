@@ -4,7 +4,7 @@ import { install } from "./installer";
 import * as yargs from "yargs";
 import { Context } from "../../../common/Context";
 import * as path from "path";
-import { debug, StaticConfig, trace } from "../../../common";
+import { StaticConfig } from "../../../common";
 
 export default {
   name: "init",
@@ -17,28 +17,26 @@ export default {
       : { fullPath: StaticConfig.rootExecutionDir, name: path.basename(context.storage.static.rootExecutionDir) };
 
 
-    debug("start initiailie init command");
+    context.logger.debug("start initiailie init command");
 
-    debug("initialize success: initilize repository = " + project.name);
+    context.logger.debug("initialize success: initilize repository: %s", project.name);
 
     let files = await getFileProvider().provide();
-    debug("files provided count = " + files.size);
+    context.logger.debug("files provided count = " + files.size);
 
     files.set(StaticConfig.packageFileName, replaceServiceName(files.get(StaticConfig.packageFileName)));
 
-    debug("try to install files");
-    install(project.fullPath, files);
+    context.logger.debug("try to install files");
+    install(project.fullPath, files, context);
 
-    trace(`Project ${project.name} initialize success`);
+    context.logger.info(`Project ${project.name} initialize success`);
   },
   describe: 'Initialize project',
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage("8base init [DIRECTORY]")
+      .usage("8base init [DIRECTORY] [OPTIONS]")
       .example("8base init", "initialize current folder")
-      .example("8base init dir1", "create folder dir1 and initialize")
-      .help()
-      .version(false);
+      .example("8base init dir1", "create folder dir1 and initialize");
   }
 };
 

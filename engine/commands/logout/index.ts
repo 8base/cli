@@ -28,9 +28,6 @@ export default {
   },
   describe: 'Clears local login credentials and invalidates API session',
   builder: (args: yargs.Argv): yargs.Argv => {
-    return args
-      .usage("8base logout")
-      .help()
-      .version(false);
+    return args.usage("8base logout [OPTIONS]");
   }
 };

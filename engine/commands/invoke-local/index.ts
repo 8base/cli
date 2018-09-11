@@ -11,6 +11,7 @@ export default {
   describe: 'Invoke function locally',
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
+      .usage("8base invoke-local [OPTIONS]")
       .option("n", {
         alias: 'name',
         describe: "function name"
@@ -24,9 +25,6 @@ export default {
         alias: 'path',
         describe: "path to file with function input data",
         type: "string"
-      })
-      .usage("8base invoke")
-      .help()
-      .version(false);
+      });
   }
 };
