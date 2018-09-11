@@ -14,7 +14,7 @@ export default {
     }
 
     const buildDir = await BuildController.compile(context);
-    context.logger.debug("build dir: %s", buildDir);
+    context.logger.debug(`build dir: ${buildDir}`);
 
     const archiveBuildPath = await Utils.archive(
       [{ source: buildDir.build }, { source: StaticConfig.modules, dist: "node_modules" }],

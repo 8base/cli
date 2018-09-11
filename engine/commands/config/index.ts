@@ -10,7 +10,7 @@ export default {
 
     if (params.v) {
       for(const key of Object.keys(StorageParameters)) {
-        context.logger.info("%s: %s\n", key, JSON.stringify(context.storage.user.getValue((<any>StorageParameters)[key]), null, 2));
+        context.logger.info(`${key}: ${JSON.stringify(context.storage.user.getValue((<any>StorageParameters)[key]), null, 2)}\n`);
       }
       return;
     }
@@ -21,7 +21,7 @@ export default {
           value: params.s
         }
       ]);
-      context.logger.info("set remote address: %s", params.s);
+      context.logger.info(context.i18n.t("set_remote_address", { address: params.s }));
       return;
     }
 

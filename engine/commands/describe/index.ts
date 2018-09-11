@@ -17,12 +17,12 @@ export default {
 
     const result = (await context.request(GraphqlActions.describe)).describeExtensions;
 
-    context.logger.info("Resolvers: %s\n", JSON.stringify(result.resolvers, null, 2));
+    context.logger.info(`Resolvers: ${JSON.stringify(result.resolvers, null, 2)}\n`);
 
     const webhooks = result.webhooks ? result.webhooks.map((w: any) => transformWebhook(w, context)) : [];
-    context.logger.info("Webhooks: ", JSON.stringify(webhooks, null, 2));
+    context.logger.info(`Webhooks: ${JSON.stringify(webhooks, null, 2)}`);
 
-    context.logger.info("Triggers: %s", JSON.stringify(result.triggers, null, 2));
+    context.logger.info(`Triggers: ${JSON.stringify(result.triggers, null, 2)}`);
   },
   describe: 'Describe project',
   builder: (args: yargs.Argv): yargs.Argv => {

@@ -155,20 +155,8 @@ export namespace Utils {
       }
     ]);
 
-    context.logger.info("Workspace " + activeWorkspace.name + " is active");
+    context.logger.info(context.i18n.t("workspace_is_active", { workspace: activeWorkspace.name }));
   };
-
-
-
-  // const format = (value: string, format: string, lng: string) => {
-  //   logger().debug("formatting value = %s, format = %s, lng = %s", value, format, lng);
-
-  //   if (format === "capitalizeFirstLetter") {
-  //     return _.upperFirst(value);
-  //   }
-
-  //   return value;
-  // };
 
   export const initTranslations = async (i18next: i18n) => {
     return new Promise((resolve, reject) => {
@@ -177,9 +165,6 @@ export namespace Utils {
         debug: false,
         defaultNS: "default",
         resources: locales
-        // interpolation: {
-        //   format: format
-        // }
       }, (err, t) => {
         if (err) return reject(err);
 

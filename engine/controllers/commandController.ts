@@ -21,7 +21,7 @@ export class CommandController {
     }
   }
 
-  static errorHandler = (error: any) => {
+  static parseError = (error: any) => {
     if (error.response) {
       console.log(error.response.errors);
     } else {
@@ -37,13 +37,13 @@ export class CommandController {
       try {
         const start = Date.now();
 
-        const result = await handler(params, new Context(params));
+        await handler(params, context);
 
         const time = Date.now() - start;
 
         context.logger.info(context.i18n.t("success_command_end", { command, time }));
       } catch(ex) {
-        const error = CommandController.errorHandler(ex);
+        context.logger.error(context.i18n.t("error_command_end", { error: CommandController.parseError(ex) }));
       }
     };
   };

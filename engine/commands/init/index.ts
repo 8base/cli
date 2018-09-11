@@ -19,7 +19,7 @@ export default {
 
     context.logger.debug("start initiailie init command");
 
-    context.logger.debug("initialize success: initilize repository: %s", project.name);
+    context.logger.debug(`initialize success: initilize repository: ${project.name}`);
 
     let files = await getFileProvider().provide();
     context.logger.debug("files provided count = " + files.size);
@@ -29,7 +29,7 @@ export default {
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);
 
-    context.logger.info(`Project ${project.name} initialize success`);
+    context.logger.info(context.i18n.t("project_init_success", { project: project.name}));
   },
   describe: 'Initialize project',
   builder: (args: yargs.Argv): yargs.Argv => {
