@@ -4,12 +4,13 @@ import * as fs from "fs";
 
 import { Utils, debug } from "../../../common";
 
-export function install(targetDirectory: string, repositoryName: string, files: Map<string, string>): string {
-    const fullPath = path.join(targetDirectory, repositoryName);
+export function install(targetDirectory: string, files: Map<string, string>): string {
 
-    debug("\nStart initialize repository with name \"" + repositoryName + "\" into path " + fullPath);
+    const repositoryName: string = path.basename(targetDirectory);
 
-    Utils.trycatch(_.bind(fs.mkdirSync, fs, fullPath), "Repository \"" + repositoryName + "\" already exist");
+    debug("\nStart initialize repository with name \"" + repositoryName + "\" into path " + targetDirectory);
 
-    return Utils.installFiles(fullPath, files, fs);
+    Utils.safeExecution(_.bind(fs.mkdirSync, fs, targetDirectory));
+
+    return Utils.installFiles(targetDirectory, files, fs);
 }

@@ -16,12 +16,18 @@ export namespace Utils {
     return m.default ? m.default : m;
   };
 
-  export const trycatch = (cmd: any, error?: string): any => {
+  export const safeExecution = (cmd: any): { result: any, error: Error } => {
     try {
-      return cmd();
+      return {
+        result: cmd(),
+        error: null
+      };
     } catch (err) {
       debug(err);
-      throw new Error(error ? error : err);
+      return {
+        result: null,
+        error: err
+      };
     }
   };
 
