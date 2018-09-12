@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { Utils } from "../../../common";
-import { Context } from "../../../common/Context";
+import { Context, Translations } from "../../../common/Context";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
 import { Interactive } from "../../../common/interactive";
@@ -31,6 +31,7 @@ export default {
       password: params.p ? params.p : await promptPassword()
     };
 
+    context.spinner.start(context.i18n.t("login_in_progress"));
     await logout.handler(params, context);
 
     const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } }, false);
@@ -49,6 +50,8 @@ export default {
         value: result.userLogin.accounts
       }]);
 
+    context.spinner.stop();
+
     if (result.userLogin.accounts.length > 1) {
       Utils.selectWorkspace(null, context);
     } else if (result.userLogin.accounts.length === 1) {
@@ -60,9 +63,9 @@ export default {
 
   describe: 'Login with your 8base credentials',
 
-  builder: (args: yargs.Argv): yargs.Argv => {
+  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
     return args
-      .usage("8base login [OPTIONS]")
+      .usage(translations.i18n.t("login_usage"))
       .option("e", {
         alias: 'email',
         describe: "user email",

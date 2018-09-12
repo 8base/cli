@@ -2,7 +2,7 @@ import { getFileProvider } from "./providers";
 import * as _ from "lodash";
 import { install } from "./installer";
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
+import { Context, Translations } from "../../../common/Context";
 import * as path from "path";
 import { StaticConfig } from "../../../common";
 
@@ -31,12 +31,12 @@ export default {
 
     context.logger.info(context.i18n.t("project_init_success", { project: project.name}));
   },
-  describe: 'Initialize project',
-  builder: (args: yargs.Argv): yargs.Argv => {
+  // describe: 'Initialize project',
+  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
     return args
-      .usage("8base init [DIRECTORY] [OPTIONS]")
-      .example("8base init", "initialize current folder")
-      .example("8base init dir1", "create folder dir1 and initialize");
+      .usage(translations.i18n.t("init_usage"))
+      .example(translations.i18n.t("init_no_dir_example_command"), translations.i18n.t("init_example_no_dir"))
+      .example(translations.i18n.t("init_with_dir_example_command"), translations.i18n.t("init_example_with_dir"));
   }
 };
 

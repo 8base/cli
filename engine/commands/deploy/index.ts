@@ -2,7 +2,7 @@ import { StaticConfig, Utils } from "../../../common";
 import { GraphqlController } from "../../controllers/graphqlController";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
+import { Context, Translations } from "../../../common/Context";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 
 export default {
@@ -40,7 +40,7 @@ export default {
     await context.request(GraphqlActions.deploy, { data: { buildId: prepareDeploy.buildId } });
   },
   describe: 'Deploy project',
-  builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage("8base deploy [OPTIONS]");
+  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+    return args.usage(translations.i18n.t("deploy_usage"));
   }
 };

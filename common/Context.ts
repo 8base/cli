@@ -11,6 +11,15 @@ import * as Ora from "ora";
 
 const { Client } = require("@8base/api-client");
 
+export class Translations {
+  i18n: i18next.i18n;
+  async init(): Promise<Translations> {
+    await Utils.initTranslations(i18next);
+    this.i18n = i18next.cloneInstance({initImmediate: false});
+    return this;
+  }
+}
+
 export class Context {
 
   private _project: ProjectDefinition = null;
@@ -20,11 +29,11 @@ export class Context {
   i18n: i18next.i18n;
 
   spinner = new Ora({
-    color: "red",
+    color: "white",
     text: "\n"
   });
 
-  constructor(params: any) {
+  constructor(params: any, translations: Translations) {
     this.logger = winston.createLogger({
       level: params.d ? "debug" : 'info',
       format: winston.format.cli(),
@@ -32,11 +41,8 @@ export class Context {
         new winston.transports.Console({ format: winston.format.cli() }),
       ]
     });
-  }
 
-  async init() {
-    await Utils.initTranslations(i18next);
-    this.i18n = i18next.cloneInstance({initImmediate: false});
+    this.i18n = translations.i18n;
   }
 
   get storage(): { static: typeof StaticConfig, user: typeof UserDataStorage } {

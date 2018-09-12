@@ -2,8 +2,8 @@ import { Utils, StaticConfig } from "../../common";
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
-import { Context } from "../../common/Context";
-import { GraphQLError } from "graphql";
+import { Context, Translations } from "../../common/Context";
+import * as yargs from "yargs";
 
 
 export class CommandController {
@@ -29,13 +29,17 @@ export class CommandController {
     }
   }
 
-  static wrapHandler = (handler: Function) => {
+  static wrapBuilder = (builder: Function, translations: Translations) => {
+    return (params: yargs.Argv): yargs.Argv => {
+      return builder(params, translations);
+    };
+  };
+
+  static wrapHandler = (handler: Function, translations: Translations) => {
     return async (params: any) => {
       const command = params._[0];
 
-
-      const context = new Context(params);
-      await context.init();
+      const context = new Context(params, translations);
 
       try {
 
@@ -51,8 +55,6 @@ export class CommandController {
         context.spinner.stop();
         context.logger.error(context.i18n.t("error_command_end", { command, error: CommandController.parseError(ex) }));
       }
-
-
     };
   };
 

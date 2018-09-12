@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Context } from "../../../common/Context";
+import { Context, Translations } from "../../../common/Context";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
@@ -27,7 +27,7 @@ export default {
     ]);
   },
   describe: 'Clears local login credentials and invalidates API session',
-  builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage("8base logout [OPTIONS]");
+  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+    return args.usage(translations.i18n.t("logout_usage"));
   }
 };

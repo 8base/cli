@@ -1,7 +1,7 @@
 import { StaticConfig, Utils } from "../../../common";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
+import { Context, Translations } from "../../../common/Context";
 
 export default {
   name: "package",
@@ -23,7 +23,7 @@ export default {
       context);
   },
   describe: 'Compile project',
-  builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage("8base package [OPTIONS]");
+  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+    return args.usage(translations.i18n.t("package_usage"));
   }
 };

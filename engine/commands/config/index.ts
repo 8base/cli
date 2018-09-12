@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Context } from "../../../common/Context";
+import { Context, Translations } from "../../../common/Context";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
 import { Utils } from "../../../common";
@@ -30,12 +30,12 @@ export default {
 
   describe: 'Advanced configuation',
 
-  builder: (args: yargs.Argv): yargs.Argv => {
+  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
     return args
-      .usage("8base config [OPTIONS]")
+      .usage(translations.i18n.t("config_usage"))
       .option("w", {
         alias: 'workspace',
-        describe: "workspace id",
+        describe: translations.i18n.t("config_workspace_option"),
         type: "string"
       })
       .option("s", {
