@@ -17,6 +17,7 @@ export default {
     const serilizedArgs = _.escape(JSON.stringify(JSON.parse(args)));
 
     const result = await context.request(GraphqlActions.invoke, { data: { functionName: params.f, inputArgs: serilizedArgs } });
+    context.spinner.stop();
 
     context.logger.info(JSON.stringify(JSON.parse(_.unescape(result.invoke.responseData)).data, null, 2));
   },

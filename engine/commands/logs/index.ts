@@ -7,6 +7,8 @@ import { translations } from "../../../common/Translations";
 export default {
   name: "logs",
   handler: async (params: any, context: Context) => {
+    context.spinner.start(context.i18n.t("logs_in_progress"));
+
     const result = await context.request(GraphqlActions.logs, { functionName: params.f, limit: params.n });
     context.logger.info(result.logs);
   },

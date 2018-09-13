@@ -7,6 +7,7 @@ import { translations } from "../../../common/Translations";
 export default {
   name: "package",
   handler: async (params: any, context: Context) => {
+    context.spinner.start(context.i18n.t("package_progress"));
 
     const buildDir = await BuildController.compile(context);
     context.logger.debug(`build dir ${JSON.stringify(buildDir, null, 2)}`);
@@ -22,6 +23,7 @@ export default {
       StaticConfig.buildRootDir,
       "summary",
       context);
+
   },
   describe: translations.i18n.t("package_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {

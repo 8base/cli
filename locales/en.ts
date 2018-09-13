@@ -1,11 +1,8 @@
 
 export default {
   "default": {
-    "success_command_end": "Command {{command}} complete. Time estimate: {{time}} ms.",
     "error_command_end": "Command {{command}} fail. Error: {{error}}.",
-    "workspace_is_active": "Workspace {{workspace}} is active.",
-    "set_remote_address": "Set remote address {{address}}.",
-    "project_init_success": "Project {{project}} initialize success",
+
     "deploy_in_progress": "deploying...\n",
     "invoke_in_progress": "invoke...\n",
 
@@ -44,8 +41,10 @@ export default {
 
     "logs_usage": "8base logs [OPTIONS]",
     "logs_describe": "view function logs",
+    "logs_in_progress": "get logs...",
 
     "package_usage": "8base package [OPTIONS]",
-    "package_describe": "package application without deploying"
+    "package_describe": "package application without deploying",
+    "package_progress": "package..."
   }
 };

@@ -4,6 +4,7 @@ import { translations } from "../../../common/Translations";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
 import { Utils } from "../../../common";
+import chalk from "chalk";
 
 export default {
   name: "config",
@@ -22,7 +23,7 @@ export default {
           value: params.s
         }
       ]);
-      context.logger.info(context.i18n.t("set_remote_address", { address: params.s }));
+      context.logger.info(`Set remote address ${chalk.yellowBright(params.s)}.`);
       return;
     }
 

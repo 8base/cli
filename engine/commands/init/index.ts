@@ -6,6 +6,7 @@ import { Context } from "../../../common/Context";
 import * as path from "path";
 import { StaticConfig } from "../../../common";
 import { translations } from "../../../common/Translations";
+import chalk from "chalk";
 
 export default {
   name: "init",
@@ -30,7 +31,7 @@ export default {
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);
 
-    context.logger.info(context.i18n.t("project_init_success", { project: project.name}));
+    context.logger.info(`Project ${chalk.yellowBright(project.name)} initialize success`);
   },
   describe: translations.i18n.t("init_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
