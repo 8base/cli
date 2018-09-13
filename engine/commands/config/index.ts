@@ -1,6 +1,6 @@
 import * as _ from "lodash";
-import { Context } from "../../../common/Context";
-import { translations } from "../../../common/Translations";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
 import { Utils } from "../../../common";

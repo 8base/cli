@@ -2,9 +2,9 @@ import { StaticConfig, Utils } from "../../../common";
 import { GraphqlController } from "../../controllers/graphqlController";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
+import { Context } from "../../../common/context";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-import { translations } from "../../../common/Translations";
+import { translations } from "../../../common/translations";
 
 export default {
   name: "deploy",

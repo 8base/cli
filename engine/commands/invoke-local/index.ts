@@ -1,7 +1,7 @@
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
+import { Context } from "../../../common/context";
 import _ = require("lodash");
-import { translations } from "../../../common/Translations";
+import { translations } from "../../../common/translations";
 
 export default {
   name: "invoke-local",

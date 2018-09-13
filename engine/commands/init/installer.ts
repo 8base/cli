@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import * as fs from "fs";
 
 import { Utils } from "../../../common";
-import { Context } from "../../../common/Context";
+import { Context } from "../../../common/context";
 
 export function install(targetDirectory: string, files: Map<string, string>, context: Context): string {
 

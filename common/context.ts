@@ -7,7 +7,7 @@ import { StorageParameters } from "../consts/StorageParameters";
 import * as winston from "winston";
 import * as i18next       from "i18next";
 import * as Ora from "ora";
-import { Translations } from "./Translations";
+import { Translations } from "./translations";
 
 const { Client } = require("@8base/api-client");
 

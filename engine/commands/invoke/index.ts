@@ -1,6 +1,6 @@
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
-import { translations } from "../../../common/Translations";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
 import _ = require("lodash");
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 

@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import { Utils } from "../../../common";
-import { Context } from "../../../common/Context";
-import { translations } from "../../../common/Translations";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
 import { Interactive } from "../../../common/interactive";

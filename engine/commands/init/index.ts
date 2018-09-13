@@ -2,10 +2,10 @@ import { getFileProvider } from "./providers";
 import * as _ from "lodash";
 import { install } from "./installer";
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
+import { Context } from "../../../common/context";
 import * as path from "path";
 import { StaticConfig } from "../../../common";
-import { translations } from "../../../common/Translations";
+import { translations } from "../../../common/translations";
 import chalk from "chalk";
 
 export default {

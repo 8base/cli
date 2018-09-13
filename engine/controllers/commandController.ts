@@ -2,8 +2,8 @@ import { Utils, StaticConfig } from "../../common";
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
-import { Translations } from "../../common/Translations";
-import { Context } from "../../common/Context";
+import { Translations } from "../../common/translations";
+import { Context } from "../../common/context";
 import * as yargs from "yargs";
 import chalk from "chalk";
 
@@ -49,10 +49,10 @@ export class CommandController {
 
       } catch(ex) {
         context.spinner.stop();
-        context.logger.error(context.i18n.t("error_command_end", { command, error: CommandController.parseError(ex) }));
+        context.logger.error(CommandController.parseError(ex));
       }
     };
-  };
+  }
 
   static enumerate(): any[] {
     return _.transform(fs.readdirSync(StaticConfig.commandsDir), (commands, file: string) => {

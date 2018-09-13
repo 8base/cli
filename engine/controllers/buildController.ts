@@ -6,7 +6,7 @@ import { FunctionDefinition } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
 import { ProjectController } from "./projectController";
 import { getCompiler } from "../compilers";
-import { Context } from "../../common/Context";
+import { Context } from "../../common/context";
 
 
 export class BuildController {

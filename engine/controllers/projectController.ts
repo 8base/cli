@@ -8,7 +8,7 @@ import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
 import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerStageType, TriggerType, ResolverDefinition } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
-import { Context } from "../../common/Context";
+import { Context } from "../../common/context";
 
 
 

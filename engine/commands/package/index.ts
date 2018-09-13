@@ -1,8 +1,8 @@
 import { StaticConfig, Utils } from "../../../common";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
-import { translations } from "../../../common/Translations";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
 
 export default {
   name: "package",

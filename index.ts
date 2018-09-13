@@ -2,7 +2,7 @@
 
 import * as yargs from "yargs";
 import { CommandController } from "./engine/controllers/commandController";
-import { translations, Translations } from "./common/Translations";
+import { translations, Translations } from "./common/translations";
 
 const start = (translations: Translations) => {
   yargs.usage(translations.i18n.t("8base_usage"));

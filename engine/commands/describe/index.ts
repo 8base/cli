@@ -1,6 +1,6 @@
 import * as yargs from "yargs";
-import { Context } from "../../../common/Context";
-import { translations } from "../../../common/Translations";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as url from "url";
 import chalk from "chalk";
