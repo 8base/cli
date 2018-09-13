@@ -5,7 +5,7 @@ import * as fs from "fs";
 import * as archiver from "archiver";
 import { Interactive } from "./interactive";
 import * as _ from "lodash";
-import { Context } from "./Context";
+import { Context } from "./context";
 import { StorageParameters } from "../consts/StorageParameters";
 
 import chalk from "chalk";
@@ -138,7 +138,7 @@ export namespace Utils {
     const accounts = context.storage.user.getValue(StorageParameters.workspaces);
 
     if (_.isEmpty(accounts)) {
-      throw new Error("You are logout");
+      throw new Error(context.i18n.t("logout_error"));
     }
 
     const workspaceId = params && params.w ? params.w : await promptWorkspace(accounts);

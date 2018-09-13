@@ -25,10 +25,17 @@ export class CommandController {
 
   static parseError = (error: any) => {
     if (error.response && error.response.errors.length > 0 && error.response.errors[0].message) {
-      return error.response.errors[0].message;
-    } else {
-      return error.message;
+      const internalError = error.response.errors[0];
+      if (internalError.details) {
+        const keys = Object.keys(internalError.details);
+        if (keys.length > 0) {
+          return internalError.details[keys[0]];
+        }
+      }
+      return internalError.message;
     }
+
+    return error.message;
   }
 
   static wrapHandler = (handler: Function, translations: Translations) => {

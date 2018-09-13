@@ -10,7 +10,7 @@ export type InteractiveInput = {
 
 export namespace Interactive {
 
-  export const ask = async (options: InteractiveInput) => {
-    return await prompts(Object.assign(options));
+  export const ask = (options: InteractiveInput): Promise<any> => {
+    return prompts(options);
   };
 }

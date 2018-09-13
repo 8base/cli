@@ -1,6 +1,8 @@
 
 export default {
   "default": {
+    "logout_error": "You are logout",
+
     "error_command_end": "Command {{command}} fail. Error: {{error}}.",
 
     "deploy_in_progress": "deploying...\n",

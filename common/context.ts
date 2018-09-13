@@ -81,7 +81,7 @@ export class Context {
     }
 
     if (isLoginRequred && (_.isEmpty(idToken) || _.isEmpty(refreshToken) || _.isEmpty(workspaceId))) {
-      throw new Error("You are logout");
+      throw new Error(this.i18n.t("logout_error"));
     }
 
     this.logger.debug("start request" );
