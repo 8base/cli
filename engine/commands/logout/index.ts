@@ -1,8 +1,9 @@
 import * as _ from "lodash";
-import { Context, Translations } from "../../../common/Context";
+import { Context } from "../../../common/Context";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
+import { translations } from "../../../common/Translations";
 
 export default {
   name: "logout",
@@ -26,8 +27,9 @@ export default {
       }
     ]);
   },
-  describe: 'Clears local login credentials and invalidates API session',
-  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+  describe: translations.i18n.t("logout_describe"),
+
+  builder: (args: yargs.Argv): yargs.Argv => {
     return args.usage(translations.i18n.t("logout_usage"));
   }
 };

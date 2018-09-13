@@ -1,5 +1,6 @@
 import * as yargs from "yargs";
-import { Context, Translations } from "../../../common/Context";
+import { Context } from "../../../common/Context";
+import { translations } from "../../../common/Translations";
 import _ = require("lodash");
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 
@@ -19,8 +20,8 @@ export default {
 
     context.logger.info(JSON.stringify(JSON.parse(_.unescape(result.invoke.responseData)).data, null, 2));
   },
-  describe: 'Invoke function remotely',
-  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+  describe: translations.i18n.t("invoke_describe"),
+  builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("invoke_usage"))
       .option("f", {

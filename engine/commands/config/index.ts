@@ -1,5 +1,6 @@
 import * as _ from "lodash";
-import { Context, Translations } from "../../../common/Context";
+import { Context } from "../../../common/Context";
+import { translations } from "../../../common/Translations";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
 import { Utils } from "../../../common";
@@ -28,9 +29,9 @@ export default {
     await Utils.selectWorkspace(params, context);
   },
 
-  describe: 'Advanced configuation',
+  describe: translations.i18n.t("config_describe"),
 
-  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+  builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("config_usage"))
       .option("w", {

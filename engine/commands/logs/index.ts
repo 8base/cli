@@ -1,8 +1,8 @@
 import * as yargs from "yargs";
-import { Context, Translations } from "../../../common/Context";
+import { Context } from "../../../common/Context";
 import _ = require("lodash");
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-
+import { translations } from "../../../common/Translations";
 
 export default {
   name: "logs",
@@ -10,8 +10,8 @@ export default {
     const result = await context.request(GraphqlActions.logs, { functionName: params.f, limit: params.n });
     context.logger.info(result.logs);
   },
-  describe: 'Invoke function remotely',
-  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+  describe: translations.i18n.t("logs_describe"),
+  builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("logs_usage"))
       .option("f", {

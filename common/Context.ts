@@ -5,20 +5,12 @@ import _ = require("lodash");
 import { ProjectController } from "../engine/controllers/projectController";
 import { StorageParameters } from "../consts/StorageParameters";
 import * as winston from "winston";
-import { Utils } from "./utils";
 import * as i18next       from "i18next";
 import * as Ora from "ora";
+import { Translations } from "./Translations";
 
 const { Client } = require("@8base/api-client");
 
-export class Translations {
-  i18n: i18next.i18n;
-  async init(): Promise<Translations> {
-    await Utils.initTranslations(i18next);
-    this.i18n = i18next.cloneInstance({initImmediate: false});
-    return this;
-  }
-}
 
 export class Context {
 
@@ -52,7 +44,7 @@ export class Context {
     };
   }
 
-  request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
+  async request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
 
     const remoteAddress = this.storage.user.getValue(StorageParameters.serverAddress) || this.storage.static.remoteAddress;
     this.logger.debug(`remote address: ${remoteAddress}`);
@@ -82,11 +74,37 @@ export class Context {
       client.setAccountId(workspaceId);
     }
 
-    if (isLoginRequred && (_.isEmpty(idToken) || _.isEmpty(idToken) || _.isEmpty(workspaceId))) {
+    const email = this.storage.user.getValue(StorageParameters.email);
+    if (email) {
+      this.logger.debug("set email id = " + email);
+      client.setEmail(email);
+    }
+
+    if (isLoginRequred && (_.isEmpty(idToken) || _.isEmpty(refreshToken) || _.isEmpty(workspaceId))) {
       throw new Error("You are logout");
     }
 
-    return client.request(query, variables);
+    this.logger.debug("start request" );
+    const result = await client.request(query, variables);
+    this.logger.debug("request complete");
+
+    if (client.idToken !== idToken) {
+      this.logger.debug("reset id token");
+      this.storage.user.setValues([{
+        name: StorageParameters.idToken,
+        value: client.idToken
+      }]);
+    }
+
+    if (client.refreshToken !== refreshToken) {
+      this.logger.debug("reset refresh token");
+      this.storage.user.setValues([{
+        name: StorageParameters.refreshToken,
+        value: client.refreshToken
+      }]);
+    }
+
+    return result;
   }
 
   get project(): ProjectDefinition {

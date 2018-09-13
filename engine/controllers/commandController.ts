@@ -2,8 +2,10 @@ import { Utils, StaticConfig } from "../../common";
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
-import { Context, Translations } from "../../common/Context";
+import { Translations } from "../../common/Translations";
+import { Context } from "../../common/Context";
 import * as yargs from "yargs";
+import chalk from "chalk";
 
 
 export class CommandController {
@@ -29,12 +31,6 @@ export class CommandController {
     }
   }
 
-  static wrapBuilder = (builder: Function, translations: Translations) => {
-    return (params: yargs.Argv): yargs.Argv => {
-      return builder(params, translations);
-    };
-  };
-
   static wrapHandler = (handler: Function, translations: Translations) => {
     return async (params: any) => {
       const command = params._[0];
@@ -49,7 +45,7 @@ export class CommandController {
 
         const time = Date.now() - start;
 
-        context.logger.info(context.i18n.t("success_command_end", { command, time }));
+        context.logger.info(`Command ${chalk.greenBright(command)} complete. Time estimate: ${chalk.greenBright(time.toString())} ms.`);
 
       } catch(ex) {
         context.spinner.stop();

@@ -31,7 +31,7 @@ logs: `query Logs(
 }`,
 prepareDeploy: `mutation PrepareDeploy {
   prepareDeploy {
-    uploadBuildUrl uploadMetaDataUrl buildId
+    uploadBuildUrl uploadMetaDataUrl buildName
   }
 }`,
 deploy: `mutation Deploy($data: DeployData) {

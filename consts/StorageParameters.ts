@@ -3,5 +3,6 @@ export const StorageParameters = {
   serverAddress: "server-address",
   idToken: "id-token",
   refreshToken: "refresh-token",
-  workspaces: "workspaces"
+  workspaces: "workspaces",
+  email: "email"
 };

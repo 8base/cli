@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import { Utils } from "../../../common";
-import { Context, Translations } from "../../../common/Context";
+import { Context } from "../../../common/Context";
+import { translations } from "../../../common/Translations";
 import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
 import { Interactive } from "../../../common/interactive";
@@ -48,7 +49,12 @@ export default {
       {
         name: StorageParameters.workspaces,
         value: result.userLogin.accounts
-      }]);
+      },
+      {
+        name: StorageParameters.email,
+        value: data.email
+      }
+    ]);
 
     context.spinner.stop();
 
@@ -61,9 +67,9 @@ export default {
     }
   },
 
-  describe: 'Login with your 8base credentials',
+  describe: translations.i18n.t("login_describe"),
 
-  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+  builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("login_usage"))
       .option("e", {

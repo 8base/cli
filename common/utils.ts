@@ -8,7 +8,7 @@ import * as _ from "lodash";
 import { Context } from "./Context";
 import { StorageParameters } from "../consts/StorageParameters";
 
-
+import chalk from "chalk";
 import { i18n } from "i18next";
 import locales from "../locales";
 
@@ -155,7 +155,7 @@ export namespace Utils {
       }
     ]);
 
-    context.logger.info(context.i18n.t("workspace_is_active", { workspace: activeWorkspace.name }));
+    context.logger.info(`Workspaces ${chalk.yellowBright(activeWorkspace.name)} is active`);
   };
 
   export const initTranslations = async (i18next: i18n) => {

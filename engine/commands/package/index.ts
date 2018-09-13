@@ -1,7 +1,8 @@
 import { StaticConfig, Utils } from "../../../common";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
-import { Context, Translations } from "../../../common/Context";
+import { Context } from "../../../common/Context";
+import { translations } from "../../../common/Translations";
 
 export default {
   name: "package",
@@ -22,8 +23,8 @@ export default {
       "summary",
       context);
   },
-  describe: 'Compile project',
-  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+  describe: translations.i18n.t("package_describe"),
+  builder: (args: yargs.Argv): yargs.Argv => {
     return args.usage(translations.i18n.t("package_usage"));
   }
 };

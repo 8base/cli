@@ -2,16 +2,16 @@
 
 import * as yargs from "yargs";
 import { CommandController } from "./engine/controllers/commandController";
-import {  Translations } from "./common/Context";
+import { translations, Translations } from "./common/Translations";
 
 const start = (translations: Translations) => {
-  yargs.usage("Usage: 8base <command> [OPTIONS]");
+  yargs.usage(translations.i18n.t("8base_usage"));
 
   CommandController.enumerate()
     .map(cmd => {
       yargs.command({
         command: cmd.name,
-        builder: CommandController.wrapBuilder(cmd.builder, translations),
+        builder: cmd.builder,
         describe: cmd.describe,
         handler: CommandController.wrapHandler(cmd.handler, translations)
       })
@@ -57,7 +57,6 @@ const start = (translations: Translations) => {
 
 };
 
-const translations = new Translations();
 translations.init()
   .then((translations: Translations) => {
     start(translations);

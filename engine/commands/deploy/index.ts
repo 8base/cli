@@ -2,8 +2,9 @@ import { StaticConfig, Utils } from "../../../common";
 import { GraphqlController } from "../../controllers/graphqlController";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
-import { Context, Translations } from "../../../common/Context";
+import { Context } from "../../../common/Context";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
+import { translations } from "../../../common/Translations";
 
 export default {
   name: "deploy",
@@ -37,10 +38,13 @@ export default {
     await Utils.upload(prepareDeploy.uploadBuildUrl, archiveBuildPath, context);
     context.logger.debug("upload source code complete");
 
-    await context.request(GraphqlActions.deploy, { data: { buildId: prepareDeploy.buildId } });
+    await context.request(GraphqlActions.deploy, { data: { buildName: prepareDeploy.buildName } });
+    context.spinner.stop();
   },
-  describe: 'Deploy project',
-  builder: (args: yargs.Argv, translations: Translations): yargs.Argv => {
+
+  describe: translations.i18n.t("deploy_describe"),
+
+  builder: (args: yargs.Argv): yargs.Argv => {
     return args.usage(translations.i18n.t("deploy_usage"));
   }
 };
