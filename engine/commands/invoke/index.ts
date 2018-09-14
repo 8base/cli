@@ -3,7 +3,7 @@ import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import _ = require("lodash");
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-
+import * as fs from "fs";
 
 export default {
   name: "invoke",

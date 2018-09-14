@@ -1,4 +1,5 @@
-import { Utils, StaticConfig } from "../../common";
+import { Utils } from "../../common/utils";
+import { StaticConfig } from "../../config";
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";

@@ -1,4 +1,4 @@
-import { StaticConfig, Utils } from "../../../common";
+import { Utils } from "../../../common/utils";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
 import { Context } from "../../../common/context";
@@ -13,14 +13,14 @@ export default {
     context.logger.debug(`build dir ${JSON.stringify(buildDir, null, 2)}`);
 
     await Utils.archive(
-      [{ source: buildDir.build }, { source: StaticConfig.modules, dist: "node_modules" }],
-      StaticConfig.buildRootDir,
+      [{ source: buildDir.build }, { source: context.storage.static.modules, dist: "node_modules" }],
+      context.storage.static.buildRootDir,
       "build",
       context);
 
     await Utils.archive(
       [{ source: buildDir.summary }],
-      StaticConfig.buildRootDir,
+      context.storage.static.buildRootDir,
       "summary",
       context);
 

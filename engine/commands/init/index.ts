@@ -4,7 +4,6 @@ import { install } from "./installer";
 import * as yargs from "yargs";
 import { Context } from "../../../common/context";
 import * as path from "path";
-import { StaticConfig } from "../../../common";
 import { translations } from "../../../common/translations";
 import chalk from "chalk";
 
@@ -15,18 +14,18 @@ export default {
     const parameters = _.castArray(params._);
 
     const project = parameters.length > 1
-      ? { fullPath: path.join(StaticConfig.rootExecutionDir, parameters[1]), name: parameters[1] }
-      : { fullPath: StaticConfig.rootExecutionDir, name: path.basename(context.storage.static.rootExecutionDir) };
+      ? { fullPath: path.join(context.storage.static.rootExecutionDir, parameters[1]), name: parameters[1] }
+      : { fullPath: context.storage.static.rootExecutionDir, name: path.basename(context.storage.static.rootExecutionDir) };
 
 
     context.logger.debug("start initiailie init command");
 
     context.logger.debug(`initialize success: initilize repository: ${project.name}`);
 
-    let files = await getFileProvider().provide();
+    let files = await getFileProvider().provide(context);
     context.logger.debug("files provided count = " + files.size);
 
-    files.set(StaticConfig.packageFileName, replaceServiceName(files.get(StaticConfig.packageFileName)));
+    files.set(context.storage.static.packageFileName, replaceServiceName(files.get(context.storage.static.packageFileName)));
 
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);

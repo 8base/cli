@@ -1,6 +1,3 @@
-import { UserDataStorage } from "../common";
-import * as url from "url";
-
 export enum ExtensionType {
     resolver = "resolver",
     trigger = "trigger",

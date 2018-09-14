@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
-import { StaticConfig } from "../../common";
+import { StaticConfig } from "../../config";
 import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
 import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerStageType, TriggerType, ResolverDefinition } from "../../interfaces/Extensions";

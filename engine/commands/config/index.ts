@@ -3,7 +3,7 @@ import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
-import { Utils } from "../../../common";
+import { Utils } from "../../../common/utils";
 import chalk from "chalk";
 
 export default {

@@ -2,10 +2,10 @@ import * as yargs from "yargs";
 import { Context } from "../../../common/context";
 import _ = require("lodash");
 import { translations } from "../../../common/translations";
-import * as path from "path";
-import { Utils } from "../../../common";
+import { Utils } from "../../../common/utils";
 import { BuildController } from "../../controllers/buildController";
 import chalk from "chalk";
+import * as fs from "fs";
 
 export default {
   name: "invoke-local",

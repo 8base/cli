@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as ts from 'typescript';
 import { ICompiler } from "../../interfaces/ICompiler";
-import { StaticConfig } from "../../common";
+import { StaticConfig } from "../../config";
 import { Context } from "../../common/context";
 
 export class TypescriptCompiler implements ICompiler {

@@ -1,5 +1,5 @@
 import { UserDataStorage } from "./userDataStorage";
-import { StaticConfig } from ".";
+import { StaticConfig } from "../config";
 import { ProjectDefinition } from "../interfaces/Project";
 import _ = require("lodash");
 import { ProjectController } from "../engine/controllers/projectController";

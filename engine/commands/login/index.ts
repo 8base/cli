@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Utils } from "../../../common";
+import { Utils } from "../../../common/utils";
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import { UserDataStorage } from "../../../common/userDataStorage";

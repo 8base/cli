@@ -1,4 +1,4 @@
-import { StaticConfig } from "../common";
+import { StaticConfig } from "../config";
 import * as path from "path";
 import * as fs from "fs";
 

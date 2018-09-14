@@ -1,4 +1,4 @@
-import { StaticConfig, Utils } from "../../../common";
+import { Utils } from "../../../common/utils";
 import { GraphqlController } from "../../controllers/graphqlController";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
@@ -19,14 +19,14 @@ export default {
     context.logger.debug(`build dir: ${buildDir}`);
 
     const archiveBuildPath = await Utils.archive(
-      [{ source: buildDir.build }, { source: StaticConfig.modules, dist: "node_modules" }],
-      StaticConfig.buildRootDir,
+      [{ source: buildDir.build }, { source: context.storage.static.modules, dist: "node_modules" }],
+      context.storage.static.buildRootDir,
       "build",
       context);
 
     const archiveSummaryPath = await Utils.archive(
       [{ source: buildDir.summary }],
-      StaticConfig.buildRootDir,
+      context.storage.static.buildRootDir,
       "summary",
       context);
 

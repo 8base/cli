@@ -1,8 +1,7 @@
 import * as path from "path";
 import * as _ from "lodash";
 import * as fs from "fs";
-
-import { Utils } from "../../../common";
+import { Utils } from "../../../common/utils";
 import { Context } from "../../../common/context";
 
 export function install(targetDirectory: string, files: Map<string, string>, context: Context): string {
