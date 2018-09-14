@@ -4,7 +4,6 @@ import * as _ from "lodash";
 import * as fs from "fs";
 import { Translations } from "../../common/translations";
 import { Context } from "../../common/context";
-import * as yargs from "yargs";
 import chalk from "chalk";
 
 
@@ -52,7 +51,7 @@ export class CommandController {
 
         const time = Date.now() - start;
 
-        context.logger.info(`Command ${chalk.greenBright(command)} complete. Time estimate: ${chalk.greenBright(time.toString())} ms.`);
+        context.logger.info(`Command ${chalk.greenBright(command)} complete. Time: ${chalk.greenBright(time.toString())} ms.`);
 
       } catch(ex) {
         context.spinner.stop();

@@ -8,6 +8,8 @@ import * as winston from "winston";
 import * as i18next       from "i18next";
 import * as Ora from "ora";
 import { Translations } from "./translations";
+import { TransformableInfo } from "logform";
+import chalk from "chalk";
 
 const { Client } = require("@8base/api-client");
 
@@ -27,11 +29,17 @@ export class Context {
 
   constructor(params: any, translations: Translations) {
     this.logger = winston.createLogger({
-      level: params.d ? "debug" : 'info',
-      format: winston.format.cli(),
-      transports: [
-        new winston.transports.Console({ format: winston.format.cli() }),
-      ]
+      level: params.d ? "debug" : "info",
+      format: winston.format.printf((info: TransformableInfo) => {
+        if (info.level === "info") {
+          return info.message;
+        }
+        if (info.level === "debug") {
+          return `${chalk.blueBright(info.level)}: ${info.message}`;
+        }
+        return `${chalk.redBright(info.level)}: ${info.message}`;
+      }),
+      transports: [new winston.transports.Console()]
     });
 
     this.i18n = translations.i18n;

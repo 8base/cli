@@ -3,7 +3,6 @@ import * as path from 'path';
 import { StaticConfig, UserDataStorage } from "../../common";
 import * as glob from "glob";
 import { FunctionDefinition } from "../../interfaces/Extensions";
-import { ProjectDefinition } from "../../interfaces/Project";
 import { ProjectController } from "./projectController";
 import { getCompiler } from "../compilers";
 import { Context } from "../../common/context";
@@ -16,7 +15,7 @@ export class BuildController {
      * @param buildDir output build directory
      * @return list of compiled files
      */
-    static async compile(context: Context): Promise<any> {
+    static async compile(context: Context): Promise<{ build: string, summary: string, compiledFiles: string[] }> {
 
         BuildController.clean();
 
@@ -38,7 +37,8 @@ export class BuildController {
 
         return {
             build: StaticConfig.buildDir,
-            summary: StaticConfig.summaryDir
+            summary: StaticConfig.summaryDir,
+            compiledFiles
         };
     }
 

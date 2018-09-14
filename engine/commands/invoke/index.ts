@@ -16,7 +16,7 @@ export default {
 
     const serilizedArgs = _.escape(JSON.stringify(JSON.parse(args)));
 
-    const result = await context.request(GraphqlActions.invoke, { data: { functionName: params.f, inputArgs: serilizedArgs } });
+    const result = await context.request(GraphqlActions.invoke, { data: { functionName: params._[1], inputArgs: serilizedArgs } });
     context.spinner.stop();
 
     context.logger.info(JSON.stringify(JSON.parse(_.unescape(result.invoke.responseData)).data, null, 2));
@@ -25,12 +25,7 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("invoke_usage"))
-      .option("f", {
-        alias: 'function',
-        require: true,
-        type: "string",
-        describe: "function to invoke"
-      })
+      .demand(1)
       .option("j", {
         alias: 'data-json',
         describe: "input JSON",

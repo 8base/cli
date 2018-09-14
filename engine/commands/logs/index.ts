@@ -9,19 +9,15 @@ export default {
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("logs_in_progress"));
 
-    const result = await context.request(GraphqlActions.logs, { functionName: params.f, limit: params.n });
+    const result = await context.request(GraphqlActions.logs, { functionName: params._[1], limit: params.n });
+    context.spinner.stop();
     context.logger.info(result.logs);
   },
   describe: translations.i18n.t("logs_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("logs_usage"))
-      .option("f", {
-        alias: 'function',
-        require: true,
-        type: "string",
-        describe: "function to invoke"
-      })
+      .demand(1)
       .option("n", {
         alias: 'num',
         default: 10,
