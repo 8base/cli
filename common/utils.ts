@@ -136,7 +136,7 @@ export namespace Utils {
 
   export const selectWorkspace = async (params: { w: string }, context: Context) => {
     const accounts = context.storage.user.getValue(StorageParameters.workspaces);
-    console.log("before 2");
+
     if (_.isEmpty(accounts)) {
       throw new Error(context.i18n.t("logout_error"));
     }

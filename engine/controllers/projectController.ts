@@ -149,7 +149,8 @@ export class ProjectController {
           const operation = data.operation.split("."); // TableName.TriggerType
 
           extensions.triggers.push({
-            name: TriggerUtils.resolveTriggerType(operation[1], functionName),
+            name: functionName,
+            type: TriggerUtils.resolveTriggerType(operation[1], functionName),
             tableName: operation[0],
             stages: [{ stageName: TriggerUtils.resolveTriggerStage(data.type, functionName), functionName }]
           });

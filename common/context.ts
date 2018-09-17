@@ -45,6 +45,10 @@ export class Context {
     this.i18n = translations.i18n;
   }
 
+  get serverAddress(): string {
+    return this.storage.user.getValue(StorageParameters.serverAddress) || this.storage.static.remoteAddress;
+  }
+
   get storage(): { static: typeof StaticConfig, user: typeof UserDataStorage } {
     return {
       static: StaticConfig,
@@ -54,7 +58,7 @@ export class Context {
 
   async request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
 
-    const remoteAddress = this.storage.user.getValue(StorageParameters.serverAddress) || this.storage.static.remoteAddress;
+    const remoteAddress = this.serverAddress;
     this.logger.debug(`remote address: ${remoteAddress}`);
 
     const client = new Client(remoteAddress);

@@ -46,7 +46,7 @@ describe: `query {
       name httpMethod accountRelativePath
     }
     triggers {
-      stages table action
+      stages table type name
     }
     functions {
       handler remoteName name
