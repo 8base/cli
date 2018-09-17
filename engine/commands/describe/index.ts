@@ -6,20 +6,19 @@ import * as url from "url";
 import chalk from "chalk";
 import _ = require("lodash");
 
-const tabSize = 35;
+const tabSize = 30;
 
 const printResolvers = (resovlers: any[], context: Context) => {
   if (!_.isArray(resovlers)) {
     return;
   }
 
-  resovlers.map(r => {
-    let out = `${chalk.yellowBright("Extension:")} resolver `;
-    out = _.padEnd(out, tabSize);
-    out += `${chalk.yellowBright("Name")}: ${r.name}`;
+  context.logger.info(`${chalk.yellowBright("Resolvers:")}`);
 
-    out = _.padEnd(out, tabSize * 2);
-    out += `${chalk.yellowBright("Type")}: ${r.gqlType} `;
+  resovlers.map(r => {
+    let out = `   ${r.name}`;
+    out = _.padEnd(out, tabSize);
+    out += `${chalk.yellowBright("type")}: ${r.gqlType} `;
     context.logger.info(out);
   });
 
@@ -30,20 +29,18 @@ const printTriggers = (triggers: any[], context: Context) => {
     return;
   }
 
+  context.logger.info(`${chalk.yellowBright("Triggers:")}`);
   triggers.map(r => {
-    let out = `${chalk.yellowBright("Extension:")} trigger `;
+    let out = `   ${r.name}`;
     out = _.padEnd(out, tabSize);
+    out += `${chalk.yellowBright("type")}: ${r.type} `;
 
-    out += `${chalk.yellowBright("Name")}: ${r.name}`;
     out = _.padEnd(out, tabSize * 2);
 
-    out += `${chalk.yellowBright("Table")}: ${r.table}`;
+    out += `${chalk.yellowBright("stages")}: ${r.stages} `;
     out = _.padEnd(out, tabSize * 3);
 
-    out += `${chalk.yellowBright("Stages")}: ${r.stages} `;
-    out = _.padEnd(out, tabSize * 4);
-
-    out += `${chalk.yellowBright("Type")}: ${r.type} `;
+    out += `${chalk.yellowBright("table")}: ${r.table}`;
     context.logger.info(out);
   });
 };
@@ -53,17 +50,16 @@ const printWebhooks = (webhooks: any[], context: Context) => {
     return;
   }
 
+  context.logger.info(`${chalk.yellowBright("Webhooks:")}`);
   webhooks.map(r => {
-    let out = `${chalk.yellowBright("Extension:")} webhook `;
+    let out = `   ${r.name}`;
+
     out = _.padEnd(out, tabSize);
 
-    out += `${chalk.yellowBright("Name")}: ${r.name}`;
+    out += `${chalk.yellowBright("method")}: ${r.httpMethod} `;
     out = _.padEnd(out, tabSize * 2);
 
-    out += `${chalk.yellowBright("Method")}: ${r.httpMethod} `;
-    out = _.padEnd(out, tabSize * 3);
-
-    out += `${chalk.yellowBright("Path")}: ${r.fullPath} `;
+    out += `${chalk.yellowBright("path")}: ${r.fullPath} `;
     context.logger.info(out);
   });
 };
