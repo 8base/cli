@@ -1,6 +1,7 @@
 image: 8base/docker-amazonlinux-node
 
 test:
+  stage: test
   environment: testing
   script:  
     - NODE_ENV=testing npm install
@@ -8,6 +9,15 @@ test:
   tags:
     - docker
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+
+e2e:
+  stage: test
+  environment: testing
+  script:  
+    - NODE_ENV=testing npm install
+    - npm run e2e
+  tags:
+    - docker
 
 publish:  
   stage: deploy
