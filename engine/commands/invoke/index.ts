@@ -5,6 +5,14 @@ import _ = require("lodash");
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as fs from "fs";
 
+const validateArgs = (args: string) => {
+  try {
+    JSON.parse(args);
+  } catch(ex) {
+    throw new Error("Invalid input format");
+  }
+};
+
 export default {
   name: "invoke",
   handler: async (params: any, context: Context) => {
@@ -14,7 +22,9 @@ export default {
     const args = params.j ? params.j
       : params.p ? fs.readFileSync(params.p) : null;
 
-    const serilizedArgs = _.escape(JSON.stringify(JSON.parse(args)));
+    validateArgs(args);
+
+    const serilizedArgs = _.escape(args);
 
     const result = await context.request(GraphqlActions.invoke, { data: { functionName: params._[1], inputArgs: serilizedArgs } });
     context.spinner.stop();

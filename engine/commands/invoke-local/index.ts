@@ -21,7 +21,7 @@ export default {
       throw new Error(`Function ${chalk.yellowBright(targetFunctionName)} not present.`);
     }
 
-    const funcPath = compiledFiles.find(f => f.search(resolver.functionName + ".") > 0);
+    const funcPath = compiledFiles.find(f => f.search(resolver.functionName + "\.") > 0);
     context.logger.debug(`Function full path: ${funcPath}`);
     const { result, error} = Utils.safeExecution(() => require(funcPath));
 

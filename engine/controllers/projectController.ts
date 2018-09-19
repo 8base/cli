@@ -6,7 +6,7 @@ import * as _ from "lodash";
 import { StaticConfig } from "../../config";
 import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
-import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerStageType, TriggerType, ResolverDefinition } from "../../interfaces/Extensions";
+import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerType, TriggerOperation, ResolverDefinition } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
 import { Context } from "../../common/context";
 
@@ -36,9 +36,6 @@ export class ProjectController {
     context.logger.debug("resolve function graphql types");
     const functionGqlTypes = GraphqlController.defineGqlFunctionsType(gqlSchema);
     extensions.resolvers = ResolverUtils.resolveGqlFunctionTypes(extensions.resolvers, functionGqlTypes);
-
-    context.logger.debug("merge trigger types");
-    extensions.triggers = TriggerUtils.mergeStages(extensions.triggers);
 
     context.logger.debug("initialize project comlete");
     return {
@@ -150,9 +147,10 @@ export class ProjectController {
 
           extensions.triggers.push({
             name: functionName,
-            type: TriggerUtils.resolveTriggerType(operation[1], functionName),
+            operation: TriggerUtils.resolveTriggerOperation(operation[1], functionName),
             tableName: operation[0],
-            stages: [{ stageName: TriggerUtils.resolveTriggerStage(data.type, functionName), functionName }]
+            functionName,
+            type: TriggerUtils.resolveTriggerType(data.type, functionName)
           });
           break;
 
@@ -244,23 +242,13 @@ namespace FunctionUtils {
 
 namespace TriggerUtils {
 
-  export function mergeStages(triggers: TriggerDefinition[]): TriggerDefinition[] {
-    return _.transform<TriggerDefinition, TriggerDefinition>(triggers, (res, trigger) => {
-      const triggerPresent = _.find(res, r => r.tableName === trigger.tableName && r.name === trigger.name);
-      if (triggerPresent) {
-        return triggerPresent.stages = _.union(triggerPresent.stages, trigger.stages);
-      }
-      res.push(trigger);
-    }, []);
-  }
-
-  export function resolveTriggerType(type: string, funcName: string): TriggerType {
-    const resolvedType = (<any>TriggerType)[type];
-    if (_.isNil(resolvedType)) {
-      throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Invalid trigger type " + type + " in function " + funcName);
+  export function resolveTriggerOperation(operation: string, funcName: string): TriggerOperation {
+    const resolvedOperation = (<any>TriggerOperation)[operation];
+    if (_.isNil(resolvedOperation)) {
+      throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Invalid trigger operation " + operation + " in function " + funcName);
     }
 
-    return <TriggerType>resolvedType;
+    return <TriggerOperation>resolvedOperation;
   }
 
   /**
@@ -268,14 +256,14 @@ namespace TriggerUtils {
    * @param type "resolve", "trigger.before", "trigger.after", "subscription"
    * @return TriggerStageType
    */
-  export function resolveTriggerStage(type: string, functionName: string): TriggerStageType {
+  export function resolveTriggerType(type: string, functionName: string): TriggerType {
     const triggerType = type.split(".")[1];
-    const resolvedType = (<any>TriggerStageType)[triggerType];
+    const resolvedType = (<any>TriggerType)[triggerType];
     if (_.isNil(resolvedType)) {
       throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Invalid trigger type " + type + " in function " + functionName);
     }
 
-    return <TriggerStageType>resolvedType;
+    return <TriggerType>resolvedType;
   }
 
 }

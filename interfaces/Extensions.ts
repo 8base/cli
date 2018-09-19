@@ -13,10 +13,13 @@ export enum GraphQLFunctionType {
     Query = "Query",
 }
 
-export interface ResolverDefinition {
+export interface BaseDefinition {
     name: string;
-
     functionName: string;
+}
+
+export interface ResolverDefinition extends BaseDefinition {
+
     gqlType: GraphQLFunctionType;
 
     gqlschemaPath: string;
@@ -26,26 +29,22 @@ export interface ResolverDefinition {
     Triggers
 */
 
-export enum TriggerStageType {
+export enum TriggerType {
     before = "Before",
     after = "After"
 }
 
-export interface TriggerStage {
-    /* pre post */
-    stageName: string;
+export interface TriggerDefinition extends BaseDefinition {
 
-    functionName: string;
-}
-
-export interface TriggerDefinition {
-    name: string;
+    // Before After
     type: string;
+
+    // Create Delete Update
+    operation: string;
     tableName: string;
-    stages: TriggerStage[];
 }
 
-export enum TriggerType {
+export enum TriggerOperation {
     create = "Create",
     update = "Update",
     delete = "Delete"
@@ -67,9 +66,7 @@ export class FunctionDefinition {
     Webhooks
 */
 
-export interface WebhookDefinition {
-    name: string;
-    functionName: string;
+export interface WebhookDefinition extends BaseDefinition {
     httpMethod: string;
     path: string;
 }
