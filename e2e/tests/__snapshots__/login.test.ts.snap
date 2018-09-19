@@ -1,10 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`As a user, I can use \`login\` command for login. 1`] = `
-"[32m[32minfo[32m[39m:        Workspace 8base is active.
-[32m[32minfo[32m[39m:        Command login complete. Time estimate: 100 ms."
-`;
-
 exports[`As a user, I can use help flag for see help information for \`login\` command. 1`] = `
 "8base login [OPTIONS]
 

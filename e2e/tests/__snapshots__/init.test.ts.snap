@@ -14,12 +14,14 @@ exports[`As a user, I can use help flag for see help information for \`init\` co
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `
-"testdir_init/8base.yml
-testdir_init/package.json
-
-testdir_init/src:
-hello.graphql
-hello.ts
-hello2.graphql
-hello2.js"
+Array [
+  "",
+  "hello.graphql",
+  "hello.ts",
+  "hello2.graphql",
+  "hello2.js",
+  "testdir_init/8base.yml",
+  "testdir_init/package.json",
+  "testdir_init/src:",
+]
 `;

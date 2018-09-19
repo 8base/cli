@@ -3,7 +3,7 @@ import * as execa from 'execa';
 
 import { runner } from '../runner';
 
-const TEST_DIR = 'testdir_init'
+const TEST_DIR = 'testdir_init';
 
 it('As a user, I can use help flag for see help information for `init` command.', async () => {
   const { stdout } = await runner()('init', '--help');
@@ -16,9 +16,9 @@ it('As a user, I can use help flag for see help information for `init` command.'
 
   expect(stdout.replace(/Time estimate: \d+ ms\./, 'Time estimate: 100 ms.')).toMatchSnapshot();
 
-  const { stdout: ls } = await execa.shell(`ls ${TEST_DIR}/**`);
+  const { stdout: ls } = await execa.shell(`ls -1 ${TEST_DIR}/** | sort`);
 
-  expect(ls).toMatchSnapshot();
+  expect(ls.split("\n").sort()).toMatchSnapshot();
 });
 
 afterEach(async () => {
