@@ -36,11 +36,11 @@ const printTriggers = (triggers: any[], context: Context) => {
     out += `${chalk.yellowBright("type")}: ${r.type} `;
 
     out = _.padEnd(out, tabSize * 2);
+    out += `${chalk.yellowBright("table")}: ${r.tableName}`;
 
-    out += `${chalk.yellowBright("stages")}: ${r.stages} `;
     out = _.padEnd(out, tabSize * 3);
+    out += `${chalk.yellowBright("operation")}: ${r.operation} `;
 
-    out += `${chalk.yellowBright("table")}: ${r.table}`;
     context.logger.info(out);
   });
 };

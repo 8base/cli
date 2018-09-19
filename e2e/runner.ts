@@ -1,6 +1,7 @@
 import * as execa from 'execa';
 import * as path from 'path';
-import * as pkg from '../package.json';
+
+const pkg = require('../package.json');
 
 const CLI_BIN = require.resolve(`../${pkg.bin['8base']}`);
 
