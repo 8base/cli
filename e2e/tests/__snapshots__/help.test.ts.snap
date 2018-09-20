@@ -4,18 +4,17 @@ exports[`As a user, I can use help flag for see help information about commands.
 "Usage: 8base <command> [OPTIONS]
 
 Commands:
-  index.js compile       Compile project
-  index.js config        Advanced configuation
+  index.js config        Advanced configuration
   index.js deploy        Deploy project
   index.js describe      Describe project
   index.js init          Initialize project
-  index.js invoke        Invoke function remotely
-  index.js invoke-local  Invoke function locally
+  index.js invoke        invoke deployed function
+  index.js invoke-local  invokelocal_describe
   index.js login         Login with your 8base credentials
   index.js logout        Clears local login credentials and invalidates API
                          session
-  index.js logs          Invoke function remotely
-  index.js package       Compile project
+  index.js logs          view function logs
+  index.js package       package application without deploying
 
 Options:
   -h, --help     Show help                                             [boolean]

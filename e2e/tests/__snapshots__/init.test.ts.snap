@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 1`] = `
-"8base init [DIRECTORY] [OPTIONS]
+"8base init [OPTIONS]
 
 Examples:
   8base init       initialize current folder
@@ -9,8 +9,8 @@ Examples:
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 2`] = `
-"[32m[32minfo[32m[39m:        Project testdir_init initialize success
-[32m[32minfo[32m[39m:        Command init complete. Time estimate: 100 ms."
+"Project testdir_init initialize success
+Command init complete. Time: 14 ms."
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `
