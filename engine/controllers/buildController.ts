@@ -9,11 +9,6 @@ import { Context } from "../../common/context";
 
 export class BuildController {
 
-    /**
-     * @param files files contain function from config yml file
-     * @param buildDir output build directory
-     * @return list of compiled files
-     */
     static async compile(context: Context): Promise<{ build: string, summary: string, compiledFiles: string[] }> {
 
         BuildController.clean(context);

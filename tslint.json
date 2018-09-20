@@ -32,10 +32,11 @@
             }
         ],
         "no-internal-module": true,
-        "no-trailing-whitespace": true,        
+        "no-trailing-whitespace": true,
+        "no-floating-promises": true,
         "prefer-const": false,
         "jsdoc-format": true
     },
     "jsRules": {},        
-    "rulesDirectory": []    
+    "rulesDirectory": []
 }

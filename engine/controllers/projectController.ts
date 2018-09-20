@@ -46,9 +46,7 @@ export class ProjectController {
   }
 
   static getFunctionSourceCode(context: Context): string[] {
-    return _.transform<FunctionDefinition, string>(context.project.extensions.functions, (result, f) => {
-      result.push(path.join(context.storage.static.rootExecutionDir, f.pathToFunction));
-    }, []);
+    return _.map(context.project.extensions.functions, f => path.join(context.storage.static.rootExecutionDir, f.pathToFunction));
   }
 
   static saveSchema(project: ProjectDefinition, outDir: string) {
@@ -84,13 +82,13 @@ export class ProjectController {
   }
 
   static getSchemaPaths(extensions: ExtensionsContainer): string[] {
-    return _.transform(extensions.resolvers, (res, f) => {
+    return _.map(extensions.resolvers, f => {
       const p = path.join(StaticConfig.rootExecutionDir, f.gqlschemaPath);
       if (!fs.existsSync(p)) {
         throw new Error("schema path \"" + p + "\" not present");
       }
-      res.push(p);
-    }, []);
+      return p;
+    });
   }
 
   /**

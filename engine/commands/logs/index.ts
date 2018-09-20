@@ -33,15 +33,14 @@ const readLogs = async (functionName: string, context: Context) => {
     const minutes = 3;
     const start = new Date(Date.now() - minutes * MS_PER_MINUTE);
 
-    await sleep(1000);
-
     const result = await context.request(GraphqlActions.logs, { functionName, startTime: start.toISOString() });
     const logs = filterMessage(result.logs);
     if (logs.length > 0) {
       context.logger.info(logs);
     }
-  }
 
+    await sleep(1000);
+  }
 };
 
 export default {

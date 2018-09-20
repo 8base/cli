@@ -23,7 +23,7 @@ export default {
 
     "config_usage": "8base config [OPTIONS]",
     "config_workspace_option": "workspace id",
-    "config_describe": "Advanced configuation",
+    "config_describe": "Advanced configuration",
 
     "init_usage": "8base init [OPTIONS]",
     "init_no_dir_example_command": "8base init",

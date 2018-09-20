@@ -59,9 +59,9 @@ export default {
     context.spinner.stop();
 
     if (result.userLogin.accounts.length > 1) {
-      Utils.selectWorkspace(null, context);
+      await Utils.selectWorkspace(null, context);
     } else if (result.userLogin.accounts.length === 1) {
-      Utils.selectWorkspace({ w: result.userLogin.accounts[0].account }, context);
+      await Utils.selectWorkspace({ w: result.userLogin.accounts[0].account }, context);
     } else {
       throw new Error("Internal error");
     }

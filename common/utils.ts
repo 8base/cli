@@ -114,7 +114,7 @@ export namespace Utils {
         resolve(fullPath);
       });
 
-      zip.finalize(); // ?????
+      zip.finalize();
     });
   };
 

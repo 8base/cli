@@ -54,7 +54,7 @@ export enum TriggerOperation {
     Functions
 */
 
-export class FunctionDefinition {
+export interface FunctionDefinition {
     readonly name: string;
 
     readonly handler: string;
