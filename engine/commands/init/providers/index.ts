@@ -10,8 +10,8 @@ interface IFileProvider {
 
 class StaticFileProvider implements IFileProvider {
     async provide(context: Context): Promise<Map<string, string>> {
-        return _.reduce<string, Map<string, string>>(readdir.readSync(context.storage.static.templatePath), (result, file) => {
-            return result.set(file, fs.readFileSync(path.join(context.storage.static.templatePath, file)).toString());
+        return _.reduce<string, Map<string, string>>(readdir.readSync(context.config.templatePath), (result, file) => {
+            return result.set(file, fs.readFileSync(path.join(context.config.templatePath, file)).toString());
         }, new Map<string, string>());
     }
 }

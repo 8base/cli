@@ -14,8 +14,8 @@ export default {
     const parameters = _.castArray(params._);
 
     const project = parameters.length > 1
-      ? { fullPath: path.join(context.storage.static.rootExecutionDir, parameters[1]), name: parameters[1] }
-      : { fullPath: context.storage.static.rootExecutionDir, name: path.basename(context.storage.static.rootExecutionDir) };
+      ? { fullPath: path.join(context.config.rootExecutionDir, parameters[1]), name: parameters[1] }
+      : { fullPath: context.config.rootExecutionDir, name: path.basename(context.config.rootExecutionDir) };
 
 
     context.logger.debug("start initiailie init command");
@@ -25,7 +25,7 @@ export default {
     let files = await getFileProvider().provide(context);
     context.logger.debug("files provided count = " + files.size);
 
-    files.set(context.storage.static.packageFileName, replaceServiceName(files.get(context.storage.static.packageFileName)));
+    files.set(context.config.packageFileName, replaceServiceName(files.get(context.config.packageFileName)));
 
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);

@@ -12,12 +12,12 @@ export default {
 
     if (params.v) {
       for(const key of Object.keys(StorageParameters)) {
-        context.logger.info(`${key}: ${JSON.stringify(context.storage.user.getValue((<any>StorageParameters)[key]), null, 2)}\n`);
+        context.logger.info(`${key}: ${JSON.stringify(context.storage.getValue((<any>StorageParameters)[key]), null, 2)}\n`);
       }
       return;
     }
     if (params.s) {
-      context.storage.user.setValues([
+      context.storage.setValues([
         {
           name: StorageParameters.serverAddress,
           value: params.s

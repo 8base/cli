@@ -135,7 +135,7 @@ export namespace Utils {
   };
 
   export const selectWorkspace = async (params: { w: string }, context: Context) => {
-    const accounts = context.storage.user.getValue(StorageParameters.workspaces);
+    const accounts = context.storage.getValue(StorageParameters.workspaces);
 
     if (_.isEmpty(accounts)) {
       throw new Error(context.i18n.t("logout_error"));
@@ -148,7 +148,7 @@ export namespace Utils {
       throw new Error("Workspace " + workspaceId + " is absent");
     }
 
-    context.storage.user.setValues([
+    context.storage.setValues([
       {
         name: StorageParameters.activeWorkspace,
         value: activeWorkspace

@@ -19,14 +19,14 @@ export default {
     context.logger.debug(`build dir: ${buildDir}`);
 
     const archiveBuildPath = await Utils.archive(
-      [{ source: buildDir.build }, { source: context.storage.static.modules, dist: "node_modules" }],
-      context.storage.static.buildRootDir,
+      [{ source: buildDir.build }, { source: context.config.modules, dist: "node_modules" }],
+      context.config.buildRootDir,
       "build",
       context);
 
     const archiveSummaryPath = await Utils.archive(
       [{ source: buildDir.summary }],
-      context.storage.static.buildRootDir,
+      context.config.buildRootDir,
       "summary",
       context);
 

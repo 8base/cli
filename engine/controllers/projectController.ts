@@ -20,7 +20,7 @@ export class ProjectController {
 
   static initialize(context: Context): ProjectDefinition {
 
-    const name = path.basename(context.storage.static.rootExecutionDir);
+    const name = path.basename(context.config.rootExecutionDir);
     context.logger.debug("start initialize project \"" + name + "\"");
 
     context.logger.debug("load main yml file");
@@ -46,7 +46,7 @@ export class ProjectController {
   }
 
   static getFunctionSourceCode(context: Context): string[] {
-    return _.map(context.project.extensions.functions, f => path.join(context.storage.static.rootExecutionDir, f.pathToFunction));
+    return _.map(context.project.extensions.functions, f => path.join(context.config.rootExecutionDir, f.pathToFunction));
   }
 
   static saveSchema(project: ProjectDefinition, outDir: string) {

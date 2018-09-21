@@ -46,14 +46,15 @@ export class Context {
   }
 
   get serverAddress(): string {
-    return this.storage.user.getValue(StorageParameters.serverAddress) || this.storage.static.remoteAddress;
+    return this.storage.getValue(StorageParameters.serverAddress) || this.config.remoteAddress;
   }
 
-  get storage(): { static: typeof StaticConfig, user: typeof UserDataStorage } {
-    return {
-      static: StaticConfig,
-      user: UserDataStorage
-    };
+  get storage(): typeof UserDataStorage {
+    return UserDataStorage;
+  }
+
+  get config(): typeof StaticConfig {
+    return StaticConfig;
   }
 
   async request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
@@ -66,19 +67,19 @@ export class Context {
     this.logger.debug(`query: ${query}`);
     this.logger.debug(`vaiables: ${JSON.stringify(variables)}`);
 
-    const refreshToken = this.storage.user.getValue(StorageParameters.refreshToken);
+    const refreshToken = this.storage.getValue(StorageParameters.refreshToken);
     if (refreshToken) {
       this.logger.debug("set refresh token");
       client.setRefreshToken(refreshToken);
     }
 
-    const idToken = this.storage.user.getValue(StorageParameters.idToken);
+    const idToken = this.storage.getValue(StorageParameters.idToken);
     if (idToken) {
       this.logger.debug("set id token");
       client.setIdToken(idToken);
     }
 
-    const workspace = this.storage.user.getValue(StorageParameters.activeWorkspace);
+    const workspace = this.storage.getValue(StorageParameters.activeWorkspace);
     const workspaceId = workspace ? workspace.account : null;
 
     if (workspaceId) {
@@ -86,7 +87,7 @@ export class Context {
       client.setAccountId(workspaceId);
     }
 
-    const email = this.storage.user.getValue(StorageParameters.email);
+    const email = this.storage.getValue(StorageParameters.email);
     if (email) {
       this.logger.debug("set email id = " + email);
       client.setEmail(email);
@@ -102,7 +103,7 @@ export class Context {
 
     if (client.idToken !== idToken) {
       this.logger.debug("reset id token");
-      this.storage.user.setValues([{
+      this.storage.setValues([{
         name: StorageParameters.idToken,
         value: client.idToken
       }]);
@@ -110,7 +111,7 @@ export class Context {
 
     if (client.refreshToken !== refreshToken) {
       this.logger.debug("reset refresh token");
-      this.storage.user.setValues([{
+      this.storage.setValues([{
         name: StorageParameters.refreshToken,
         value: client.refreshToken
       }]);
