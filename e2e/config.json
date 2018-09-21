@@ -15,8 +15,5 @@
   "testMatch": [
     "/**/*.test.(ts|js)"
   ],
-  "setupFiles": [
-    "./setup.ts"
-  ],
   "testEnvironment": "node"
 }
