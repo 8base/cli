@@ -1,6 +1,6 @@
 image: 8base/docker-amazonlinux-node
 
-e2e:
+test:
   stage: test
   environment: testing
   script:  
