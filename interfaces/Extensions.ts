@@ -22,7 +22,7 @@ export interface ResolverDefinition extends BaseDefinition {
 
     gqlType: GraphQLFunctionType;
 
-    gqlschemaPath: string;
+    gqlSchemaPath: string;
 }
 
 /*

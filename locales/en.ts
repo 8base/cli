@@ -36,7 +36,7 @@ export default {
     "invoke_describe": "invoke deployed function",
 
     "invokelocal_usage": "8base invoke-local [FUNCTION NAME] [OPTIONS]",
-    "invokelocal_desribe": "invoke function locally",
+    "invokelocal_describe": "invoke function locally",
     "invokelocal_in_progress": "invoke local...",
 
     "logout_usage": "8base logout [OPTIONS]",
@@ -49,5 +49,16 @@ export default {
     "package_usage": "8base package [OPTIONS]",
     "package_describe": "package application without deploying",
     "package_progress": "package..."
+  },
+
+  "debug": {
+    "remote_address": "remote address: {{- remoteAddress}}",
+    "start_request": "start request",
+    "request_complete": "request complete",
+    "reset_id_token": "reset id token",
+    "set_id_token": "set id token",
+    "reset_refresh_token": "reset refresh token",
+    "set_email": "set email: {{- email}}",
+    "set_workspace_id": "set workspace id {{workspaceId}}",
   }
 };

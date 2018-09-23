@@ -9,8 +9,6 @@ import { Context } from "./context";
 import { StorageParameters } from "../consts/StorageParameters";
 
 import chalk from "chalk";
-import { i18n } from "i18next";
-import locales from "../locales";
 
 
 type workspace = { name: string, account: string };
@@ -157,20 +155,4 @@ export namespace Utils {
 
     context.logger.info(`Workspaces ${chalk.yellowBright(activeWorkspace.name)} is active`);
   };
-
-  export const initTranslations = async (i18next: i18n) => {
-    return new Promise((resolve, reject) => {
-      i18next.init({
-        fallbackLng: "en",
-        debug: false,
-        defaultNS: "default",
-        resources: locales
-      }, (err, t) => {
-        if (err) return reject(err);
-
-        resolve();
-      });
-    });
-  };
-
 }

@@ -8,14 +8,14 @@ import _ = require("lodash");
 
 const tabSize = 30;
 
-const printResolvers = (resovlers: any[], context: Context) => {
-  if (!_.isArray(resovlers)) {
+const printResolvers = (resolvers: any[], context: Context) => {
+  if (!_.isArray(resolvers)) {
     return;
   }
 
   context.logger.info(`${chalk.yellowBright("Resolvers:")}`);
 
-  resovlers.map(r => {
+  resolvers.map(r => {
     let out = `   ${r.name}`;
     out = _.padEnd(out, tabSize);
     out += `${chalk.yellowBright("type")}: ${r.gqlType} `;

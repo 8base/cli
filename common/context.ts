@@ -57,25 +57,26 @@ export class Context {
     return StaticConfig;
   }
 
-  async request(query: string, variables: any = null, isLoginRequred = true): Promise<any> {
+  async request(query: string, variables: any = null, isLoginRequired = true): Promise<any> {
 
     const remoteAddress = this.serverAddress;
-    this.logger.debug(`remote address: ${remoteAddress}`);
+    this.logger.debug(this.i18n.t("debug:remote_address", { remoteAddress }));
+
 
     const client = new Client(remoteAddress);
 
     this.logger.debug(`query: ${query}`);
-    this.logger.debug(`vaiables: ${JSON.stringify(variables)}`);
+    this.logger.debug(`variables: ${JSON.stringify(variables)}`);
 
     const refreshToken = this.storage.getValue(StorageParameters.refreshToken);
     if (refreshToken) {
-      this.logger.debug("set refresh token");
+      this.logger.debug(this.i18n.t("debug:set refresh token"));
       client.setRefreshToken(refreshToken);
     }
 
     const idToken = this.storage.getValue(StorageParameters.idToken);
     if (idToken) {
-      this.logger.debug("set id token");
+      this.logger.debug(this.i18n.t("debug:set_id_token"));
       client.setIdToken(idToken);
     }
 
@@ -83,26 +84,26 @@ export class Context {
     const workspaceId = workspace ? workspace.account : null;
 
     if (workspaceId) {
-      this.logger.debug("set workspace id = " + workspaceId);
+      this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));
       client.setAccountId(workspaceId);
     }
 
     const email = this.storage.getValue(StorageParameters.email);
     if (email) {
-      this.logger.debug("set email id = " + email);
+      this.logger.debug(this.i18n.t("debug:set_email", { email }));
       client.setEmail(email);
     }
 
-    if (isLoginRequred && (_.isEmpty(idToken) || _.isEmpty(refreshToken) || _.isEmpty(workspaceId))) {
+    if (isLoginRequired && (_.isEmpty(idToken) || _.isEmpty(refreshToken) || _.isEmpty(workspaceId))) {
       throw new Error(this.i18n.t("logout_error"));
     }
 
-    this.logger.debug("start request" );
+    this.logger.debug(this.i18n.t("debug:start_request"));
     const result = await client.request(query, variables);
-    this.logger.debug("request complete");
+    this.logger.debug(this.i18n.t("debug:request_complete"));
 
     if (client.idToken !== idToken) {
-      this.logger.debug("reset id token");
+      this.logger.debug(this.i18n.t("debug:reset_id_token"));
       this.storage.setValues([{
         name: StorageParameters.idToken,
         value: client.idToken
@@ -110,7 +111,7 @@ export class Context {
     }
 
     if (client.refreshToken !== refreshToken) {
-      this.logger.debug("reset refresh token");
+      this.logger.debug(this.i18n.t("debug:reset_refresh_token"));
       this.storage.setValues([{
         name: StorageParameters.refreshToken,
         value: client.refreshToken

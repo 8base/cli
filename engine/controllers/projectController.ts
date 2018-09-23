@@ -37,7 +37,7 @@ export class ProjectController {
     const functionGqlTypes = GraphqlController.defineGqlFunctionsType(gqlSchema);
     extensions.resolvers = ResolverUtils.resolveGqlFunctionTypes(extensions.resolvers, functionGqlTypes);
 
-    context.logger.debug("initialize project comlete");
+    context.logger.debug("initialize project complete");
     return {
       extensions,
       name,
@@ -83,7 +83,7 @@ export class ProjectController {
 
   static getSchemaPaths(extensions: ExtensionsContainer): string[] {
     return _.map(extensions.resolvers, f => {
-      const p = path.join(StaticConfig.rootExecutionDir, f.gqlschemaPath);
+      const p = path.join(StaticConfig.rootExecutionDir, f.gqlSchemaPath);
       if (!fs.existsSync(p)) {
         throw new Error("schema path \"" + p + "\" not present");
       }
@@ -131,7 +131,7 @@ export class ProjectController {
           extensions.resolvers.push({
             name: functionName,
             functionName: functionName,
-            gqlschemaPath: data.schema,
+            gqlSchemaPath: data.schema,
             gqlType: undefined
           });
           break;
@@ -183,7 +183,7 @@ export class ProjectController {
 namespace ResolverUtils {
 
   /**
-   * @argument types project, { funcname: type }
+   * @argument types project, { functionName: type }
    * Function resolve graphql type for each function.
    * we have to know function type (mutation, query) for compile schema on the server side
    */
@@ -214,7 +214,7 @@ namespace FunctionUtils {
     }
 
     if (func.handler.code && !fs.existsSync(path.join(StaticConfig.rootExecutionDir, func.handler.code))) {
-      throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "unnable to determine function \"" + name + "\" source code");
+      throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "unable to determine function \"" + name + "\" source code");
     }
 
     if (!StaticConfig.supportedCompileExtension.has(path.extname(func.handler.code))) {

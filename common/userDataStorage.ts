@@ -13,7 +13,7 @@ class Storage {
     }
 
     /**
-     * Fucntion check exist and create storage file.
+     * Function check exist and create storage file.
      *
      * @returns path to instanced repository file
      */

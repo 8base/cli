@@ -18,9 +18,9 @@ export default {
       : { fullPath: context.config.rootExecutionDir, name: path.basename(context.config.rootExecutionDir) };
 
 
-    context.logger.debug("start initiailie init command");
+    context.logger.debug("start initialize init command");
 
-    context.logger.debug(`initialize success: initilize repository: ${project.name}`);
+    context.logger.debug(`initialize success: initialize repository: ${project.name}`);
 
     let files = await getFileProvider().provide(context);
     context.logger.debug("files provided count = " + files.size);
@@ -43,7 +43,7 @@ export default {
 
 
 const replaceServiceName = (packageFile: string) => {
-  let packagedata = JSON.parse(packageFile);
-  packagedata.name = this.repositoryName;
-  return JSON.stringify(packagedata, null, 2);
+  let packageData = JSON.parse(packageFile);
+  packageData.name = this.repositoryName;
+  return JSON.stringify(packageData, null, 2);
 };

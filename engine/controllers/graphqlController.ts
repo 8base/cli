@@ -20,7 +20,7 @@ export class GraphqlController {
     /**
      *
      * @param project
-     * @return { funcname: "Query/Mutation" }
+     * @return { functionName: "Query/Mutation" }
      */
     static defineGqlFunctionsType(gqlSchema: string): {[functionName: string]: GraphQLFunctionType} {
         // bad solution, I think
