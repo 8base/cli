@@ -14,7 +14,7 @@ it('As a user, I can use help flag for see help information for `init` command.'
 it('As a user, I can use help flag for see help information for `init` command.', async () => {
   const { stdout } = await runner()('init', TEST_DIR);
 
-  expect(stdout.replace(/Time estimate: \d+ ms\./, 'Time estimate: 100 ms.')).toMatchSnapshot();
+  expect(stdout.replace(/Time: \d+ ms\./, 'Time: 100 ms.')).toMatchSnapshot();
 
   const { stdout: ls } = await execa.shell(`ls -1 ${TEST_DIR}/** | sort`);
 
