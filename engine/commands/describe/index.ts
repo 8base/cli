@@ -68,7 +68,7 @@ const transformWebhook = (webhook: any, context: Context) => {
   return {
     ...webhook,
     httpMethod: webhook.httpMethod.toUpperCase(),
-    fullPath: url.resolve(context.serverAddress, webhook.accountRelativePath)
+    fullPath: url.resolve(context.serverAddress, webhook.workspaceRelativePath)
   };
 };
 

@@ -5,9 +5,9 @@ export const GraphqlActions = {
         idToken
         refreshToken
       }
-      accounts {
+      workspaces {
         name
-        account
+        workspace
       }
     }
   }`,
@@ -43,7 +43,7 @@ describe: `query {
       name gqlType
     }
     webhooks  {
-      name httpMethod accountRelativePath
+      name httpMethod workspaceRelativePath
     }
     triggers {
       operation tableName type name

@@ -81,11 +81,11 @@ export class Context {
     }
 
     const workspace = this.storage.getValue(StorageParameters.activeWorkspace);
-    const workspaceId = workspace ? workspace.account : null;
+    const workspaceId = workspace ? workspace.workspace : null;
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));
-      client.setAccountId(workspaceId);
+      client.setWorkspaceId(workspaceId);
     }
 
     const email = this.storage.getValue(StorageParameters.email);

@@ -48,7 +48,7 @@ export default {
       },
       {
         name: StorageParameters.workspaces,
-        value: result.userLogin.accounts
+        value: result.userLogin.workspaces
       },
       {
         name: StorageParameters.email,
@@ -58,10 +58,10 @@ export default {
 
     context.spinner.stop();
 
-    if (result.userLogin.accounts.length > 1) {
+    if (result.userLogin.workspaces.length > 1) {
       await Utils.selectWorkspace(null, context);
-    } else if (result.userLogin.accounts.length === 1) {
-      await Utils.selectWorkspace({ w: result.userLogin.accounts[0].account }, context);
+    } else if (result.userLogin.workspaces.length === 1) {
+      await Utils.selectWorkspace({ w: result.userLogin.workspaces[0].workspace }, context);
     } else {
       throw new Error("Internal error");
     }
