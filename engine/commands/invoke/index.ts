@@ -17,7 +17,7 @@ export default {
     const result = await context.request(GraphqlActions.invoke, { data: { functionName: params._[1], inputArgs: args } });
     context.spinner.stop();
 
-    context.logger.info(JSON.stringify(result.invoke));
+    context.logger.info(result.invoke.responseData);
   },
   describe: translations.i18n.t("invoke_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
