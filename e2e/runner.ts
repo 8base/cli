@@ -3,7 +3,7 @@ import * as path from 'path';
 
 const pkg = require('../package.json');
 
-const CLI_BIN = require.resolve(`../${pkg.bin['8base']}`);
+const CLI_BIN = require.resolve(`${process.cwd()}/${pkg.bin['8base']}`);
 
 const runner = (cwd?: any, env?: any) => {
   const opts = {

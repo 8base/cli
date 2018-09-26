@@ -10,7 +10,7 @@ Examples:
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 2`] = `
 "Project testdir_init initialize success
-Command init complete. Time: 14 ms."
+Command init complete. Time: 22 ms."
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `

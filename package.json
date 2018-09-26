@@ -9,8 +9,8 @@
     "8base": "dist/index.js"
   },
   "scripts": {
-    "e2e": "jest --config e2e/config.json",
-    "test": "npm run build && npm run e2e",
+    "e2e": "npm run build && jest --config e2e/config.json",
+    "test": "npm run e2e",
     "build": "tsc",
     "watch": "npm run build -- --watch",
     "tslint": "tslint -c tslint.json -p tsconfig.json --type-check",

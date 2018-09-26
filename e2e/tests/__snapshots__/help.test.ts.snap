@@ -4,12 +4,13 @@ exports[`As a user, I can use help flag for see help information about commands.
 "Usage: 8base <command> [OPTIONS]
 
 Commands:
+  index.js compile       Compile project
   index.js config        Advanced configuration
   index.js deploy        Deploy project
   index.js describe      Describe project
   index.js init          Initialize project
   index.js invoke        invoke deployed function
-  index.js invoke-local  invokelocal_describe
+  index.js invoke-local  invoke function locally
   index.js login         Login with your 8base credentials
   index.js logout        Clears local login credentials and invalidates API
                          session
