@@ -1,66 +1,50 @@
-import { BaseCommand } from "../base";
-import { ExecutionConfig, debug, StaticConfig, ProjectDefinition } from "../../../common";
-import { ProjectController, BuildController, ArchiveController, RemoteActionController, GraphqlController } from "../../../engine";
-import * as path from "path";
+import { Utils } from "../../../common/utils";
+import { GraphqlController } from "../../controllers/graphqlController";
+import { BuildController } from "../../controllers/buildController";
+import * as yargs from "yargs";
+import { Context } from "../../../common/context";
+import { GraphqlActions } from "../../../consts/GraphqlActions";
+import { translations } from "../../../common/translations";
 
-export default class Deploy extends BaseCommand {
+export default {
+  name: "deploy",
+  handler: async (params: any, context: Context) => {
+    context.spinner.start(context.i18n.t("deploy_in_progress"));
 
-    private project: ProjectDefinition;
-
-    private schemaValidate: boolean;
-
-    /**
-     * 1. ensure token
-     * 2. compile project
-     * 3. define function to compile
-     * 4. compile it
-     * 5. prepare labmda
-     * 6. zip all
-     * 7. upload zip to remote host
-     */
-
-    async run(): Promise<any> {
-
-        if (this.schemaValidate) {
-            GraphqlController.validateSchema(this.project);
-        }
-
-        const buildDir = await BuildController.compile(this.project);
-        debug("build dir = " + buildDir);
-
-        const archiveBuildPath = await ArchiveController.archive(
-                [ { source: buildDir.build }, { source: StaticConfig.modules, dist: "node_modules" } ],
-                StaticConfig.buildRootDir,
-                "build");
-
-        const archiveSummaryPath = await ArchiveController.archive(
-            [{ source: buildDir.summary }],
-            StaticConfig.buildRootDir,
-            "summary");
-
-        await RemoteActionController.deploy(
-            archiveBuildPath,
-            archiveSummaryPath,
-            BuildController.generateBuildName());
-
-        debug("deploy success");
+    if (params["validate_schema"]) {
+      GraphqlController.validateSchema(context.project);
     }
 
-    async commandInit(config: ExecutionConfig): Promise<any> {
-        this.schemaValidate = config.isParameterPresent("validate_schema");
-        this.project = await ProjectController.initialize(config);
-    }
+    const buildDir = await BuildController.compile(context);
+    context.logger.debug(`build dir: ${buildDir}`);
 
-    usage(): string {
-        return "";
-    }
+    const archiveBuildPath = await Utils.archive(
+      [{ source: buildDir.build }, { source: context.config.modules, dist: "node_modules" }],
+      context.config.buildRootDir,
+      "build",
+      context);
 
-    name(): string {
-        return "deploy";
-    }
+    const archiveSummaryPath = await Utils.archive(
+      [{ source: buildDir.summary }],
+      context.config.buildRootDir,
+      "summary",
+      context);
 
-    onSuccess(): string {
-        return "deploy complete successfully";
-    }
+    const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy);
 
-}
+    await Utils.upload(prepareDeploy.uploadMetaDataUrl, archiveSummaryPath, context);
+    context.logger.debug("upload summary data complete");
+
+    await Utils.upload(prepareDeploy.uploadBuildUrl, archiveBuildPath, context);
+    context.logger.debug("upload source code complete");
+
+    await context.request(GraphqlActions.deploy, { data: { buildName: prepareDeploy.buildName } });
+    context.spinner.stop();
+  },
+
+  describe: translations.i18n.t("deploy_describe"),
+
+  builder: (args: yargs.Argv): yargs.Argv => {
+    return args.usage(translations.i18n.t("deploy_usage"));
+  }
+};

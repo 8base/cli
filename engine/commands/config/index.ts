@@ -1,62 +1,54 @@
-import { BaseCommand } from "../base";
-import { ExecutionConfig, UserDataStorage, trace } from "../../../common";
 import * as _ from "lodash";
-import * as path from "path";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
+import * as yargs from "yargs";
+import { StorageParameters } from "../../../consts/StorageParameters";
+import { Utils } from "../../../common/utils";
+import chalk from "chalk";
 
-export default class Use extends BaseCommand {
+export default {
+  name: "config",
+  handler: async (params: any, context: Context) => {
 
-    private accountId: string;
-    private email: string;
-
-    private remote: string;
-
-    async run(): Promise<any> {
-        if (_.isNil(this.accountId) && _.isNil(this.email) && _.isNil(this.remote)) {
-            return trace(UserDataStorage.toString());
+    if (params.v) {
+      for(const key of Object.keys(StorageParameters)) {
+        context.logger.info(`${key}: ${JSON.stringify(context.storage.getValue((<any>StorageParameters)[key]), null, 2)}\n`);
+      }
+      return;
+    }
+    if (params.s) {
+      context.storage.setValues([
+        {
+          name: StorageParameters.serverAddress,
+          value: params.s
         }
-
-        if (this.accountId) {
-            UserDataStorage.account = this.accountId;
-        }
-        if (this.email) {
-            UserDataStorage.email = this.email;
-        }
-
-        if (this.remote) {
-            UserDataStorage.remoteAddress = this.remote;
-        }
+      ]);
+      context.logger.info(`Set remote address ${chalk.yellowBright(params.s)}.`);
+      return;
     }
 
-    async commandInit(config: ExecutionConfig): Promise<any> {
-        this.accountId = config.getParameter("account");
-        this.email = config.getParameter("email");
-        this.remote = config.getParameter("remote");
-    }
+    await Utils.selectWorkspace(params, context);
+  },
 
-    usage(): string {
-        return `
-            no parameters - print config
-            --account <account_id> set account (optional)
-            --email <email> set email (optional)
-            --remote <address> set remote cli endpoint (optional)`;
-    }
+  describe: translations.i18n.t("config_describe"),
 
-    name(): string {
-        return "config";
-    }
-
-    onSuccess(): string {
-        let res = "";
-        if (this.accountId) {
-            res += "use account " + this.accountId + "\n";
-        }
-        if (this.email) {
-            res += "use email " + this.email + "\n";
-        }
-        if (this.remote) {
-            res += "use remote cli endpoint " + this.remote + "\n";
-        }
-        return res;
-    }
-
-}
+  builder: (args: yargs.Argv): yargs.Argv => {
+    return args
+      .usage(translations.i18n.t("config_usage"))
+      .option("w", {
+        alias: 'workspace',
+        describe: translations.i18n.t("config_workspace_option"),
+        type: "string"
+      })
+      .option("s", {
+        alias: 'server',
+        type: "string",
+        hidden: true
+      })
+      .option("v", {
+        alias: 'view',
+        type: "boolean",
+        hidden: true
+      });
+  }
+};

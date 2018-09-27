@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`As a user, I can use help flag for see help information for \`deploy\` command. 1`] = `"8base deploy [OPTIONS]"`;

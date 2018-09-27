@@ -1,40 +1,38 @@
 import * as fs from "fs-extra";
 import * as path from 'path';
-import { debug, FunctionDefinition, ProjectDefinition, StaticConfig, UserDataStorage } from "../../common";
-import { resolveCompiler, ProjectController } from "../../engine";
 import * as glob from "glob";
+import { FunctionDefinition } from "../../interfaces/Extensions";
+import { ProjectController } from "./projectController";
+import { getCompiler } from "../compilers";
+import { Context } from "../../common/context";
 
 
 export class BuildController {
 
-    /**
-     * @param files files contain function from config yml file
-     * @param buildDir output build directory
-     * @return list of compiled files
-     */
-    static async compile(project: ProjectDefinition): Promise<any> {
+    static async compile(context: Context): Promise<{ build: string, summary: string, compiledFiles: string[] }> {
 
-        BuildController.clean();
+        BuildController.clean(context);
 
-        const files = ProjectController.getFunctionSourceCode(project);
+        const files = ProjectController.getFunctionSourceCode(context);
 
-        BuildController.prepare();
+        BuildController.prepare(context);
 
-        debug("resolve compilers");
-        const compiler = resolveCompiler(files);
+        context.logger.debug("resolve compilers");
+        const compiler = getCompiler(files, context);
 
-        const compiledFiles = await compiler.compile(StaticConfig.buildDir);
-        debug("compiled files = " + compiledFiles);
+        const compiledFiles = await compiler.compile(context.config.buildDir);
+        context.logger.debug("compiled files = " + compiledFiles);
 
-        BuildController.makeFunctionHandlers(ProjectController.getFunctions(project));
+        BuildController.makeFunctionHandlers(context.project.extensions.functions, context);
 
-        ProjectController.saveMetaDataFile(project, StaticConfig.summaryDir);
+        ProjectController.saveMetaDataFile(context.project, context.config.summaryDir);
 
-        ProjectController.saveSchema(project, StaticConfig.summaryDir);
+        ProjectController.saveSchema(context.project, context.config.summaryDir);
 
         return {
-            build: StaticConfig.buildDir,
-            summary: StaticConfig.summaryDir
+            build: context.config.buildDir,
+            summary: context.config.summaryDir,
+            compiledFiles
         };
     }
 
@@ -42,54 +40,49 @@ export class BuildController {
      * Private functions
      */
 
-    private static makeFunctionHandlers(functions: FunctionDefinition[]) {
+    private static makeFunctionHandlers(functions: FunctionDefinition[], context: Context) {
 
         functions.forEach(func => {
-            debug("process function = " + func.name);
+            context.logger.debug("process function = " + func.name);
 
-            const handler = func.handler.value();
-            const ext = path.parse(handler).ext;
+            const ext = path.parse(func.pathToFunction).ext;
 
-            const mask = path.join(StaticConfig.buildDir, handler.replace(ext, ".*"));
+            const mask = path.join(context.config.buildDir, func.pathToFunction.replace(ext, ".*"));
 
             if (glob.sync(mask).length !== 1) {
-                throw new Error("target compiled file " + handler + " not exist");
+                throw new Error("target compiled file " + func.pathToFunction + " not exist");
             }
 
-            BuildController.makeFunctionWrapper(func.name, handler.replace(ext, ""));
+            BuildController.makeFunctionWrapper(func.name, func.pathToFunction.replace(ext, ""), context);
         });
     }
 
-    private static makeFunctionWrapper(name: string, functionPath: string) {
+    private static makeFunctionWrapper(name: string, functionPath: string, context: Context) {
 
-        const fullWrapperFuncPath = path.join(StaticConfig.buildDir, name.concat(StaticConfig.FunctionHandlerExt));
+        const fullWrapperFuncPath = path.join(context.config.buildDir, name.concat(context.config.FunctionHandlerExt));
 
-        debug("full function path = " + fullWrapperFuncPath);
+        context.logger.debug("full function path = " + fullWrapperFuncPath);
 
         fs.writeFileSync(
 
             fullWrapperFuncPath,
 
-            fs.readFileSync(StaticConfig.functionWrapperPath)
+            fs.readFileSync(context.config.functionWrapperPath)
                 .toString()
                 .replace("__functionname__", functionPath)
-                .replace("__remote_server_endpoint__", UserDataStorage.remoteAddress)
+                .replace("__remote_server_endpoint__", context.storage.getValue("remoteAddress"))
         );
 
-        debug("write func wrapper compete");
+        context.logger.debug("write func wrapper compete");
     }
 
-    static generateBuildName(): string {
-        return `build_${Date.now()}`;
+    private static clean(context: Context) {
+        fs.removeSync(context.config.buildRootDir);
     }
 
-    private static clean() {
-        fs.removeSync(StaticConfig.buildRootDir);
-    }
-
-    private static prepare() {
-        fs.mkdirpSync(StaticConfig.buildDir);
-        fs.mkdirpSync(StaticConfig.summaryDir);
+    private static prepare(context: Context) {
+        fs.mkdirpSync(context.config.buildDir);
+        fs.mkdirpSync(context.config.summaryDir);
     }
 }
 

@@ -1,57 +1,96 @@
-import { BaseCommand } from "../base";
-import {
-    ExecutionConfig,
-    trace
-} from "../../../common";
-import { ServerConnector } from "../../connectors";
+import * as yargs from "yargs";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
+import { GraphqlActions } from "../../../consts/GraphqlActions";
+import * as url from "url";
+import chalk from "chalk";
+import _ = require("lodash");
 
-export default class Describe extends BaseCommand {
+const tabSize = 30;
 
-    private functions: boolean;
-    private webhooks: boolean;
-    private triggers: boolean;
+const printResolvers = (resolvers: any[], context: Context) => {
+  if (!_.isArray(resolvers)) {
+    return;
+  }
 
-    private allPrint: boolean;
+  context.logger.info(`${chalk.yellowBright("Resolvers:")}`);
 
-    async commandInit(config: ExecutionConfig): Promise<any> {
-        this.functions = config.isParameterPresent("f");
-        this.webhooks = config.isParameterPresent("w");
-        this.triggers = config.isParameterPresent("t");
+  resolvers.map(r => {
+    let out = `   ${r.name}`;
+    out = _.padEnd(out, tabSize);
+    out += `${chalk.yellowBright("type")}: ${r.gqlType} `;
+    context.logger.info(out);
+  });
 
-        this.allPrint = !this.functions && !this.triggers && !this.webhooks;
-    }
+};
 
-    async run(): Promise<any> {
-        const result = await ServerConnector().describeBuild();
+const printTriggers = (triggers: any[], context: Context) => {
+  if (!_.isArray(triggers)) {
+    return;
+  }
 
-        if (this.functions || this.allPrint) {
-            trace("Functions: ");
-            trace(JSON.stringify(result.functions, null, 2));
-            trace("");
-        }
+  context.logger.info(`${chalk.yellowBright("Triggers:")}`);
+  triggers.map(r => {
+    let out = `   ${r.name}`;
+    out = _.padEnd(out, tabSize);
+    out += `${chalk.yellowBright("type")}: ${r.type} `;
 
-        if (this.webhooks || this.allPrint) {
-            trace("Webhooks: ");
-            trace(JSON.stringify(result.webhooks, null, 2));
-            trace("");
-        }
+    out = _.padEnd(out, tabSize * 2);
+    out += `${chalk.yellowBright("table")}: ${r.tableName}`;
 
-        if (this.triggers || this.allPrint) {
-            trace("Triggers: ");
-            trace(JSON.stringify(result.triggers, null, 2));
-        }
-    }
+    out = _.padEnd(out, tabSize * 3);
+    out += `${chalk.yellowBright("operation")}: ${r.operation} `;
 
-    onSuccess(): string {
-        return "";
-    }
+    context.logger.info(out);
+  });
+};
 
-    usage(): string {
-        return "";
-    }
+const printWebhooks = (webhooks: any[], context: Context) => {
+  if (!_.isArray(webhooks)) {
+    return;
+  }
 
-    name(): string {
-        return "describe";
-    }
+  context.logger.info(`${chalk.yellowBright("Webhooks:")}`);
+  webhooks.map(r => {
+    let out = `   ${r.name}`;
 
-}
+    out = _.padEnd(out, tabSize);
+
+    out += `${chalk.yellowBright("method")}: ${r.httpMethod} `;
+    out = _.padEnd(out, tabSize * 2);
+
+    out += `${chalk.yellowBright("path")}: ${r.fullPath} `;
+    context.logger.info(out);
+  });
+};
+
+const transformWebhook = (webhook: any, context: Context) => {
+  return {
+    ...webhook,
+    httpMethod: webhook.httpMethod.toUpperCase(),
+    fullPath: url.resolve(context.serverAddress, webhook.workspaceRelativePath)
+  };
+};
+
+export default {
+  name: "describe",
+  handler: async (params: any, context: Context) => {
+
+    context.spinner.start(context.i18n.t("describe_progress"));
+    const result = (await context.request(GraphqlActions.describe)).describeExtensions;
+    context.spinner.stop();
+
+    printResolvers(result.resolvers, context);
+    context.logger.info("");
+
+    printTriggers(result.triggers, context);
+    context.logger.info("");
+
+    const webhooks = result.webhooks ? result.webhooks.map((w: any) => transformWebhook(w, context)) : [];
+    printWebhooks(webhooks, context);
+  },
+  describe: translations.i18n.t("describe_describe"),
+  builder: (args: yargs.Argv): yargs.Argv => {
+    return args.usage(translations.i18n.t("describe_usage"));
+  }
+};

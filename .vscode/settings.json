@@ -5,6 +5,7 @@
         "**/bower_components": true,
         "**/dist": true
     },
+    "editor.tabSize": 2,
     "typescript.referencesCodeLens.enabled": true,
     "tslint.ignoreDefinitionFiles": false,
     "tslint.autoFixOnSave": true,

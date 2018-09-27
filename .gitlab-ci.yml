@@ -1,13 +1,13 @@
 image: 8base/docker-amazonlinux-node
 
 test:
+  stage: test
   environment: testing
   script:  
     - NODE_ENV=testing npm install
-    - npm run tslint
+    - npm run e2e
   tags:
     - docker
-  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
 publish:  
   stage: deploy

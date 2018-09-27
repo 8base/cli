@@ -1,53 +1,38 @@
-import { ExecutionConfig } from "../../../common";
-import { BaseCommand } from "../base";
-import { RemoteActionController } from "../../controllers";
-import * as _ from "lodash";
-import { InvalidArgument } from '../../../errors';
+import * as yargs from "yargs";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
+import _ = require("lodash");
+import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as fs from "fs";
 
+export default {
+  name: "invoke",
+  handler: async (params: any, context: Context) => {
 
-export default class Invoke extends BaseCommand {
+    context.spinner.start(context.i18n.t("invoke_in_progress"));
 
-    private functionName: string;
+    const args = params.j ? params.j
+      : params.p ? fs.readFileSync(params.p) : null;
 
-    private args: any;
+    const result = await context.request(GraphqlActions.invoke, { data: { functionName: params._[1], inputArgs: args } });
+    context.spinner.stop();
 
-    private async: boolean;
-
-    private response: any;
-
-    async commandInit(config: ExecutionConfig): Promise<any> {
-        this.functionName = config.getParameter("f");
-
-        if (_.isNil(this.functionName)) {
-            throw new InvalidArgument("function name");
-        }
-
-        this.args = config.getParameter("data");
-        if (_.isNil(this.args)) {
-            const p = config.getParameter("args_path");
-            this.args = _.isNil(p) ? null : fs.readFileSync(p);
-        }
-
-        this.args = _.escape(JSON.stringify(JSON.parse(this.args)));
-    }
-
-    async run(): Promise<any> {
-        this.response = _.unescape(await RemoteActionController.invoke(this.functionName, this.args));
-    }
-
-    onSuccess(): string {
-        return "invoke function result = " + JSON.stringify(this.response, null, 2);
-    }
-
-    usage(): string {
-        return `-f <function_name>
-                --data <JSON> input arguments as JSON data
-                --args_path <path_to_file> path to file with arguments`;
-    }
-
-    name(): string {
-        return "invoke";
-    }
-
-}
+    context.logger.info(result.invoke.responseData);
+  },
+  describe: translations.i18n.t("invoke_describe"),
+  builder: (args: yargs.Argv): yargs.Argv => {
+    return args
+      .usage(translations.i18n.t("invoke_usage"))
+      .demand(1)
+      .option("j", {
+        alias: 'data-json',
+        describe: "input JSON",
+        type: "string"
+      })
+      .option("p", {
+        alias: 'data-path',
+        describe: "path to input JSON",
+        type: "string"
+      });
+  }
+};

@@ -1,4 +1,0 @@
-type DeployDataResponce {
-  buildUrl: String,
-  summaryDataUrl: String
-}

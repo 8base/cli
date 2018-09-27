@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`As a user, I can use help flag for see help information for \`init\` command. 1`] = `
+"8base init [OPTIONS]
+
+Examples:
+  8base init       initialize current folder
+  8base init dir1  create folder dir1 and initialize"
+`;
+
+exports[`As a user, I can use help flag for see help information for \`init\` command. 2`] = `
+"Project testdir_init initialize success
+Command init complete. Time: 100 ms."
+`;
+
+exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `
+Array [
+  "",
+  "hello.graphql",
+  "hello.ts",
+  "hello2.graphql",
+  "hello2.js",
+  "testdir_init/8base.yml",
+  "testdir_init/package.json",
+  "testdir_init/src:",
+]
+`;

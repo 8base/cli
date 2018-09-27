@@ -1,6 +1,0 @@
-type Mutation {
-
-  generateDeployUrl(build: String): DeployDataResponce
-
-  deploySchema(build: String): Response
-}

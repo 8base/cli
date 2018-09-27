@@ -1,43 +1,65 @@
 #!/usr/bin/env node
 
-import { CommandController } from "./engine";
-import { trace, printHelp, debug, ExecutionConfig, setTraceLevel, TraceLevel } from "./common";
-import { BaseCommand } from "./engine";
+import * as yargs from "yargs";
+import { CommandController } from "./engine/controllers/commandController";
+import { translations, Translations } from "./common/translations";
 
-// print copyright ?
-trace("\nWelcome to 8base command line interface");
+const start = (translations: Translations) => {
+  yargs.usage(translations.i18n.t("8base_usage"));
 
-let command: BaseCommand;
+  CommandController.enumerate()
+    .map(cmd => {
+      yargs.command({
+        command: cmd.name,
+        builder: cmd.builder,
+        describe: cmd.describe,
+        handler: CommandController.wrapHandler(cmd.handler, translations)
+      })
+      .option('d', {
+        hidden: true
+      });
+    }
+  );
 
+  yargs
+    .alias('h', 'help')
+    .option('h', {
+      global: false
+    })
+    .alias('v', 'version')
+    .option('v', {
+      global: false
+    })
+    .option('d', {
+      alias: "debug",
+      describe: "turn on debug logs",
+      type: "boolean"
+    })
+    .recommendCommands()
+    .strict()
+    .fail((msg, err) => {
+      // certain yargs validations throw strings :P
+      const actual = err || new Error(msg);
 
+      // ValidationErrors are already logged, as are package errors
+      if (actual.name !== "ValidationError") {
 
-async function initialize(): Promise<any> {
-    try {
-
-        let config = new ExecutionConfig(process.argv.slice(2));
-
-        if (config.isParameterPresent('d')) {
-            setTraceLevel(TraceLevel.Debug);
-        } else {
-            setTraceLevel(TraceLevel.Trace);
+        if (/Did you mean/.test(actual.message)) {
+          console.error("Unknown command");
         }
 
-        debug("start init");
-        return await CommandController.initialize(config);
-    }
-    catch(err) {
-        setTraceLevel(TraceLevel.Trace);
-        printHelp();
-        throw err;
-    }
-}
+        console.error(actual.message);
+      }
 
-initialize()
-    .then((cmd) => {
-        command = cmd;
-        return CommandController.run(command);
+      process.exit(0);
     })
-    .then(() => {
-        trace("\n" + command.onSuccess());
-    })
-    .catch(err => { trace("\nError = " + err.message); });
+    .argv;
+
+};
+
+translations.init()
+  .then((translations: Translations) => {
+    start(translations);
+  })
+  .catch(err => console.error(err.message));
+

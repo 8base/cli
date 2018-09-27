@@ -1,6 +1,6 @@
 import { ICompiler } from "../../../interfaces/ICompiler";
 import * as fs from "fs";
-import { StaticConfig } from "../../../common";
+import { StaticConfig } from "../../../config";
 import * as path from "path";
 
 export class TypescriptCompiler implements ICompiler {

@@ -1,39 +1,86 @@
-import { BaseCommand } from "../base";
-import { ExecutionConfig } from "../../../common";
-import { InvalidArgument } from "../../../errors";
-import { RemoteActionController } from "../../controllers";
 import * as _ from "lodash";
+import { Utils } from "../../../common/utils";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
+import { UserDataStorage } from "../../../common/userDataStorage";
+import * as yargs from "yargs";
+import { Interactive } from "../../../common/interactive";
+import { GraphqlActions } from "../../../consts/GraphqlActions";
+import { StorageParameters } from "../../../consts/StorageParameters";
+import logout from "../logout";
 
-export default class Login extends BaseCommand {
-    private user: string;
-    private password: string;
-    async run(): Promise<any> {
-        return await RemoteActionController.authorize(this.user, this.password);
+const promptEmail = async (): Promise<string> => {
+  return (await Interactive.ask({ type: "text", name: "email", message: "Email:" })).email;
+};
+
+const promptPassword = async (): Promise<string> => {
+  return (await Interactive.ask(
+    {
+      name: "password",
+      message: "Password:",
+      type: "password"
     }
+  )).password;
+};
 
-    async commandInit(config: ExecutionConfig): Promise<any> {
-        this.user = config.getParameter('u');
-        this.password = config.getParameter('p');
+export default {
+  name: "login",
+  handler: async (params: any, context: Context) => {
 
-        if (_.isNil(this.user)) {
-            throw new InvalidArgument("user");
-        }
+    const data = {
+      email: params.e ? params.e : await promptEmail(),
+      password: params.p ? params.p : await promptPassword()
+    };
 
-        if (_.isNil(this.password)) {
-            throw new InvalidArgument("password");
-        }
+    context.spinner.start(context.i18n.t("login_in_progress"));
+    await logout.handler(params, context);
+
+    const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } }, false);
+
+    UserDataStorage.setValues([
+      {
+        name: StorageParameters.refreshToken,
+        value: result.userLogin.auth.refreshToken
+      },
+      {
+        name: StorageParameters.idToken,
+        value: result.userLogin.auth.idToken
+      },
+      {
+        name: StorageParameters.workspaces,
+        value: result.userLogin.workspaces
+      },
+      {
+        name: StorageParameters.email,
+        value: data.email
+      }
+    ]);
+
+    context.spinner.stop();
+
+    if (result.userLogin.workspaces.length > 1) {
+      await Utils.selectWorkspace(null, context);
+    } else if (result.userLogin.workspaces.length === 1) {
+      await Utils.selectWorkspace({ w: result.userLogin.workspaces[0].workspace }, context);
+    } else {
+      throw new Error("Internal error");
     }
+  },
 
-    usage(): string {
-        return "-u <username> -p <password>";
-    }
+  describe: translations.i18n.t("login_describe"),
 
-    name(): string {
-        return "login";
-    }
-
-    onSuccess(): string {
-        return "login complete successfully";
-    }
-
-}
+  builder: (args: yargs.Argv): yargs.Argv => {
+    return args
+      .usage(translations.i18n.t("login_usage"))
+      .option("e", {
+        alias: 'email',
+        describe: "user email",
+        type: "string"
+      })
+      .option("p", {
+        alias: 'password',
+        describe: "user password",
+        type: "string"
+      });
+  }
+};

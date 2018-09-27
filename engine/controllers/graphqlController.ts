@@ -1,19 +1,16 @@
-import { ProjectDefinition, debug, rootGraphqlSchema, GraphQlFunctionType } from "../../common";
-import { ProjectController } from "../../engine";
 import * as _ from "lodash";
 import * as fs from "fs";
-import * as path from "path";
-import { makeExecutableSchema } from "graphql-tools";
 import { parse, FieldDefinitionNode } from "graphql";
 import { ObjectTypeExtensionNode } from "graphql/language/ast";
-import { graphqlLambda } from 'graphql-server-lambda';
+import { GraphQLFunctionType } from "../../interfaces/Extensions";
+import { ProjectDefinition } from "../../interfaces/Project";
+import { makeExecutableSchema } from "graphql-tools";
+import { rootGraphqlSchema } from "../../consts/RootSchema";
 
 
 export class GraphqlController {
 
-    static loadSchema(project: ProjectDefinition, predefineSchema: string = ""): string {
-        const schemaPaths = GraphqlController.getSchemas(project);
-
+    static loadSchema(schemaPaths: string[], predefineSchema: string = ""): string {
         return _.reduce<string, string>(schemaPaths, (res: string, file: string): string => {
             res += fs.readFileSync(file);
             return res;
@@ -23,15 +20,15 @@ export class GraphqlController {
     /**
      *
      * @param project
-     * @return { funcname: "Query/Mutation" }
+     * @return { functionName: "Query/Mutation" }
      */
-    static defineGqlFunctionsType(project: ProjectDefinition): {[functionName: string]: GraphQlFunctionType} {
+    static defineGqlFunctionsType(gqlSchema: string): {[functionName: string]: GraphQLFunctionType} {
         // bad solution, I think
         // parse graphql file and get function type for all each function
-        if (!project.gqlSchema) {
+        if (!gqlSchema) {
             return;
         }
-        const parsedSchema = parse(project.gqlSchema);
+        const parsedSchema = parse(gqlSchema);
         return _.transform(parsedSchema.definitions, (res: any, data: any) => {
             switch(data.kind) {
                 case "ObjectTypeExtension": {
@@ -49,20 +46,16 @@ export class GraphqlController {
      *
      * @param project
      */
-    static validateSchema(project: ProjectDefinition) {
-        const schema = GraphqlController.loadSchema(project, rootGraphqlSchema());
 
-        const res = makeExecutableSchema({
-            typeDefs: schema,
+    static validateSchema(project: ProjectDefinition) {
+        // TODO: add mutations and queries
+        makeExecutableSchema({
+            typeDefs: project.gqlSchema + rootGraphqlSchema(),
             resolvers: {
                 Mutation: {},
                 Query: {}
             }
         });
-    }
-
-    static lambda(schema: any, context: any, event: any, callback: any) {
-        return graphqlLambda( { schema, context })(event, context, callback);
     }
 
     /**
@@ -73,20 +66,5 @@ export class GraphqlController {
         return _.transform(fields, (res: any[], f: any) => {
             res.push(f.name.value);
         }, []);
-    }
-
-    private static readGraphqlFiles(dir: string): string[] {
-        debug("read all from " + dir);
-        return _.transform(fs.readdirSync(dir), (files: any[], file: string) => {
-            const p = path.join(dir, file);
-            if (fs.statSync(p).isFile() && path.extname(p) === ".graphql") {
-                files.push(p);
-            }
-        }, []);
-    }
-
-    private static getSchemas(project: ProjectDefinition): string[] {
-        const schemas = ProjectController.getSchemaPaths(project);
-        return schemas.length === 0 ? GraphqlController.readGraphqlFiles(project.rootPath) : schemas;
     }
 }
