@@ -1,6 +1,5 @@
 import * as yargs from "yargs";
 import { Context } from "../../../common/context";
-import _ = require("lodash");
 import { translations } from "../../../common/translations";
 import { Utils } from "../../../common/utils";
 import { BuildController } from "../../controllers/buildController";
@@ -16,12 +15,12 @@ export default {
     const { compiledFiles } = await BuildController.compile(context);
 
     const targetFunctionName = params._[1];
-    const resolver = context.project.extensions.resolvers.find(r => r.name === targetFunctionName);
-    if (!resolver) {
+    const functionInfo = context.project.extensions.functions.find(r => r.name === targetFunctionName);
+    if (!functionInfo) {
       throw new Error(`Function ${chalk.yellowBright(targetFunctionName)} not present.`);
     }
 
-    const funcPath = compiledFiles.find((f: any) => f.search(resolver.functionName + "\.") > 0);
+    const funcPath = compiledFiles.find((f: any) => f.search(functionInfo.name + "\.") > 0);
     context.logger.debug(`Function full path: ${funcPath}`);
     const { result, error} = Utils.safeExecution(() => require(funcPath));
 
