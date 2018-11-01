@@ -12,11 +12,13 @@ import { TransformableInfo } from "logform";
 import chalk from "chalk";
 
 const { Client } = require("@8base/api-client");
-
+const pkg = require('../../package.json');
 
 export class Context {
 
   private _project: ProjectDefinition = null;
+
+  version: string;
 
   logger: winston.Logger;
 
@@ -43,6 +45,7 @@ export class Context {
     });
 
     this.i18n = translations.i18n;
+    this.version = pkg.version;
   }
 
   get serverAddress(): string {
