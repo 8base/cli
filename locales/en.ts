@@ -33,11 +33,24 @@ export default {
     "init_describe": "Initialize project",
 
     "invoke_usage": "8base invoke [FUNCTION NAME] [OPTIONS]",
-    "invoke_describe": "invoke deployed function",
+    "invoke_describe": "Invoke deployed function",
 
     "invokelocal_usage": "8base invoke-local [FUNCTION NAME] [OPTIONS]",
-    "invokelocal_describe": "invoke function locally",
+    "invokelocal_describe": "Invoke function locally",
     "invokelocal_in_progress": "invoke local...",
+
+    "export_in_progress": "export...",
+    "export_describe": "Export current workspace schema",
+    "export_usage": "8base export [OPTIONS]",
+
+    "import_schema_in_progress": "import schema...",
+    "import_data_in_progress": "import data...",
+    "import_describe": "Import schema to the current workspace",
+    "import_usage": "8base import [OPTIONS]",
+
+    "import_cant_parse_schema": "Can't parse the schema file.",
+    "import_file_not_exist": "Schema file not existed.",
+    "import_schema_different_version": "Schema file have a different version.",
 
     "logout_usage": "8base logout [OPTIONS]",
     "logout_describe": "Clears local login credentials and invalidates API session",

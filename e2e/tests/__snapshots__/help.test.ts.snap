@@ -7,9 +7,11 @@ Commands:
   index.js config        Advanced configuration
   index.js deploy        Deploy project
   index.js describe      Describe project
+  index.js export        Export current workspace schema
+  index.js import        Import schema to the current workspace
   index.js init          Initialize project
-  index.js invoke        invoke deployed function
-  index.js invoke-local  invoke function locally
+  index.js invoke        Invoke deployed function
+  index.js invoke-local  Invoke function locally
   index.js login         Login with your 8base credentials
   index.js logout        Clears local login credentials and invalidates API
                          session
