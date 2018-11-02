@@ -61,7 +61,11 @@ export default {
 
     "package_usage": "8base package [OPTIONS]",
     "package_describe": "package application without deploying",
-    "package_progress": "package..."
+    "package_progress": "package...",
+
+    "login_timeout_error": "Login time out.",
+
+    "login_password_warning": "Email & password login is only available if you registered using email and password authentication method. You can enable password by going through “forgot password“."
   },
 
   "debug": {

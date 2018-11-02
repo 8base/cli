@@ -3,7 +3,6 @@ import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
-import { Utils } from "../../../common/utils";
 import chalk from "chalk";
 
 export default {
@@ -16,6 +15,7 @@ export default {
       }
       return;
     }
+
     if (params.s) {
       context.storage.setValues([
         {
@@ -27,7 +27,7 @@ export default {
       return;
     }
 
-    await Utils.selectWorkspace(params, context);
+    await context.chooseWorkspace(params.w);
   },
 
   describe: translations.i18n.t("config_describe"),

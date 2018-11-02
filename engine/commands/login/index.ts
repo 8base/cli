@@ -1,70 +1,24 @@
 import * as _ from "lodash";
-import { Utils } from "../../../common/utils";
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
-import { UserDataStorage } from "../../../common/userDataStorage";
 import * as yargs from "yargs";
-import { Interactive } from "../../../common/interactive";
-import { GraphqlActions } from "../../../consts/GraphqlActions";
-import { StorageParameters } from "../../../consts/StorageParameters";
 import logout from "../logout";
+import 'isomorphic-fetch';
+import { StaticConfig } from "../../../config";
+import { passwordLogin } from "./passwordLogin";
+import { webLogin } from "./webLogin";
 
-const promptEmail = async (): Promise<string> => {
-  return (await Interactive.ask({ type: "text", name: "email", message: "Email:" })).email;
-};
-
-const promptPassword = async (): Promise<string> => {
-  return (await Interactive.ask(
-    {
-      name: "password",
-      message: "Password:",
-      type: "password"
-    }
-  )).password;
-};
 
 export default {
   name: "login",
   handler: async (params: any, context: Context) => {
 
-    const data = {
-      email: params.e ? params.e : await promptEmail(),
-      password: params.p ? params.p : await promptPassword()
-    };
+    const result = params.e || params.p ? await passwordLogin(params, context) : await webLogin(params, context);
 
-    context.spinner.start(context.i18n.t("login_in_progress"));
     await logout.handler(params, context);
-
-    const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } }, false);
-
-    UserDataStorage.setValues([
-      {
-        name: StorageParameters.refreshToken,
-        value: result.userLogin.auth.refreshToken
-      },
-      {
-        name: StorageParameters.idToken,
-        value: result.userLogin.auth.idToken
-      },
-      {
-        name: StorageParameters.workspaces,
-        value: result.userLogin.workspaces
-      },
-      {
-        name: StorageParameters.email,
-        value: data.email
-      }
-    ]);
-
+    context.setSessionInfo(result);
     context.spinner.stop();
-
-    if (result.userLogin.workspaces.length > 1) {
-      await Utils.selectWorkspace(null, context);
-    } else if (result.userLogin.workspaces.length === 1) {
-      await Utils.selectWorkspace({ w: result.userLogin.workspaces[0].workspace }, context);
-    } else {
-      throw new Error("Internal error");
-    }
+    await context.chooseWorkspace();
   },
 
   describe: translations.i18n.t("login_describe"),
@@ -81,6 +35,11 @@ export default {
         alias: 'password',
         describe: "user password",
         type: "string"
+      })
+      .option("w", {
+        type: "string",
+        default: StaticConfig.webClientAddress,
+        hidden: true
       });
   }
 };
