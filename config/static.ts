@@ -30,6 +30,10 @@ export class StaticConfig {
         return this.staticData.remoteAddress;
     }
 
+    static get webClientAddress(): string {
+        return this.staticData.webClientAddress;
+    }
+
     static get serviceConfigFileName(): string {
         return path.join(this.staticData.executionDir, "8base.yml");
     }

@@ -10,6 +10,8 @@ import * as Ora from "ora";
 import { Translations } from "./translations";
 import { TransformableInfo } from "logform";
 import chalk from "chalk";
+import { SessionInfo } from "../interfaces/Common";
+import { Utils } from "./utils";
 
 const { Client } = require("@8base/api-client");
 const pkg = require('../../package.json');
@@ -60,6 +62,48 @@ export class Context {
     return StaticConfig;
   }
 
+  setSessionInfo(data: SessionInfo) {
+    this.storage.setValues([
+      {
+        name: StorageParameters.refreshToken,
+        value: data.refreshToken
+      },
+      {
+        name: StorageParameters.idToken,
+        value: data.idToken
+      },
+      {
+        name: StorageParameters.workspaces,
+        value: data.workspaces
+      }
+    ]);
+  }
+
+  async chooseWorkspace(workspaceId?: string) {
+
+    const workspaces = this.storage.getValue(StorageParameters.workspaces);
+
+    if (_.isEmpty(workspaces)) {
+      throw new Error(this.i18n.t("logout_error"));
+    }
+
+    const selectedWorkspaceId = workspaceId ? workspaceId : (await Utils.promptWorkspace(workspaces, this)).id;
+
+    const activeWorkspace = workspaces.find((workspace: any) => workspace.id === selectedWorkspaceId);
+    if (!activeWorkspace) {
+      throw new Error("Workspace " + selectedWorkspaceId + " is absent");
+    }
+
+    this.storage.setValues([
+      {
+        name: StorageParameters.activeWorkspace,
+        value: selectedWorkspaceId
+      }
+    ]);
+
+    this.logger.info(`Workspaces ${chalk.yellowBright(activeWorkspace.name)} is active`);
+  }
+
   async request(query: string, variables: any = null, isLoginRequired = true): Promise<any> {
 
     const remoteAddress = this.serverAddress;
@@ -84,7 +128,7 @@ export class Context {
     }
 
     const workspace = this.storage.getValue(StorageParameters.activeWorkspace);
-    const workspaceId = workspace ? workspace.workspace : null;
+    const workspaceId = workspace ? workspace.id : null;
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));

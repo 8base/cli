@@ -11,7 +11,7 @@ import { StorageParameters } from "../consts/StorageParameters";
 import chalk from "chalk";
 
 
-type workspace = { name: string, workspace: string };
+type workspace = { name: string, id: string };
 
 export namespace Utils {
   export const undefault = (m: any) => {
@@ -118,41 +118,31 @@ export namespace Utils {
 
 
 
-  const promptWorkspace = async (workspaces: workspace[]): Promise<workspace> => {
-    return (await Interactive.ask({
+  export const promptWorkspace = async (workspaces: workspace[], context: Context): Promise<{ id:string }> => {
+
+    if (_.isEmpty(workspaces)) {
+      throw new Error(context.i18n.t("logout_error"));
+    }
+
+    if (workspaces.length === 1) {
+      return workspaces[0];
+    }
+
+    const result = await Interactive.ask({
       name: "workspace",
       type: "select",
       message: "choose workspace",
       choices: workspaces.map(workspace => {
         return {
           title: workspace.name,
-          value: workspace.workspace
+          value: workspace.id
         };
       })
-    })).workspace;
+    });
+
+    return {
+      id: result.workspace
+    };
   };
 
-  export const selectWorkspace = async (params: { w: string }, context: Context) => {
-    const workspaces = context.storage.getValue(StorageParameters.workspaces);
-
-    if (_.isEmpty(workspaces)) {
-      throw new Error(context.i18n.t("logout_error"));
-    }
-
-    const workspaceId = params && params.w ? params.w : await promptWorkspace(workspaces);
-
-    const activeWorkspace = workspaces.find((workspace: any) => workspace.workspace === workspaceId);
-    if (!activeWorkspace) {
-      throw new Error("Workspace " + workspaceId + " is absent");
-    }
-
-    context.storage.setValues([
-      {
-        name: StorageParameters.activeWorkspace,
-        value: activeWorkspace
-      }
-    ]);
-
-    context.logger.info(`Workspaces ${chalk.yellowBright(activeWorkspace.name)} is active`);
-  };
 }
