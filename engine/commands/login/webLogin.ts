@@ -15,7 +15,7 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   context.spinner.start(context.i18n.t("login_in_progress"));
   const session = cuid();
 
-  await opn(`${params.w}/cli?guid=${session}`);
+  await opn(`${params.w}/cli?guid=${session}`, { wait: false });
 
   const server = context.storage.getValue(StorageParameters.serverAddress) || context.config.remoteAddress;
 
