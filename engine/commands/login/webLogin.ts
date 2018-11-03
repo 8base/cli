@@ -22,9 +22,11 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   let retryCount = 20;
   let res = null;
   while(--retryCount > 0) {
+    context.logger.debug(`try to fetch session ${session}`);
     const fetchResult = await fetch(`${server}/loginSessionGet/${session}`);
 
     if (fetchResult.status === 404) {
+      context.logger.debug(`session not present`);
       await sleep(2000);
       continue;
     }
@@ -39,6 +41,8 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   if (!res) {
     throw new Error(context.i18n.t("login_timeout_error"));
   }
+
+  context.setSessionInfo(res);
 
   const workspaces = await context.request(GraphqlActions.listWorkspaces, null, false);
 
