@@ -63,6 +63,24 @@ export class Context {
   }
 
   setSessionInfo(data: SessionInfo) {
+    if (!data) {
+      this.logger.debug("set session info empty data");
+      return;
+    }
+
+    this.logger.debug("set session info...");
+    if (_.isString(data.idToken)) {
+      this.logger.debug(`id token ${data.idToken.substr(0, 10)}`);
+    }
+
+    if (_.isString(data.refreshToken)) {
+      this.logger.debug(`refresh token: ${data.refreshToken.substr(0, 10)}`);
+    }
+
+    if (data.workspaces) {
+      this.logger.debug(`workspaces: ${JSON.stringify(data.workspaces, null, 2)}`);
+    }
+
     this.storage.setValues([
       {
         name: StorageParameters.refreshToken,
@@ -127,8 +145,7 @@ export class Context {
       client.setIdToken(idToken);
     }
 
-    const workspace = this.storage.getValue(StorageParameters.activeWorkspace);
-    const workspaceId = workspace ? workspace.id : null;
+    const workspaceId = this.storage.getValue(StorageParameters.activeWorkspace);
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));
@@ -141,7 +158,7 @@ export class Context {
       client.setEmail(email);
     }
 
-    if (isLoginRequired && (_.isEmpty(idToken) || _.isEmpty(refreshToken) || _.isEmpty(workspaceId))) {
+    if (isLoginRequired && (_.isEmpty(idToken) || _.isEmpty(refreshToken))) {
       throw new Error(this.i18n.t("logout_error"));
     }
 
