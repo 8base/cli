@@ -6,7 +6,6 @@ export default {
     "error_command_end": "{{command}} failed. Error: {{error}}.",
 
     "deploy_in_progress": "deploying...",
-    "invoke_in_progress": "invoking...",
 
     "8base_usage": "Usage: 8base <command> [OPTIONS]",
 
@@ -34,10 +33,11 @@ export default {
 
     "invoke_usage": "8base invoke [FUNCTION NAME] [OPTIONS]",
     "invoke_describe": "Invoke deployed function remotely",
+    "invoke_in_progress": "invoking...",
 
     "invokelocal_usage": "8base invoke-local [FUNCTION NAME] [OPTIONS]",
     "invokelocal_describe": "Invoke function locally",
-    "invokelocal_in_progress": "invoke local...",
+    "invokelocal_in_progress": "invoking...",
 
     "export_in_progress": "exporting...",
     "export_describe": "Export current workspace data schema",
@@ -60,7 +60,7 @@ export default {
     "logout_describe": "Clears local login credentials and invalidates API session",
 
     "logs_usage": "8base logs [FUNCTION NAME] [OPTIONS]",
-    "logs_describe": "view function logs",
+    "logs_describe": "View function logs",
     "logs_in_progress": "getting logs...",
 
     "package_usage": "8base package [OPTIONS]",
