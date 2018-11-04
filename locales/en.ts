@@ -1,76 +1,80 @@
 
 export default {
   "default": {
-    "logout_error": "You are logout",
+    "logout_error": "Please login first by running '8base login'",
 
-    "error_command_end": "Command {{command}} fail. Error: {{error}}.",
+    "error_command_end": "{{command}} failed. Error: {{error}}.",
 
     "deploy_in_progress": "deploying...",
-    "invoke_in_progress": "invoke...",
+    "invoke_in_progress": "invoking...",
 
     "8base_usage": "Usage: 8base <command> [OPTIONS]",
 
-    "login_in_progress": "login...",
+    "login_in_progress": "waiting for authentication...",
     "login_usage": "8base login [OPTIONS]",
-    "login_describe": "Login with your 8base credentials",
+    "login_describe": "Login via browser",
 
     "describe_usage": "8base describe [OPTIONS]",
-    "describe_progress": "describe...",
-    "describe_describe":"Describe project",
+    "describe_progress": "describing...",
+    "describe_describe":"Describe project functions and their types",
 
     "deploy_usage": "8base deploy [OPTIONS]",
     "deploy_describe": "Deploy project",
 
     "config_usage": "8base config [OPTIONS]",
     "config_workspace_option": "workspace id",
-    "config_describe": "Advanced configuration",
+    "config_describe": "Select workspace",
 
     "init_usage": "8base init [OPTIONS]",
     "init_no_dir_example_command": "8base init",
-    "init_with_dir_example_command": "8base init dir1",
+    "init_with_dir_example_command": "8base init my_project",
     "init_example_no_dir": "initialize current folder",
-    "init_example_with_dir": "create folder dir1 and initialize",
+    "init_example_with_dir": "create folder my_project and initialize",
     "init_describe": "Initialize project",
 
     "invoke_usage": "8base invoke [FUNCTION NAME] [OPTIONS]",
-    "invoke_describe": "Invoke deployed function",
+    "invoke_describe": "Invoke deployed function remotely",
 
     "invokelocal_usage": "8base invoke-local [FUNCTION NAME] [OPTIONS]",
     "invokelocal_describe": "Invoke function locally",
     "invokelocal_in_progress": "invoke local...",
 
-    "export_in_progress": "export...",
-    "export_describe": "Export current workspace schema",
+    "export_in_progress": "exporting...",
+    "export_describe": "Export current workspace data schema",
     "export_usage": "8base export [OPTIONS]",
+    "export_file_describe": "Destination file",
 
-    "import_schema_in_progress": "import schema...",
-    "import_data_in_progress": "import data...",
-    "import_describe": "Import schema to the current workspace",
+    "import_schema_in_progress": "importing schema...",
+    "import_data_in_progress": "importing data...",
+    "import_describe": "Import schema file to the current workspace",
     "import_usage": "8base import [OPTIONS]",
+    "import_file_describe": "Path to file with schema",
+    "import_schema_describe": "Import schema",
+    "import_data_describe": "Import data",
 
     "import_cant_parse_schema": "Can't parse the schema file.",
-    "import_file_not_exist": "Schema file not existed.",
-    "import_schema_different_version": "Schema file have a different version.",
+    "import_file_not_exist": "Schema file does not exist.",
+    "import_schema_different_version": "Schema file has a different version.",
 
     "logout_usage": "8base logout [OPTIONS]",
     "logout_describe": "Clears local login credentials and invalidates API session",
 
     "logs_usage": "8base logs [FUNCTION NAME] [OPTIONS]",
     "logs_describe": "view function logs",
-    "logs_in_progress": "get logs...",
+    "logs_in_progress": "getting logs...",
 
     "package_usage": "8base package [OPTIONS]",
-    "package_describe": "package application without deploying",
-    "package_progress": "package...",
+    "package_describe": "Package application without deploying",
+    "package_progress": "packaging...",
 
     "login_timeout_error": "Login time out.",
 
-    "login_password_warning": "Email & password login is only available if you registered using email and password authentication method. You can enable password by going through “forgot password“."
+    "login_password_warning": "Email & password login is only available if you registered using email and password authentication method. You can enable password by signing up again with the same email."
   },
 
   "debug": {
     "remote_address": "remote address: {{- remoteAddress}}",
-    "start_request": "start request",
+    "start_request": "begin request",
     "request_complete": "request complete",
     "reset_id_token": "reset id token",
     "set_id_token": "set id token",

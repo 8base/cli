@@ -12,10 +12,9 @@ import { webLogin } from "./webLogin";
 export default {
   name: "login",
   handler: async (params: any, context: Context) => {
+    await logout.handler(params, context);
 
     const result = params.e || params.p ? await passwordLogin(params, context) : await webLogin(params, context);
-
-    await logout.handler(params, context);
     context.setSessionInfo(result);
     context.spinner.stop();
     await context.chooseWorkspace();

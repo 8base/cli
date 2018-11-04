@@ -21,7 +21,7 @@ const start = (translations: Translations) => {
     }
   );
 
-  yargs
+  const argv = yargs
     .alias('h', 'help')
     .option('h', {
       global: false
@@ -55,6 +55,9 @@ const start = (translations: Translations) => {
     })
     .argv;
 
+    if (!argv._[0]) {
+      yargs.showHelp();
+    }
 };
 
 translations.init()

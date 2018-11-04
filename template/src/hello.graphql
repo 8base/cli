@@ -3,5 +3,5 @@ type HelloResult {
 }
 
 extend type Query {
-  hello(name: String): HelloResult
+  hello(name: String!): HelloResult
 }
