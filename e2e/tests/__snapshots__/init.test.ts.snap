@@ -4,13 +4,13 @@ exports[`As a user, I can use help flag for see help information for \`init\` co
 "8base init [OPTIONS]
 
 Examples:
-  8base init       initialize current folder
-  8base init dir1  create folder dir1 and initialize"
+  8base init             initialize current folder
+  8base init my_project  create folder my_project and initialize"
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 2`] = `
 "Project testdir_init initialize success
-Command init complete. Time: 100 ms."
+init done. Time: 100 ms."
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `
