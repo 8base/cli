@@ -50,7 +50,7 @@
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "graceful-fs": "^4.1.11",
-    "graphql": "^0.12.3",
+    "graphql": "^0.13.0",
     "graphql-request": "^1.4.1",
     "graphql-server-lambda": "^1.3.2",
     "graphql-tools": "^2.12.0",
