@@ -1,7 +1,7 @@
 export default async (event: any) => {
-  return event && event.data ? {
+  return {
+    data: {
       message: `Hello ${event.data.name}`
-  } : {
-    message: "Hello world!"
+    }
   };
 };

@@ -23,9 +23,9 @@ export default {
       throw new Error(translations.i18n.t("import_file_not_exist"));
     }
 
-    if (context.version !== schema.version) {
-      throw new Error(translations.i18n.t("import_schema_different_version"));
-    }
+    // if (context.version !== schema.version) {
+    //   throw new Error(translations.i18n.t("import_schema_different_version"));
+    // }
 
     if (params.schema) {
       context.spinner.start(context.i18n.t("import_schema_in_progress"));
@@ -52,14 +52,14 @@ export default {
       .option("f", {
         alias: 'file',
         demandOption: true,
-        describe: "File with importing schema",
+        describe: translations.i18n.t("import_file_describe"),
         type: "string"
       }).option("schema", {
-        describe: "Enable import tables schema",
+        describe: translations.i18n.t("import_schema_describe"),
         default: true,
         type: "boolean"
       }).option("data", {
-        describe: "Enable import data",
+        describe: translations.i18n.t("import_data_describe"),
         default: true,
         type: "boolean"
       });

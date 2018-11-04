@@ -30,7 +30,7 @@ export default {
       .usage(translations.i18n.t("export_usage"))
       .option("f", {
         alias: 'file',
-        describe: "Destination file for export",
+        describe: translations.i18n.t("export_file_describe"),
         type: "string"
       });
   }
