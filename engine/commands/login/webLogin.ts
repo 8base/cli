@@ -6,16 +6,14 @@ import * as cuid from "cuid";
 const opn = require("opn");
 import 'isomorphic-fetch';
 import { SessionInfo } from "../../../interfaces/Common";
+import { Utils } from "../../../common/utils";
 
-const sleep = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
 
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
   context.spinner.start(context.i18n.t("login_in_progress"));
   const session = cuid();
 
-  await opn(`${params.w}/cli?guid=${session}`, { wait: false });
+  await opn(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
 
   const server = context.storage.getValue(StorageParameters.serverAddress) || context.config.remoteAddress;
 
@@ -27,7 +25,7 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
 
     if (fetchResult.status === 404) {
       context.logger.debug(`session not present`);
-      await sleep(2000);
+      await Utils.sleep(2000);
       continue;
     }
     if (fetchResult.status !== 200) {
