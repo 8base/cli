@@ -7,6 +7,7 @@ const opn = require("opn");
 import 'isomorphic-fetch';
 import { SessionInfo } from "../../../interfaces/Common";
 import { Utils } from "../../../common/utils";
+import { Selectors } from "../../../common/selectors";
 
 
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
@@ -15,13 +16,11 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
 
   await opn(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
 
-  const server = context.storage.getValue(StorageParameters.serverAddress) || context.config.remoteAddress;
-
   let retryCount = 20;
   let res = null;
   while(--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
-    const fetchResult = await fetch(`${server}/loginSessionGet/${session}`);
+    const fetchResult = await fetch(`${Selectors.getServerAddress(context)}/loginSessionGet/${session}`);
 
     if (fetchResult.status === 404) {
       context.logger.debug(`session not present`);

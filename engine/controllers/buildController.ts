@@ -6,6 +6,7 @@ import { ProjectController } from "./projectController";
 import { getCompiler } from "../compilers";
 import { Context } from "../../common/context";
 import { StorageParameters } from "../../consts/StorageParameters";
+import { Selectors } from "../../common/selectors";
 
 
 export class BuildController {
@@ -71,7 +72,7 @@ export class BuildController {
             fs.readFileSync(context.config.functionWrapperPath)
                 .toString()
                 .replace("__functionname__", functionPath)
-                .replace("__remote_server_endpoint__", context.storage.getValue(StorageParameters.serverAddress) || context.config.remoteAddress)
+                .replace("__remote_server_endpoint__", Selectors.getServerAddress(context))
         );
 
         context.logger.debug("write func wrapper compete");
