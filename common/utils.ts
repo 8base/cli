@@ -145,4 +145,15 @@ export namespace Utils {
     };
   };
 
+  export const sleep = (ms: number): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  export const trimLastSlash = (url: string ): string => {
+    if (!_.isString(url) || url.length === 0) {
+      return "";
+    }
+
+    return url[url.length - 1] === "/" ? url.substr(0, url.length - 1) : url;
+  };
 }
