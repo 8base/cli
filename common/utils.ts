@@ -74,11 +74,11 @@ export namespace Utils {
   };
 
   export const archive = async (
-    sourceDirectories: { source: string, dist?: string }[],
+    sourceDirectories: string[],
     outDir: string,
-    buildName: string,
+    fileName: string,
     context: Context): Promise<string> => {
-    const fullPath = path.join(outDir, buildName + '.zip');
+    const fullPath = path.join(outDir, fileName + '.zip');
 
     sourceDirectories.map(p => context.logger.debug("archive source path = " + p));
     context.logger.debug("archive dest path = " + fullPath);
@@ -89,14 +89,20 @@ export namespace Utils {
 
       zip.pipe(write);
 
-      sourceDirectories.forEach((directory) => {
-        context.logger.debug("archive files from directory = " + directory.source);
-        zip.directory(directory.source, directory.dist ? directory.dist : "");
+      sourceDirectories.forEach((sourcePath) => {
+        context.logger.debug("archive files from directory = " + sourcePath + " is file = " + fs.statSync(sourcePath).isFile());
+
+        if (fs.statSync(sourcePath).isFile()) {
+          context.logger.warn("Archiving file isn't supported.");
+          return;
+        }
+
+        zip.directory(sourcePath, false);
       });
 
       zip.on('error', (err: any) => {
         context.logger.debug('Error while zipping build: ' + err);
-        reject();
+        reject(new Error(err));
       });
 
       zip.on('finish', (err: any) => {
@@ -110,6 +116,10 @@ export namespace Utils {
       zip.on('end', (err: any) => {
         context.logger.debug('end');
         resolve(fullPath);
+      });
+
+      zip.on('data', (data: any, a2: any) => {
+        // console.log(a2.toString());
       });
 
       zip.finalize();

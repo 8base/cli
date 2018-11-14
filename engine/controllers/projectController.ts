@@ -54,6 +54,16 @@ export class ProjectController {
     fs.writeFileSync(graphqlFilePath, project.gqlSchema);
   }
 
+  static saveProject(project: ProjectDefinition, outDir: string) {
+    const projectObject = {
+      name: project.name,
+      functions: project.extensions.functions
+    };
+
+    const projectFilePath = path.join(outDir, 'project.json');
+    return fs.writeFileSync(projectFilePath, JSON.stringify(projectObject, null, 2));
+  }
+
   static saveMetaDataFile(project: ProjectDefinition, outDir: string) {
     const summaryFile = path.join(outDir, '__summary__functions.json');
     fs.writeFileSync(summaryFile, JSON.stringify(

@@ -42,10 +42,6 @@ export class StaticConfig {
         return "package.json";
     }
 
-    static get modules(): string {
-        return path.join(this.staticData.executionDir, "node_modules");
-    }
-
     static get functionWrapperPath(): string {
         return this.staticData.functionWrapperPath;
     }
@@ -54,13 +50,21 @@ export class StaticConfig {
      * Compiler paths
      */
 
-    static buildRootDir = path.join(StaticConfig.rootExecutionDir, '.build');
+    // static buildRootDir = '.build';
 
-    static buildDir = path.join(StaticConfig.buildRootDir, '/dist');
+    static buildRootFolder = '.build';
+    static buildDistFolder = '/dist';
+    static modulesFolder = 'node_modules';
+
+    static buildRootDirPath = path.join(StaticConfig.rootExecutionDir, StaticConfig.buildRootFolder);
+
+    static buildDistPath = path.join(StaticConfig.buildRootDirPath, StaticConfig.buildDistFolder);
+    static summaryDir = path.join(StaticConfig.buildRootDirPath, '/summary');
+
+    static compiledPath = path.join(StaticConfig.buildRootDirPath, '/compiled');
 
     static FunctionHandlerExt = ".js";
 
-    static summaryDir = path.join(StaticConfig.buildRootDir, '/summary');
 
     static supportedCompileExtension = new Set<string>([".ts", ".js"]);
 }

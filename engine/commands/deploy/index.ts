@@ -15,27 +15,15 @@ export default {
       GraphqlController.validateSchema(context.project);
     }
 
-    const buildDir = await BuildController.compile(context);
+    const buildDir = await BuildController.package(context);
     context.logger.debug(`build dir: ${buildDir}`);
-
-    const archiveBuildPath = await Utils.archive(
-      [{ source: buildDir.build }, { source: context.config.modules, dist: "node_modules" }],
-      context.config.buildRootDir,
-      "build",
-      context);
-
-    const archiveSummaryPath = await Utils.archive(
-      [{ source: buildDir.summary }],
-      context.config.buildRootDir,
-      "summary",
-      context);
 
     const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy);
 
-    await Utils.upload(prepareDeploy.uploadMetaDataUrl, archiveSummaryPath, context);
+    await Utils.upload(prepareDeploy.uploadMetaDataUrl, buildDir.summary, context);
     context.logger.debug("upload summary data complete");
 
-    await Utils.upload(prepareDeploy.uploadBuildUrl, archiveBuildPath, context);
+    await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
     context.logger.debug("upload source code complete");
 
     await context.request(GraphqlActions.deploy, { data: { buildName: prepareDeploy.buildName } });

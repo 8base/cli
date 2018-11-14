@@ -12,7 +12,7 @@ export default {
 
     context.spinner.start(context.i18n.t("invokelocal_in_progress"));
 
-    const { compiledFiles } = await BuildController.compile(context);
+    const { compiledFiles } = await BuildController.compile(context, context.config.compiledPath);
 
     const targetFunctionName = params._[1];
     const functionInfo = context.project.extensions.functions.find(r => r.name === targetFunctionName);

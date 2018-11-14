@@ -9,21 +9,8 @@ export default {
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("package_progress"));
 
-    const buildDir = await BuildController.compile(context);
+    const buildDir = await BuildController.package(context);
     context.logger.debug(`build dir ${JSON.stringify(buildDir, null, 2)}`);
-
-    await Utils.archive(
-      [{ source: buildDir.build }, { source: context.config.modules, dist: "node_modules" }],
-      context.config.buildRootDir,
-      "build",
-      context);
-
-    await Utils.archive(
-      [{ source: buildDir.summary }],
-      context.config.buildRootDir,
-      "summary",
-      context);
-
   },
   describe: translations.i18n.t("package_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
