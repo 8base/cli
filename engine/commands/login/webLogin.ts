@@ -16,7 +16,9 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
 
   await opn(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
 
-  let retryCount = 20;
+  const timeoutMs = 2000;
+  let retryCount = 150; // 150 * 2s = 300s = 5 min
+
   let res = null;
   while(--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
@@ -24,7 +26,7 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
 
     if (fetchResult.status === 404) {
       context.logger.debug(`session not present`);
-      await Utils.sleep(2000);
+      await Utils.sleep(timeoutMs);
       continue;
     }
     if (fetchResult.status !== 200) {
