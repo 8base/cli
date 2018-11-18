@@ -1,12 +1,7 @@
 import * as fs from "fs-extra";
-import * as path from 'path';
-import * as glob from "glob";
-import { FunctionDefinition } from "../../interfaces/Extensions";
 import { ProjectController } from "./projectController";
 import { getCompiler } from "../compilers";
 import { Context } from "../../common/context";
-import { Selectors } from "../../common/selectors";
-import { BuildDirectory } from "../../interfaces/Common";
 import { Utils } from "../../common/utils";
 import _ = require("lodash");
 import { Readable } from "stream";

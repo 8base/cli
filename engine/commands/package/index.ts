@@ -1,4 +1,3 @@
-import { Utils } from "../../../common/utils";
 import { BuildController } from "../../controllers/buildController";
 import * as yargs from "yargs";
 import * as fs from "fs-extra";
