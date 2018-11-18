@@ -50,18 +50,16 @@ export class StaticConfig {
      * Compiler paths
      */
 
-    // static buildRootDir = '.build';
-
     static buildRootFolder = '.build';
-    static buildDistFolder = '/dist';
+    static buildDistFolder = 'dist';
     static modulesFolder = 'node_modules';
+    static metaFolder = "meta";
+    static packageFolder = "package";
 
     static buildRootDirPath = path.join(StaticConfig.rootExecutionDir, StaticConfig.buildRootFolder);
-
     static buildDistPath = path.join(StaticConfig.buildRootDirPath, StaticConfig.buildDistFolder);
-    static summaryDir = path.join(StaticConfig.buildRootDirPath, '/summary');
-
-    static compiledPath = path.join(StaticConfig.buildRootDirPath, '/compiled');
+    static metaDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.metaFolder);
+    static packageDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.packageFolder);
 
     static FunctionHandlerExt = ".js";
 

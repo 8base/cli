@@ -5,7 +5,7 @@ export default {
 
     "error_command_end": "{{command}} failed. Error: {{error}}.",
 
-    "deploy_in_progress": "deploying...",
+    "deploy_in_progress": "deploying (step: {{status}})...",
 
     "8base_usage": "Usage: 8base <command> [OPTIONS]",
 
