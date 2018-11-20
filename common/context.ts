@@ -152,12 +152,6 @@ export class Context {
       client.setWorkspaceId(workspaceId);
     }
 
-    const email = this.storage.getValue(StorageParameters.email);
-    if (email) {
-      this.logger.debug(this.i18n.t("debug:set_email", { email }));
-      client.setEmail(email);
-    }
-
     if (isLoginRequired && (_.isEmpty(idToken) || _.isEmpty(refreshToken))) {
       throw new Error(this.i18n.t("logout_error"));
     }
