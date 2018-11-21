@@ -50,8 +50,8 @@ export namespace Utils {
     context.logger.debug("start upload file");
     context.logger.debug("url: " + url);
 
-    await streamToBuffer(fileStream, (err: Error, data: any) => {
-      return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
+      streamToBuffer(fileStream, (err: Error, data: any) => {
         request({
             method: "PUT",
             url: url,
