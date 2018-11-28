@@ -1,8 +1,7 @@
 export enum ExtensionType {
     resolver = "resolver",
     trigger = "trigger",
-    webhook = "webhook",
-    task = "task"
+    webhook = "webhook"
 }
 
 /*
@@ -24,12 +23,6 @@ export interface ResolverDefinition extends BaseDefinition {
     gqlType: GraphQLFunctionType;
 
     gqlSchemaPath: string;
-}
-
-export interface TaskDefinition extends BaseDefinition {}
-
-export interface ScheduleDefinition extends BaseDefinition {
-    scheduleExpression: string;
 }
 
 /*
@@ -81,8 +74,6 @@ export interface WebhookDefinition extends BaseDefinition {
 
 export interface ExtensionsContainer {
     resolvers: ResolverDefinition[];
-    tasks: TaskDefinition[];
-    schedules: ScheduleDefinition[];
     functions: FunctionDefinition[];
     triggers: TriggerDefinition[];
     webhooks: WebhookDefinition[];
