@@ -5,6 +5,7 @@ import * as yargs from "yargs";
 import { Context } from "../../../common/context";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 import { translations } from "../../../common/translations";
+import { DeployStatus } from "../../../consts/DeployStatus";
 
 export default {
   name: "deploy",
@@ -32,12 +33,12 @@ export default {
     do {
       result = (await context.request(GraphqlActions.deployStatus, { buildName: prepareDeploy.buildName })).deployStatus;
       context.logger.debug(result);
-      await Utils.sleep(1000);
+      await Utils.sleep(2000);
       context.spinner.stop();
-      context.spinner.start(context.i18n.t("deploy_in_progress", { status: result.status }));
-    } while (result.status !== "complete_success" && result.status !== "complete_error");
+      context.spinner.start(context.i18n.t("deploy_in_progress", { status: result.status, message: result.message }));
+    } while (result.status !== DeployStatus.completeSuccess && result.status !== DeployStatus.completeError);
 
-    if (result.status === "complete_error") {
+    if (result.status === DeployStatus.completeError) {
       throw new Error(result.message);
     }
 

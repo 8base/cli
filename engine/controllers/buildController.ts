@@ -70,11 +70,9 @@ export class BuildController {
       context.config.modulesFolder
     ];
 
-    const sourceToArchive = _.flow(
-      () => BuildController.getSourceBuildData(context),
-      (directories: string[]) => _.filter(directories, dir => !excludedDirectories.includes(dir)),
-      (directories: string[]) => _.map(directories, dir => { return { dist: dir, source: dir }; })
-    )();
+    const sourceToArchive = BuildController.getSourceBuildData(context)
+      .filter(dir => !excludedDirectories.includes(dir))
+      .map(dir => ({ dist: dir, source: dir }));
 
     return Utils.archiveToMemory(sourceToArchive, context);
   }
