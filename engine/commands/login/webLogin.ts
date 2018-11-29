@@ -1,7 +1,5 @@
-import * as _ from "lodash";
 import { Context } from "../../../common/context";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-import { StorageParameters } from "../../../consts/StorageParameters";
 import * as cuid from "cuid";
 const opn = require("opn");
 import 'isomorphic-fetch';

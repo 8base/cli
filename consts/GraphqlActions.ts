@@ -37,12 +37,18 @@ export const GraphqlActions = {
         endTime: $endTime
       )
   }`,
+  deployStatus: `
+    query DeployStatus($buildName: String!) {
+      deployStatus(buildName: $buildName) {
+        status, message
+      }
+    }`,
   prepareDeploy: `mutation PrepareDeploy {
     prepareDeploy {
       uploadBuildUrl uploadMetaDataUrl buildName
     }
   }`,
-  deploy: `mutation Deploy($data: DeployData) {
+  deploy: `mutation Deploy($data: DeployingBuildInput) {
     deploy(data: $data)
   }`,
   describe: `query {

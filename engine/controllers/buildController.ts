@@ -1,91 +1,104 @@
 import * as fs from "fs-extra";
-import * as path from 'path';
-import * as glob from "glob";
-import { FunctionDefinition } from "../../interfaces/Extensions";
 import { ProjectController } from "./projectController";
 import { getCompiler } from "../compilers";
 import { Context } from "../../common/context";
-import { StorageParameters } from "../../consts/StorageParameters";
-import { Selectors } from "../../common/selectors";
+import { Utils } from "../../common/utils";
+import _ = require("lodash");
+import { Readable } from "stream";
 
+
+/*
+  paths:
+    /project_dir
+      - user's files / folders
+      - node_modules
+      - .build
+        - dist (use for local compile when invoke-local command is invoked
+        - meta (use for build meta for project)
+        - package (use for package command)
+ */
 
 export class BuildController {
 
-    static async compile(context: Context): Promise<{ build: string, summary: string, compiledFiles: string[] }> {
+  /*
+    Function workflow
+      1. Clean up directory
+      2. Create Metadata file
+      3. Create Schema file and save it
+      4. Archive build and summary
+  */
 
-        BuildController.clean(context);
+  static async package(context: Context): Promise<{ build: Readable, meta: Readable }> {
 
-        const files = ProjectController.getFunctionSourceCode(context);
+    BuildController.prepare(context);
 
-        BuildController.prepare(context);
+    return {
+      build: await BuildController.packageSources(context),
+      meta: await BuildController.packageMetadata(context)
+    };
+  }
 
-        context.logger.debug("resolve compilers");
-        const compiler = getCompiler(files, context);
+  // compile use only for invoke-local command
+  static async compile(context: Context): Promise<{ compiledFiles: string[] }> {
 
-        const compiledFiles = await compiler.compile(context.config.buildDir);
-        context.logger.debug("compiled files = " + compiledFiles);
+    BuildController.prepare(context);
 
-        BuildController.makeFunctionHandlers(context.project.extensions.functions, context);
+    const files = ProjectController.getFunctionSourceCode(context);
 
-        ProjectController.saveMetaDataFile(context.project, context.config.summaryDir);
+    context.logger.debug("resolve compilers");
+    const compiler = getCompiler(files, context);
 
-        ProjectController.saveSchema(context.project, context.config.summaryDir);
+    const compiledFiles = await compiler.compile(context.config.buildDistFolder);
+    context.logger.debug("compiled files = " + compiledFiles);
 
-        return {
-            build: context.config.buildDir,
-            summary: context.config.summaryDir,
-            compiledFiles
-        };
-    }
+    return {
+      compiledFiles
+    };
+  }
 
-    /**
-     * Private functions
-     */
+  /**
+   * Private functions
+   */
 
-    private static makeFunctionHandlers(functions: FunctionDefinition[], context: Context) {
+  private static packageSources(context: Context): Promise<Readable> {
 
-        functions.forEach(func => {
-            context.logger.debug("process function = " + func.name);
+    const excludedDirectories = [
+      context.config.buildDistFolder,
+      context.config.packageFolder,
+      context.config.metaFolder,
+      context.config.buildRootFolder,
+      context.config.modulesFolder
+    ];
 
-            const ext = path.parse(func.pathToFunction).ext;
+    const sourceToArchive = BuildController.getSourceBuildData(context)
+      .filter(dir => !excludedDirectories.includes(dir))
+      .map(dir => ({ dist: dir, source: dir }));
 
-            const mask = path.join(context.config.buildDir, func.pathToFunction.replace(ext, ".*"));
+    return Utils.archiveToMemory(sourceToArchive, context);
+  }
 
-            if (glob.sync(mask).length !== 1) {
-                throw new Error("target compiled file " + func.pathToFunction + " not exist");
-            }
+  private static packageMetadata(context: Context): Promise<Readable> {
+    const metaDir = context.config.metaDir;
 
-            BuildController.makeFunctionWrapper(func.name, func.pathToFunction.replace(ext, ""), context);
-        });
-    }
+    ProjectController.saveMetaDataFile(context.project, metaDir);
+    ProjectController.saveSchema(context.project, metaDir);
+    ProjectController.saveProject(context.project, metaDir);
 
-    private static makeFunctionWrapper(name: string, functionPath: string, context: Context) {
+    return Utils.archiveToMemory([ { source: metaDir }], context);
+  }
 
-        const fullWrapperFuncPath = path.join(context.config.buildDir, name.concat(context.config.FunctionHandlerExt));
+  private static getSourceBuildData(context: Context): string[] {
+    return fs.readdirSync(context.config.rootExecutionDir);
+  }
 
-        context.logger.debug("full function path = " + fullWrapperFuncPath);
+  private static prepare(context: Context) {
 
-        fs.writeFileSync(
+    fs.removeSync(context.config.buildRootDirPath);
 
-            fullWrapperFuncPath,
-
-            fs.readFileSync(context.config.functionWrapperPath)
-                .toString()
-                .replace("__functionname__", functionPath)
-                .replace("__remote_server_endpoint__", Selectors.getServerAddress(context))
-        );
-
-        context.logger.debug("write func wrapper compete");
-    }
-
-    private static clean(context: Context) {
-        fs.removeSync(context.config.buildRootDir);
-    }
-
-    private static prepare(context: Context) {
-        fs.mkdirpSync(context.config.buildDir);
-        fs.mkdirpSync(context.config.summaryDir);
-    }
+    fs.mkdirpSync(context.config.buildDistPath);
+    fs.mkdirpSync(context.config.metaDir);
+    fs.mkdirpSync(context.config.packageDir);
+  }
 }
 
 

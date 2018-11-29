@@ -6,7 +6,7 @@ import { Context } from "../../common/context";
 
 export class TypescriptCompiler implements ICompiler {
 
-  private files: string[];
+  readonly files: string[];
   private context: Context;
 
   constructor(files: string[], context: Context) {

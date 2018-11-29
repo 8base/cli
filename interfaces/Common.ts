@@ -3,3 +3,5 @@ export interface SessionInfo {
   refreshToken: string;
   workspaces: { name: string, id: string }[];
 }
+
+export type BuildDirectory = string;

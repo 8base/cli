@@ -6,10 +6,10 @@ import * as archiver from "archiver";
 import { Interactive } from "./interactive";
 import * as _ from "lodash";
 import { Context } from "./context";
-import { StorageParameters } from "../consts/StorageParameters";
+import { Readable } from "stream";
 
-import chalk from "chalk";
-
+const MemoryStream = require("memorystream");
+const streamToBuffer = require("stream-to-buffer");
 
 type workspace = { name: string, id: string };
 
@@ -46,70 +46,69 @@ export namespace Utils {
     return targetDirectory;
   };
 
-  export const upload = async (url: any, filepath: any, context: Context): Promise<any> => {
-    const data = fs.readFileSync(filepath);
+  export const upload = async (url: string, fileStream: Readable, context: Context): Promise<void> => {
     context.logger.debug("start upload file");
     context.logger.debug("url: " + url);
-    context.logger.debug("filepath: " + filepath);
-    return new Promise<any>((resolve, reject) => {
-      request({
-        method: "PUT",
-        url: url,
-        body: data,
-        headers: {
-          'Content-Length': data.length
-        }
-      },
-        (err: any, res: any, body: any) => {
-          if (err) {
-            return reject(err);
-          }
-          if (res && res.statusCode !== 200) {
-            return reject(new Error(res.body));
-          }
-          context.logger.debug("upload file \"" + filepath + "\" success");
-          resolve(path.basename(filepath));
-        });
+
+    return new Promise<void>((resolve, reject) => {
+      streamToBuffer(fileStream, (err: Error, data: any) => {
+        request({
+            method: "PUT",
+            url: url,
+            body: data,
+            headers: {
+              'Content-Length': data.length
+            }
+          },
+          (err: any, res: any, body: any) => {
+            if (err) {
+              return reject(err);
+            }
+            if (res && res.statusCode !== 200) {
+              return reject(new Error(res.body));
+            }
+            context.logger.debug("upload file success");
+            resolve();
+          });
+      });
     });
   };
 
-  export const archive = async (
-    sourceDirectories: { source: string, dist?: string }[],
-    outDir: string,
-    buildName: string,
-    context: Context): Promise<string> => {
-    const fullPath = path.join(outDir, buildName + '.zip');
+  export const archiveToMemory = async (directories: { source: string, dist?: string }[], context: Context): Promise<Readable> => {
 
-    sourceDirectories.map(p => context.logger.debug("archive source path = " + p));
-    context.logger.debug("archive dest path = " + fullPath);
+    const memoryStream = new MemoryStream(null);
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<Readable>((resolve, reject) => {
       const zip = archiver("zip", { zlib: { level: 8 } });
-      const write = fs.createWriteStream(fullPath);
 
-      zip.pipe(write);
+      zip.pipe(memoryStream);
 
-      sourceDirectories.forEach((directory) => {
-        context.logger.debug("archive files from directory = " + directory.source);
-        zip.directory(directory.source, directory.dist ? directory.dist : "");
+      directories.forEach((sourcePath) => {
+        const source = fs.statSync(sourcePath.source);
+        context.logger.debug("archive files from directory = " + sourcePath.source + " dist = " + sourcePath.dist + " is file = " + source.isFile());
+
+        source.isFile()
+          ? zip.file(sourcePath.source, { })
+          : zip.directory(sourcePath.source, sourcePath.dist || false);
       });
 
       zip.on('error', (err: any) => {
         context.logger.debug('Error while zipping build: ' + err);
-        reject();
+        reject(new Error(err));
       });
 
-      zip.on('finish', (err: any) => {
-        context.logger.debug('finish');
+      zip.on('finish', () => {
+        context.logger.debug('zipping finish');
+        memoryStream.end();
+        resolve(memoryStream);
       });
 
-      zip.on('close', (err: any) => {
-        context.logger.debug('close');
+      zip.on('end', () => {
+        context.logger.debug('zipping end');
       });
 
-      zip.on('end', (err: any) => {
-        context.logger.debug('end');
-        resolve(fullPath);
+      zip.on('warning', (error: archiver.ArchiverError) => {
+        context.logger.warn(error);
       });
 
       zip.finalize();
