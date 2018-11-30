@@ -10,7 +10,7 @@ export default {
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("package_progress"));
 
-    context.project;
+    context.initializeProject();
 
     const { build, meta } = await BuildController.package(context);
 

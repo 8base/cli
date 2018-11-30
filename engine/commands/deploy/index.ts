@@ -12,11 +12,11 @@ export default {
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("deploy_in_progress", { status: "prepare to upload"}));
 
+    context.initializeProject();
+
     if (params["validate_schema"]) {
       GraphqlController.validateSchema(context.project);
     }
-
-    context.project;
 
     const buildDir = await BuildController.package(context);
     context.logger.debug(`build dir: ${buildDir}`);

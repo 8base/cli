@@ -10,7 +10,7 @@ export default {
   name: "invoke-local",
   handler: async (params: any, context: Context) => {
 
-    context.project;
+    context.initializeProject();
 
     context.spinner.start(context.i18n.t("invokelocal_in_progress"));
 

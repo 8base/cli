@@ -9,7 +9,7 @@ export default {
   name: "invoke",
   handler: async (params: any, context: Context) => {
 
-    context.project;
+    context.initializeProject();
 
     context.spinner.start(context.i18n.t("invoke_in_progress"));
 

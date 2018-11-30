@@ -76,7 +76,7 @@ export default {
   name: "describe",
   handler: async (params: any, context: Context) => {
 
-    context.project;
+    context.initializeProject();
 
     context.spinner.start(context.i18n.t("describe_progress"));
     const result = (await context.request(GraphqlActions.describe)).describeExtensions;
