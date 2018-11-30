@@ -179,6 +179,10 @@ export class Context {
     return result;
   }
 
+  initializeProject() {
+    this.project;
+  }
+
   get project(): ProjectDefinition {
     if (_.isNil(this._project)) {
       this._project = ProjectController.initialize(this);

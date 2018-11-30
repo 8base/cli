@@ -10,6 +10,8 @@ export default {
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("package_progress"));
 
+    context.initializeProject();
+
     const { build, meta } = await BuildController.package(context);
 
     build.pipe(fs.createWriteStream(path.join(context.config.packageDir, "build.zip")));
