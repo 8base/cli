@@ -79,7 +79,7 @@ export namespace Utils {
     const memoryStream = new MemoryStream(null);
 
     return new Promise<Readable>((resolve, reject) => {
-      const zip = archiver("zip", { zlib: { level: 8 } });
+      const zip = archiver("zip", { zlib: { level: 0 } });
 
       zip.pipe(memoryStream);
 
