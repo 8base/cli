@@ -48,7 +48,7 @@ export class BuildController {
     context.logger.debug("resolve compilers");
     const compiler = getCompiler(files, context);
 
-    const compiledFiles = await compiler.compile(context.config.buildDistFolder);
+    const compiledFiles = await compiler.compile(context.config.buildDistPath);
     context.logger.debug("compiled files = " + compiledFiles);
 
     return {

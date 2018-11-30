@@ -16,6 +16,8 @@ export default {
       GraphqlController.validateSchema(context.project);
     }
 
+    context.project;
+
     const buildDir = await BuildController.package(context);
     context.logger.debug(`build dir: ${buildDir}`);
 

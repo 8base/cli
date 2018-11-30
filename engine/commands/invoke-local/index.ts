@@ -10,6 +10,8 @@ export default {
   name: "invoke-local",
   handler: async (params: any, context: Context) => {
 
+    context.project;
+
     context.spinner.start(context.i18n.t("invokelocal_in_progress"));
 
     const { compiledFiles } = await BuildController.compile(context);
@@ -32,7 +34,7 @@ export default {
     const args = params.j ? params.j: params.p ? fs.readFileSync(params.p) : null;
     context.spinner.stop();
 
-    const funcResult = await funcToCall(args);
+    const funcResult = await funcToCall(JSON.parse(args));
     context.logger.info("\nResult:");
     context.logger.info(JSON.stringify(funcResult, null, 2));
   },
