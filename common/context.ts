@@ -10,6 +10,7 @@ import * as Ora from "ora";
 import { Translations } from "./translations";
 import { TransformableInfo } from "logform";
 import chalk from "chalk";
+import { Colors } from "../consts/Colors";
 import { SessionInfo } from "../interfaces/Common";
 import { Utils } from "./utils";
 
@@ -39,9 +40,9 @@ export class Context {
           return info.message;
         }
         if (info.level === "debug") {
-          return `${chalk.blueBright(info.level)}: ${info.message}`;
+          return `${chalk.hex(Colors.blue)(info.level)}: ${info.message}`;
         }
-        return `${chalk.redBright(info.level)}: ${info.message}`;
+        return `${chalk.hex(Colors.red)(info.level)}: ${info.message}`;
       }),
       transports: [new winston.transports.Console()]
     });
@@ -119,7 +120,8 @@ export class Context {
       }
     ]);
 
-    this.logger.info(`Workspaces ${chalk.hex('#FFD012')(activeWorkspace.name)} is active`);
+    this.logger.info(`Workspaces ${chalk.hex(Colors.yellow)(activeWorkspace.name)} is active`);
+    this.logger.info(`\nAPI endpoint URL: https:\/\/api.8base.com/${activeWorkspace.id}\n`);
   }
 
   async request(query: string, variables: any = null, isLoginRequired = true): Promise<any> {

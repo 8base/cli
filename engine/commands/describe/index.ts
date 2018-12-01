@@ -4,6 +4,7 @@ import { translations } from "../../../common/translations";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as url from "url";
 import chalk from "chalk";
+import { Colors } from "../../../consts/Colors";
 import _ = require("lodash");
 
 const tabSize = 30;
@@ -13,12 +14,12 @@ const printResolvers = (resolvers: any[], context: Context) => {
     return;
   }
 
-  context.logger.info(`${chalk.hex('#FFD012')("Resolvers:")}`);
+  context.logger.info(`${chalk.hex(Colors.yellow)("Resolvers:")}`);
 
   resolvers.map(r => {
     let out = `   ${r.name}`;
     out = _.padEnd(out, tabSize);
-    out += `${chalk.hex('#FFD012')("type")}: ${r.gqlType} `;
+    out += `${chalk.hex(Colors.yellow)("type")}: ${r.gqlType} `;
     context.logger.info(out);
   });
 
@@ -29,17 +30,17 @@ const printTriggers = (triggers: any[], context: Context) => {
     return;
   }
 
-  context.logger.info(`${chalk.hex('#FFD012')("Triggers:")}`);
+  context.logger.info(`${chalk.hex(Colors.yellow)("Triggers:")}`);
   triggers.map(r => {
     let out = `   ${r.name}`;
     out = _.padEnd(out, tabSize);
-    out += `${chalk.hex('#FFD012')("type")}: ${r.type} `;
+    out += `${chalk.hex(Colors.yellow)("type")}: ${r.type} `;
 
     out = _.padEnd(out, tabSize * 2);
-    out += `${chalk.hex('#FFD012')("table")}: ${r.tableName}`;
+    out += `${chalk.hex(Colors.yellow)("table")}: ${r.tableName}`;
 
     out = _.padEnd(out, tabSize * 3);
-    out += `${chalk.hex('#FFD012')("operation")}: ${r.operation} `;
+    out += `${chalk.hex(Colors.yellow)("operation")}: ${r.operation} `;
 
     context.logger.info(out);
   });
@@ -50,16 +51,16 @@ const printWebhooks = (webhooks: any[], context: Context) => {
     return;
   }
 
-  context.logger.info(`${chalk.hex('#FFD012')("Webhooks:")}`);
+  context.logger.info(`${chalk.hex(Colors.yellow)("Webhooks:")}`);
   webhooks.map(r => {
     let out = `   ${r.name}`;
 
     out = _.padEnd(out, tabSize);
 
-    out += `${chalk.hex('#FFD012')("method")}: ${r.httpMethod} `;
+    out += `${chalk.hex(Colors.yellow)("method")}: ${r.httpMethod} `;
     out = _.padEnd(out, tabSize * 2);
 
-    out += `${chalk.hex('#FFD012')("path")}: ${r.fullPath} `;
+    out += `${chalk.hex(Colors.yellow)("path")}: ${r.fullPath} `;
     context.logger.info(out);
   });
 };
