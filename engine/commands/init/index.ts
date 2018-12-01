@@ -30,7 +30,7 @@ export default {
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);
 
-    context.logger.info(`Project ${chalk.yellowBright(project.name)} initialize success`);
+    context.logger.info(`Project ${chalk.hex('#FFD012')(project.name)} initialize success`);
   },
   describe: translations.i18n.t("init_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {

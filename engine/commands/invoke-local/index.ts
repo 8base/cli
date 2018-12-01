@@ -19,7 +19,7 @@ export default {
     const targetFunctionName = params._[1];
     const functionInfo = context.project.extensions.functions.find(r => r.name === targetFunctionName);
     if (!functionInfo) {
-      throw new Error(`Function ${chalk.yellowBright(targetFunctionName)} not present.`);
+      throw new Error(`Function ${chalk.hex('#FFD012')(targetFunctionName)} not present.`);
     }
 
     const funcPath = compiledFiles.find((f: any) => f.search(functionInfo.name + "\.") > 0);

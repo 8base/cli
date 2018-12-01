@@ -52,7 +52,7 @@ export class CommandController {
 
         const time = Date.now() - start;
 
-        context.logger.info(`${chalk.greenBright(command)} done. Time: ${chalk.greenBright(time.toLocaleString('en-US'))} ms.`);
+        context.logger.info(`${chalk.hex('#00BB6E')(command)} done. Time: ${chalk.hex('#00BB6E')(time.toLocaleString('en-US'))} ms.`);
 
       } catch(ex) {
         context.spinner.stop();

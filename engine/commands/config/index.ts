@@ -23,7 +23,7 @@ export default {
           value: params.s
         }
       ]);
-      context.logger.info(`Set remote address ${chalk.yellowBright(params.s)}.`);
+      context.logger.info(`Set remote address ${chalk.hex('#FFD012')(params.s)}.`);
       return;
     }
 

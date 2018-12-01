@@ -119,7 +119,7 @@ export class Context {
       }
     ]);
 
-    this.logger.info(`Workspaces ${chalk.yellowBright(activeWorkspace.name)} is active`);
+    this.logger.info(`Workspaces ${chalk.hex('#FFD012')(activeWorkspace.name)} is active`);
   }
 
   async request(query: string, variables: any = null, isLoginRequired = true): Promise<any> {

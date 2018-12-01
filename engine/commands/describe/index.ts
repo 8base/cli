@@ -13,12 +13,12 @@ const printResolvers = (resolvers: any[], context: Context) => {
     return;
   }
 
-  context.logger.info(`${chalk.yellowBright("Resolvers:")}`);
+  context.logger.info(`${chalk.hex('#FFD012')("Resolvers:")}`);
 
   resolvers.map(r => {
     let out = `   ${r.name}`;
     out = _.padEnd(out, tabSize);
-    out += `${chalk.yellowBright("type")}: ${r.gqlType} `;
+    out += `${chalk.hex('#FFD012')("type")}: ${r.gqlType} `;
     context.logger.info(out);
   });
 
@@ -29,17 +29,17 @@ const printTriggers = (triggers: any[], context: Context) => {
     return;
   }
 
-  context.logger.info(`${chalk.yellowBright("Triggers:")}`);
+  context.logger.info(`${chalk.hex('#FFD012')("Triggers:")}`);
   triggers.map(r => {
     let out = `   ${r.name}`;
     out = _.padEnd(out, tabSize);
-    out += `${chalk.yellowBright("type")}: ${r.type} `;
+    out += `${chalk.hex('#FFD012')("type")}: ${r.type} `;
 
     out = _.padEnd(out, tabSize * 2);
-    out += `${chalk.yellowBright("table")}: ${r.tableName}`;
+    out += `${chalk.hex('#FFD012')("table")}: ${r.tableName}`;
 
     out = _.padEnd(out, tabSize * 3);
-    out += `${chalk.yellowBright("operation")}: ${r.operation} `;
+    out += `${chalk.hex('#FFD012')("operation")}: ${r.operation} `;
 
     context.logger.info(out);
   });
@@ -50,16 +50,16 @@ const printWebhooks = (webhooks: any[], context: Context) => {
     return;
   }
 
-  context.logger.info(`${chalk.yellowBright("Webhooks:")}`);
+  context.logger.info(`${chalk.hex('#FFD012')("Webhooks:")}`);
   webhooks.map(r => {
     let out = `   ${r.name}`;
 
     out = _.padEnd(out, tabSize);
 
-    out += `${chalk.yellowBright("method")}: ${r.httpMethod} `;
+    out += `${chalk.hex('#FFD012')("method")}: ${r.httpMethod} `;
     out = _.padEnd(out, tabSize * 2);
 
-    out += `${chalk.yellowBright("path")}: ${r.fullPath} `;
+    out += `${chalk.hex('#FFD012')("path")}: ${r.fullPath} `;
     context.logger.info(out);
   });
 };
