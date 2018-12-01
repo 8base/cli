@@ -6,6 +6,7 @@ import { Context } from "../../../common/context";
 import * as path from "path";
 import { translations } from "../../../common/translations";
 import chalk from "chalk";
+import { Colors } from "../../../consts/Colors";
 
 export default {
   name: "init",
@@ -30,7 +31,7 @@ export default {
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);
 
-    context.logger.info(`Project ${chalk.hex('#FFD012')(project.name)} initialize success`);
+    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} initialize success`);
   },
   describe: translations.i18n.t("init_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {

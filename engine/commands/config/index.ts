@@ -4,6 +4,7 @@ import { translations } from "../../../common/translations";
 import * as yargs from "yargs";
 import { StorageParameters } from "../../../consts/StorageParameters";
 import chalk from "chalk";
+import { Colors } from "../../../consts/Colors";
 
 export default {
   name: "config",
@@ -23,7 +24,7 @@ export default {
           value: params.s
         }
       ]);
-      context.logger.info(`Set remote address ${chalk.hex('#FFD012')(params.s)}.`);
+      context.logger.info(`Set remote address ${chalk.hex(Colors.yellow)(params.s)}.`);
       return;
     }
 

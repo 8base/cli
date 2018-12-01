@@ -6,6 +6,7 @@ import * as fs from "fs";
 import { Translations } from "../../common/translations";
 import { Context } from "../../common/context";
 import chalk from "chalk";
+import { Colors } from "../../consts/Colors";
 
 
 export class CommandController {
@@ -52,7 +53,7 @@ export class CommandController {
 
         const time = Date.now() - start;
 
-        context.logger.info(`${chalk.hex('#00BB6E')(command)} done. Time: ${chalk.hex('#00BB6E')(time.toLocaleString('en-US'))} ms.`);
+        context.logger.info(`${chalk.hex(Colors.green)(command)} done. Time: ${chalk.hex(Colors.green)(time.toLocaleString('en-US'))} ms.`);
 
       } catch(ex) {
         context.spinner.stop();

@@ -4,6 +4,7 @@ import { translations } from "../../../common/translations";
 import { Utils } from "../../../common/utils";
 import { BuildController } from "../../controllers/buildController";
 import chalk from "chalk";
+import { Colors } from "../../../consts/Colors";
 import * as fs from "fs";
 
 export default {
@@ -19,7 +20,7 @@ export default {
     const targetFunctionName = params._[1];
     const functionInfo = context.project.extensions.functions.find(r => r.name === targetFunctionName);
     if (!functionInfo) {
-      throw new Error(`Function ${chalk.hex('#FFD012')(targetFunctionName)} not present.`);
+      throw new Error(`Function ${chalk.hex(Colors.yellow)(targetFunctionName)} not present.`);
     }
 
     const funcPath = compiledFiles.find((f: any) => f.search(functionInfo.name + "\.") > 0);
