@@ -164,7 +164,7 @@ export class ProjectController {
 
         case ExtensionType.webhook:
           if (!data.method) {
-            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Http method in webhook " + functionName + " is absent.");
+            throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "Parameter 'method' is missing in webhook '" + functionName + "'");
           }
 
           extensions.webhooks.push({
