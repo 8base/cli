@@ -146,6 +146,14 @@ export class ProjectController {
           });
           break;
 
+        case ExtensionType.task:
+          extensions.tasks.push({
+            name: functionName,
+            functionName: functionName,
+          });
+          break;
+
+
         case ExtensionType.trigger:
           if (_.isNil(data.operation)) {
             throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, "operation field not present in trigger " + functionName);
@@ -178,12 +186,23 @@ export class ProjectController {
         default:
           break;
       }
+
+      if (data.schedule) {
+        extensions.schedules.push({
+          name: functionName,
+          functionName,
+          scheduleExpression: data.schedule
+        });
+      }
+
       return extensions;
     }, {
         resolvers: [],
+        tasks: [],
         functions: [],
         webhooks: [],
-        triggers: []
+        triggers: [],
+        schedules: []
       });
   }
 }
