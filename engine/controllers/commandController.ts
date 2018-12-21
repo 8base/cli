@@ -25,7 +25,7 @@ export class CommandController {
   }
 
   static parseError = (error: any) => {
-    if (error.response && error.response.errors.length > 0 && error.response.errors[0].message) {
+    if (error.response && error.response.errors && error.response.errors.length > 0 && error.response.errors[0].message) {
       const internalError = error.response.errors[0];
       if (internalError.details) {
         const keys = Object.keys(internalError.details);

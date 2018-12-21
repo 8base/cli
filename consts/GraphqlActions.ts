@@ -62,9 +62,6 @@ export const GraphqlActions = {
       triggers {
         operation tableName type name
       }
-      functions {
-        handler remoteName name
-      }
     }
   }`
 };

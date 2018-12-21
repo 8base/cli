@@ -13,6 +13,8 @@ import chalk from "chalk";
 import { Colors } from "../consts/Colors";
 import { SessionInfo } from "../interfaces/Common";
 import { Utils } from "./utils";
+import { log } from "util";
+import { GraphqlActions } from "../consts/GraphqlActions";
 
 const { Client } = require("@8base/api-client");
 const pkg = require('../../package.json');
@@ -40,7 +42,7 @@ export class Context {
           return info.message;
         }
         if (info.level === "debug") {
-          return `${chalk.hex(Colors.blue)(info.level)}: ${info.message}`;
+          return `${chalk.hex(Colors.blue)(info.level)} [${Date.now()}]: ${info.message}`;
         }
         return `${chalk.hex(Colors.red)(info.level)}: ${info.message}`;
       }),
@@ -78,10 +80,6 @@ export class Context {
       this.logger.debug(`refresh token: ${data.refreshToken.substr(0, 10)}`);
     }
 
-    if (data.workspaces) {
-      this.logger.debug(`workspaces: ${JSON.stringify(data.workspaces, null, 2)}`);
-    }
-
     this.storage.setValues([
       {
         name: StorageParameters.refreshToken,
@@ -91,14 +89,19 @@ export class Context {
         name: StorageParameters.idToken,
         value: data.idToken
       },
-      {
-        name: StorageParameters.workspaces,
-        value: data.workspaces
-      }
     ]);
   }
 
   async chooseWorkspace(workspaceId?: string) {
+
+    const data = await this.request(GraphqlActions.listWorkspaces, null, false);
+
+    this.storage.setValues([
+      {
+        name: StorageParameters.workspaces,
+        value: data.workspacesList.items
+      }
+    ]);
 
     const workspaces = this.storage.getValue(StorageParameters.workspaces);
 
@@ -120,7 +123,7 @@ export class Context {
       }
     ]);
 
-    this.logger.info(`Workspaces ${chalk.hex(Colors.yellow)(activeWorkspace.name)} is active`);
+    this.logger.info(`Workspace ${chalk.hex(Colors.yellow)(activeWorkspace.name)} is active`);
     this.logger.info(`\nAPI endpoint URL: https:\/\/api.8base.com/${activeWorkspace.id}\n`);
   }
 
