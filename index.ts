@@ -7,6 +7,8 @@ import { translations, Translations } from "./common/translations";
 const start = (translations: Translations) => {
   yargs.usage(translations.i18n.t("8base_usage"));
 
+  yargs.scriptName("8base");
+
   CommandController.enumerate()
     .map(cmd => {
       yargs.command({
