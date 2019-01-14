@@ -41,7 +41,8 @@ export default {
     } while (result.status !== DeployStatus.completeSuccess && result.status !== DeployStatus.completeError);
 
     if (result.status === DeployStatus.completeError) {
-      throw new Error(result.message);
+      const gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be threw as is
+      throw gqlError;
     }
 
     context.spinner.stop();
