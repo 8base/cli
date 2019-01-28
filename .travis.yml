@@ -1,0 +1,15 @@
+language: node_js
+node_js: node
+script:
+- npm install
+- npm run e2e
+deploy:
+  provider: npm
+  email: andrei.anisimov@8base.com
+  skip_cleanup: true
+  api_key:
+    secure: aejArO4IZAR9iBnB84QPaqk/lwC1FWAEErbxLsw4YALCLLnUhgrDC4ZBVUEJRPoAbYSxD8L5A57nAQjXWEXTwrWhMKmh9xyA3hv+bhSjQV/a+oKPWR6ao4fxRCjs3ZwyikJmmTKiii1hmTgLmBpHGtmoi3b+dWSsBg7OipjBmMKj0Casu7jnr3cNRR8Yh91GebugNeOGpK0U8SOMGGNhFxLr9vbDnOlIXSQUxTv+2iucKKEBRDTWR2ONOHVRsGN5ZPPXbUSgqJmHpZCNCGEXj9S/3rIN6pwkg7tSJFk4KPC14+PQ6ji88MOn9qy0QRjlEwNh1aQeKRut4ndsOHRiAwYpKVZgw3HJcnYy09SG6BFTgER7ApBjOzHqYqI8b/drijZMwwW8WGmR1M8V+M8qWc7vhySZNSWEAj098hUSw3fD92aFCy6ZVF3WZ46Ff0mZSwPSC8may2oM4Lqb4cuoZH7I4vpp+2xGA6bU0XLQo2mlyiXf1I5eXjyhRy4WpFpW6Ms23Lu3L2CAAvMn6lll9ZF+M0jEaCY00zuz7vNhAwkB1PiP1L05PR8smRnYA0cIdpr8E/3tgCR0bQRC1lWrQWjVS3K18AiNog/PWCxDBRYbhPenYXrvD6D+zASus+aw8oWDhW9xogTCrnBB7GwynxHmO8wdl7j4M1g0T1+trS4=
+  on:
+    tags: true
+    repo: 8base/cli
+    branch: master
