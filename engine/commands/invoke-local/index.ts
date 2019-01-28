@@ -6,6 +6,7 @@ import { BuildController } from "../../controllers/buildController";
 import chalk from "chalk";
 import { Colors } from "../../../consts/Colors";
 import * as fs from "fs";
+import { InvokeLocalError } from "../../../errors/invokeLocal";
 
 export default {
   name: "invoke-local",
@@ -23,21 +24,27 @@ export default {
       throw new Error(`Function ${chalk.hex(Colors.yellow)(targetFunctionName)} not present.`);
     }
 
-    const funcPath = compiledFiles.find((f: any) => f.search(functionInfo.name + "\.") > 0);
+    const safeFunctionPath = functionInfo.pathToFunction.substring(0, functionInfo.pathToFunction.lastIndexOf("."));
+    const funcPath = compiledFiles.find((f: any) => f.search(safeFunctionPath) > 0);
     context.logger.debug(`Function full path: ${funcPath}`);
-    const { result, error} = Utils.safeExecution(() => require(funcPath));
+    const { result, error } = Utils.safeExecution(() => require(funcPath));
 
     if (error) {
-      throw new Error(`Function path ${funcPath} not present.`);
+      throw new InvokeLocalError(error.message, functionInfo.name, funcPath);
     }
 
     const funcToCall = Utils.undefault(result);
     const args = params.j ? params.j: params.p ? fs.readFileSync(params.p) : null;
     context.spinner.stop();
 
-    const funcResult = await funcToCall(JSON.parse(args));
-    context.logger.info("\nResult:");
-    context.logger.info(JSON.stringify(funcResult, null, 2));
+    try {
+      const funcResult = await funcToCall(JSON.parse(args));
+
+      context.logger.info("\nResult:");
+      context.logger.info(JSON.stringify(funcResult, null, 2));
+    } catch (ex) {
+      throw new InvokeLocalError(ex.message, functionInfo.name, funcPath);
+    }
   },
   describe: translations.i18n.t("invokelocal_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
