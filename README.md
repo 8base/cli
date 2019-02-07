@@ -5,7 +5,7 @@
 
 
 ## Getting Started
-```bash
+```
 $ npm install -g 8base
 
 $ 8base --help
