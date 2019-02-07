@@ -1,8 +1,7 @@
-# 8base CLI
+# 8base CLI  [![Build Status](https://travis-ci.org/8base/cli.svg?branch=master)](https://travis-ci.org/8base/cli)
 > A Command Line Interface (CLI) that simplifies the deployment of serverless functions to your 8base workspace
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
-[![Build Status](https://travis-ci.org/8base/cli.svg?branch=master)](https://travis-ci.org/8base/cli)
 
 
 ## Getting Started
