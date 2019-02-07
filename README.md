@@ -8,7 +8,7 @@
 ```
 $ npm install -g 8base
 
-$ 8base --help
+$ 8base help
 Usage: 8base <command> [OPTIONS]
 
 Commands:
