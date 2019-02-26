@@ -25,6 +25,7 @@ Commands:
                       API session
   8base logs          View function logs
   8base package       Package application without deploying
+  8base codegen:view  Create frontend templates 
 
 Options:
   -h, --help     Show help                                 [boolean]

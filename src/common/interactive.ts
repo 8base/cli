@@ -5,7 +5,7 @@ export type InteractiveInput = {
   message?: string,
   initial?: string,
   choices?: any[]
-  type: "select" | "password" | "text"
+  type: "select" | "password" | "text" | "multiselect"
 };
 
 export namespace Interactive {

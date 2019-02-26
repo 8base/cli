@@ -63,6 +63,16 @@ export default {
     "logs_describe": "View function logs",
     "logs_in_progress": "getting logs...",
 
+    "view_usage": "8base codegen:view [OPTIONS]",
+    "view_describe": "Create frontend templates",
+    "view_table_describe": "Table name",
+    "view_template_describe": "Type of template (crud, create, edit, delete, table, index) ",
+    "view_depth_describe": "Depth of the generated query",
+    "view_withMeta_describe": "Include meta fields (createdAt, createdBy, updatedAt)",
+    "view_table_error": "Can't find a '{{- tableName }}' table",
+    "view_successfully_created": "{{- fileName }} was successfully created",
+    "view_was_not_created": "{{- fileName }} wasn't created",
+
     "package_usage": "8base package [OPTIONS]",
     "package_describe": "Package application without deploying",
     "package_progress": "packaging...",
