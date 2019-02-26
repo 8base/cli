@@ -17,22 +17,22 @@ const start = (translations: Translations) => {
         describe: cmd.describe,
         handler: CommandController.wrapHandler(cmd.handler, translations)
       })
-      .option('d', {
+      .option("d", {
         hidden: true
       });
     }
   );
 
   const argv = yargs
-    .alias('h', 'help')
-    .option('h', {
+    .alias("h", "help")
+    .option("h", {
       global: false
     })
-    .alias('v', 'version')
-    .option('v', {
+    .alias("v", "version")
+    .option("v", {
       global: false
     })
-    .option('d', {
+    .option("d", {
       alias: "debug",
       describe: "turn on debug logs",
       type: "boolean"
@@ -57,9 +57,9 @@ const start = (translations: Translations) => {
     })
     .argv;
 
-    if (!argv._[0]) {
-      yargs.showHelp();
-    }
+  if (!argv._[0]) {
+    yargs.showHelp();
+  }
 };
 
 translations.init()

@@ -27,12 +27,12 @@ export default {
       .usage(translations.i18n.t("invoke_usage"))
       .demand(1)
       .option("j", {
-        alias: 'data-json',
+        alias: "data-json",
         describe: "input JSON",
         type: "string"
       })
       .option("p", {
-        alias: 'data-path',
+        alias: "data-path",
         describe: "path to input JSON",
         type: "string"
       });

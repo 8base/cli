@@ -1,5 +1,5 @@
 import * as path from "path";
-import 'isomorphic-fetch';
+import "isomorphic-fetch";
 import * as request from "request";
 import * as fs from "fs";
 import * as archiver from "archiver";
@@ -53,13 +53,13 @@ export namespace Utils {
     return new Promise<void>((resolve, reject) => {
       streamToBuffer(fileStream, (err: Error, data: any) => {
         request({
-            method: "PUT",
-            url: url,
-            body: data,
-            headers: {
-              'Content-Length': data.length
-            }
-          },
+          method: "PUT",
+          url: url,
+          body: data,
+          headers: {
+            "Content-Length": data.length
+          }
+        },
           (err: any, res: any, body: any) => {
             if (err) {
               return reject(err);
@@ -92,22 +92,22 @@ export namespace Utils {
           : zip.directory(sourcePath.source, sourcePath.dist || false);
       });
 
-      zip.on('error', (err: any) => {
-        context.logger.debug('Error while zipping build: ' + err);
+      zip.on("error", (err: any) => {
+        context.logger.debug("Error while zipping build: " + err);
         reject(new Error(err));
       });
 
-      zip.on('finish', () => {
-        context.logger.debug('zipping finish');
+      zip.on("finish", () => {
+        context.logger.debug("zipping finish");
         memoryStream.end();
         resolve(memoryStream);
       });
 
-      zip.on('end', () => {
-        context.logger.debug('zipping end');
+      zip.on("end", () => {
+        context.logger.debug("zipping end");
       });
 
-      zip.on('warning', (error: archiver.ArchiverError) => {
+      zip.on("warning", (error: archiver.ArchiverError) => {
         context.logger.warn(error);
       });
 

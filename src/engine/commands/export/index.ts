@@ -29,7 +29,7 @@ export default {
     return args
       .usage(translations.i18n.t("export_usage"))
       .option("f", {
-        alias: 'file',
+        alias: "file",
         describe: translations.i18n.t("export_file_describe"),
         type: "string"
       });

@@ -2,7 +2,7 @@ import { Context } from "../../../common/context";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as cuid from "cuid";
 const opn = require("opn");
-import 'isomorphic-fetch';
+import "isomorphic-fetch";
 import { SessionInfo } from "../../../interfaces/Common";
 import { Utils } from "../../../common/utils";
 import { Selectors } from "../../../common/selectors";

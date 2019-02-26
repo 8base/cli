@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import * as path from 'path';
+import * as path from "path";
 import * as yaml from "js-yaml";
 import * as _ from "lodash";
 
@@ -50,7 +50,7 @@ export class ProjectController {
   }
 
   static saveSchema(project: ProjectDefinition, outDir: string) {
-    const graphqlFilePath = path.join(outDir, 'schema.graphql');
+    const graphqlFilePath = path.join(outDir, "schema.graphql");
     fs.writeFileSync(graphqlFilePath, project.gqlSchema);
   }
 
@@ -60,12 +60,12 @@ export class ProjectController {
       functions: project.extensions.functions
     };
 
-    const projectFilePath = path.join(outDir, 'project.json');
+    const projectFilePath = path.join(outDir, "project.json");
     return fs.writeFileSync(projectFilePath, JSON.stringify(projectObject, null, 2));
   }
 
   static saveMetaDataFile(project: ProjectDefinition, outDir: string) {
-    const summaryFile = path.join(outDir, '__summary__functions.json');
+    const summaryFile = path.join(outDir, "__summary__functions.json");
     fs.writeFileSync(summaryFile, JSON.stringify(
       {
         functions: project.extensions.functions.map(f => {
@@ -117,7 +117,7 @@ export class ProjectController {
     context.logger.debug("load yaml file");
 
     try {
-      return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
+      return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, "utf8"));
     }
     catch (ex) {
       throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, ex.message);
@@ -197,13 +197,13 @@ export class ProjectController {
 
       return extensions;
     }, {
-        resolvers: [],
-        tasks: [],
-        functions: [],
-        webhooks: [],
-        triggers: [],
-        schedules: []
-      });
+      resolvers: [],
+      tasks: [],
+      functions: [],
+      webhooks: [],
+      triggers: [],
+      schedules: []
+    });
   }
 }
 

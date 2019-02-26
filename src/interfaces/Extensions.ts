@@ -16,21 +16,21 @@ export enum GraphQLFunctionType {
 }
 
 export interface BaseDefinition {
-    name: string;
-    functionName: string;
+  name: string;
+  functionName: string;
 }
 
 export interface ResolverDefinition extends BaseDefinition {
 
-    gqlType: GraphQLFunctionType;
+  gqlType: GraphQLFunctionType;
 
-    gqlSchemaPath: string;
+  gqlSchemaPath: string;
 }
 
 export interface TaskDefinition extends BaseDefinition {}
 
 export interface ScheduleDefinition extends BaseDefinition {
-    scheduleExpression: string;
+  scheduleExpression: string;
 }
 
 
@@ -46,11 +46,11 @@ export enum TriggerType {
 export interface TriggerDefinition extends BaseDefinition {
 
     // Before After
-    type: string;
+  type: string;
 
     // Create Delete Update
-    operation: string;
-    tableName: string;
+  operation: string;
+  tableName: string;
 }
 
 export enum TriggerOperation {
@@ -64,11 +64,11 @@ export enum TriggerOperation {
 */
 
 export interface FunctionDefinition {
-    readonly name: string;
+  readonly name: string;
 
-    readonly handler: string;
+  readonly handler: string;
 
-    readonly pathToFunction: string;
+  readonly pathToFunction: string;
 }
 
 /*
@@ -76,17 +76,17 @@ export interface FunctionDefinition {
 */
 
 export interface WebhookDefinition extends BaseDefinition {
-    httpMethod: string;
-    path: string;
+  httpMethod: string;
+  path: string;
 }
 
 
 export interface ExtensionsContainer {
-    resolvers: ResolverDefinition[];
-    tasks: TaskDefinition[];
-    schedules: ScheduleDefinition[];
+  resolvers: ResolverDefinition[];
+  tasks: TaskDefinition[];
+  schedules: ScheduleDefinition[];
 
-    functions: FunctionDefinition[];
-    triggers: TriggerDefinition[];
-    webhooks: WebhookDefinition[];
+  functions: FunctionDefinition[];
+  triggers: TriggerDefinition[];
+  webhooks: WebhookDefinition[];
 }

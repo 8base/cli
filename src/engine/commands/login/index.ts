@@ -3,7 +3,7 @@ import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import * as yargs from "yargs";
 import logout from "../logout";
-import 'isomorphic-fetch';
+import "isomorphic-fetch";
 import { StaticConfig } from "../../../config";
 import { passwordLogin } from "./passwordLogin";
 import { webLogin } from "./webLogin";
@@ -26,12 +26,12 @@ export default {
     return args
       .usage(translations.i18n.t("login_usage"))
       .option("e", {
-        alias: 'email',
+        alias: "email",
         describe: "user email",
         type: "string"
       })
       .option("p", {
-        alias: 'password',
+        alias: "password",
         describe: "user password",
         type: "string"
       })

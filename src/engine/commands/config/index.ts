@@ -37,17 +37,17 @@ export default {
     return args
       .usage(translations.i18n.t("config_usage"))
       .option("w", {
-        alias: 'workspace',
+        alias: "workspace",
         describe: translations.i18n.t("config_workspace_option"),
         type: "string"
       })
       .option("s", {
-        alias: 'server',
+        alias: "server",
         type: "string",
         hidden: true
       })
       .option("v", {
-        alias: 'view',
+        alias: "view",
         type: "boolean",
         hidden: true
       });

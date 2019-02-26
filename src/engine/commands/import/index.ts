@@ -15,7 +15,7 @@ export default {
 
     if (fs.existsSync(params.file)) {
       try {
-        schema = JSON.parse(fs.readFileSync(params.file, 'utf8'));
+        schema = JSON.parse(fs.readFileSync(params.file, "utf8"));
       } catch (e) {
         throw new Error(translations.i18n.t("import_cant_parse_schema"));
       }
@@ -50,7 +50,7 @@ export default {
     return args
       .usage(translations.i18n.t("import_usage"))
       .option("f", {
-        alias: 'file',
+        alias: "file",
         demandOption: true,
         describe: translations.i18n.t("import_file_describe"),
         type: "string"

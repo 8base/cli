@@ -53,12 +53,12 @@ export class CommandController {
 
         const time = Date.now() - start;
 
-        context.logger.info(`${chalk.hex(Colors.green)(command)} done. Time: ${chalk.hex(Colors.green)(time.toLocaleString('en-US'))} ms.`);
+        context.logger.info(`${chalk.hex(Colors.green)(command)} done. Time: ${chalk.hex(Colors.green)(time.toLocaleString("en-US"))} ms.`);
 
       } catch(ex) {
         context.spinner.stop();
         const time = Date.now() - start;
-        context.logger.error(`${CommandController.parseError(ex)} \n Time: ${chalk.hex(Colors.red)(time.toLocaleString('en-US'))} ms.`
+        context.logger.error(`${CommandController.parseError(ex)} \n Time: ${chalk.hex(Colors.red)(time.toLocaleString("en-US"))} ms.`
         );
 
       }

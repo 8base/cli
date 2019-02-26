@@ -1,11 +1,11 @@
 export function rootGraphqlSchema(): string {
-    return `
-    type Query {
-        company: String
-    }
+  return `
+  type Query {
+    company: String
+  }
 
-    type Mutation {
-        company: String
-    }
-    `;
+  type Mutation {
+    company: String
+  }
+  `;
 }

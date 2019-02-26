@@ -17,7 +17,7 @@ import { log } from "util";
 import { GraphqlActions } from "../consts/GraphqlActions";
 
 const { Client } = require("@8base/api-client");
-const pkg = require('../../package.json');
+const pkg = require("../../package.json");
 
 export class Context {
 
