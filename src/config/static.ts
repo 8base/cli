@@ -42,10 +42,6 @@ export class StaticConfig {
         return "package.json";
     }
 
-    static get functionWrapperPath(): string {
-        return this.staticData.functionWrapperPath;
-    }
-
     /**
      * Compiler paths
      */
