@@ -1,28 +1,27 @@
 {
-    "compilerOptions": {
-        "diagnostics": true,
-        "module": "commonjs",
-        "target": "ES2016",
-        "noImplicitAny": true,
-        "lib": [ "es2016", "esnext.asynciterable", "es2016.array.include", "dom" ],
-        "moduleResolution": "node",        
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,        
-        "outDir": "dist",
-        "baseUrl": ".",
-        "allowJs": true,
-        "sourceMap": true,
-        "typeRoots": [
-            "node_modules/@types"
-        ],        
-        "paths": {
-            "*": [
-                "types/*"
-            ]
-        }
-    },
-    "exclude": [
-        "dist",
-        "template"
-    ]
+  "compilerOptions": {
+    "diagnostics": true,
+    "module": "commonjs",
+    "target": "ES2016",
+    "noImplicitAny": true,
+    "lib": [ "es2016", "esnext.asynciterable", "es2016.array.include", "dom" ],
+    "moduleResolution": "node",        
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,        
+    "outDir": "dist",
+    "baseUrl": ".",
+    "allowJs": true,
+    "sourceMap": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],        
+    "paths": {
+      "*": [
+        "types/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
