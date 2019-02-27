@@ -2,6 +2,7 @@
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"
   ],
+  "defaultSeverity": "warning",
   "rules": {
     "class-name": true,
     "comment-format": [

@@ -1,27 +1,27 @@
 import * as yargs from "yargs";
 import * as fs from "fs-extra";
-import * as changeCase from 'change-case';
+import * as changeCase from "change-case";
 import * as _ from "lodash";
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import { Interactive } from "../../../common/interactive";
 
-const pluralize = require('pluralize');
+const pluralize = require("pluralize");
 const generators = require("@8base/generators");
 const { exportTables } = require("@8base/api-client");
 const { createQueryColumnsList } = require("@8base/utils");
 
 
 type ViewCommanConfig = {
-  table: 'index' | 'table' | 'create' | 'edit' | 'crud',
+  table: "index" | "table" | "create" | "edit" | "crud",
   template: string,
   withMeta: boolean,
   depth: number,
-}
+};
 
 type CreateFileConfig = {
   includeColumns ?: string[],
-} & ViewCommanConfig
+} & ViewCommanConfig;
 
 
 const promptColumns = async (columns: string[], context: Context): Promise<string[]> => {
@@ -44,7 +44,7 @@ const promptColumns = async (columns: string[], context: Context): Promise<strin
 const getColumnsNames = (params: ViewCommanConfig, tables: Object[], context: Context): string[] => {
   const table = tables.find(({ name }: any) => params.table === name);
 
-  if (!table) { throw new Error(context.i18n.t('view_table_error', { tableName: params.table })); }
+  if (!table) { throw new Error(context.i18n.t("view_table_error", { tableName: params.table })); }
 
   const columns = createQueryColumnsList(
     tables,
@@ -52,60 +52,60 @@ const getColumnsNames = (params: ViewCommanConfig, tables: Object[], context: Co
     { deep: params.depth, withMeta: params.withMeta }
   );
 
-  const columnsNames = params.template === 'create' || params.template === 'edit'
+  const columnsNames = params.template === "create" || params.template === "edit"
     ? _.uniq(
-      columns.map(({ name }: any) => name.split('.')[0])
+      columns.map(({ name }: any) => name.split(".")[0])
     )
-    : columns.map(({ name }: any) => name)
+    : columns.map(({ name }: any) => name);
 
   return columnsNames;
-}
+};
 
 
 const createTemplateFile = async (
-  tables: Object[], 
+  tables: Object[],
   { table: tableName, template, depth, withMeta, includeColumns }: CreateFileConfig,
   context: Context,
 ) => {
-  let templateString = '';
-  let fileName = '';
+  let templateString = "";
+  let fileName = "";
 
   switch (template) {
-    case 'index': {
+    case "index": {
       templateString = generators.generateIndex(tableName, { deep: depth });
       fileName = `index.js`;
       break;
-    };
-    case 'table': {
+    }
+    case "table": {
       templateString = generators.generateTable(tables, tableName, { deep: depth, withMeta, includeColumns });
       fileName = `${changeCase.pascal(tableName)}Table.js`;
       break;
-    };
-    case 'create': {
+    }
+    case "create": {
       templateString = generators.generateCreateForm(tables, tableName, { deep: depth, includeColumns });
       fileName = `${changeCase.pascal(pluralize.singular(tableName))}CreateDialog.js`;
       break;
-    };
-    case 'edit': {
+    }
+    case "edit": {
       templateString = generators.generateEditForm(tables, tableName, { deep: depth, includeColumns });
       fileName = `${changeCase.pascal(pluralize.singular(tableName))}EditDialog.js`;
       break;
-    };
-    case 'delete': {
+    }
+    case "delete": {
       templateString = generators.generateDeleteForm(tables, tableName, { deep: depth, includeColumns });
       fileName = `${changeCase.pascal(pluralize.singular(tableName))}DeleteDialog.js`;
       break;
-    };
+    }
     default: return;
   }
 
   try {
     await fs.writeFile(fileName, templateString);
-    context.logger.info(context.i18n.t('view_successfully_created', { fileName}));
+    context.logger.info(context.i18n.t("view_successfully_created", { fileName}));
   } catch( err ) {
-    context.logger.error(context.i18n.t('view_was_not_created', { fileName }));
+    context.logger.error(context.i18n.t("view_was_not_created", { fileName }));
   }
-}
+};
 
 
 
@@ -114,8 +114,8 @@ export default {
   describe: translations.i18n.t("view_describe"),
   handler: async (params: ViewCommanConfig, context: Context) => {
     const tables: any[] = await exportTables(context.request.bind(context), { withSystemTables: true });
-    const columnsNames = getColumnsNames(params, tables, context)
-    const includeColumns = params.template !== 'index' 
+    const columnsNames = getColumnsNames(params, tables, context);
+    const includeColumns = params.template !== "index"
       ? await promptColumns(columnsNames, context)
       : [];
 
@@ -126,14 +126,14 @@ export default {
       includeColumns: includeColumns || [],
     };
 
-    if (params.template === 'crud') {
-      createTemplateFile(tables, { ...generatorConfig, template: 'index' }, context);
-      createTemplateFile(tables, { ...generatorConfig, template: 'create' }, context);
-      createTemplateFile(tables, { ...generatorConfig, template: 'edit' }, context);
-      createTemplateFile(tables, { ...generatorConfig, template: 'delete' }, context);
-      createTemplateFile(tables, { ...generatorConfig, template: 'table' }, context);
+    if (params.template === "crud") {
+      await createTemplateFile(tables, { ...generatorConfig, template: "index" }, context);
+      await createTemplateFile(tables, { ...generatorConfig, template: "create" }, context);
+      await createTemplateFile(tables, { ...generatorConfig, template: "edit" }, context);
+      await createTemplateFile(tables, { ...generatorConfig, template: "delete" }, context);
+      await createTemplateFile(tables, { ...generatorConfig, template: "table" }, context);
     } else {
-      createTemplateFile(tables, { ...generatorConfig, template: params.template }, context);
+      await createTemplateFile(tables, { ...generatorConfig, template: params.template }, context);
     }
   },
   builder: (args: yargs.Argv): yargs.Argv => {
@@ -147,7 +147,7 @@ export default {
       .option("template", {
         describe: translations.i18n.t("view_template_describe"),
         type: "string",
-        default: 'crud',
+        default: "crud",
       })
       .option("depth", {
         describe: translations.i18n.t("view_depth_describe"),
