@@ -10,7 +10,7 @@
   },
   "scripts": {
     "e2e": "npm run build && jest --config e2e/config.json",
-    "test": "npm run e2e",
+    "test": "npm run e2e && npm run tslint",
     "build": "tsc",
     "watch": "npm run build -- --watch",
     "tslint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
