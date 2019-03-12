@@ -101,7 +101,7 @@ const createTemplateFile = async (
 
   try {
     await fs.writeFile(fileName, templateString);
-    context.logger.info(context.i18n.t("view_successfully_created", { fileName}));
+    context.logger.info(context.i18n.t("view_successfully_created", { fileName }));
   } catch( err ) {
     context.logger.error(context.i18n.t("view_was_not_created", { fileName }));
   }
