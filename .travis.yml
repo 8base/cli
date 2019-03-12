@@ -3,6 +3,7 @@ node_js:
   - "11.10.1"
 script:
 - npm install
+- npm run tslint
 - npm run test
 deploy:
   provider: npm
