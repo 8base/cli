@@ -72,27 +72,27 @@ const createTemplateFile = async (
 
   switch (template) {
     case "index": {
-      templateString = generators.generateIndex(tableName, { deep: depth });
+      templateString = generators.generateIndex({ tableName }, { deep: depth });
       fileName = `index.js`;
       break;
     }
     case "table": {
-      templateString = generators.generateTable(tables, tableName, { deep: depth, withMeta, includeColumns });
+      templateString = generators.generateTable({ tablesList: tables, tableName }, { deep: depth, withMeta, includeColumns });
       fileName = `${changeCase.pascal(tableName)}Table.js`;
       break;
     }
     case "create": {
-      templateString = generators.generateCreateForm(tables, tableName, { deep: depth, includeColumns });
+      templateString = generators.generateCreateForm({ tablesList: tables, tableName }, { deep: depth, includeColumns });
       fileName = `${changeCase.pascal(pluralize.singular(tableName))}CreateDialog.js`;
       break;
     }
     case "edit": {
-      templateString = generators.generateEditForm(tables, tableName, { deep: depth, includeColumns });
+      templateString = generators.generateEditForm({ tablesList: tables, tableName }, { deep: depth, includeColumns });
       fileName = `${changeCase.pascal(pluralize.singular(tableName))}EditDialog.js`;
       break;
     }
     case "delete": {
-      templateString = generators.generateDeleteForm(tables, tableName, { deep: depth, includeColumns });
+      templateString = generators.generateDeleteForm({ tablesList: tables, tableName }, { deep: depth, includeColumns });
       fileName = `${changeCase.pascal(pluralize.singular(tableName))}DeleteDialog.js`;
       break;
     }
@@ -101,7 +101,7 @@ const createTemplateFile = async (
 
   try {
     await fs.writeFile(fileName, templateString);
-    context.logger.info(context.i18n.t("view_successfully_created", { fileName}));
+    context.logger.info(context.i18n.t("view_successfully_created", { fileName }));
   } catch( err ) {
     context.logger.error(context.i18n.t("view_was_not_created", { fileName }));
   }

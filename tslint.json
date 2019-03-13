@@ -16,6 +16,7 @@
         "SwitchCase": 1
       }
     ],
+    "object-curly-spacing": true,
     "one-line": [
       true,
       "check-open-brace",

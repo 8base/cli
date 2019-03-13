@@ -27,7 +27,7 @@ export class TypescriptCompiler implements ICompiler {
         this.context.logger.debug(JSON.stringify(diagnostic, null, 2));
       }
       if (diagnostic.file) {
-        const {line, character} = diagnostic.file!.getLineAndCharacterOfPosition(diagnostic.start!);
+        const { line, character } = diagnostic.file!.getLineAndCharacterOfPosition(diagnostic.start!);
         const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
         this.context.logger.debug(`${diagnostic.file!.fileName} (${line + 1},${character + 1}): ${message}`);
       }
