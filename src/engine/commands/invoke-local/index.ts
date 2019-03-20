@@ -9,7 +9,7 @@ import * as fs from "fs";
 import { InvokeLocalError } from "../../../errors/invokeLocal";
 
 export default {
-  name: "invoke-local",
+  command: "invoke-local",
   handler: async (params: any, context: Context) => {
 
     context.initializeProject();

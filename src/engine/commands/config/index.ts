@@ -7,9 +7,8 @@ import chalk from "chalk";
 import { Colors } from "../../../consts/Colors";
 
 export default {
-  name: "config",
+  command: "config",
   handler: async (params: any, context: Context) => {
-
     if (params.v) {
       for(const key of Object.keys(StorageParameters)) {
         context.logger.info(`${key}: ${JSON.stringify(context.storage.getValue((<any>StorageParameters)[key]), null, 2)}\n`);

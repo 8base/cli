@@ -8,7 +8,7 @@ import { translations } from "../../../common/translations";
 import { DeployStatus } from "../../../consts/DeployStatus";
 
 export default {
-  name: "deploy",
+  command: "deploy",
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("deploy_in_progress", { status: "prepare to upload" }));
 

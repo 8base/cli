@@ -10,9 +10,9 @@ import { webLogin } from "./webLogin";
 
 
 export default {
-  name: "login",
+  command: "login",
   handler: async (params: any, context: Context) => {
-    await logout.handler(params, context);
+    await logout.handler();
 
     const result = params.e || params.p ? await passwordLogin(params, context) : await webLogin(params, context);
     context.setSessionInfo(result);
@@ -25,13 +25,13 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("login_usage"))
-      .option("e", {
-        alias: "email",
+      .option("email", {
+        alias: "e",
         describe: "user email",
         type: "string"
       })
-      .option("p", {
-        alias: "password",
+      .option("password", {
+        alias: "p",
         describe: "user password",
         type: "string"
       })

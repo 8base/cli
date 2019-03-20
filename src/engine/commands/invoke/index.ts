@@ -6,7 +6,7 @@ import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as fs from "fs";
 
 export default {
-  name: "invoke",
+  command: "invoke",
   handler: async (params: any, context: Context) => {
 
     context.initializeProject();

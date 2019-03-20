@@ -4,21 +4,23 @@ exports[`As a user, I can use help flag for see help information about commands.
 "Usage: 8base <command> [OPTIONS]
 
 Commands:
-  8base config        Select workspace
-  8base deploy        Deploy project
-  8base describe      Describe project functions and their types
-  8base export        Export current workspace data schema
-  8base import        Import schema file to the current workspace
-  8base init          Initialize project
-  8base invoke        Invoke deployed function remotely
-  8base invoke-local  Invoke function locally
-  8base login         Login via browser
-  8base logout        Clears local login credentials and invalidates API session
-  8base logs          View function logs
-  8base package       Package application without deploying
-  8base codegen:view  Create frontend templates
+  8base config              Select workspace
+  8base deploy              Deploy project
+  8base describe            Describe project functions and their types
+  8base export              Export current workspace data schema
+  8base generate <command>  Generate frontend templates
+  8base import              Import schema file to the current workspace
+  8base init                Initialize project
+  8base invoke              Invoke deployed function remotely
+  8base invoke-local        Invoke function locally
+  8base login               Login via browser
+  8base logout              Clears local login credentials and invalidates API
+                            session
+  8base logs                View function logs
+  8base package             Package application without deploying
 
 Options:
-  -h, --help     Show help                                             [boolean]
-  -v, --version  Show version number                                   [boolean]"
+  --version, -v  Show version number                                   [boolean]
+  --debug, -d    Turn on debug logs                                    [boolean]
+  --help         Show help                                             [boolean]"
 `;

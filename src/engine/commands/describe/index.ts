@@ -74,7 +74,7 @@ const transformWebhook = (webhook: any, context: Context) => {
 };
 
 export default {
-  name: "describe",
+  command: "describe",
   handler: async (params: any, context: Context) => {
 
     context.initializeProject();

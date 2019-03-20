@@ -4,12 +4,11 @@ import * as yargs from "yargs";
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-import { CommandController } from "../../controllers/commandController";
 
 const { importTables, importData } = require("@8base/api-client");
 
 export default {
-  name: "import",
+  command: "import",
   handler: async (params: any, context: Context) => {
     let schema;
 
@@ -22,10 +21,6 @@ export default {
     } else {
       throw new Error(translations.i18n.t("import_file_not_exist"));
     }
-
-    // if (context.version !== schema.version) {
-    //   throw new Error(translations.i18n.t("import_schema_different_version"));
-    // }
 
     if (params.schema) {
       context.spinner.start(context.i18n.t("import_schema_in_progress"));
