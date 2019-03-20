@@ -16,6 +16,7 @@ Commands:
   8base deploy        Deploy project
   8base describe      Describe project functions and their types
   8base export        Export current workspace data schema
+  8base generate      Generate frontend templates 
   8base import        Import schema file to the current workspace
   8base init          Initialize project
   8base invoke        Invoke deployed function remotely
@@ -25,7 +26,6 @@ Commands:
                       API session
   8base logs          View function logs
   8base package       Package application without deploying
-  8base codegen:view  Create frontend templates 
 
 Options:
   -h, --help     Show help                                 [boolean]

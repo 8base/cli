@@ -2,9 +2,9 @@ import * as yargs from "yargs";
 import * as fs from "fs-extra";
 import * as changeCase from "change-case";
 import * as _ from "lodash";
-import { Context } from "../../../common/context";
-import { translations } from "../../../common/translations";
-import { Interactive } from "../../../common/interactive";
+import { Context } from "../../../../common/context";
+import { translations } from "../../../../common/translations";
+import { Interactive } from "../../../../common/interactive";
 
 const pluralize = require("pluralize");
 const generators = require("@8base/generators");
@@ -44,7 +44,7 @@ const promptColumns = async (columns: string[], context: Context): Promise<strin
 const getColumnsNames = (params: ViewCommanConfig, tables: Object[], context: Context): string[] => {
   const table = tables.find(({ name }: any) => params.table === name);
 
-  if (!table) { throw new Error(context.i18n.t("view_table_error", { tableName: params.table })); }
+  if (!table) { throw new Error(context.i18n.t("scaffold_table_error", { tableName: params.table })); }
 
   const columns = createQueryColumnsList(
     tables,
@@ -101,17 +101,16 @@ const createTemplateFile = async (
 
   try {
     await fs.writeFile(fileName, templateString);
-    context.logger.info(context.i18n.t("view_successfully_created", { fileName }));
+    context.logger.info(context.i18n.t("scaffold_successfully_created", { fileName }));
   } catch( err ) {
-    context.logger.error(context.i18n.t("view_was_not_created", { fileName }));
+    context.logger.error(context.i18n.t("scaffold_was_not_created", { fileName }));
   }
 };
 
 
-
-export default {
-  name: "codegen:view",
-  describe: translations.i18n.t("view_describe"),
+module.exports = {
+  command: "scaffold",
+  describe: translations.i18n.t("scaffold_describe"),
   handler: async (params: ViewCommanConfig, context: Context) => {
     const tables: any[] = await exportTables(context.request.bind(context), { withSystemTables: true });
     const columnsNames = getColumnsNames(params, tables, context);
@@ -138,24 +137,24 @@ export default {
   },
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage(translations.i18n.t("view_usage"))
+      .usage(translations.i18n.t("scaffold_usage"))
       .option("table", {
-        describe: translations.i18n.t("view_table_describe"),
+        describe: translations.i18n.t("scaffold_table_describe"),
         type: "string",
         demandOption: true,
       })
       .option("template", {
-        describe: translations.i18n.t("view_template_describe"),
+        describe: translations.i18n.t("scaffold_template_describe"),
         type: "string",
         default: "crud",
       })
       .option("depth", {
-        describe: translations.i18n.t("view_depth_describe"),
+        describe: translations.i18n.t("scaffold_depth_describe"),
         type: "number",
         default: 1,
       })
       .option("withMeta", {
-        describe: translations.i18n.t("view_withMeta_describe"),
+        describe: translations.i18n.t("scaffold_withMeta_describe"),
         type: "boolean",
         default: false,
       });
