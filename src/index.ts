@@ -1,40 +1,48 @@
 #!/usr/bin/env node
 
 import * as yargs from "yargs";
+import * as path from "path";
+import * as _ from "lodash";
 import { CommandController } from "./engine/controllers/commandController";
+import { StaticConfig } from "./config";
+
 import { translations, Translations } from "./common/translations";
 
 const start = (translations: Translations) => {
-  yargs.usage(translations.i18n.t("8base_usage"));
-
-  yargs.scriptName("8base");
-
-  CommandController.enumerate()
-    .map(cmd => {
-      yargs.command({
-        command: cmd.name,
-        builder: cmd.builder,
-        describe: cmd.describe,
-        handler: CommandController.wrapHandler(cmd.handler, translations)
-      })
-      .option("d", {
-        hidden: true
-      });
-    }
-  );
-
   const argv = yargs
-    .alias("h", "help")
-    .option("h", {
+    .scriptName("8base")
+    .usage(translations.i18n.t("8base_usage"))
+    .commandDir(StaticConfig.commandsDir, {
+      extensions: ["js", "ts"],
+      recurse: true,
+      visit: (commandObject, pathName) => {
+        const mathedFolderRegExp = new RegExp(
+          path
+            .join(StaticConfig.commandsDir, "/[^\/]*/[^\/]*.(t|j)s")
+            .replace(/\//ig, "\\\/")
+        );
+
+        const cmd = commandObject.default || commandObject;
+
+        if (mathedFolderRegExp.test(pathName) && !!cmd.command) {
+          return {
+            ...cmd,
+            handler: CommandController.wrapHandler(cmd.handler, translations)
+          };
+        }
+      }
+    } )
+    .alias("help", "h")
+    .option("help", {
       global: false
     })
-    .alias("v", "version")
+    .alias("version", "v")
     .option("v", {
       global: false
     })
-    .option("d", {
-      alias: "debug",
-      describe: "turn on debug logs",
+    .option("debug", {
+      alias: "d",
+      describe: "Turn on debug logs",
       type: "boolean"
     })
     .recommendCommands()
@@ -55,6 +63,9 @@ const start = (translations: Translations) => {
 
       process.exit(0);
     })
+    .demandCommand()
+    .detectLocale(false)
+    .help()
     .argv;
 
   if (!argv._[0]) {
@@ -67,4 +78,3 @@ translations.init()
     start(translations);
   })
   .catch(err => console.error(err.message));
-

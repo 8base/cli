@@ -7,7 +7,7 @@ import { GraphqlActions } from "../../../consts/GraphqlActions";
 const { exportTables } = require("@8base/api-client");
 
 export default {
-  name: "export",
+  command: "export",
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("export_in_progress"));
 

@@ -1,7 +1,7 @@
 import * as yargs from "yargs";
 import { translations } from "../../../common/translations";
 
-module.exports = {
+export default {
   command: "generate <command>",
   describe: translations.i18n.t("generate_describe"),
   builder: function (yargs: yargs.Argv) {
@@ -9,5 +9,7 @@ module.exports = {
       extensions: ["js", "ts"],
     });
   },
-  handler: function (argv: any) { }
+  handler: function () {
+    // This is parent handler. It is not used.
+  }
 };

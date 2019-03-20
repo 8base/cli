@@ -6,7 +6,7 @@ import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 
 export default {
-  name: "package",
+  command: "package",
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("package_progress"));
 

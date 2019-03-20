@@ -3,6 +3,10 @@
 exports[`As a user, I can use help flag for see help information for \`init\` command. 1`] = `
 "8base init [OPTIONS]
 
+Options:
+  --debug, -d  Turn on debug logs                                      [boolean]
+  --help       Show help                                               [boolean]
+
 Examples:
   8base init             initialize current folder
   8base init my_project  create folder my_project and initialize"

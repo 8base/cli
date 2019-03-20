@@ -44,7 +44,7 @@ const readLogs = async (functionName: string, context: Context) => {
 };
 
 export default {
-  name: "logs",
+  command: "logs",
   handler: async (params: any, context: Context) => {
     if (params["t"] ) {
       return await readLogs(params._[1], context);

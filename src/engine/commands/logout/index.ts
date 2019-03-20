@@ -6,8 +6,8 @@ import { StorageParameters } from "../../../consts/StorageParameters";
 import { translations } from "../../../common/translations";
 
 export default {
-  name: "logout",
-  handler: async (params: any, context: Context) => {
+  command: "logout",
+  handler: async () => {
     UserDataStorage.setValues([
       {
         name: StorageParameters.refreshToken,
@@ -28,8 +28,7 @@ export default {
     ]);
   },
   describe: translations.i18n.t("logout_describe"),
-
   builder: (args: yargs.Argv): yargs.Argv => {
     return args.usage(translations.i18n.t("logout_usage"));
-  }
+  },
 };

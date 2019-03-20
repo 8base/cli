@@ -9,7 +9,7 @@ import chalk from "chalk";
 import { Colors } from "../../../consts/Colors";
 
 export default {
-  name: "init",
+  command: "init",
   handler: async (params: any, context: Context) => {
 
     const parameters = _.castArray(params._);

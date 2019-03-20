@@ -2,7 +2,7 @@ import * as path from "path";
 import * as readdir from "readdir";
 import * as _ from "lodash";
 import * as fs from "fs";
-import { Context } from "../../../../common/context";
+import { Context } from "../../../common/context";
 
 interface IFileProvider {
   /*async*/ provide(context: Context): Promise<Map<string, string>>;

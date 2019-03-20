@@ -4,6 +4,8 @@ exports[`As a user, I can use help flag for see help information for \`login\` c
 "8base login [OPTIONS]
 
 Options:
-  -e, --email     user email                                            [string]
-  -p, --password  user password                                         [string]"
+  --debug, -d     Turn on debug logs                                   [boolean]
+  --help          Show help                                            [boolean]
+  --email, -e     user email                                            [string]
+  --password, -p  user password                                         [string]"
 `;
