@@ -1,4 +1,5 @@
 import { UserDataStorage } from "./userDataStorage";
+import { User } from "./user";
 import { StaticConfig } from "../config";
 import { ProjectDefinition } from "../interfaces/Project";
 import _ = require("lodash");
@@ -59,6 +60,10 @@ export class Context {
 
   get storage(): typeof UserDataStorage {
     return UserDataStorage;
+  }
+
+  get user(): typeof User {
+    return User;
   }
 
   get config(): typeof StaticConfig {
@@ -124,7 +129,7 @@ export class Context {
     ]);
 
     this.logger.info(`Workspace ${chalk.hex(Colors.yellow)(activeWorkspace.name)} is active`);
-    this.logger.info(`\nAPI endpoint URL: https:\/\/api.8base.com/${activeWorkspace.id}\n`);
+    this.logger.info(`\nAPI endpoint URL: ${this.user.endpoint}`);
   }
 
   async request(query: string, variables: any = null, isLoginRequired = true): Promise<any> {

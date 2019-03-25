@@ -1,9 +1,16 @@
 import { StaticConfig } from "../config";
+import { StorageParameters } from "../consts/StorageParameters";
 import * as path from "path";
 import * as fs from "fs";
 
 class Storage {
   private static storageFileName = ".8baserc";
+
+  private static defaultStorageData = {
+    [StorageParameters.serverAddress]: StaticConfig.remoteAddress,
+    [StorageParameters.authDomain]: StaticConfig.authDomain,
+    [StorageParameters.authClientId]: StaticConfig.authClientId,
+  };
 
   /**
    *  path to storage file is persistent
@@ -20,7 +27,7 @@ class Storage {
   private static checkStorageExist() {
     const storagePath = this.pathToStorage;
     if (!fs.existsSync(storagePath)) {
-      fs.writeFileSync(storagePath, "{}");
+      fs.writeFileSync(storagePath, this.toPrettyString(this.defaultStorageData));
     }
   }
 
