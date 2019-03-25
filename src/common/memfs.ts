@@ -3,19 +3,19 @@ import * as path from "path";
 import * as mkdirp from "mkdirp";
 
 
-const asyncForEach = async(array: any[], callback: Function) => {
+const asyncForEach = async<T extends Object>(array: T[], callback: (arg0: T, arg1: number, arg2: T[]) => any) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
   }
 };
 
-const writeFile = async (relativePath:string , data: any, options: Object) => {
+const writeFile = async (relativePath:string , data: Object, options: Object) => {
   await mkdirp.sync(path.dirname(relativePath));
 
   await fs.writeFile(relativePath, data, options);
 };
 
-export const writeFs = async (fsObject: any, rootPath: string = "./", options: Object = {}) => {
+export const writeFs = async (fsObject: Object, rootPath: string = "./", options: Object = {}) => {
   await asyncForEach(Object.keys(fsObject), async (relativePath: string) => {
     const fileContent = fsObject[relativePath];
 

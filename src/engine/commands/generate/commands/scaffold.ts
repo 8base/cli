@@ -1,21 +1,17 @@
 import * as yargs from "yargs";
 import * as fs from "fs-extra";
 import * as yaml from "js-yaml";
-
-import * as changeCase from "change-case";
-import * as _ from "lodash";
 import { Context } from "../../../../common/context";
 import { translations } from "../../../../common/translations";
 import { Interactive } from "../../../../common/interactive";
 import { writeFs } from "../../../../common/memfs";
+import { createQueryColumnsList, TableSchema } from "@8base/utils";
+import { generateScreen } from "@8base/generators";
 
-const pluralize = require("pluralize");
-const { generateScreen } = require("@8base/generators");
 const { exportTables } = require("@8base/api-client");
-const { createQueryColumnsList } = require("@8base/utils");
 
 
-type ViewCommanConfig = {
+type ViewCommandConfig = {
   tableName: string,
   depth: number,
 };
@@ -48,9 +44,9 @@ const promptColumns = async (columns: string[], message: string): Promise<string
   return result.columns;
 };
 
-const getTable = (tables: Object[], tableName: string): any => {
+const getTable = (tables: TableSchema[], tableName: string): TableSchema => {
   const table = tables.find(
-    ({ name, displayName }: any) => tableName === name || tableName === displayName
+    ({ name, displayName }) => tableName === name || tableName === displayName
   );
 
   if (!table) { throw new Error(translations.i18n.t("scaffold_table_error", { tableName })); }
@@ -58,7 +54,7 @@ const getTable = (tables: Object[], tableName: string): any => {
   return table;
 };
 
-const getColumnsNames = (params: { withMeta: boolean } & ViewCommanConfig, tables: Object[]): string[] => {
+const getColumnsNames = (params: { withMeta: boolean } & ViewCommandConfig, tables: TableSchema[]): string[] => {
   const { name } = getTable(tables, params.tableName);
 
   const columns = createQueryColumnsList(
@@ -67,16 +63,16 @@ const getColumnsNames = (params: { withMeta: boolean } & ViewCommanConfig, table
     { deep: params.depth, withMeta: params.withMeta }
   );
 
-  const columnsNames = columns.map(({ name }: any) => name);
+  const columnsNames = columns.map(({ name }) => name);
 
   return columnsNames;
 };
 
 
 const createTemplateFs = async (
-  tables: Object[],
+  tables: TableSchema[],
   screen: Screen,
-  config: Object,
+  config: { depth: number },
   context: Context,
 ) => {
 
@@ -88,7 +84,7 @@ const createTemplateFs = async (
       screen,
       rootFile,
     },
-    { ...config, withMeta: true },
+    { deep: config.depth },
   );
 
   try {
@@ -110,9 +106,9 @@ const createTemplateFs = async (
 export default {
   command: "scaffold <tableName>",
   describe: translations.i18n.t("scaffold_describe"),
-  handler: async (params: ViewCommanConfig, context: Context) => {
+  handler: async (params: ViewCommandConfig, context: Context) => {
     context.spinner.start("Fetching table data");
-    const tables: any[] = await exportTables(context.request.bind(context), { withSystemTables: true });
+    const tables: TableSchema[] = await exportTables(context.request.bind(context), { withSystemTables: true });
     const { name } = getTable(tables, params.tableName);
 
     context.spinner.stop();
@@ -134,8 +130,8 @@ export default {
     const columnsTableNames = getColumnsNames({ ...params, withMeta: true }, tables);
     const tableFields = await promptColumns(columnsTableNames, "Choose table fields");
 
-    const columnsformNames = getColumnsNames({ ...params, withMeta: false, depth: 1 }, tables);
-    const formFields = await promptColumns(columnsformNames, "Choose form fields");
+    const columnsFormNames = getColumnsNames({ ...params, withMeta: false, depth: 1 }, tables);
+    const formFields = await promptColumns(columnsFormNames, "Choose form fields");
 
     const generatorScreen = {
       screenName: name,

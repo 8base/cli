@@ -23,6 +23,8 @@ export class User {
     const activeWorkspace = this.storage.getValue(StorageParameters.activeWorkspace);
     const serverAddress = this.storage.getValue(StorageParameters.serverAddress);
 
-    return path.join(serverAddress, activeWorkspace);
+    const separator = serverAddress.slice(-1) === "/" ? "" : "/";
+
+    return serverAddress + separator + activeWorkspace;
   }
 }
