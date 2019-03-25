@@ -65,6 +65,9 @@ export default {
 
     "generate_describe": "Generate frontend templates",
 
+    "app_describe": "Generate app sceleton",
+    "app_usage": "8base generate app [PROJECT_NAME]",
+
     "scaffold_usage": "8base generate scaffold [TABLE_NAME] [OPTIONS]",
     "scaffold_describe": "Generate crud",
     "scaffold_table_describe": "Table name",
