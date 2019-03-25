@@ -30,6 +30,14 @@ export class StaticConfig {
     return this.staticData.remoteAddress;
   }
 
+  static get authDomain(): string {
+    return this.staticData.authDomain;
+  }
+
+  static get authClientId(): string {
+    return this.staticData.authClientId;
+  }
+
   static get webClientAddress(): string {
     return this.staticData.webClientAddress;
   }
