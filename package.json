@@ -9,34 +9,16 @@
     "8base": "dist/index.js"
   },
   "scripts": {
-    "e2e": "npm run build && jest --config e2e/config.json",
-    "test": "npm run e2e && npm run tslint",
+    "e2e": "npm run docker:start",
+    "docker:build": "docker build -t e2e-cli .",
+    "docker:start": "docker run --rm -it -e 'TERM=xterm-256color' -v $(pwd)/src:/app/src -v $(pwd)/e2e:/app/e2e -v $(pwd)/types:/app/types -v $(pwd)/e2e:/app/e2e -v $(pwd)/template:/app/template -v $(pwd)/package.json:/app/package.json -v $(pwd)/tsconfig.json:/app/tsconfig.json e2e-cli",
+    "jest": "npm run build && jest --config e2e/config.js",
+    "check": "npm run e2e && npm run tslint",
     "build": "tsc",
     "watch": "npm run build -- --watch",
     "tslint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "upload": "npm version patch && git push --follow-tags",
     "preversion": "npm run tslint"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "tsconfig.json"
-      }
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "json"
-    ],
-    "transform": {
-      "\\.(gql|graphql)$": "jest-transform-graphql",
-      "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
-    },
-    "testMatch": [
-      "**/test/**/*.test.(ts|js)"
-    ],
-    "clearMocks": true,
-    "setupTestFrameworkScriptFile": "./test/setup.ts"
   },
   "dependencies": {
     "@8base/api-client": "^0.18.3",
@@ -111,6 +93,7 @@
     "jest-cli": "^24.1.0",
     "jest-environment-node-debug": "^2.0.0",
     "jest-transform-graphql": "^2.1.0",
+    "mock-fs": "^4.8.0",
     "node-sass": "^4.10.0",
     "nodemon": "^1.18.5",
     "npm": "^6.4.1",

@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`As a user, I can generate new app. 1`] = `"generate done. Time: 100 ms."`;
+
+exports[`As a user, I can generate new app. 2`] = `
+Array [
+  "test_app",
+  "test_app/.8base.yml",
+  "test_app/.eslintrc.json",
+  "test_app/.gitignore",
+  "test_app/.prettierrc",
+  "test_app/README.md",
+  "test_app/apollo.config.js",
+  "test_app/package-lock.json",
+  "test_app/package.json",
+  "test_app/public",
+  "test_app/public/favicon.ico",
+  "test_app/public/index.html",
+  "test_app/public/manifest.json",
+  "test_app/src",
+  "test_app/src/Application.js",
+  "test_app/src/Root.js",
+  "test_app/src/components",
+  "test_app/src/components/Breadcrumbs.js",
+  "test_app/src/components/Breadcrumbs.routes.js",
+  "test_app/src/components/ContentPlate.js",
+  "test_app/src/components/Header.js",
+  "test_app/src/components/MainPlate.js",
+  "test_app/src/components/NavItem.js",
+  "test_app/src/components/NavPlate.js",
+  "test_app/src/components/UserDropdown.js",
+  "test_app/src/components/index.js",
+  "test_app/src/images",
+  "test_app/src/images/Logo.js",
+  "test_app/src/index.css",
+  "test_app/src/index.js",
+  "test_app/src/registerServiceWorker.js",
+  "test_app/src/routes",
+  "test_app/src/routes/auth",
+  "test_app/src/routes/auth/index.js",
+  "test_app/src/routes/auth/routes",
+  "test_app/src/routes/auth/routes/callback",
+  "test_app/src/routes/auth/routes/root",
+  "test_app/src/shared",
+  "test_app/src/shared/components",
+  "test_app/src/shared/components/AddressInputField.js",
+  "test_app/src/shared/components/FileInputField.js",
+  "test_app/src/shared/components/ListFields.js",
+  "test_app/src/shared/components/PhoneInputField.js",
+  "test_app/src/shared/components/ProtectedRoute.js",
+  "test_app/src/shared/components/index.js",
+  "test_app/src/shared/constants.js",
+  "test_app/src/shared/index.js",
+]
+`;
+
+exports[`As a user, I can generate new app. 3`] = `
+"import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { WebAuth0AuthClient } from '@8base/web-auth0-auth-client';
+import { EightBaseAppProvider } from '@8base/app-provider';
+import { EightBaseBoostProvider, AsyncContent } from '@8base/boost';
+import { ToastContainer, toast } from 'react-toastify';
+import { TOAST_SUCCESS_MESSAGE } from './shared/constants';
+
+import { Root } from './Root';
+
+
+/** __AUTH_WEB_START__ */
+const APP_API_ENDPOINT = 'https://api.8base.com/cjtrfwbnn000k01qhwfs0juth';
+const APP_AUTH_CLIENT_ID = 'qGHZVu5CxY5klivm28OPLjopvsYp0baD';
+const APP_AUTH_DOMAIN = 'auth.8base.com';
+
+const authClient = new WebAuth0AuthClient({
+  domain: APP_AUTH_DOMAIN,
+  clientId: APP_AUTH_CLIENT_ID,
+  redirectUri: \`\${window.location.origin}/auth/callback\`,
+  logoutRedirectUri: \`\${window.location.origin}/auth\`,
+});
+/** __AUTH_WEB_END__ */
+
+class Application extends React.PureComponent {
+  onRequestSuccess = ({ operation }) => {
+    const message = operation.getContext()[TOAST_SUCCESS_MESSAGE];
+
+    if (message) {
+      toast.success(message);
+    }
+  };
+
+  onRequestError = ({ graphQLErrors }) => {
+    const hasGraphQLErrors = Array.isArray(graphQLErrors) && graphQLErrors.length > 0;
+
+    if (hasGraphQLErrors) {
+      graphQLErrors.forEach(error => {
+        toast.error(error.message);
+      });
+    }
+  };
+
+  render() {
+    return (
+      <BrowserRouter>
+        <EightBaseBoostProvider>
+          <EightBaseAppProvider
+            uri={APP_API_ENDPOINT}
+            authClient={authClient}
+            onRequestSuccess={this.onRequestSuccess}
+            onRequestError={this.onRequestError}
+          >
+            {({ loading }) => (
+              <AsyncContent loading={loading} stretch>
+                <Root />
+              </AsyncContent>
+            )}
+          </EightBaseAppProvider>
+          <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
+        </EightBaseBoostProvider>
+      </BrowserRouter>
+    );
+  }
+}
+
+export { Application };"
+`;
+
+exports[`As a user, I can generate new app. 4`] = `"appName: test_app"`;
+
+exports[`As a user, I can use help flag for see help information for \`generate app\` command. 1`] = `
+"8base generate app [PROJECT_NAME]
+
+Options:
+  --debug, -d  Turn on debug logs                                      [boolean]
+  --help       Show help                                               [boolean]"
+`;

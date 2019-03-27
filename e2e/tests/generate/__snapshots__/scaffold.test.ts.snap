@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`As a user, I can create some tables. 1`] = `
+"error: Can't find a '.8base.yml' file. You should be in the project root directory to exec this command. 
+ Time: 100 ms."
+`;
+
+exports[`As a user, I can create some tables. 2`] = `
+Array [
+  "test_app/src/routes",
+  "test_app/src/routes/auth",
+  "test_app/src/routes/auth/index.js",
+  "test_app/src/routes/auth/routes",
+  "test_app/src/routes/auth/routes/callback",
+  "test_app/src/routes/auth/routes/callback/index.js",
+  "test_app/src/routes/auth/routes/root",
+  "test_app/src/routes/auth/routes/root/index.js",
+]
+`;
+
+exports[`As a user, I can create some tables. 3`] = `
+"import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+
+import { ProtectedRoute } from './shared/components';
+import { MainPlate, ContentPlate, Nav } from './components';
+import { Auth } from './routes/auth';
+/** __APP_PAGES_IMPORTS__ */
+
+export const Root = () => (
+  <Switch>
+    <Route path=\\"/auth\\" component={Auth} />
+    <Route>
+      <MainPlate>
+        <Nav.Plate color=\\"BLUE\\">
+          {/** __APP_ROUTE_LINKS__ */}
+        </Nav.Plate>
+        <ContentPlate>
+          <Switch>
+            {/** __APP_ROUTES__ */}
+        </Switch>
+        </ContentPlate>
+      </MainPlate>
+    </Route>
+  </Switch>
+);"
+`;
+
+exports[`As a user, I can use help flag for see help information for \`generate scaffold\` command. 1`] = `
+"8base generate scaffold [TABLE_NAME] [OPTIONS]
+
+Options:
+  --debug, -d  Turn on debug logs                                      [boolean]
+  --help       Show help                                               [boolean]
+  --depth      Depth of the generated query                [number] [default: 1]"
+`;

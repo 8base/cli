@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`As a user, I can use help flag for see contains of the config. 1`] = `
+"activeWorkspace: \\"cjrm4ngj9000001s1jo4nsrjv\\"
+
+serverAddress: \\"https://api.8base.com\\"
+
+authDomain: \\"auth.8base.com\\"
+
+authClientId: \\"qGHZVu5CxY5klivm28OPLjopvsYp0baD\\"
+
+idToken: \\"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1qazNPVEZGTmtGQlEwRTNNa0pGT0RNeE1qUTJSamMzUVRRM1JqRTFSalF3UkRNME5qVkVSQSJ9.eyJodHRwczovLzhiYXNlLmNvbS92aXNpdG9yX2lkIjoiODkzNzYwZmMtNjdiNS00MmQyLThkYmYtYjliMWNkODAyYjNiIiwiZ2l2ZW5fbmFtZSI6InAiLCJmYW1pbHlfbmFtZSI6ImciLCJuaWNrbmFtZSI6Iml2YW4ucGluY2h1ayszIiwibmFtZSI6InAgZyIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci8zNmYxOTE1NmFhNDBmYmZiOTFhOGFjZjJmMjQzMDlmZD9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRml2LnBuZyIsInVwZGF0ZWRfYXQiOiIyMDE5LTAzLTI1VDEzOjAyOjA1Ljc5N1oiLCJlbWFpbCI6Iml2YW4ucGluY2h1ayszQDhiYXNlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczovL2F1dGguOGJhc2UuY29tLyIsInN1YiI6ImF1dGgwfDVjNTQ1MzYwNThkZDQyMzYzMDE4NTk0MCIsImF1ZCI6InFHSFpWdTVDeFk1a2xpdm0yOE9QTGpvcHZzWXAwYmFEIiwiaWF0IjoxNTUzNjA2Nzg3LCJleHAiOjE1NTM2NDI3ODd9.g37SxJmDVMXmZFWKN6tj704ahGMBWiyApM5hBbRNphRYvQdYbILH9ESJLc2-JTA1bb8AjZkqH3ka2dO5X0XHvRwTchToqvz6L81SWrCAuQ0xHvJbukxC07mUcMvmp3jsS5kQSG4-PzSvGQIVjbcK7fohjm0RkWu6EDl-zFoAlS-6_Aaf2QOC-O2GgNuvhcEokdDMcaYdNE7MvpTf8Z0pwWGzP4jaHWH4_MEfMzmtJc4xc0-Oqh8lqRl9gke8i2hFIWytowEYkoUDy9dooG9AAQZ8cvTz8F95t_GAprljCOfRAI4V--ErhETTp5IhjuEbxTRw1QCFBjUBqTHf2qxDgw\\"
+
+refreshToken: \\"2bI361Fyx-Atfa1tNIOs5_NtV54NgpbGbDU6zPrVFj1ud\\"
+
+workspaces: [
+  {
+    \\"name\\": \\"p's Workspace\\",
+    \\"id\\": \\"cjrm4ngj9000001s1jo4nsrjv\\"
+  },
+  {
+    \\"name\\": \\"react-native-example\\",
+    \\"id\\": \\"cjrm4o15b000e01qq3lg7l2ys\\"
+  }
+]
+
+config done. Time: 100 ms."
+`;
+
+exports[`As a user, I can use help flag for see help information about \`config\` commands. 1`] = `
+"8base config [OPTIONS]
+
+Options:
+  --debug, -d      Turn on debug logs                                  [boolean]
+  --help           Show help                                           [boolean]
+  -w, --workspace  workspace id                                         [string]"
+`;
