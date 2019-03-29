@@ -65,6 +65,9 @@ export default {
 
     "generate_describe": "Generate frontend templates",
 
+    "app_describe": "Generate app sceleton",
+    "app_usage": "8base generate app [PROJECT_NAME]",
+
     "scaffold_usage": "8base generate scaffold [TABLE_NAME] [OPTIONS]",
     "scaffold_describe": "Generate crud",
     "scaffold_table_describe": "Table name",
@@ -72,8 +75,11 @@ export default {
     "scaffold_depth_describe": "Depth of the generated query",
     "scaffold_withMeta_describe": "Include meta fields (createdAt, createdBy, updatedAt)",
     "scaffold_table_error": "Can't find a '{{- tableName }}' table",
-    "scaffold_successfully_created": "{{- fileName }} was successfully created",
-    "scaffold_was_not_created": "{{- fileName }} wasn't created",
+    "scaffold_crud_exist_error": "CRUD for this table already exist.",
+    "scaffold_project_file_error": "Can't find a '{{- projectFileName }}' file. You should be in the project root directory to exec this command.",
+    "scaffold_project_name_error": "Can't find an 'appName' constant. Check you '{{- projectFileName }}' file in the project root directory.",
+    "scaffold_successfully_created": "{{- screenName }} was successfully created",
+    "scaffold_was_not_created": "{{- screenName }} wasn't created",
 
     "package_usage": "8base package [OPTIONS]",
     "package_describe": "Package application without deploying",

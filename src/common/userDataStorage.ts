@@ -1,9 +1,18 @@
 import { StaticConfig } from "../config";
+import { StorageParameters } from "../consts/StorageParameters";
 import * as path from "path";
 import * as fs from "fs";
 
+
+const defaultStorageData = {
+  [StorageParameters.serverAddress]: StaticConfig.remoteAddress,
+  [StorageParameters.authDomain]: StaticConfig.authDomain,
+  [StorageParameters.authClientId]: StaticConfig.authClientId,
+};
+
 class Storage {
   private static storageFileName = ".8baserc";
+
 
   /**
    *  path to storage file is persistent
@@ -20,7 +29,7 @@ class Storage {
   private static checkStorageExist() {
     const storagePath = this.pathToStorage;
     if (!fs.existsSync(storagePath)) {
-      fs.writeFileSync(storagePath, "{}");
+      fs.writeFileSync(storagePath, this.toPrettyString(defaultStorageData));
     }
   }
 
@@ -56,7 +65,20 @@ export class UserDataStorage {
 
   static getValue(name: string): any {
     const storage = Storage.getStorage();
-    return storage ? storage[name] : null;
+    const storegeValue = storage[name];
+
+    if (!storegeValue && !!defaultStorageData[name]) {
+      this.setValues([{
+        name,
+        value: defaultStorageData[name],
+      }]);
+
+      return defaultStorageData[name];
+    } else if (!storegeValue) {
+      return null;
+    }
+
+    return storegeValue;
   }
 
   static clearAll() {

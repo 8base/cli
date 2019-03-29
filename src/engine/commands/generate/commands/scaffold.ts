@@ -1,34 +1,38 @@
 import * as yargs from "yargs";
 import * as fs from "fs-extra";
-import * as changeCase from "change-case";
-import * as _ from "lodash";
+import * as yaml from "js-yaml";
 import { Context } from "../../../../common/context";
 import { translations } from "../../../../common/translations";
 import { Interactive } from "../../../../common/interactive";
+import { writeFs } from "../../../../common/memfs";
+import { createQueryColumnsList, TableSchema } from "@8base/utils";
+import { generateScreen } from "@8base/generators";
 
-const pluralize = require("pluralize");
-const generators = require("@8base/generators");
 const { exportTables } = require("@8base/api-client");
-const { createQueryColumnsList } = require("@8base/utils");
 
 
-type ViewCommanConfig = {
-  table: "index" | "table" | "create" | "edit" | "crud",
-  template: string,
-  withMeta: boolean,
+type ViewCommandConfig = {
+  tableName: string,
   depth: number,
 };
 
-type CreateFileConfig = {
-  includeColumns ?: string[],
-} & ViewCommanConfig;
+type Screen = {
+  tableName: string,
+  screenName: string,
+  tableFields?: string[],
+  formFields?: string[],
+};
+
+type EightBaseConfig = {
+  appName: string
+};
 
 
-const promptColumns = async (columns: string[], context: Context): Promise<string[]> => {
+const promptColumns = async (columns: string[], message: string): Promise<string[]> => {
   const result = await Interactive.ask({
     name: "columns",
     type: "multiselect",
-    message: "choose columns",
+    message: message,
     choices: columns.map(column => {
       return {
         title: column,
@@ -40,123 +44,115 @@ const promptColumns = async (columns: string[], context: Context): Promise<strin
   return result.columns;
 };
 
+const getTable = (tables: TableSchema[], tableName: string): TableSchema => {
+  const table = tables.find(
+    ({ name, displayName }) => tableName === name || tableName === displayName
+  );
 
-const getColumnsNames = (params: ViewCommanConfig, tables: Object[], context: Context): string[] => {
-  const table = tables.find(({ name }: any) => params.table === name);
+  if (!table) { throw new Error(translations.i18n.t("scaffold_table_error", { tableName })); }
 
-  if (!table) { throw new Error(context.i18n.t("scaffold_table_error", { tableName: params.table })); }
+  return table;
+};
+
+const getColumnsNames = (params: { withMeta: boolean } & ViewCommandConfig, tables: TableSchema[]): string[] => {
+  const { name } = getTable(tables, params.tableName);
 
   const columns = createQueryColumnsList(
     tables,
-    params.table,
+    name,
     { deep: params.depth, withMeta: params.withMeta }
   );
 
-  const columnsNames = params.template === "create" || params.template === "edit"
-    ? _.uniq(
-      columns.map(({ name }: any) => name.split(".")[0])
-    )
-    : columns.map(({ name }: any) => name);
+  const columnsNames = columns.map(({ name }) => name);
 
   return columnsNames;
 };
 
 
-const createTemplateFile = async (
-  tables: Object[],
-  { table: tableName, template, depth, withMeta, includeColumns }: CreateFileConfig,
+const createTemplateFs = async (
+  tables: TableSchema[],
+  screen: Screen,
+  config: { depth: number },
   context: Context,
 ) => {
-  let templateString = "";
-  let fileName = "";
 
-  switch (template) {
-    case "index": {
-      templateString = generators.generateIndex({ tableName }, { deep: depth });
-      fileName = `index.js`;
-      break;
-    }
-    case "table": {
-      templateString = generators.generateTable({ tablesList: tables, tableName }, { deep: depth, withMeta, includeColumns });
-      fileName = `${changeCase.pascal(tableName)}Table.js`;
-      break;
-    }
-    case "create": {
-      templateString = generators.generateCreateForm({ tablesList: tables, tableName }, { deep: depth, includeColumns });
-      fileName = `${changeCase.pascal(pluralize.singular(tableName))}CreateDialog.js`;
-      break;
-    }
-    case "edit": {
-      templateString = generators.generateEditForm({ tablesList: tables, tableName }, { deep: depth, includeColumns });
-      fileName = `${changeCase.pascal(pluralize.singular(tableName))}EditDialog.js`;
-      break;
-    }
-    case "delete": {
-      templateString = generators.generateDeleteForm({ tablesList: tables, tableName }, { deep: depth, includeColumns });
-      fileName = `${changeCase.pascal(pluralize.singular(tableName))}DeleteDialog.js`;
-      break;
-    }
-    default: return;
-  }
+  const rootFile = await fs.readFile("src/Root.js", "utf8");
+
+  const fsObject = generateScreen(
+    {
+      tablesList: tables,
+      screen,
+      rootFile,
+    },
+    { deep: config.depth },
+  );
 
   try {
-    await fs.writeFile(fileName, templateString);
-    context.logger.info(context.i18n.t("scaffold_successfully_created", { fileName }));
+    if (fs.existsSync(Object.keys(fsObject)[0])) {
+      throw new Error(translations.i18n.t("scaffold_crud_exist_error"));
+    }
+
+    await writeFs(fsObject);
+
+    Object.keys(fsObject).forEach(filePath => context.logger.info(filePath));
+    context.logger.info(context.i18n.t("scaffold_successfully_created", { screenName: screen.screenName }));
   } catch( err ) {
-    context.logger.error(context.i18n.t("scaffold_was_not_created", { fileName }));
+    context.logger.error(err);
+    context.logger.error(context.i18n.t("scaffold_was_not_created", { screenName: screen.screenName }));
   }
 };
 
 
-module.exports = {
-  command: "scaffold",
+export default {
+  command: "scaffold <tableName>",
   describe: translations.i18n.t("scaffold_describe"),
-  handler: async (params: ViewCommanConfig, context: Context) => {
-    const tables: any[] = await exportTables(context.request.bind(context), { withSystemTables: true });
-    const columnsNames = getColumnsNames(params, tables, context);
-    const includeColumns = params.template !== "index"
-      ? await promptColumns(columnsNames, context)
-      : [];
+  handler: async (params: ViewCommandConfig, context: Context) => {
+    context.spinner.start("Fetching table data");
+    const tables: TableSchema[] = await exportTables(context.request.bind(context), { withSystemTables: true });
+    const { name } = getTable(tables, params.tableName);
 
-    const generatorConfig = {
-      table: params.table,
-      depth: params.depth,
-      withMeta: params.withMeta,
-      includeColumns: includeColumns || [],
+    context.spinner.stop();
+
+    let eightBaseConfig: EightBaseConfig;
+    try {
+      eightBaseConfig = <any>yaml.safeLoad(await fs.readFile(".8base.yml", "utf8"));
+    } catch(err) {
+      if (err.code === "ENOENT") {
+        throw new Error(translations.i18n.t("scaffold_project_file_error", { projectFileName: ".8base.yml" }));
+      } else {
+        throw err;
+      }
+    }
+
+    const { appName } = eightBaseConfig;
+    if (!appName) throw new Error(translations.i18n.t("scaffold_project_name_error", { projectFileName: ".8base.yml" }));
+
+    const columnsTableNames = getColumnsNames({ ...params, withMeta: true }, tables);
+    const tableFields = await promptColumns(columnsTableNames, "Choose table fields");
+
+    const columnsFormNames = getColumnsNames({ ...params, withMeta: false, depth: 1 }, tables);
+    const formFields = await promptColumns(columnsFormNames, "Choose form fields");
+
+    const generatorScreen = {
+      screenName: name,
+      tableName: name,
+      formFields: formFields || [],
+      tableFields: tableFields || [],
     };
 
-    if (params.template === "crud") {
-      await createTemplateFile(tables, { ...generatorConfig, template: "index" }, context);
-      await createTemplateFile(tables, { ...generatorConfig, template: "create" }, context);
-      await createTemplateFile(tables, { ...generatorConfig, template: "edit" }, context);
-      await createTemplateFile(tables, { ...generatorConfig, template: "delete" }, context);
-      await createTemplateFile(tables, { ...generatorConfig, template: "table" }, context);
-    } else {
-      await createTemplateFile(tables, { ...generatorConfig, template: params.template }, context);
-    }
+    const generatorConfig = {
+      depth: params.depth,
+    };
+
+    await createTemplateFs(tables, generatorScreen, generatorConfig, context);
   },
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("scaffold_usage"))
-      .option("table", {
-        describe: translations.i18n.t("scaffold_table_describe"),
-        type: "string",
-        demandOption: true,
-      })
-      .option("template", {
-        describe: translations.i18n.t("scaffold_template_describe"),
-        type: "string",
-        default: "crud",
-      })
       .option("depth", {
         describe: translations.i18n.t("scaffold_depth_describe"),
         type: "number",
         default: 1,
-      })
-      .option("withMeta", {
-        describe: translations.i18n.t("scaffold_withMeta_describe"),
-        type: "boolean",
-        default: false,
       });
   }
 };

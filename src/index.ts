@@ -3,9 +3,8 @@
 import * as yargs from "yargs";
 import * as path from "path";
 import * as _ from "lodash";
-import { CommandController } from "./engine/controllers/commandController";
 import { StaticConfig } from "./config";
-
+import { Utils } from "./common/utils";
 import { translations, Translations } from "./common/translations";
 
 const start = (translations: Translations) => {
@@ -15,22 +14,7 @@ const start = (translations: Translations) => {
     .commandDir(StaticConfig.commandsDir, {
       extensions: ["js", "ts"],
       recurse: true,
-      visit: (commandObject, pathName) => {
-        const mathedFolderRegExp = new RegExp(
-          path
-            .join(StaticConfig.commandsDir, "/[^\/]*/[^\/]*.(t|j)s")
-            .replace(/\//ig, "\\\/")
-        );
-
-        const cmd = commandObject.default || commandObject;
-
-        if (mathedFolderRegExp.test(pathName) && !!cmd.command) {
-          return {
-            ...cmd,
-            handler: CommandController.wrapHandler(cmd.handler, translations)
-          };
-        }
-      }
+      visit: Utils.commandDirMiddleware(StaticConfig.commandsDir)
     } )
     .alias("help", "h")
     .option("help", {

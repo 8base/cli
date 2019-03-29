@@ -7,6 +7,9 @@ import { Interactive } from "./interactive";
 import * as _ from "lodash";
 import { Context } from "./context";
 import { Readable } from "stream";
+import { CommandController } from "../engine/controllers/commandController";
+import { StaticConfig } from "../config";
+import { translations, Translations } from "./translations";
 
 const MemoryStream = require("memorystream");
 const streamToBuffer = require("stream-to-buffer");
@@ -115,8 +118,6 @@ export namespace Utils {
     });
   };
 
-
-
   export const promptWorkspace = async (workspaces: workspace[], context: Context): Promise<{ id:string }> => {
 
     if (_.isEmpty(workspaces)) {
@@ -154,5 +155,22 @@ export namespace Utils {
     }
 
     return url[url.length - 1] === "/" ? url.substr(0, url.length - 1) : url;
+  };
+
+  export const commandDirMiddleware = (commandsDirPath: string) => (commandObject: {[key: string]: any}, pathName: string): Object => {
+    const mathedFolderRegExp = new RegExp(
+      commandsDirPath
+        .replace(/\//ig, "\\\/")
+        .concat("(\/[^\/]*){0,1}\/[^\/]*\.(t|j)s")
+    );
+
+    const cmd = commandObject.default || commandObject;
+
+    if (mathedFolderRegExp.test(pathName) && !!cmd.command) {
+      return {
+        ...cmd,
+        handler: CommandController.wrapHandler(cmd.handler, translations)
+      };
+    }
   };
 }
