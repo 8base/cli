@@ -38,7 +38,7 @@ export default {
     context.spinner.stop();
 
     try {
-      const funcResult = await funcToCall(JSON.parse(args));
+      const funcResult = await funcToCall({ data: JSON.parse(args) });
 
       context.logger.info("\nResult:");
       context.logger.info(JSON.stringify(funcResult, null, 2));
