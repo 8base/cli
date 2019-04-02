@@ -63,13 +63,13 @@ export default {
     "logs_describe": "View function logs",
     "logs_in_progress": "getting logs...",
 
-    "generate_describe": "Generate frontend templates",
+    "generate_describe": "Generate React templates",
 
-    "app_describe": "Generate app sceleton",
+    "app_describe": "Generate React app skeleton",
     "app_usage": "8base generate app [PROJECT_NAME]",
 
     "scaffold_usage": "8base generate scaffold [TABLE_NAME] [OPTIONS]",
-    "scaffold_describe": "Generate crud",
+    "scaffold_describe": "Generate CRUD screens for a table",
     "scaffold_table_describe": "Table name",
     "scaffold_template_describe": "Type of template (crud, create, edit, delete, table, index) ",
     "scaffold_depth_describe": "Depth of the generated query",
