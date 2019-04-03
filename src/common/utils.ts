@@ -158,15 +158,13 @@ export namespace Utils {
   };
 
   export const commandDirMiddleware = (commandsDirPath: string) => (commandObject: {[key: string]: any}, pathName: string): Object => {
-    const mathedFolderRegExp = new RegExp(
-      commandsDirPath
-        .replace(/\//ig, "\\\/")
-        .concat("(\/[^\/]*){0,1}\/[^\/]*\.(t|j)s")
-    );
-
     const cmd = commandObject.default || commandObject;
+    const fileDepth = path
+      .relative(commandsDirPath, pathName)
+      .split(path.sep)
+      .length;
 
-    if (mathedFolderRegExp.test(pathName) && !!cmd.command) {
+    if (fileDepth <= 2 && !!cmd.command) {
       return {
         ...cmd,
         handler: CommandController.wrapHandler(cmd.handler, translations)
