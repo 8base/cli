@@ -1,6 +1,7 @@
 dist/tests/
 src/
 tests/
+e2e/
 .travis.yml
 tsconfig.json
 tslint.json
