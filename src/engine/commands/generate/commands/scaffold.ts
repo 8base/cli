@@ -46,7 +46,7 @@ const promptColumns = async (columns: string[], message: string): Promise<string
 
 const getTable = (tables: TableSchema[], tableName: string): TableSchema => {
   const table = tables.find(
-    ({ name, displayName }) => tableName === name || tableName === displayName
+    ({ name, displayName }) => tableName.toLowerCase() === name.toLowerCase() || tableName.toLowerCase() === displayName.toLowerCase()
   );
 
   if (!table) { throw new Error(translations.i18n.t("scaffold_table_error", { tableName })); }
