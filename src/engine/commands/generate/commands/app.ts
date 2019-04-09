@@ -48,7 +48,7 @@ export default {
       authDomain: context.storage.getValue(StorageParameters.authDomain),
       appName,
     }, {
-        authMode: 'web'
+      authMode: "web"
     });
 
     await writeFs(replacedFsObject);
