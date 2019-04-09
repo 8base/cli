@@ -36,6 +36,7 @@ export default {
 
     const fsObject = await readFs([
       "src/Application.js",
+      "src/components/Header.js",
       "apollo.config.js",
       "package.json",
       "package-lock.json",
