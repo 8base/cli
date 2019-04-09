@@ -36,6 +36,7 @@ export default {
 
     const fsObject = await readFs([
       "src/Application.js",
+      "src/components/Header.js",
       "apollo.config.js",
       "package.json",
       "package-lock.json",
@@ -46,6 +47,8 @@ export default {
       authClientId: context.storage.getValue(StorageParameters.authClientId),
       authDomain: context.storage.getValue(StorageParameters.authDomain),
       appName,
+    }, {
+        authMode: 'web'
     });
 
     await writeFs(replacedFsObject);
