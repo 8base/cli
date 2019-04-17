@@ -3,6 +3,7 @@ import * as fs from "fs";
 import { execSync } from "child_process";
 import cuid = require("cuid");
 import * as yaml from "js-yaml";
+import { CLI_BIN } from "./consts";
 
 export const prepareTestEnvironment = async (repName: string = cuid()): Promise<{ onComplete: () => void, repPath: string }> => {
   const dir = cuid();
@@ -51,7 +52,7 @@ export const addFileToProject = (fileName: string, fileData: string, projectPath
   };
 };
 
-export const invokeLocalFunction = (funcName: string, repPath: string, input?: { path?: string, data?: object }) => {
+export const invokeLocalFunction = async (funcName: string, repPath: string, input?: { path?: string, data?: object }) => {
   let command: string = `invoke-local ${funcName} `;
 
   if (input && input.data) {
@@ -65,15 +66,16 @@ export const invokeLocalFunction = (funcName: string, repPath: string, input?: {
 
 const execCmd = (repPath: string, command: string) => {
   console.log("execution cmd: " + command);
-  return execSync(`cd ${repPath} && 8base ${command}`).toString();
+
+  return execSync(`cd ${repPath} && node ${CLI_BIN} ${command}`).toString();
 };
 
 export const expectInString =(template: string, expectedValue: string) => {
   const cleanString = (str: string): string => {
-    return str.replace(/^\s*\n+\s*/g, '')
-      .replace(/\s*\n+\s*$/g, '')
-      .replace(/\n+/g, ' ')
-      .replace(/\s\s+/g, ' ');
+    return str.replace(/^\s*\n+\s*/g, "")
+      .replace(/\s*\n+\s*$/g, "")
+      .replace(/\n+/g, " ")
+      .replace(/\s\s+/g, " ");
   };
 
   expect(cleanString(template)).toContain(cleanString(expectedValue));

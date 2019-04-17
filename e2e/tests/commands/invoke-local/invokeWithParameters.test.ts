@@ -36,7 +36,7 @@ it("As a user, I can invoke resolver locally.", async () => {
   const fileData = JSON.stringify({ data: { value: "kokoko" } });
   const { relativePathToFile } = addFileToProject("someData.json", fileData, project.repPath, "data");
 
-  const result = invokeLocalFunction(funcName, project.repPath, { path: relativePathToFile });
+  const result = await invokeLocalFunction(funcName, project.repPath, { path: relativePathToFile });
 
   expectInString(result, `Result:
     {

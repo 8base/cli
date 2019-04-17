@@ -1,9 +1,5 @@
 import * as execa from "execa";
-
-
-const pkg = require("../package.json");
-
-const CLI_BIN = require.resolve(`${process.cwd()}/${pkg.bin["8base"]}`);
+import { CLI_BIN } from "./consts";
 
 const runner = (cwd?: any, env?: any) => {
   const opts = {
