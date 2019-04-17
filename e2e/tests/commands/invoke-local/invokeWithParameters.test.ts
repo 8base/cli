@@ -1,8 +1,7 @@
 import {
   addFileToProject,
-  addResolverToProject,
+  addResolverToProject, RunCommand,
   expectInString,
-  invokeLocalFunction,
   prepareTestEnvironment
 } from "../../../utils";
 
@@ -36,14 +35,14 @@ it("As a user, I can invoke resolver locally.", async () => {
   const fileData = JSON.stringify({ data: { value: "kokoko" } });
   const { relativePathToFile } = addFileToProject("someData.json", fileData, project.repPath, "data");
 
-  const result = await invokeLocalFunction(funcName, project.repPath, { path: relativePathToFile });
+  const result = await RunCommand.invokeLocal(funcName, project.repPath, { path: relativePathToFile });
 
   expectInString(result, `Result:
     {
       "data": "kokoko"
     }
-    invoke-local done. Time:`);
-
+    invoke-local done. Time:`
+  );
 });
 
 beforeAll(async () => {

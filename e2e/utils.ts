@@ -11,7 +11,7 @@ export const prepareTestEnvironment = async (repName: string = cuid()): Promise<
 
   execSync(`mkdir ${fullPath}`);
 
-  execCmd(fullPath, `init ${repName}`);
+  RunCommand.init(fullPath, repName);
 
   return {
     repPath: path.join(fullPath, repName),
@@ -52,17 +52,26 @@ export const addFileToProject = (fileName: string, fileData: string, projectPath
   };
 };
 
-export const invokeLocalFunction = async (funcName: string, repPath: string, input?: { path?: string, data?: object }) => {
-  let command: string = `invoke-local ${funcName} `;
 
-  if (input && input.data) {
-    command += `-j '${JSON.stringify(input.data)}'`;
-  } else if (input && input.path) {
-    command += `-p ${input.path}`;
-  }
 
-  return execCmd(repPath, command);
-};
+export namespace RunCommand {
+
+  export const invokeLocal = async (funcName: string, repPath: string, input?: { path?: string, data?: object }) => {
+    let command: string = `invoke-local ${funcName} `;
+
+    if (input && input.data) {
+      command += `-j '${JSON.stringify(input.data)}'`;
+    } else if (input && input.path) {
+      command += `-p ${input.path}`;
+    }
+
+    return execCmd(repPath, command);
+  };
+
+  export const init = (repPath: string, repName: string) => {
+    return execCmd(repPath, `init ${repName}`);
+  };
+}
 
 const execCmd = (repPath: string, command: string) => {
   console.log("execution cmd: " + command);
