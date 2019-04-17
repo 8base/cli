@@ -9,7 +9,7 @@ import {
 let project: any = null;
 const repositoryName = "test_rep";
 
-it("As a user, I can use help flag for see help information for `deploy` command.", async () => {
+it("As a user, I can invoke resolver locally.", async () => {
 
   jest.setTimeout(12000);
 
