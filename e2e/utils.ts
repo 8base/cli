@@ -11,7 +11,7 @@ export const prepareTestEnvironment = async (repName: string = cuid()): Promise<
 
   execSync(`mkdir ${fullPath}`);
 
-  execSync(`cd ${fullPath} && 8base init ${repName}`);
+  execCmd(fullPath, `init ${repName}`);
 
   return {
     repPath: path.join(fullPath, repName),
