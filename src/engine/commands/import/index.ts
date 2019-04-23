@@ -33,7 +33,7 @@ export default {
     if (params.data) {
       context.spinner.start(context.i18n.t("import_data_in_progress"));
 
-      await importData(context.request.bind(context), schema.data);
+      await importData(context.request.bind(context), schema.data, { maxThreads: 2 });
 
       context.spinner.stop();
     }
