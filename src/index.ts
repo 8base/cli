@@ -47,7 +47,6 @@ const start = (translations: Translations) => {
 
       process.exit(0);
     })
-    .demandCommand()
     .detectLocale(false)
     .help()
     .argv;
