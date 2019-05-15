@@ -10,6 +10,7 @@ const repositoryName = "test_rep";
 
 it("As a user, I can invoke resolver locally.", async () => {
 
+  // @ts-ignore
   jest.setTimeout(12000);
 
   expect.assertions(1);

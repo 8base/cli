@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import * as yargs from "yargs";
-import * as path from "path";
 import * as _ from "lodash";
 import { StaticConfig } from "./config";
 import { Utils } from "./common/utils";

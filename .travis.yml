@@ -3,8 +3,10 @@ node_js:
   - "11.10.1"
 script:
 - npm install
+- npm run build
 - npm run tslint
-- npm run test
+- npm run e2e
+- npm run e2e-scaffold:ci
 deploy:
   provider: npm
   skip_cleanup: true
