@@ -1,6 +1,6 @@
 {
   "name": "8base",
-  "version": "0.0.73",
+  "version": "0.0.76",
   "description": "8base CLI",
   "author": "8base",
   "license": "MIT",
@@ -39,9 +39,9 @@
     "setupTestFrameworkScriptFile": "./test/setup.ts"
   },
   "dependencies": {
-    "@8base/api-client": "^0.18.5",
-    "@8base/generators": "^0.19.1",
-    "@8base/utils": "^0.19.1",
+    "@8base/api-client": "^0.19.5",
+    "@8base/generators": "^0.32.4",
+    "@8base/utils": "^0.19.4",
     "@types/execa": "^0.9.0",
     "archiver": "^3.0.0",
     "async": "^2.5.0",
