@@ -1,9 +1,5 @@
-import * as execa from 'execa';
-import * as path from 'path';
-
-const pkg = require('../package.json');
-
-const CLI_BIN = require.resolve(`${process.cwd()}/${pkg.bin['8base']}`);
+import * as execa from "execa";
+import { CLI_BIN } from "./consts";
 
 const runner = (cwd?: any, env?: any) => {
   const opts = {
@@ -11,9 +7,9 @@ const runner = (cwd?: any, env?: any) => {
     env: Object.assign({
       HOME: process.env.HOME,
     }, env),
-   };
+  };
 
-   return (...args: any[]) => execa('node', [CLI_BIN].concat(args), opts);
+  return (...args: any[]) => execa("node", [CLI_BIN].concat(args), opts);
 };
 
 export { runner };

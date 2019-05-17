@@ -26,7 +26,7 @@ export default {
     let files = await getFileProvider().provide(context);
     context.logger.debug("files provided count = " + files.size);
 
-    files.set(context.config.packageFileName, replaceServiceName(files.get(context.config.packageFileName)));
+    files.set(context.config.packageFileName, replaceServiceName(files.get(context.config.packageFileName), project.name));
 
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);
@@ -43,8 +43,8 @@ export default {
 };
 
 
-const replaceServiceName = (packageFile: string) => {
+const replaceServiceName = (packageFile: string, repositoryName: string) => {
   let packageData = JSON.parse(packageFile);
-  packageData.name = this.repositoryName;
+  packageData.name = repositoryName;
   return JSON.stringify(packageData, null, 2);
 };
