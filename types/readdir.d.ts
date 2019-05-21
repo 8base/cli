@@ -1,3 +1,3 @@
 declare module "readdir" {
-    export function readSync(path: string): string[];   
+    export function readSync(path: string): string[];
 }

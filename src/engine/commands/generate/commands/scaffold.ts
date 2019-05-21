@@ -14,11 +14,12 @@ const { exportTables } = require("@8base/api-client");
 type ViewCommandConfig = {
   tableName: string,
   depth: number,
+  all: boolean,
 };
 
 type Screen = {
   tableName: string,
-  screenName: string,
+  screenName?: string,
   tableFields?: string[],
   formFields?: string[],
 };
@@ -127,17 +128,21 @@ export default {
     const { appName } = eightBaseConfig;
     if (!appName) throw new Error(translations.i18n.t("scaffold_project_name_error", { projectFileName: ".8base.yml" }));
 
-    const columnsTableNames = getColumnsNames({ ...params, withMeta: true }, tables);
-    const tableFields = await promptColumns(columnsTableNames, "Choose table fields");
+    let tableFields, formFields;
 
-    const columnsFormNames = getColumnsNames({ ...params, withMeta: false, depth: 1 }, tables);
-    const formFields = await promptColumns(columnsFormNames, "Choose form fields");
+    if (!params.all) {
+      const columnsTableNames = getColumnsNames({ ...params, withMeta: true }, tables);
+      tableFields = await promptColumns(columnsTableNames, "Choose table fields") || [];
+
+      const columnsFormNames = getColumnsNames({ ...params, withMeta: false, depth: 1 }, tables);
+      formFields = await promptColumns(columnsFormNames, "Choose form fields") || [];
+    }
 
     const generatorScreen = {
-      screenName: name,
       tableName: name,
-      formFields: formFields || [],
-      tableFields: tableFields || [],
+      screenName: name,
+      formFields: formFields,
+      tableFields: tableFields,
     };
 
     const generatorConfig = {
@@ -153,6 +158,11 @@ export default {
         describe: translations.i18n.t("scaffold_depth_describe"),
         type: "number",
         default: 1,
+      })
+      .option("all", {
+        type: "boolean",
+        default: false,
+        hidden: true,
       });
   }
 };

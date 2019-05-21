@@ -23,12 +23,13 @@ export const passwordLogin = async (params: any, context: Context): Promise<Sess
   context.logger.info(context.i18n.t("login_password_warning"));
 
   const data = {
-    email: params.e ? params.e : await promptEmail(),
-    password: params.p ? params.p : await promptPassword()
+    email: params.email ? params.email : await promptEmail(),
+    password: params.password ? params.password : await promptPassword()
   };
 
   context.spinner.start(context.i18n.t("login_in_progress"));
   const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } }, false);
+
   return {
     idToken: result.userLogin.auth.idToken,
     refreshToken: result.userLogin.auth.refreshToken,

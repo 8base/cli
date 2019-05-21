@@ -7,17 +7,25 @@ import "isomorphic-fetch";
 import { StaticConfig } from "../../../config";
 import { passwordLogin } from "./passwordLogin";
 import { webLogin } from "./webLogin";
+import { StorageParameters } from "../../../consts/StorageParameters";
 
+type LoginCommandParams = {
+  email: string,
+  password: string,
+  w: string,
+  workspace: string,
+};
 
 export default {
   command: "login",
-  handler: async (params: any, context: Context) => {
+  handler: async (params: LoginCommandParams, context: Context) => {
     await logout.handler();
 
-    const result = params.e || params.p ? await passwordLogin(params, context) : await webLogin(params, context);
+    const result = params.email || params.password ? await passwordLogin(params, context) : await webLogin(params, context);
     context.setSessionInfo(result);
     context.spinner.stop();
-    await context.chooseWorkspace();
+
+    await context.chooseWorkspace(params.workspace);
   },
 
   describe: translations.i18n.t("login_describe"),
@@ -38,6 +46,10 @@ export default {
       .option("w", {
         type: "string",
         default: StaticConfig.webClientAddress,
+        hidden: true
+      })
+      .option("workspace", {
+        type: "string",
         hidden: true
       });
   }
