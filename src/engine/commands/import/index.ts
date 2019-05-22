@@ -25,7 +25,7 @@ export default {
     if (params.schema) {
       context.spinner.start(context.i18n.t("import_schema_in_progress"));
 
-      await importTables(context.request.bind(context), schema.tables);
+      await importTables(context.request.bind(context), _.get(schema, "tables", {}), { debug: params.d });
 
       context.spinner.stop();
     }
@@ -33,7 +33,7 @@ export default {
     if (params.data) {
       context.spinner.start(context.i18n.t("import_data_in_progress"));
 
-      await importData(context.request.bind(context), schema.data, { maxThreads: 2 });
+      await importData(context.request.bind(context), _.get(schema, "data", {}), { maxThreads: 2 });
 
       context.spinner.stop();
     }
