@@ -14,10 +14,9 @@ import chalk from "chalk";
 import { Colors } from "../consts/Colors";
 import { SessionInfo } from "../interfaces/Common";
 import { Utils } from "./utils";
-import { log } from "util";
 import { GraphqlActions } from "../consts/GraphqlActions";
+import { Client } from "@8base/api-client";
 
-const { Client } = require("@8base/api-client");
 const pkg = require("../../package.json");
 
 export class Context {

@@ -7,8 +7,7 @@ import { Interactive } from "../../../../common/interactive";
 import { writeFs } from "../../../../common/memfs";
 import { createQueryColumnsList, TableSchema } from "@8base/utils";
 import { generateScreen } from "@8base/generators";
-
-const { exportTables } = require("@8base/api-client");
+import { exportTables } from "@8base/api-client";
 
 
 type ViewCommandConfig = {
