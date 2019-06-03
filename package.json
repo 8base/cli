@@ -23,9 +23,9 @@
     "preversion": "npm run tslint"
   },
   "dependencies": {
-    "@8base/api-client": "^0.21.4",
+    "@8base/api-client": "^0.24.0",
     "@8base/generators": "^0.32.7",
-    "@8base/utils": "^0.21.4",
+    "@8base/utils": "^0.24.0",
     "@types/execa": "^0.9.0",
     "archiver": "^3.0.0",
     "async": "^2.5.0",

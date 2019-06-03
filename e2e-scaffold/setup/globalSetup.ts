@@ -8,7 +8,7 @@ import * as os from "os";
 import * as path from "path";
 import * as dotenv from "dotenv";
 import gql from "graphql-tag";
-const { Client } = require("@8base/api-client");
+import { Client } from "@8base/api-client";
 
 const DIR = path.join(os.tmpdir(), "jest_puppeteer_global_setup");
 

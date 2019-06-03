@@ -1,4 +1,4 @@
-const { Client } = require("@8base/api-client");
+import { Client } from "@8base/api-client";
 
 const {
   ID_TOKEN,

@@ -3,8 +3,7 @@ import * as yargs from "yargs";
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-
-const { exportTables } = require("@8base/api-client");
+import { exportTables } from "@8base/api-client";
 
 export default {
   command: "export",
