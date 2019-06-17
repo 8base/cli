@@ -40,9 +40,13 @@ export default {
     "invokelocal_in_progress": "invoking...",
 
     "export_in_progress": "exporting...",
-    "export_describe": "Export current workspace data schema",
+    "export_schema_in_progress": "exporting schema...",
+    "export_data_in_progress": "exporting data...",
+    "export_describe": "Export current workspace tables schema and data",
     "export_usage": "8base export [OPTIONS]",
-    "export_file_describe": "Destination file",
+    "export_destination_describe": "Destination folder. It will include WORKSPACE.json and folder for files if there are files in workspace",
+    "export_data_describe": "Determines to include data from workspace or not",
+    "export_system-tables_describe": "Determines to include system tables from workspace or not",
 
     "import_schema_in_progress": "importing schema...",
     "import_data_in_progress": "importing data...",
