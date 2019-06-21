@@ -55,6 +55,7 @@ export default {
     "import_file_describe": "Path to file with schema",
     "import_schema_describe": "Import schema",
     "import_data_describe": "Import data",
+    "import_strict_describe": "In strict mode, the process will be terminated on server error. When strict mode is off, it will skip entry when gets an error from the server.",
 
     "import_cant_parse_schema": "Can't parse the schema file.",
     "import_file_not_exist": "Schema file does not exist.",
