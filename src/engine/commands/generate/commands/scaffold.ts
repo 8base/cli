@@ -17,7 +17,7 @@ type ViewCommandConfig = {
 };
 
 type Screen = {
-  tableName: string,
+  tableId: string,
   screenName?: string,
   tableFields?: string[],
   formFields?: string[],
@@ -56,10 +56,11 @@ const getTable = (tables: TableSchema[], tableName: string): TableSchema => {
 
 const getColumnsNames = (params: { withMeta: boolean } & ViewCommandConfig, tables: TableSchema[]): string[] => {
   const { name } = getTable(tables, params.tableName);
+  const table = getTable(tables, name);
 
   const columns = createQueryColumnsList(
     tables,
-    name,
+    table.id,
     { deep: params.depth, withMeta: params.withMeta }
   );
 
@@ -109,7 +110,7 @@ export default {
   handler: async (params: ViewCommandConfig, context: Context) => {
     context.spinner.start("Fetching table data");
     const tables: TableSchema[] = await exportTables(context.request.bind(context), { withSystemTables: true });
-    const { name } = getTable(tables, params.tableName);
+    const { name, id } = getTable(tables, params.tableName);
 
     context.spinner.stop();
 
@@ -138,7 +139,7 @@ export default {
     }
 
     const generatorScreen = {
-      tableName: name,
+      tableId: id,
       screenName: name,
       formFields: formFields,
       tableFields: tableFields,
