@@ -5,7 +5,7 @@ exports[`As a user, I can use help flag for see help information for \`init\` co
 
 Options:
   --debug, -d  Turn on debug logs                                      [boolean]
-  --help       Show help                                               [boolean]
+  --help, -h   Show help                                               [boolean]
 
 Examples:
   8base init             initialize current folder
@@ -13,8 +13,8 @@ Examples:
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 2`] = `
-"Project testdir_init initialize success
-init done. Time: 100 ms."
+"Project [38;5;220mtestdir_init[39m initialize success
+[38;5;42minit[39m done. Time: [38;5;42m6[39m ms."
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `

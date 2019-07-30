@@ -22,5 +22,5 @@ Commands:
 Options:
   --version, -v  Show version number                                   [boolean]
   --debug, -d    Turn on debug logs                                    [boolean]
-  --help         Show help                                             [boolean]"
+  --help, -h     Show help                                             [boolean]"
 `;

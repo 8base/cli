@@ -5,7 +5,7 @@ exports[`As a user, I can use help flag for see help information for \`login\` c
 
 Options:
   --debug, -d     Turn on debug logs                                   [boolean]
-  --help          Show help                                            [boolean]
+  --help, -h      Show help                                            [boolean]
   --email, -e     user email                                            [string]
   --password, -p  user password                                         [string]"
 `;

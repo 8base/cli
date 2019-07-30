@@ -15,10 +15,6 @@ const start = (translations: Translations) => {
       recurse: true,
       visit: Utils.commandDirMiddleware(StaticConfig.commandsDir)
     } )
-    .alias("help", "h")
-    .option("help", {
-      global: false
-    })
     .alias("version", "v")
     .option("v", {
       global: false
@@ -48,6 +44,7 @@ const start = (translations: Translations) => {
     })
     .detectLocale(false)
     .help()
+    .alias("help", "h")
     .argv;
 
   if (!argv._[0]) {
