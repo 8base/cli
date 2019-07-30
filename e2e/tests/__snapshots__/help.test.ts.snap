@@ -1,9 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`As a user, I can use help flag for see help information about commands. 1`] = `
-"Usage: 8base <command> [OPTIONS]
+"DESCRIPTION
+  The 8base Command Line Interface is a unified tool to manage your 8base
+  workspaces services.
 
-Commands:
+SYNOPSIS
+  8base <command> [OPTIONS]
+
+  Use 8base command \`--help\` for information on a specific command. Use 8base
+  help topics to view a list of available help topics. The synopsis for each
+  command shows it’s parameters and their usage. Optional options are shown in
+  square brackets.
+
+COMMANDS
   8base config              Select workspace
   8base deploy              Deploy project
   8base describe            Describe project functions and their types
@@ -19,7 +29,7 @@ Commands:
   8base logs                View function logs
   8base package             Package application without deploying
 
-Options:
+OPTIONS
   --version, -v  Show version number                                   [boolean]
   --debug, -d    Turn on debug logs                                    [boolean]
   --help, -h     Show help                                             [boolean]"

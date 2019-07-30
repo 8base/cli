@@ -45,6 +45,10 @@ const start = (translations: Translations) => {
     .detectLocale(false)
     .help()
     .alias("help", "h")
+    .updateStrings({
+      'Commands:': 'COMMANDS',
+      'Options:': 'OPTIONS'
+    })
     .argv;
 
   if (!argv._[0]) {

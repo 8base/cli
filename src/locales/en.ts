@@ -7,7 +7,7 @@ export default {
 
     "deploy_in_progress": "deploying... \nStep: {{status}}\n{{message}}",
 
-    "8base_usage": "Usage: 8base <command> [OPTIONS]",
+    "8base_usage": "DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nSYNOPSIS\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.",
 
     "login_in_progress": "waiting for authentication...",
     "login_usage": "8base login [OPTIONS]",
