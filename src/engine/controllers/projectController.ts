@@ -9,6 +9,7 @@ import { GraphqlController } from "../../engine/controllers/graphqlController";
 import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerType, TriggerOperation, ResolverDefinition } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
 import { Context } from "../../common/context";
+import { translations } from "../../common/translations";
 
 
 
@@ -111,7 +112,7 @@ export class ProjectController {
     context.logger.debug("check exist yaml file = " + pathToYmlConfig);
 
     if (!fs.existsSync(pathToYmlConfig)) {
-      throw new Error("Main configuration file \"" + StaticConfig.serviceConfigFileName + "\" is absent.");
+      throw new Error(context.i18n.t("8base_config_is_missing"));
     }
 
     context.logger.debug("load yaml file");
