@@ -27,10 +27,11 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("export_usage"))
-      .option("f", {
-        alias: "file",
+      .option("file", {
+        alias: "f",
         describe: translations.i18n.t("export_file_describe"),
-        type: "string"
+        type: "string",
+        demandOption: translations.i18n.t("export_file_required_option_error"),
       });
   }
 };
