@@ -31,8 +31,10 @@ export default {
     "init_example_with_dir": "Creates new folder for initialized project",
     "init_describe": "Initializes a new project with example directory structure and custom functions.",
 
-    "invoke_usage": "8base invoke [FUNCTION NAME] [OPTIONS]",
-    "invoke_describe": "Invoke deployed function remotely",
+    "invoke_usage": "COMMAND\n  8base invoke [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.",
+    "invoke_describe": "Invokes a custom function in the production workspace.",
+    "invoke_data_json_describe": "Input JSON",
+    "invoke_data_path_describe": "Path to input JSON",
     "invoke_in_progress": "invoking...",
 
     "invokelocal_usage": "8base invoke-local [FUNCTION NAME] [OPTIONS]",
