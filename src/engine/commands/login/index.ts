@@ -51,6 +51,8 @@ export default {
       .option("workspace", {
         type: "string",
         hidden: true
-      });
+      })
+      .example(translations.i18n.t("login_browser_example_command"), translations.i18n.t("login_browser_example"))
+      .example(translations.i18n.t("login_cli_example_command"), translations.i18n.t("login_cli_example"));
   }
 };

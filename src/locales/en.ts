@@ -9,9 +9,13 @@ export default {
 
     "8base_usage": "DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nSYNOPSIS\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.",
 
+    "login_usage": "COMMAND\n  8base login [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
+    "login_describe": "Authenticates the command line user by letting them log into an 8base account.",
+    "login_browser_example_command": "8base login",
+    "login_browser_example": "",
+    "login_cli_example_command": "8base login -e my@email.com -p S3cretP@ssw0rd",
+    "login_cli_example": "",
     "login_in_progress": "waiting for authentication...",
-    "login_usage": "8base login [OPTIONS]",
-    "login_describe": "Login via browser",
 
     "describe_usage": "COMMAND\n  8base describe [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.",
     "describe_describe": "Describes your 8base project’s functions and their types through 8base.yml file.",
