@@ -72,6 +72,10 @@ const readLogs = async (functionName: string, context: Context) => {
 export default {
   command: "logs",
   handler: async (params: any, context: Context) => {
+    if (params.n > 100) {
+      params.n = 100;
+    }
+
     if (params["t"] ) {
       return await readLogs(params._[1], context);
     }
@@ -92,7 +96,6 @@ export default {
         default: 10,
         describe: translations.i18n.t("logs_num_describe"),
         type: "number",
-        coerce: arg => arg > 100 ? 100 : arg
       })
       .option("tail", {
         alias: "t",
