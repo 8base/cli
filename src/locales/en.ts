@@ -37,8 +37,10 @@ export default {
     "invoke_data_path_describe": "Path to input JSON",
     "invoke_in_progress": "invoking...",
 
-    "invokelocal_usage": "8base invoke-local [FUNCTION NAME] [OPTIONS]",
-    "invokelocal_describe": "Invoke function locally",
+    "invokelocal_usage": "COMMAND\n  8base invoke-local [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.",
+    "invokelocal_describe": "Invokes the custom function in the local development workspace.",
+    "invokelocal_data_json_describe": "Input JSON",
+    "invokelocal_data_path_describe": "Path to input JSON",
     "invokelocal_in_progress": "invoking...",
 
     "export_in_progress": "exporting...",

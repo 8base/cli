@@ -51,14 +51,14 @@ export default {
     return args
       .usage(translations.i18n.t("invokelocal_usage"))
       .demand(1)
-      .option("j", {
-        alias: "data-json",
-        describe: "input JSON",
+      .option("data-json", {
+        alias: "j",
+        describe: translations.i18n.t("invokelocal_data_json_describe"),
         type: "string"
       })
-      .option("p", {
-        alias: "data-path",
-        describe: "path to input JSON",
+      .option("data-path", {
+        alias: "p",
+        describe: translations.i18n.t("invokelocal_data_path_describe"),
         type: "string"
       });
   }
