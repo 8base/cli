@@ -73,6 +73,9 @@ export default {
     "logs_num_describe": "Number of lines to display",
     "logs_tail_describe": "Continually stream logs",
     "logs_in_progress": "getting logs...",
+    "logs_tail_in_progress": "Establishing connection with server...",
+    "logs_tail_failed": "Failed to establish connection... Please try again in a few minutes.",
+    "logs_tail_success": "Connection established. Tailing logs...",
 
     "generate_describe": "Generate React templates",
 

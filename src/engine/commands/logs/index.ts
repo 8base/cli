@@ -27,19 +27,45 @@ const filterMessage = (messages: string[]): string[] => {
 };
 
 const readLogs = async (functionName: string, context: Context) => {
+  let attempt = 0;
+  let error = null;
 
-  while(true) {
+  while (error === null) {
     const MS_PER_MINUTE = 60000;
     const minutes = 3;
     const start = new Date(Date.now() - minutes * MS_PER_MINUTE);
 
-    const result = await context.request(GraphqlActions.logs, { functionName, startTime: start.toISOString() });
+    if (attempt === 0) {
+      context.spinner.start(translations.i18n.t("logs_tail_in_progress"));
+    }
+
+    let result;
+
+    try {
+      result = await context.request(GraphqlActions.logs, { functionName, startTime: start.toISOString() });
+    } catch (e) {
+      error = e;
+    }
+
+    if (attempt === 0) {
+      context.spinner.stop();
+
+      if (error) {
+        context.logger.error(translations.i18n.t("logs_tail_failed"));
+        continue;
+      } else {
+        context.logger.info(translations.i18n.t("logs_tail_success"));
+      }
+    }
+
     const logs = filterMessage(result.logs);
+
     if (logs.length > 0) {
       context.logger.info(logs);
     }
 
     await sleep(1000);
+    attempt = attempt + 1;
   }
 };
 
