@@ -45,10 +45,10 @@ export default {
     "export_file_describe": "Destination file",
     "export_file_required_option_error": "Please specify a relative path and filename for the export.\n\nExample: \n`8base export -f <EXPORT_FILE_PATH>`",
 
+    "import_usage": "COMMAND\n  8base import [OPTIONS]\n\nDESCRIPTION\n  Import 8base schema file and data to the current - or specified - workspace.",
+    "import_describe": "Import 8base schema file and data to the current - or specified - workspace.",
     "import_schema_in_progress": "importing schema...",
     "import_data_in_progress": "importing data...",
-    "import_describe": "Import schema file to the current workspace",
-    "import_usage": "8base import [OPTIONS]",
     "import_file_describe": "Path to file with schema",
     "import_schema_describe": "Import schema",
     "import_data_describe": "Import data",
