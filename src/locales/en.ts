@@ -65,8 +65,8 @@ export default {
     "import_file_not_exist": "Schema file does not exist.",
     "import_schema_different_version": "Schema file has a different version.",
 
-    "logout_usage": "8base logout [OPTIONS]",
-    "logout_describe": "Clears local login credentials and invalidates API session",
+    "logout_usage": "COMMAND\n  8base logout [OPTIONS]\n\nDESCRIPTION\n  Clears local login credentials and invalidates API session.",
+    "logout_describe": "Clears local login credentials and invalidates API session.",
 
     "logs_usage": "8base logs [FUNCTION NAME] [OPTIONS]",
     "logs_describe": "View function logs",
