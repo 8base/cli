@@ -13,9 +13,9 @@ export default {
     "login_usage": "8base login [OPTIONS]",
     "login_describe": "Login via browser",
 
-    "describe_usage": "8base describe [OPTIONS]",
+    "describe_usage": "COMMAND\n  8base describe [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.",
+    "describe_describe": "Describes your 8base project’s functions and their types through 8base.yml file.",
     "describe_progress": "describing...",
-    "describe_describe":"Describe project functions and their types",
 
     "deploy_usage": "COMMAND\n  8base deploy [OPTIONS]\n\nDESCRIPTION\n  Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
     "deploy_describe": "Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
