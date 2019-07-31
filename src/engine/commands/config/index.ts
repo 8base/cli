@@ -35,8 +35,8 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("config_usage"))
-      .option("w", {
-        alias: "workspace",
+      .option("workspace", {
+        alias: "w",
         describe: translations.i18n.t("config_workspace_option"),
         type: "string"
       })
