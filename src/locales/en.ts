@@ -68,8 +68,10 @@ export default {
     "logout_usage": "COMMAND\n  8base logout [OPTIONS]\n\nDESCRIPTION\n  Clears local login credentials and invalidates API session.",
     "logout_describe": "Clears local login credentials and invalidates API session.",
 
-    "logs_usage": "8base logs [FUNCTION NAME] [OPTIONS]",
-    "logs_describe": "View function logs",
+    "logs_usage": "COMMAND\n  8base logs [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
+    "logs_describe": "Authenticates the command line user by letting them log into an 8base account.",
+    "logs_num_describe": "Number of lines to display",
+    "logs_tail_describe": "Continually stream logs",
     "logs_in_progress": "getting logs...",
 
     "generate_describe": "Generate React templates",

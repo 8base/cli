@@ -61,16 +61,16 @@ export default {
     return args
       .usage(translations.i18n.t("logs_usage"))
       .demand(1)
-      .option("n", {
-        alias: "num",
+      .option("num", {
+        alias: "n",
         default: 10,
-        describe: "number of lines to display (default: 10, max: 100)",
+        describe: translations.i18n.t("logs_num_describe"),
         type: "number",
         coerce: arg => arg > 100 ? 100 : arg
       })
-      .option("t", {
-        alias: "tail",
-        describe: "continually stream logs",
+      .option("tail", {
+        alias: "t",
+        describe: translations.i18n.t("logs_tail_describe"),
         type: "boolean"
       });
   }
