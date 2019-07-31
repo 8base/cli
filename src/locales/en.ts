@@ -41,7 +41,7 @@ export default {
 
     "export_in_progress": "exporting...",
     "export_describe": "Export current workspace data schema",
-    "export_usage": "8base export [OPTIONS]",
+    "export_usage": "COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Export current - or specified - workspace data schema to a local file",
     "export_file_describe": "Destination file",
     "export_file_required_option_error": "Please specify a relative path and filename for the export.\n\nExample: \n`8base export -f <EXPORT_FILE_PATH>`",
 
