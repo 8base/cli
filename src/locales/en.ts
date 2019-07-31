@@ -24,12 +24,12 @@ export default {
     "config_describe": "Allows you to select a default workspace and retrieve the API endpoint URL.",
     "config_workspace_option": "Workspace Id",
 
-    "init_usage": "8base init [OPTIONS]",
+    "init_usage": "COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.",
     "init_no_dir_example_command": "8base init",
-    "init_with_dir_example_command": "8base init my_project",
-    "init_example_no_dir": "initialize current folder",
-    "init_example_with_dir": "create folder my_project and initialize",
-    "init_describe": "Initialize project",
+    "init_with_dir_example_command": "8base init my-project",
+    "init_example_no_dir": "Initializes project in current folder",
+    "init_example_with_dir": "Creates new folder for initialized project",
+    "init_describe": "Initializes a new project with example directory structure and custom functions.",
 
     "invoke_usage": "8base invoke [FUNCTION NAME] [OPTIONS]",
     "invoke_describe": "Invoke deployed function remotely",
