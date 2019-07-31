@@ -17,8 +17,8 @@ export default {
     "describe_progress": "describing...",
     "describe_describe":"Describe project functions and their types",
 
-    "deploy_usage": "8base deploy [OPTIONS]",
-    "deploy_describe": "Deploy project",
+    "deploy_usage": "COMMAND\n  8base deploy [OPTIONS]\n\nDESCRIPTION\n  Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
+    "deploy_describe": "Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
 
     "config_usage": "8base config [OPTIONS]",
     "config_workspace_option": "workspace id",
