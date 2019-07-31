@@ -92,8 +92,8 @@ export default {
     "scaffold_successfully_created": "{{- screenName }} was successfully created",
     "scaffold_was_not_created": "{{- screenName }} wasn't created",
 
-    "package_usage": "8base package [OPTIONS]",
-    "package_describe": "Package application without deploying",
+    "package_usage": "COMMAND\n  8base package [OPTIONS]\n\nDESCRIPTION\n  Package 8base application without deploying it.",
+    "package_describe": "Package 8base application without deploying it.",
     "package_progress": "packaging...",
 
     "login_timeout_error": "Login time out.",
