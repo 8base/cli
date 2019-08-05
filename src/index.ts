@@ -46,9 +46,9 @@ const start = (translations: Translations) => {
     .help()
     .alias("help", "h")
     .updateStrings({
-      'Examples:': 'EXAMPLES',
-      'Commands:': 'COMMANDS',
-      'Options:': 'OPTIONS'
+      "Examples:": "EXAMPLES",
+      "Commands:": "COMMANDS",
+      "Options:": "OPTIONS"
     })
     .argv;
 

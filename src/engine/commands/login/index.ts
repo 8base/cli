@@ -10,7 +10,7 @@ import { passwordLogin } from "./passwordLogin";
 import { Interactive } from "../../../common/interactive";
 import { webLogin } from "./webLogin";
 import { StorageParameters } from "../../../consts/StorageParameters";
-import * as jwtDecode from 'jwt-decode';
+import * as jwtDecode from "jwt-decode";
 
 type LoginCommandParams = {
   email: string,
@@ -48,14 +48,14 @@ export default {
         message: translations.i18n.t("login_choice_title"),
         choices: [{
           title: translations.i18n.t("login_choice_change_workspace"),
-          value: 'change',
+          value: "change",
         }, {
           title: translations.i18n.t("login_choice_relogin"),
-          value: 'login',
+          value: "login",
         }]
       });
 
-      if (choice === 'change') {
+      if (choice === "change") {
         await context.chooseWorkspace();
 
         return;

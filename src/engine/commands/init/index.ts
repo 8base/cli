@@ -41,7 +41,7 @@ export default {
     const fileTree:string = tree(context.config.templatePath);
 
     context.logger.info(project.name);
-    context.logger.info(fileTree.replace(/[^\n]+\n/, ''));
+    context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
 
     context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} was successfully create!`);
   },
