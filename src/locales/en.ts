@@ -17,6 +17,11 @@ export default {
     "login_cli_example": "",
     "login_in_progress": "waiting for authentication...",
 
+    "login_already_note": "Look's like you've already authenticated as {{email}}!",
+    "login_choice_title": "Are you trying to?",
+    "login_choice_change_workspace": 'Change your current workspace',
+    "login_choice_relogin": 'Login to a different 8base account',
+
     "describe_usage": "COMMAND\n  8base describe [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.",
     "describe_describe": "Describes your 8base project’s functions and their types through 8base.yml file.",
     "describe_progress": "describing...",
