@@ -26,8 +26,8 @@ exports[`As a user, I can use help flag for see help information for \`init\` co
     ├── hello.ts
     ├── hello2.graphql
     └── hello2.js
-Project [38;5;220mtestdir_init[39m was successfully create!
-[38;5;42minit[39m done. Time: [38;5;42m7[39m ms."
+Project testdir_init was successfully create!
+init done. Time: 100 ms."
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `
