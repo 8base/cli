@@ -24,7 +24,13 @@ export default {
     if (params.schema) {
       context.spinner.start(context.i18n.t("import_schema_in_progress"));
 
-      await importTables(context.request.bind(context), _.get(schema, "tables", {}), { debug: params.d });
+      const gqlRequest = context.request.bind(context);
+
+      await importTables(
+        (query, variables) => gqlRequest(query, variables, true, params.workspace),
+        _.get(schema, "tables", {}),
+        { debug: params.d }
+      );
 
       context.spinner.stop();
     }
@@ -56,6 +62,10 @@ export default {
         describe: translations.i18n.t("import_data_describe"),
         default: true,
         type: "boolean"
+      }).option("workspace", {
+        alias: "w",
+        describe: translations.i18n.t("import_workspace_describe"),
+        type: "string"
       });
   }
 };

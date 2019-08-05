@@ -131,7 +131,7 @@ export class Context {
     this.logger.info(`\nAPI endpoint URL: ${this.user.endpoint}`);
   }
 
-  async request(query: string, variables: any = null, isLoginRequired = true): Promise<any> {
+  async request(query: string, variables: any = null, isLoginRequired = true, customWorkspaceId?: string): Promise<any> {
 
     const remoteAddress = this.serverAddress;
     this.logger.debug(this.i18n.t("debug:remote_address", { remoteAddress }));
@@ -154,7 +154,7 @@ export class Context {
       client.setIdToken(idToken);
     }
 
-    const workspaceId = this.storage.getValue(StorageParameters.activeWorkspace);
+    const workspaceId = customWorkspaceId || this.storage.getValue(StorageParameters.activeWorkspace);
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));

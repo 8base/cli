@@ -57,6 +57,7 @@ export default {
     "export_usage": "COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Export current - or specified - workspace data schema to a local file",
     "export_file_describe": "Destination file",
     "export_file_required_option_error": "Please specify a relative path and filename for the export.\n\nExample: \n`8base export -f <EXPORT_FILE_PATH>`",
+    "export_workspace_describe": "Custom workspace id",
 
     "import_usage": "COMMAND\n  8base import [OPTIONS]\n\nDESCRIPTION\n  Import 8base schema file and data to the current - or specified - workspace.",
     "import_describe": "Import 8base schema file and data to the current - or specified - workspace.",
@@ -65,6 +66,7 @@ export default {
     "import_file_describe": "Path to file with schema",
     "import_schema_describe": "Import schema",
     "import_data_describe": "Import data",
+    "import_workspace_describe": "Custom workspace id",
 
     "import_cant_parse_schema": "Can't parse the schema file.",
     "import_file_not_exist": "Schema file does not exist.",
