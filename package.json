@@ -20,7 +20,7 @@
     "e2e-scaffold:debug": "cross-env E2E_SCAFFOLD_DEBUG=true npm run e2e-scaffold",
     "e2e-scaffold:ci": "cross-env E2E_SCAFFOLD_GENERATE=true npm run e2e-scaffold",
     "upload": "npm version patch && git push --follow-tags",
-    "postinstall": "node ./postinstall.js && node dist/index.js --help && echo",
+    "postinstall": "npm run build && node ./postinstall.js && node dist/index.js --help && echo",
     "preversion": "npm run tslint"
   },
   "dependencies": {
