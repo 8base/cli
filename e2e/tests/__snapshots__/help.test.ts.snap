@@ -14,20 +14,30 @@ SYNOPSIS
   square brackets.
 
 COMMANDS
-  8base config              Select workspace
-  8base deploy              Deploy project
-  8base describe            Describe project functions and their types
+  8base config              Allows you to select a default workspace and
+                            retrieve the API endpoint URL.
+  8base deploy              Deploys project in current directory to 8base using
+                            8base.yml config file. To use this command, you must
+                            be in the root directory of your 8base project.
+  8base describe            Describes your 8base project’s functions and their
+                            types through 8base.yml file.
   8base export              Export current workspace data schema
   8base generate <command>  Generate React templates
-  8base import              Import schema file to the current workspace
-  8base init                Initialize project
-  8base invoke              Invoke deployed function remotely
-  8base invoke-local        Invoke function locally
-  8base login               Login via browser
+  8base import              Import 8base schema file and data to the current -
+                            or specified - workspace.
+  8base init                Initializes a new project with example directory
+                            structure and custom functions.
+  8base invoke              Invokes a custom function in the production
+                            workspace.
+  8base invoke-local        Invokes the custom function in the local development
+                            workspace.
+  8base login               Authenticates the command line user by letting them
+                            log into an 8base account.
   8base logout              Clears local login credentials and invalidates API
-                            session
-  8base logs                View function logs
-  8base package             Package application without deploying
+                            session.
+  8base logs                Authenticates the command line user by letting them
+                            log into an 8base account.
+  8base package             Package 8base application without deploying it.
 
 OPTIONS
   --version, -v  Show version number                                   [boolean]

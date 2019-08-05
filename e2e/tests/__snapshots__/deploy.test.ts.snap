@@ -1,7 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`As a user, I can use help flag for see help information for \`deploy\` command. 1`] = `
-"8base deploy [OPTIONS]
+"COMMAND
+  8base deploy [OPTIONS]
+
+DESCRIPTION
+  Deploys project in current directory to 8base using 8base.yml config file. To
+  use this command, you must be in the root directory of your 8base project.
 
 OPTIONS
   --debug, -d  Turn on debug logs                                      [boolean]

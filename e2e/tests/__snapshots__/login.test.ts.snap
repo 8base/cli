@@ -1,11 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`As a user, I can use help flag for see help information for \`login\` command. 1`] = `
-"8base login [OPTIONS]
+"COMMAND
+  8base login [OPTIONS]
+
+DESCRIPTION
+  Authenticates the command line user by letting them log into an 8base account.
 
 OPTIONS
   --debug, -d     Turn on debug logs                                   [boolean]
   --help, -h      Show help                                            [boolean]
   --email, -e     user email                                            [string]
-  --password, -p  user password                                         [string]"
+  --password, -p  user password                                         [string]
+
+EXAMPLES
+  8base login
+  8base login -e my@email.com -p S3cretP@ssw0rd"
 `;
