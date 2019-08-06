@@ -108,6 +108,8 @@ export default {
 
     "login_timeout_error": "Login time out.",
 
+    "inexistent_workspace": "Inexistent workspace",
+
     "login_password_warning": "Email & password login is only available if you registered using email and password authentication method. You can enable password by signing up again with the same email.",
 
     "8base_config_is_missing": "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present."

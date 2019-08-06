@@ -131,6 +131,16 @@ export class Context {
     this.logger.info(`\nAPI endpoint URL: ${this.user.endpoint}`);
   }
 
+  async checkWorkspace(workspaceId: string) {
+    const data = await this.request(GraphqlActions.listWorkspaces, null, false);
+
+    const workspaces = _.get(data, ["workspacesList", "items"], []);
+
+    if (!_.some(workspaces, { id: workspaceId })) {
+      throw new Error(this.i18n.t("inexistent_workspace"));
+    }
+  }
+
   async request(query: string, variables: any = null, isLoginRequired = true, customWorkspaceId?: string): Promise<any> {
 
     const remoteAddress = this.serverAddress;

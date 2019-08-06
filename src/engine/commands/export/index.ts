@@ -14,6 +14,10 @@ export default {
       throw new Error(translations.i18n.t("export_file_required_option_error"));
     }
 
+    if (params.workspace) {
+      await context.checkWorkspace(params.workspace);
+    }
+
     const gqlRequest = context.request.bind(context);
 
     const tables = await exportTables(

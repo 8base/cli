@@ -21,6 +21,10 @@ export default {
       throw new Error(translations.i18n.t("import_file_not_exist"));
     }
 
+    if (params.workspace) {
+      await context.checkWorkspace(params.workspace);
+    }
+
     if (params.schema) {
       context.spinner.start(context.i18n.t("import_schema_in_progress"));
 
