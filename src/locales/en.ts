@@ -7,61 +7,82 @@ export default {
 
     "deploy_in_progress": "deploying... \nStep: {{status}}\n{{message}}",
 
-    "8base_usage": "Usage: 8base <command> [OPTIONS]",
+    "8base_usage": "DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.",
 
+    "login_usage": "COMMAND\n  8base login [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
+    "login_describe": "Authenticates the command line user by letting them log into an 8base account.",
+    "login_browser_example_command": "8base login",
+    "login_browser_example": "",
+    "login_cli_example_command": "8base login -e my@email.com -p S3cretP@ssw0rd",
+    "login_cli_example": "",
     "login_in_progress": "waiting for authentication...",
-    "login_usage": "8base login [OPTIONS]",
-    "login_describe": "Login via browser",
 
-    "describe_usage": "8base describe [OPTIONS]",
+    "login_already_note": "Looks like you've already authenticated as {{email}}!",
+    "login_choice_title": "Are you trying to?",
+    "login_choice_change_workspace": "Change your current workspace",
+    "login_choice_relogin": "Login to a different 8base account",
+
+    "describe_usage": "COMMAND\n  8base describe [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.",
+    "describe_describe": "Describes your 8base project’s functions and their types through 8base.yml file.",
     "describe_progress": "describing...",
-    "describe_describe":"Describe project functions and their types",
 
-    "deploy_usage": "8base deploy [OPTIONS]",
-    "deploy_describe": "Deploy project",
+    "deploy_usage": "COMMAND\n  8base deploy [OPTIONS]\n\nDESCRIPTION\n  Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
+    "deploy_describe": "Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
 
-    "config_usage": "8base config [OPTIONS]",
-    "config_workspace_option": "workspace id",
-    "config_describe": "Select workspace",
+    "config_usage": "COMMAND\n  8base config [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.",
+    "config_describe": "Allows you to select a default workspace and retrieve the API endpoint URL.",
+    "config_workspace_option": "Workspace Id",
 
-    "init_usage": "8base init [OPTIONS]",
+    "init_usage": "COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.",
     "init_no_dir_example_command": "8base init",
-    "init_with_dir_example_command": "8base init my_project",
-    "init_example_no_dir": "initialize current folder",
-    "init_example_with_dir": "create folder my_project and initialize",
-    "init_describe": "Initialize project",
+    "init_with_dir_example_command": "8base init my-project",
+    "init_example_no_dir": "Initializes project in current folder",
+    "init_example_with_dir": "Creates new folder for initialized project",
+    "init_describe": "Initializes a new project with example directory structure and custom functions.",
 
-    "invoke_usage": "8base invoke [FUNCTION NAME] [OPTIONS]",
-    "invoke_describe": "Invoke deployed function remotely",
+    "invoke_usage": "COMMAND\n  8base invoke [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.",
+    "invoke_describe": "Invokes a custom function in the production workspace.",
+    "invoke_data_json_describe": "Input JSON",
+    "invoke_data_path_describe": "Path to input JSON",
     "invoke_in_progress": "invoking...",
 
-    "invokelocal_usage": "8base invoke-local [FUNCTION NAME] [OPTIONS]",
-    "invokelocal_describe": "Invoke function locally",
+    "invokelocal_usage": "COMMAND\n  8base invoke-local [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.",
+    "invokelocal_describe": "Invokes the custom function in the local development workspace.",
+    "invokelocal_data_json_describe": "Input JSON",
+    "invokelocal_data_path_describe": "Path to input JSON",
     "invokelocal_in_progress": "invoking...",
 
     "export_in_progress": "exporting...",
     "export_describe": "Export current workspace data schema",
-    "export_usage": "8base export [OPTIONS]",
+    "export_usage": "COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Export current - or specified - workspace data schema to a local file",
     "export_file_describe": "Destination file",
+    "export_file_required_option_error": "Please specify a relative path and filename for the export.\n\nExample: \n`8base export -f <EXPORT_FILE_PATH>`",
+    "export_workspace_describe": "Custom workspace id",
 
+    "import_usage": "COMMAND\n  8base import [OPTIONS]\n\nDESCRIPTION\n  Import 8base schema file and data to the current - or specified - workspace.",
+    "import_describe": "Import 8base schema file and data to the current - or specified - workspace.",
     "import_schema_in_progress": "importing schema...",
     "import_data_in_progress": "importing data...",
-    "import_describe": "Import schema file to the current workspace",
-    "import_usage": "8base import [OPTIONS]",
     "import_file_describe": "Path to file with schema",
     "import_schema_describe": "Import schema",
     "import_data_describe": "Import data",
+    "import_workspace_describe": "Custom workspace id",
 
     "import_cant_parse_schema": "Can't parse the schema file.",
     "import_file_not_exist": "Schema file does not exist.",
     "import_schema_different_version": "Schema file has a different version.",
 
-    "logout_usage": "8base logout [OPTIONS]",
-    "logout_describe": "Clears local login credentials and invalidates API session",
+    "logout_usage": "COMMAND\n  8base logout [OPTIONS]\n\nDESCRIPTION\n  Clears local login credentials and invalidates API session.",
+    "logout_describe": "Clears local login credentials and invalidates API session.",
 
-    "logs_usage": "8base logs [FUNCTION NAME] [OPTIONS]",
-    "logs_describe": "View function logs",
+    "logs_usage": "COMMAND\n  8base logs [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
+    "logs_describe": "Authenticates the command line user by letting them log into an 8base account.",
+    "logs_num_describe": "Number of lines to display",
+    "logs_tail_describe": "Continually stream logs",
     "logs_in_progress": "getting logs...",
+    "logs_tail_in_progress": "Establishing connection with server...",
+    "logs_tail_failed": "Failed to establish connection... Please try again in a few minutes.",
+    "logs_tail_success": "Connection established. Tailing logs...",
 
     "generate_describe": "Generate React templates",
 
@@ -81,13 +102,17 @@ export default {
     "scaffold_successfully_created": "{{- screenName }} was successfully created",
     "scaffold_was_not_created": "{{- screenName }} wasn't created",
 
-    "package_usage": "8base package [OPTIONS]",
-    "package_describe": "Package application without deploying",
+    "package_usage": "COMMAND\n  8base package [OPTIONS]\n\nDESCRIPTION\n  Package 8base application without deploying it.",
+    "package_describe": "Package 8base application without deploying it.",
     "package_progress": "packaging...",
 
     "login_timeout_error": "Login time out.",
 
-    "login_password_warning": "Email & password login is only available if you registered using email and password authentication method. You can enable password by signing up again with the same email."
+    "inexistent_workspace": "Inexistent workspace",
+
+    "login_password_warning": "Email & password login is only available if you registered using email and password authentication method. You can enable password by signing up again with the same email.",
+
+    "8base_config_is_missing": "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present."
   },
 
   "debug": {

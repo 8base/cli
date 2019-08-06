@@ -20,6 +20,7 @@
     "e2e-scaffold:debug": "cross-env E2E_SCAFFOLD_DEBUG=true npm run e2e-scaffold",
     "e2e-scaffold:ci": "cross-env E2E_SCAFFOLD_GENERATE=true npm run e2e-scaffold",
     "upload": "npm version patch && git push --follow-tags",
+    "postinstall": "npm run build && node ./postinstall.js && node dist/index.js --help && echo",
     "preversion": "npm run tslint"
   },
   "dependencies": {
@@ -59,9 +60,11 @@
     "request": "^2.88.0",
     "simple-git": "^1.107.0",
     "stream-to-buffer": "^0.1.0",
+    "strip-ansi": "^5.2.0",
+    "tree-node-cli": "^1.2.5",
     "typescript": "^3.4.3",
     "winston": "^3.1.0",
-    "yargs": "^12.0.2"
+    "yargs": "^13.3.0"
   },
   "devDependencies": {
     "@types/archiver": "^2.1.2",

@@ -1,11 +1,13 @@
-import { getFileProvider } from "./providers";
 import * as _ from "lodash";
-import { install } from "./installer";
 import * as yargs from "yargs";
-import { Context } from "../../../common/context";
 import * as path from "path";
-import { translations } from "../../../common/translations";
 import chalk from "chalk";
+import * as tree from "tree-node-cli";
+
+import { getFileProvider } from "./providers";
+import { install } from "./installer";
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
 import { Colors } from "../../../consts/Colors";
 
 export default {
@@ -19,6 +21,8 @@ export default {
       : { fullPath: context.config.rootExecutionDir, name: path.basename(context.config.rootExecutionDir) };
 
 
+    context.spinner.start(`Initializing new project ${chalk.hex(Colors.yellow)(project.name)}`);
+
     context.logger.debug("start initialize init command");
 
     context.logger.debug(`initialize success: initialize repository: ${project.name}`);
@@ -31,7 +35,15 @@ export default {
     context.logger.debug("try to install files");
     install(project.fullPath, files, context);
 
-    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} initialize success`);
+    context.spinner.stop();
+
+    // @ts-ignore
+    const fileTree:string = tree(context.config.templatePath);
+
+    context.logger.info(project.name);
+    context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
+
+    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} was successfully create!`);
   },
   describe: translations.i18n.t("init_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {

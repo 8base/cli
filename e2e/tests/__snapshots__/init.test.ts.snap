@@ -1,19 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 1`] = `
-"8base init [OPTIONS]
+"COMMAND
+  8base export [OPTIONS]
 
-Options:
+DESCRIPTION
+  Initializes a new project with example directory structure and custom
+  functions.
+
+OPTIONS
   --debug, -d  Turn on debug logs                                      [boolean]
-  --help       Show help                                               [boolean]
+  --help, -h   Show help                                               [boolean]
 
-Examples:
-  8base init             initialize current folder
-  8base init my_project  create folder my_project and initialize"
+EXAMPLES
+  8base init             Initializes project in current folder
+  8base init my-project  Creates new folder for initialized project"
 `;
 
 exports[`As a user, I can use help flag for see help information for \`init\` command. 2`] = `
-"Project testdir_init initialize success
+"testdir_init
+├── 8base.yml
+├── package.json
+└── src
+    ├── hello.graphql
+    ├── hello.ts
+    ├── hello2.graphql
+    └── hello2.js
+Project testdir_init was successfully create!
 init done. Time: 100 ms."
 `;
 

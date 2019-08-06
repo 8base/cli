@@ -3,6 +3,7 @@ import * as fs from "fs";
 import { execSync } from "child_process";
 import cuid = require("cuid");
 import * as yaml from "js-yaml";
+import stripAnsi from 'strip-ansi';
 import { CLI_BIN } from "./consts";
 
 export const prepareTestEnvironment = async (repName: string = cuid()): Promise<{ onComplete: () => void, repPath: string }> => {
@@ -81,10 +82,10 @@ const execCmd = (repPath: string, command: string) => {
 
 export const expectInString =(template: string, expectedValue: string) => {
   const cleanString = (str: string): string => {
-    return str.replace(/^\s*\n+\s*/g, "")
+    return stripAnsi(str.replace(/^\s*\n+\s*/g, "")
       .replace(/\s*\n+\s*$/g, "")
       .replace(/\n+/g, " ")
-      .replace(/\s\s+/g, " ");
+      .replace(/\s\s+/g, " "));
   };
 
   expect(cleanString(template)).toContain(cleanString(expectedValue));

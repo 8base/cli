@@ -27,25 +27,55 @@ const filterMessage = (messages: string[]): string[] => {
 };
 
 const readLogs = async (functionName: string, context: Context) => {
+  let attempt = 0;
+  let error = null;
 
-  while(true) {
+  while (error === null) {
     const MS_PER_MINUTE = 60000;
     const minutes = 3;
     const start = new Date(Date.now() - minutes * MS_PER_MINUTE);
 
-    const result = await context.request(GraphqlActions.logs, { functionName, startTime: start.toISOString() });
+    if (attempt === 0) {
+      context.spinner.start(translations.i18n.t("logs_tail_in_progress"));
+    }
+
+    let result;
+
+    try {
+      result = await context.request(GraphqlActions.logs, { functionName, startTime: start.toISOString() });
+    } catch (e) {
+      error = e;
+    }
+
+    if (attempt === 0) {
+      context.spinner.stop();
+
+      if (error) {
+        context.logger.error(translations.i18n.t("logs_tail_failed"));
+        continue;
+      } else {
+        context.logger.info(translations.i18n.t("logs_tail_success"));
+      }
+    }
+
     const logs = filterMessage(result.logs);
+
     if (logs.length > 0) {
       context.logger.info(logs);
     }
 
     await sleep(1000);
+    attempt = attempt + 1;
   }
 };
 
 export default {
   command: "logs",
   handler: async (params: any, context: Context) => {
+    if (params.n > 100) {
+      params.n = 100;
+    }
+
     if (params["t"] ) {
       return await readLogs(params._[1], context);
     }
@@ -61,16 +91,15 @@ export default {
     return args
       .usage(translations.i18n.t("logs_usage"))
       .demand(1)
-      .option("n", {
-        alias: "num",
+      .option("num", {
+        alias: "n",
         default: 10,
-        describe: "number of lines to display (default: 10, max: 100)",
+        describe: translations.i18n.t("logs_num_describe"),
         type: "number",
-        coerce: arg => arg > 100 ? 100 : arg
       })
-      .option("t", {
-        alias: "tail",
-        describe: "continually stream logs",
+      .option("tail", {
+        alias: "t",
+        describe: translations.i18n.t("logs_tail_describe"),
         type: "boolean"
       });
   }

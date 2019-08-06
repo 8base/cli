@@ -10,7 +10,19 @@ export default {
   handler: async (params: any, context: Context) => {
     context.spinner.start(context.i18n.t("export_in_progress"));
 
-    const tables = await exportTables(context.request.bind(context));
+    if (!params.file) {
+      throw new Error(translations.i18n.t("export_file_required_option_error"));
+    }
+
+    if (params.workspace) {
+      await context.checkWorkspace(params.workspace);
+    }
+
+    const gqlRequest = context.request.bind(context);
+
+    const tables = await exportTables(
+      (query, variables) => gqlRequest(query, variables, true, params.workspace),
+    );
 
     const exportResult = {
       tables,
@@ -27,9 +39,14 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("export_usage"))
-      .option("f", {
-        alias: "file",
+      .option("file", {
+        alias: "f",
         describe: translations.i18n.t("export_file_describe"),
+        type: "string",
+        demandOption: translations.i18n.t("export_file_required_option_error"),
+      }).option("workspace", {
+        alias: "w",
+        describe: translations.i18n.t("export_workspace_describe"),
         type: "string"
       });
   }

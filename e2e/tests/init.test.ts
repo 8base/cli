@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as execa from 'execa';
+import stripAnsi from 'strip-ansi';
 
 import { runner } from '../runner';
 
@@ -12,7 +13,9 @@ it('As a user, I can use help flag for see help information for `init` command.'
 });
 
 it('As a user, I can use help flag for see help information for `init` command.', async () => {
-  const { stdout } = await runner()('init', TEST_DIR);
+  let { stdout } = await runner()('init', TEST_DIR);
+
+  stdout = stripAnsi(stdout);
 
   expect(stdout.replace(/Time: \d+ ms\./, 'Time: 100 ms.')).toMatchSnapshot();
 
