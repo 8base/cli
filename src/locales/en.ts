@@ -7,7 +7,7 @@ export default {
 
     "deploy_in_progress": "deploying... \nStep: {{status}}\n{{message}}",
 
-    "8base_usage": "DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nSYNOPSIS\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.",
+    "8base_usage": "DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.",
 
     "login_usage": "COMMAND\n  8base login [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
     "login_describe": "Authenticates the command line user by letting them log into an 8base account.",
@@ -17,7 +17,7 @@ export default {
     "login_cli_example": "",
     "login_in_progress": "waiting for authentication...",
 
-    "login_already_note": "Look's like you've already authenticated as {{email}}!",
+    "login_already_note": "Looks like you've already authenticated as {{email}}!",
     "login_choice_title": "Are you trying to?",
     "login_choice_change_workspace": "Change your current workspace",
     "login_choice_relogin": "Login to a different 8base account",

@@ -5,7 +5,7 @@ exports[`As a user, I can use help flag for see help information about commands.
   The 8base Command Line Interface is a unified tool to manage your 8base
   workspaces services.
 
-SYNOPSIS
+USAGE
   8base <command> [OPTIONS]
 
   Use 8base command \`--help\` for information on a specific command. Use 8base
