@@ -49,7 +49,7 @@ const getTable = (tables: TableSchema[], tableName: string): TableSchema => {
     ({ name, displayName }) => tableName.toLowerCase() === name.toLowerCase() || tableName.toLowerCase() === displayName.toLowerCase()
   );
 
-  if (!table) { throw new Error(translations.i18n.t("scaffold_table_error", { tableName })); }
+  if (!table) { throw new Error(translations.i18n.t("generate_scaffold_table_error", { tableName })); }
 
   return table;
 };
@@ -90,23 +90,23 @@ const createTemplateFs = async (
 
   try {
     if (fs.existsSync(Object.keys(fsObject)[0])) {
-      throw new Error(translations.i18n.t("scaffold_crud_exist_error"));
+      throw new Error(translations.i18n.t("generate_scaffold_crud_exist_error"));
     }
 
     await writeFs(fsObject);
 
     Object.keys(fsObject).forEach(filePath => context.logger.info(filePath));
-    context.logger.info(context.i18n.t("scaffold_successfully_created", { screenName: screen.screenName }));
+    context.logger.info(context.i18n.t("generate_scaffold_successfully_created", { screenName: screen.screenName }));
   } catch( err ) {
     context.logger.error(err);
-    context.logger.error(context.i18n.t("scaffold_was_not_created", { screenName: screen.screenName }));
+    context.logger.error(context.i18n.t("generate_scaffold_was_not_created", { screenName: screen.screenName }));
   }
 };
 
 
 export default {
   command: "scaffold <tableName>",
-  describe: translations.i18n.t("scaffold_describe"),
+  describe: translations.i18n.t("generate_scaffold_describe"),
   handler: async (params: ViewCommandConfig, context: Context) => {
     context.spinner.start("Fetching table data");
     const tables: TableSchema[] = await exportTables(context.request.bind(context), { withSystemTables: true });
@@ -119,14 +119,14 @@ export default {
       eightBaseConfig = <any>yaml.safeLoad(await fs.readFile(".8base.yml", "utf8"));
     } catch(err) {
       if (err.code === "ENOENT") {
-        throw new Error(translations.i18n.t("scaffold_project_file_error", { projectFileName: ".8base.yml" }));
+        throw new Error(translations.i18n.t("generate_scaffold_project_file_error", { projectFileName: ".8base.yml" }));
       } else {
         throw err;
       }
     }
 
     const { appName } = eightBaseConfig;
-    if (!appName) throw new Error(translations.i18n.t("scaffold_project_name_error", { projectFileName: ".8base.yml" }));
+    if (!appName) throw new Error(translations.i18n.t("generate_scaffold_project_name_error", { projectFileName: ".8base.yml" }));
 
     let tableFields, formFields;
 
@@ -153,9 +153,9 @@ export default {
   },
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage(translations.i18n.t("scaffold_usage"))
+      .usage(translations.i18n.t("generate_scaffold_usage"))
       .option("depth", {
-        describe: translations.i18n.t("scaffold_depth_describe"),
+        describe: translations.i18n.t("generate_scaffold_depth_describe"),
         type: "number",
         default: 1,
       })

@@ -1,18 +1,29 @@
 export enum ExtensionType {
-    resolver = "resolver",
-    trigger = "trigger",
-    webhook = "webhook",
-    task = "task"
-
+  resolver = "resolver",
+  trigger = "trigger",
+  webhook = "webhook",
+  task = "task"
 }
 
-/*
-    Resolvers
-*/
+export enum SyntaxType {
+  js = "js",
+  ts = "ts",
+}
 
 export enum GraphQLFunctionType {
-    Mutation = "Mutation",
-    Query = "Query",
+  Mutation = "Mutation",
+  Query = "Query",
+}
+
+export enum TriggerOperation {
+  create = "create",
+  update = "update",
+  delete = "delete"
+}
+
+export enum TriggerType {
+  before = "before",
+  after = "after"
 }
 
 export interface BaseDefinition {
@@ -21,7 +32,6 @@ export interface BaseDefinition {
 }
 
 export interface ResolverDefinition extends BaseDefinition {
-
   gqlType: GraphQLFunctionType;
 
   gqlSchemaPath: string;
@@ -33,35 +43,11 @@ export interface ScheduleDefinition extends BaseDefinition {
   scheduleExpression: string;
 }
 
-
-/*
-    Triggers
-*/
-
-export enum TriggerType {
-    before = "Before",
-    after = "After"
-}
-
 export interface TriggerDefinition extends BaseDefinition {
-
-    // Before After
   type: string;
-
-    // Create Delete Update
   operation: string;
   tableName: string;
 }
-
-export enum TriggerOperation {
-    create = "Create",
-    update = "Update",
-    delete = "Delete"
-}
-
-/*
-    Functions
-*/
 
 export interface FunctionDefinition {
   readonly name: string;
@@ -71,15 +57,10 @@ export interface FunctionDefinition {
   readonly pathToFunction: string;
 }
 
-/*
-    Webhooks
-*/
-
 export interface WebhookDefinition extends BaseDefinition {
   httpMethod: string;
   path: string;
 }
-
 
 export interface ExtensionsContainer {
   resolvers: ResolverDefinition[];

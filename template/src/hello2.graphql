@@ -1,3 +1,0 @@
-extend type Query {
-  hello2(name: String!): HelloResult
-}

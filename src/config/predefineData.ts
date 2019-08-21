@@ -3,7 +3,8 @@ import * as path from "path";
 export class PredefineData {
   projectDir = path.join(__dirname, "../");
   executionDir = process.cwd();
-  templatePath = path.join(this.projectDir, "../template");
+  projectTemplatePath = path.join(this.projectDir, "../templates/project");
+  functionTemplatesPath = path.join(this.projectDir, "../templates/functions");
   commandsPath = path.join(this.projectDir, "./engine/commands");
   remoteAddress = "https://api.8base.com";
   authDomain = "auth.8base.com";

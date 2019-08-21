@@ -6,14 +6,20 @@ import { runner } from '../runner';
 
 const TEST_DIR = 'testdir_init';
 
-it('As a user, I can use help flag for see help information for `init` command.', async () => {
-  const { stdout } = await runner()('init', '--help');
+it('As a user, I can init example project.', async () => {
+  let { stdout } = await runner()('init', TEST_DIR);
 
-  expect(stdout).toMatchSnapshot();
+  stdout = stripAnsi(stdout);
+
+  expect(stdout.replace(/Time: \d+ ms\./, 'Time: 100 ms.')).toMatchSnapshot();
+
+  const { stdout: ls } = await execa.shell(`ls -1 ${TEST_DIR}/** | sort`);
+
+  expect(ls.split("\n").sort()).toMatchSnapshot();
 });
 
-it('As a user, I can use help flag for see help information for `init` command.', async () => {
-  let { stdout } = await runner()('init', TEST_DIR);
+it('As a user, I can init empty project.', async () => {
+  let { stdout } = await runner()('init', TEST_DIR, '-e');
 
   stdout = stripAnsi(stdout);
 

@@ -1,44 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`As a user, I can use help flag for see help information for \`init\` command. 1`] = `
-"COMMAND
-  8base export [OPTIONS]
-
-DESCRIPTION
-  Initializes a new project with example directory structure and custom
-  functions.
-
-OPTIONS
-  --debug, -d  Turn on debug logs                                      [boolean]
-  --help, -h   Show help                                               [boolean]
-
-EXAMPLES
-  8base init             Initializes project in current folder
-  8base init my-project  Creates new folder for initialized project"
-`;
-
-exports[`As a user, I can use help flag for see help information for \`init\` command. 2`] = `
+exports[`As a user, I can init empty project. 1`] = `
 "testdir_init
 ├── 8base.yml
-├── package.json
-└── src
-    ├── hello.graphql
-    ├── hello.ts
-    ├── hello2.graphql
-    └── hello2.js
+└── package.json
 Project testdir_init was successfully create!
 init done. Time: 100 ms."
 `;
 
-exports[`As a user, I can use help flag for see help information for \`init\` command. 3`] = `
+exports[`As a user, I can init empty project. 2`] = `
+Array [
+  "testdir_init/8base.yml",
+  "testdir_init/package.json",
+]
+`;
+
+exports[`As a user, I can init example project. 1`] = `
+"testdir_init
+├── 8base.yml
+└── package.json
+Project testdir_init was successfully create!
+
+Updated file testdir_init/8base.yml
+Created file testdir_init/src/resolvers/resolver/handler.ts
+Created file testdir_init/src/resolvers/resolver/mocks/request.json
+Created file testdir_init/src/resolvers/resolver/schema.graphql
+
+Boom! Your new resolver function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
+
+Updated file testdir_init/8base.yml
+Created file testdir_init/src/tasks/task/handler.ts
+Created file testdir_init/src/tasks/task/mocks/request.json
+
+Boom! Your new task function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
+
+Updated file testdir_init/8base.yml
+Created file testdir_init/src/webhooks/webhook/handler.ts
+Created file testdir_init/src/webhooks/webhook/mocks/request.json
+
+Boom! Your new webhook function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
+
+Updated file testdir_init/8base.yml
+Created file testdir_init/src/triggers/trigger/handler.ts
+Created file testdir_init/src/triggers/trigger/mocks/request.json
+
+Boom! Your new trigger function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
+init done. Time: 100 ms."
+`;
+
+exports[`As a user, I can init example project. 2`] = `
 Array [
   "",
-  "hello.graphql",
-  "hello.ts",
-  "hello2.graphql",
-  "hello2.js",
+  "resolvers",
+  "tasks",
   "testdir_init/8base.yml",
   "testdir_init/package.json",
   "testdir_init/src:",
+  "triggers",
+  "webhooks",
 ]
 `;
