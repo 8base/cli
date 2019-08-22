@@ -1,17 +1,69 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as yaml from "js-yaml";
+import * as ejs from "ejs";
+import * as mkdirp from "mkdirp";
+import * as changeCase from "change-case";
 import * as _ from "lodash";
 
 import { StaticConfig } from "../../config";
 import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
-import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerType, TriggerOperation, ResolverDefinition } from "../../interfaces/Extensions";
+import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerType, TriggerOperation, ResolverDefinition, SyntaxType } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
 import { Context } from "../../common/context";
 import { translations } from "../../common/translations";
 
+type FunctionDeclarationOptions = {
+  operation?: string,
+  method?: string,
+  path?: string,
+  type?: string,
+  schedule?: string,
+};
 
+type FunctionGeneratationOptions = {
+  type: ExtensionType,
+  name: string,
+  mocks: boolean,
+  syntax: SyntaxType,
+  projectPath?: string,
+};
+
+const generateFunctionDeclaration = (
+  { type, name, mocks, syntax }: FunctionGeneratationOptions,
+  dirPath: string,
+  options: FunctionDeclarationOptions,
+) => {
+  let declaration = {
+    type,
+    handler: {
+      code: `${dirPath}/handler.${syntax}`,
+    },
+  };
+
+  if (type === ExtensionType.resolver) {
+    declaration = _.merge(declaration, {
+      schema: `${dirPath}/schema.graphql`,
+    });
+  } else if (type === ExtensionType.task && options.schedule) {
+    declaration = _.merge(declaration, {
+      schedule: options.schedule,
+    });
+  } else if (type === ExtensionType.trigger) {
+    declaration = _.merge(declaration, {
+      type: `trigger.${ options.type || "before" }`,
+      operation: options.operation || "Users.create",
+    });
+  } else if (type === ExtensionType.webhook) {
+    declaration = _.merge(declaration, {
+      path: options.path || "/webhook",
+      method: options.method || "POST",
+    });
+  }
+
+  return declaration;
+};
 
 export class ProjectController {
 
@@ -106,8 +158,8 @@ export class ProjectController {
    * private functions
    */
 
-  private static loadConfigFile(context: Context): any {
-    const pathToYmlConfig = StaticConfig.serviceConfigFileName;
+  private static loadConfigFile(context: Context, projectPath?: string): any {
+    const pathToYmlConfig = projectPath ? path.join(projectPath, "8base.yml") : StaticConfig.serviceConfigFileName;
 
     context.logger.debug("check exist yaml file = " + pathToYmlConfig);
 
@@ -115,14 +167,22 @@ export class ProjectController {
       throw new Error(context.i18n.t("8base_config_is_missing"));
     }
 
-    context.logger.debug("load yaml file");
-
     try {
       return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, "utf8"));
     }
     catch (ex) {
       throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, ex.message);
     }
+  }
+
+  private static saveConfigFile(context: Context, config: Object, projectPath?: string): any {
+    const pathToYmlConfig = projectPath ? path.join(projectPath, "8base.yml") : StaticConfig.serviceConfigFileName;
+
+    fs.writeFileSync(pathToYmlConfig, yaml.safeDump(config));
+
+    context.logger.info(context.i18n.t("project_updated_file", {
+      path: pathToYmlConfig,
+    }));
   }
 
   private static loadExtensions(config: any): ExtensionsContainer {
@@ -206,9 +266,93 @@ export class ProjectController {
       schedules: []
     });
   }
+
+  static addFunctionDeclaration(context: Context, name: string, declaration: Object, projectPath?: string) {
+    let config = ProjectController.loadConfigFile(context, projectPath) || { functions: {} };
+
+    if (_.has(config, ["functions", name])) {
+      throw new Error(context.i18n.t("function_with_name_already_defined", { name }));
+    }
+
+    config = _.set(config, ["functions", name], declaration);
+
+    ProjectController.saveConfigFile(context, config, projectPath);
+  }
+
+  static generateFunction(
+    context: Context,
+    { type, name, mocks, syntax, projectPath = "." }: FunctionGeneratationOptions,
+    options: FunctionDeclarationOptions = {}
+  ) {
+    const dirPath = `src/${type}s/${name}`;
+
+    ProjectController.addFunctionDeclaration(
+      context,
+      name,
+      generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
+      projectPath,
+    );
+
+    const functionTemplatePath = path.resolve(context.config.functionTemplatesPath, type);
+
+    processTemplate(
+      context,
+      { dirPath: path.join(projectPath, dirPath), templatePath: functionTemplatePath },
+      { type, name, syntax, mocks },
+    );
+
+    context.logger.info("");
+
+    context.logger.info(context.i18n.t("generate_function_grettings", {
+      name,
+    }));
+  }
 }
 
+const processTemplate = (
+  context: Context,
+  { dirPath, templatePath }: { dirPath: string, templatePath: string },
+  { type, name, mocks, syntax }: FunctionGeneratationOptions,
+) => {
+  mkdirp.sync(dirPath);
 
+  fs.readdirSync(templatePath).forEach(file => {
+    if (file.indexOf(".") === -1) {
+      if (file !== "mocks" || mocks) {
+        processTemplate(context, {
+          dirPath: path.join(dirPath, file),
+          templatePath: path.join(templatePath, file),
+        }, {
+          type,
+          name,
+          mocks,
+          syntax,
+        });
+      }
+
+      return;
+    }
+
+    if ((new RegExp(`.${syntax === SyntaxType.js ? SyntaxType.ts : SyntaxType.js}.ejs$`)).test(file)) {
+      return;
+    }
+
+    const data = fs.readFileSync(path.resolve(templatePath, file));
+
+    const content = ejs.compile(data.toString())({
+      functionName: name,
+      changeCase,
+    });
+
+    const fileName = file.replace(/\.ejs$/, "");
+
+    fs.writeFileSync(path.resolve(dirPath, fileName), content);
+
+    context.logger.info(context.i18n.t("project_created_file", {
+      path: path.join(dirPath, fileName),
+    }));
+  });
+};
 
 namespace ResolverUtils {
 

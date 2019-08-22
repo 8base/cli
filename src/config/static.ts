@@ -6,8 +6,12 @@ export class StaticConfig {
 
   private static staticData = new PredefineData();
 
-  static get templatePath(): string {
-    return this.staticData.templatePath;
+  static get projectTemplatePath(): string {
+    return this.staticData.projectTemplatePath;
+  }
+
+  static get functionTemplatesPath(): string {
+    return this.staticData.functionTemplatesPath;
   }
 
   static get rootProjectDir(): string {

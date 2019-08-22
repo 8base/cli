@@ -75,8 +75,6 @@ export namespace RunCommand {
 }
 
 const execCmd = (repPath: string, command: string) => {
-  console.log("execution cmd: " + command);
-
   return execSync(`cd ${repPath} && node ${CLI_BIN} ${command}`).toString();
 };
 

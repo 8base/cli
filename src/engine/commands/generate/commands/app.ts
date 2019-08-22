@@ -17,9 +17,9 @@ type AppParams = {
 
 export default {
   command: "app <appName>",
-  describe: translations.i18n.t("app_describe"),
+  describe: translations.i18n.t("generate_app_describe"),
   builder: (yargs: yargs.Argv): yargs.Argv => yargs
-    .usage(translations.i18n.t("app_usage")),
+    .usage(translations.i18n.t("generate_app_usage")),
   handler: async (params: AppParams, context: Context) => {
     if (!context.user.isAuthorized()) {
       throw new Error(context.i18n.t("logout_error"));
