@@ -189,7 +189,9 @@ export default {
     "package_describe": "Package 8base application without deploying it.",
     "package_progress": "packaging...",
   },
-
+  /**
+   * Debug related messages
+   */
   "debug": {
     "remote_address": "remote address: {{- remoteAddress}}",
     "start_request": "begin request",
