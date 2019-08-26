@@ -55,7 +55,7 @@ export default {
     /**
      * Init related messages
      */
-    "init_usage": "COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.",
+    "init_usage": "COMMAND\n  8base init [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.",
     "init_no_dir_example_command": "8base init",
     "init_with_dir_example_command": "8base init my-project",
     "init_example_no_dir": "Initializes project in current folder",
