@@ -6,7 +6,7 @@
 
 ## Getting Started
 ```
-$ npm install -g 8base
+$ npm install -g 8base-cli
 
 $ 8base help
 Usage: 8base <command> [OPTIONS]
