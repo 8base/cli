@@ -73,7 +73,6 @@ export default {
     }
 
     // @ts-ignore
-    // context.config.projectTemplatePath
     const fileTree:string = tree(`./${project.name}`, {
       allFiles: true,
       exclude: [/node_modules/]
