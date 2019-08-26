@@ -55,7 +55,8 @@ export default {
     context.spinner.stop();
 
     /* Creating new project message */
-    context.logger.info(`Building a new project called ${chalk.hex(Colors.yellow)(project.name)} 🚀`);
+    const chalkedName = chalk.hex(Colors.yellow)(project.name);
+    context.logger.info(`Building a new project called ${chalkedName} 🚀`);
 
     /* Generate project files before printing tree */
     if (!empty && Array.isArray(params.functions)) {
@@ -83,7 +84,7 @@ export default {
     context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
 
     /* Print project created message */
-    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} was successfully created!`);
+    context.logger.info(`🎉 Project ${chalkedName} was successfully created 🎉`);
   },
   describe: translations.i18n.t("init_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
