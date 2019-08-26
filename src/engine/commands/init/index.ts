@@ -54,18 +54,12 @@ export default {
 
     context.spinner.stop();
 
-    // @ts-ignore
-    const fileTree:string = tree(context.config.projectTemplatePath);
+    /* Creating new project message */
+    context.logger.info(`Building a new project called ${chalk.hex(Colors.yellow)(project.name)} 🚀`);
 
-    context.logger.info(project.name);
-    context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
-
-    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} was successfully create!`);
-
+    /* Generate project files before printing tree */
     if (!empty && Array.isArray(params.functions)) {
       params.functions.forEach((declaration: string) => {
-        context.logger.info("");
-
         const [type, name] = declaration.split(":");
 
         ProjectController.generateFunction(context, {
@@ -73,10 +67,24 @@ export default {
           name,
           mocks,
           syntax,
-          projectPath: parameters.length > 1 ? parameters[1] : null,
+          projectPath: parameters.length > 1 ? parameters[1] : null
         });
       });
     }
+
+    // @ts-ignore
+    // context.config.projectTemplatePath
+    const fileTree:string = tree(`./${project.name}`, {
+      allFiles: true,
+      exclude: [/node_modules/]
+    });
+
+    /* Print out tree of new project */
+    context.logger.info(project.name);
+    context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
+
+    /* Print project created message */
+    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} was successfully created!`);
   },
   describe: translations.i18n.t("init_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
