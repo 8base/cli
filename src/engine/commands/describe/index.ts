@@ -1,96 +1,103 @@
 import * as yargs from "yargs";
+import * as url from "url";
+import chalk from "chalk";
+import { table } from "table";
+import * as _ from "lodash";
+
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
-import * as url from "url";
-import chalk from "chalk";
 import { Colors } from "../../../consts/Colors";
-import _ = require("lodash");
 
-const tabSize = 30;
-
-const printResolvers = (resolvers: any[], context: Context) => {
-  if (!_.isArray(resolvers)) {
-    return;
-  }
-
-  context.logger.info(`${chalk.hex(Colors.yellow)("Resolvers:")}`);
-
-  resolvers.map(r => {
-    let out = `   ${r.name}`;
-    out = _.padEnd(out, tabSize);
-    out += `${chalk.hex(Colors.yellow)("type")}: ${r.gqlType} `;
-    context.logger.info(out);
-  });
-
-};
-
-const printTriggers = (triggers: any[], context: Context) => {
-  if (!_.isArray(triggers)) {
-    return;
-  }
-
-  context.logger.info(`${chalk.hex(Colors.yellow)("Triggers:")}`);
-  triggers.map(r => {
-    let out = `   ${r.name}`;
-    out = _.padEnd(out, tabSize);
-    out += `${chalk.hex(Colors.yellow)("type")}: ${r.type} `;
-
-    out = _.padEnd(out, tabSize * 2);
-    out += `${chalk.hex(Colors.yellow)("table")}: ${r.tableName}`;
-
-    out = _.padEnd(out, tabSize * 3);
-    out += `${chalk.hex(Colors.yellow)("operation")}: ${r.operation} `;
-
-    context.logger.info(out);
-  });
-};
-
-const printWebhooks = (webhooks: any[], context: Context) => {
-  if (!_.isArray(webhooks)) {
-    return;
-  }
-
-  context.logger.info(`${chalk.hex(Colors.yellow)("Webhooks:")}`);
-  webhooks.map(r => {
-    let out = `   ${r.name}`;
-
-    out = _.padEnd(out, tabSize);
-
-    out += `${chalk.hex(Colors.yellow)("method")}: ${r.httpMethod} `;
-    out = _.padEnd(out, tabSize * 2);
-
-    out += `${chalk.hex(Colors.yellow)("path")}: ${r.fullPath} `;
-    context.logger.info(out);
-  });
-};
-
-const transformWebhook = (webhook: any, context: Context) => {
-  return {
-    ...webhook,
-    httpMethod: webhook.httpMethod.toUpperCase(),
-    fullPath: url.resolve(context.serverAddress, webhook.workspaceRelativePath)
-  };
-};
+const RESOLVERS_HEADER = ["Name", "Description", "Type"];
+const TRIGGERS_HEADER = ["Name", "Description", "Type", "Operation", "Table"];
+const WEBHOOKS_HEADER = ["Name", "Description", "Method", "Path"];
+const TASKS_HEADER = ["Name", "Description", "Schedule"];
 
 export default {
   command: "describe",
   handler: async (params: any, context: Context) => {
-
     context.initializeProject();
 
     context.spinner.start(context.i18n.t("describe_progress"));
-    const result = (await context.request(GraphqlActions.describe)).describeExtensions;
+
+    let functionsList = (await context.request(GraphqlActions.functionsList)).functionsList;
+
     context.spinner.stop();
 
-    printResolvers(result.resolvers, context);
-    context.logger.info("");
+    functionsList = _.groupBy(functionsList.items, "functionType");
 
-    printTriggers(result.triggers, context);
-    context.logger.info("");
+    context.logger.info(`${chalk.hex(Colors.yellow)("Resolvers:")}`);
 
-    const webhooks = result.webhooks ? result.webhooks.map((w: any) => transformWebhook(w, context)) : [];
-    printWebhooks(webhooks, context);
+    const resolvers = functionsList.resolver || [];
+    const triggers = functionsList.trigger || [];
+    const webhooks = functionsList.webhook || [];
+    const tasks = functionsList.task || [];
+
+    if (resolvers.length > 0) {
+      context.logger.info(table([
+        RESOLVERS_HEADER,
+        ...resolvers.map((resolver: any) => [
+          resolver.name,
+          resolver.description,
+          resolver.gqlType,
+        ]),
+      ]));
+    } else {
+      context.logger.info(translations.i18n.t("describe_empty_resolvers"));
+      context.logger.info("");
+    }
+
+    context.logger.info(`${chalk.hex(Colors.yellow)("Triggers:")}`);
+
+    if (triggers.length > 0) {
+      context.logger.info(table([
+        TRIGGERS_HEADER,
+        ...triggers.map((trigger: any) => [
+          trigger.name,
+          trigger.description,
+          trigger.type,
+          trigger.operation,
+          trigger.tableName,
+        ]),
+      ]));
+    } else {
+      context.logger.info(translations.i18n.t("describe_empty_triggers"));
+      context.logger.info("");
+    }
+
+    context.logger.info(`${chalk.hex(Colors.yellow)("Webhooks:")}`);
+
+    if (webhooks.length > 0) {
+      context.logger.info(table([
+        WEBHOOKS_HEADER,
+        ...webhooks.map((webhook: any) => [
+          webhook.name,
+          webhook.description,
+          webhook.httpMethod,
+          url.resolve(context.serverAddress, webhook.workspaceRelativePath),
+        ]),
+      ]));
+    } else {
+      context.logger.info(translations.i18n.t("describe_empty_webhooks"));
+      context.logger.info("");
+    }
+
+    context.logger.info(`${chalk.hex(Colors.yellow)("Tasks:")}`);
+
+    if (tasks.length > 0) {
+      context.logger.info(table([
+        TASKS_HEADER,
+        ...tasks.map((task: any) => [
+          task.name,
+          task.description,
+          task.scheduleExpression,
+        ]),
+      ]));
+    } else {
+      context.logger.info(translations.i18n.t("describe_empty_tasks"));
+      context.logger.info("");
+    }
   },
   describe: translations.i18n.t("describe_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
