@@ -50,6 +50,7 @@ const start = (translations: Translations) => {
       "Commands:": "COMMANDS",
       "Options:": "OPTIONS"
     })
+    .wrap(yargs.terminalWidth())
     .argv;
 
   if (!argv._[0]) {
