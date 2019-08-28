@@ -75,7 +75,7 @@ export default {
           webhook.name,
           webhook.description,
           webhook.httpMethod,
-          url.resolve(context.serverAddress, webhook.workspaceRelativePath),
+          url.resolve(context.serverAddress, webhook.workspaceRelativePath.toLowerCase()),
         ]),
       ]));
     } else {
