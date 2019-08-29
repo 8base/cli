@@ -5,16 +5,17 @@ import _ = require("lodash");
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as fs from "fs";
 
+/* Helper function for reading and stringifying mock file */
+const readMock = (filePath: string) => JSON.stringify(fs.readFileSync(filePath) || {})
+
 export default {
   command: "invoke",
   handler: async (params: any, context: Context) => {
-
     context.initializeProject();
 
     context.spinner.start(context.i18n.t("invoke_in_progress"));
 
-    const args = params.j ? params.j
-      : params.p ? fs.readFileSync(params.p) : null;
+    const args = params.j ? params.j : params.p ? readMock(params.p) : null;
 
     const result = await context.request(GraphqlActions.invoke, { data: { functionName: params._[1], inputArgs: args } });
     context.spinner.stop();
