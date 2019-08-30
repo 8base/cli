@@ -6,7 +6,7 @@ import { GraphqlActions } from "../../../consts/GraphqlActions";
 import * as fs from "fs";
 
 /* Helper function for reading and stringifying mock file */
-const readMock = (filePath: string) => JSON.stringify(fs.readFileSync(filePath) || {})
+const readMock = (filePath: string) => JSON.stringify(fs.readFileSync(filePath) || {});
 
 export default {
   command: "invoke",
