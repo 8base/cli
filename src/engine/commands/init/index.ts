@@ -60,7 +60,7 @@ export default {
     context.logger.info(project.name);
     context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
 
-    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} was successfully create!`);
+    context.logger.info(`Project ${chalk.hex(Colors.yellow)(project.name)} was successfully created!`);
 
     if (!empty && Array.isArray(params.functions)) {
       params.functions.forEach((declaration: string) => {
