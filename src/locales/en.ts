@@ -13,6 +13,7 @@ export default {
     "8base_usage": "DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.",
     "inexistent_workspace": "Inexistent workspace",
     "8base_config_is_missing": "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
+    "silent_describe": "Disable printing extra info to the console",
     /**
      * Login related messages
      */

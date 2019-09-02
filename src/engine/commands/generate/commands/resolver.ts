@@ -9,19 +9,21 @@ type ResolverParams = {
   name: string,
   mocks: boolean,
   syntax: SyntaxType,
+  silent: boolean,
 };
 
 export default {
   command: "resolver <name>",
 
   handler: async (params: ResolverParams, context: Context) => {
-    let { name, mocks, syntax } = params;
+    let { name, mocks, syntax, silent } = params;
 
     ProjectController.generateFunction(context, {
       type: ExtensionType.resolver,
       name,
       mocks,
       syntax,
+      silent,
     });
   },
 
@@ -41,5 +43,10 @@ export default {
       default: "ts",
       type: "string",
       choices: Object.values(SyntaxType),
+    })
+    .option("silent", {
+      describe: translations.i18n.t("silent_describe"),
+      default: false,
+      type: "boolean",
     })
 };

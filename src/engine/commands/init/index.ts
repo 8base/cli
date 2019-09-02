@@ -15,7 +15,7 @@ import { ExtensionType, SyntaxType } from "../../../interfaces/Extensions";
 export default {
   command: "init",
   handler: async (params: any, context: Context) => {
-    const { functions, empty, syntax, mocks } = params;
+    const { functions, empty, syntax, mocks, silent } = params;
 
     if (!empty && Array.isArray(functions)) {
       functions.forEach((declaration) => {
@@ -56,7 +56,10 @@ export default {
 
     /* Creating new project message */
     const chalkedName = chalk.hex(Colors.yellow)(project.name);
-    context.logger.info(`Building a new project called ${chalkedName} 🚀`);
+
+    if (!silent) {
+      context.logger.info(`Building a new project called ${chalkedName} 🚀`);
+    }
 
     /* Generate project files before printing tree */
     if (!empty && Array.isArray(params.functions)) {
@@ -74,18 +77,20 @@ export default {
       });
     }
 
-    // @ts-ignore
-    const fileTree:string = tree(`./${project.name}`, {
-      allFiles: true,
-      exclude: [/node_modules/, /\.build/]
-    });
+    if (!silent) {
+      // @ts-ignore
+      const fileTree:string = tree(`./${project.name}`, {
+        allFiles: true,
+        exclude: [/node_modules/, /\.build/]
+      });
 
-    /* Print out tree of new project */
-    context.logger.info(project.name);
-    context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
+      /* Print out tree of new project */
+      context.logger.info(project.name);
+      context.logger.info(fileTree.replace(/[^\n]+\n/, ""));
 
-    /* Print project created message */
-    context.logger.info(`🎉 Project ${chalkedName} was successfully created 🎉`);
+      /* Print project created message */
+      context.logger.info(`🎉 Project ${chalkedName} was successfully created 🎉`);
+    }
   },
   describe: translations.i18n.t("init_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {
@@ -115,6 +120,11 @@ export default {
         default: "ts",
         type: "string",
         choices: Object.values(SyntaxType),
+      })
+      .option("silent", {
+        describe: translations.i18n.t("silent_describe"),
+        default: false,
+        type: "boolean",
       })
       .example(translations.i18n.t("init_no_dir_example_command"), translations.i18n.t("init_example_no_dir"))
       .example(translations.i18n.t("init_with_dir_example_command"), translations.i18n.t("init_example_with_dir"));
