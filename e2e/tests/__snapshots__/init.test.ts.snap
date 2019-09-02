@@ -4,7 +4,7 @@ exports[`As a user, I can init empty project. 1`] = `
 "testdir_init
 ├── 8base.yml
 └── package.json
-Project testdir_init was successfully create!
+Project testdir_init was successfully created!
 init done. Time: 100 ms."
 `;
 
@@ -19,7 +19,7 @@ exports[`As a user, I can init example project. 1`] = `
 "testdir_init
 ├── 8base.yml
 └── package.json
-Project testdir_init was successfully create!
+Project testdir_init was successfully created!
 
 Updated file testdir_init/8base.yml
 Created file testdir_init/src/resolvers/resolver/handler.ts

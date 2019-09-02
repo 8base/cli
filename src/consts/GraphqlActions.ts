@@ -51,17 +51,36 @@ export const GraphqlActions = {
   deploy: `mutation Deploy($data: DeployingBuildInput) {
     deploy(data: $data)
   }`,
-  describe: `query {
-    describeExtensions {
-      resolvers {
-        name gqlType
-      }
-      webhooks  {
-        name httpMethod workspaceRelativePath
-      }
-      triggers {
-        operation tableName type name
+  functionsList: `query {
+    functionsList {
+      items {
+        name
+        functionType
+        description
+        ...FunctionWebhookInfo
+        ...FunctionTriggerInfo
+        ...FunctionResolverInfo
+        ...FunctionTaskInfo
       }
     }
+  }
+
+  fragment FunctionWebhookInfo on FunctionWebhookInfo {
+    httpMethod
+    workspaceRelativePath
+  }
+
+  fragment FunctionTriggerInfo on FunctionTriggerInfo{
+    operation
+    tableName
+    type
+  }
+
+  fragment FunctionResolverInfo on FunctionResolverInfo {
+    gqlType
+  }
+
+  fragment FunctionTaskInfo on FunctionTaskInfo {
+    scheduleExpression
   }`
 };

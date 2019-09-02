@@ -25,6 +25,10 @@ export default {
     "describe_usage": "COMMAND\n  8base describe [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.",
     "describe_describe": "Describes your 8base project’s functions and their types through 8base.yml file.",
     "describe_progress": "describing...",
+    "describe_empty_resolvers": "You don't have resolvers",
+    "describe_empty_triggers": "You don't have triggers",
+    "describe_empty_webhooks": "You don't have webhooks",
+    "describe_empty_tasks": "You don't have tasks",
 
     "deploy_usage": "COMMAND\n  8base deploy [OPTIONS]\n\nDESCRIPTION\n  Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
     "deploy_describe": "Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
