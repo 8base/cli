@@ -8,7 +8,7 @@ export default {
      */
     "project_created_file": "Created file {{- path }}",
     "project_updated_file": "Updated file {{- path }}",
-    "invalid_syntax": "Invalid syntax, available ['js', 'ts']",    
+    "invalid_syntax": "Invalid syntax, available ['js', 'ts']",
     "error_command_end": "{{command}} failed. Error: {{error}}.",
     "8base_usage": "DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.",
     "inexistent_workspace": "Inexistent workspace",

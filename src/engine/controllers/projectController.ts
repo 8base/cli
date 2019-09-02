@@ -28,6 +28,7 @@ type FunctionGeneratationOptions = {
   mocks: boolean,
   syntax: SyntaxType,
   projectPath?: string,
+  silent?: boolean,
 };
 
 const generateFunctionDeclaration = (
@@ -175,14 +176,16 @@ export class ProjectController {
     }
   }
 
-  private static saveConfigFile(context: Context, config: Object, projectPath?: string): any {
+  private static saveConfigFile(context: Context, config: Object, projectPath?: string, silent?: boolean): any {
     const pathToYmlConfig = projectPath ? path.join(projectPath, "8base.yml") : StaticConfig.serviceConfigFileName;
 
     fs.writeFileSync(pathToYmlConfig, yaml.safeDump(config));
 
-    context.logger.info(context.i18n.t("project_updated_file", {
-      path: pathToYmlConfig,
-    }));
+    if (!silent) {
+      context.logger.info(context.i18n.t("project_updated_file", {
+        path: pathToYmlConfig,
+      }));
+    }
   }
 
   private static loadExtensions(config: any): ExtensionsContainer {
@@ -267,7 +270,7 @@ export class ProjectController {
     });
   }
 
-  static addFunctionDeclaration(context: Context, name: string, declaration: Object, projectPath?: string) {
+  static addFunctionDeclaration(context: Context, name: string, declaration: Object, projectPath?: string, silent?: boolean) {
     let config = ProjectController.loadConfigFile(context, projectPath) || { functions: {} };
 
     if (_.has(config, ["functions", name])) {
@@ -276,12 +279,12 @@ export class ProjectController {
 
     config = _.set(config, ["functions", name], declaration);
 
-    ProjectController.saveConfigFile(context, config, projectPath);
+    ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
   static generateFunction(
     context: Context,
-    { type, name, mocks, syntax, projectPath = "." }: FunctionGeneratationOptions,
+    { type, name, mocks, syntax, projectPath = ".", silent }: FunctionGeneratationOptions,
     options: FunctionDeclarationOptions = {}
   ) {
     const dirPath = `src/${type}s/${name}`;
@@ -291,6 +294,7 @@ export class ProjectController {
       name,
       generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
       projectPath,
+      silent,
     );
 
     const functionTemplatePath = path.resolve(context.config.functionTemplatesPath, type);
@@ -298,21 +302,23 @@ export class ProjectController {
     processTemplate(
       context,
       { dirPath: path.join(projectPath, dirPath), templatePath: functionTemplatePath },
-      { type, name, syntax, mocks },
+      { type, name, syntax, mocks, silent },
     );
 
-    context.logger.info("");
+    if (!silent) {
+      context.logger.info("");
 
-    context.logger.info(context.i18n.t("generate_function_grettings", {
-      name,
-    }));
+      context.logger.info(context.i18n.t("generate_function_grettings", {
+        name,
+      }));
+    }
   }
 }
 
 const processTemplate = (
   context: Context,
   { dirPath, templatePath }: { dirPath: string, templatePath: string },
-  { type, name, mocks, syntax }: FunctionGeneratationOptions,
+  { type, name, mocks, syntax, silent }: FunctionGeneratationOptions,
 ) => {
   mkdirp.sync(dirPath);
 
@@ -327,6 +333,7 @@ const processTemplate = (
           name,
           mocks,
           syntax,
+          silent,
         });
       }
 
@@ -348,9 +355,11 @@ const processTemplate = (
 
     fs.writeFileSync(path.resolve(dirPath, fileName), content);
 
-    context.logger.info(context.i18n.t("project_created_file", {
-      path: path.join(dirPath, fileName),
-    }));
+    if (!silent) {
+      context.logger.info(context.i18n.t("project_created_file", {
+        path: path.join(dirPath, fileName),
+      }));
+    }
   });
 };
 

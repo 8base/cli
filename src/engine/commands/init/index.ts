@@ -68,7 +68,8 @@ export default {
           name,
           mocks,
           syntax,
-          projectPath: parameters.length > 1 ? parameters[1] : null
+          projectPath: parameters.length > 1 ? parameters[1] : null,
+          silent: true,
         });
       });
     }
@@ -76,7 +77,7 @@ export default {
     // @ts-ignore
     const fileTree:string = tree(`./${project.name}`, {
       allFiles: true,
-      exclude: [/node_modules/]
+      exclude: [/node_modules/, /\.build/]
     });
 
     /* Print out tree of new project */

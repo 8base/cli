@@ -179,7 +179,7 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`init\`. 1`] = `
 "COMMAND
-  8base export [OPTIONS]
+  8base init [OPTIONS]
 
 DESCRIPTION
   Initializes a new project with example directory structure and custom functions.
