@@ -11,13 +11,14 @@ type TiggerParams = {
   operation?: string,
   mocks: boolean,
   syntax: SyntaxType,
+  silent: boolean,
 };
 
 export default {
   command: "trigger <name>",
 
   handler: async (params: TiggerParams, context: Context) => {
-    let { name, type, operation, mocks, syntax } = params;
+    let { name, type, operation, mocks, syntax, silent } = params;
 
     if (operation && !/[\w\d]+\.(create|update|delete)/.test(operation)) {
       throw new Error(translations.i18n.t("generate_trigger_invalid_operation"));
@@ -28,6 +29,7 @@ export default {
       name,
       mocks,
       syntax,
+      silent,
     }, {
       type,
       operation,
@@ -61,5 +63,10 @@ export default {
       default: "ts",
       type: "string",
       choices: Object.values(SyntaxType),
+    })
+    .option("silent", {
+      describe: translations.i18n.t("silent_describe"),
+      default: false,
+      type: "boolean",
     })
 };

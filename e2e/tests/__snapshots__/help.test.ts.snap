@@ -96,7 +96,8 @@ OPTIONS
   --debug, -d   Turn on debug logs  [boolean]
   --help, -h    Show help  [boolean]
   --mocks, -x   Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]"
+  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent      Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`generate,scaffold\`. 1`] = `
@@ -116,7 +117,8 @@ OPTIONS
   --help, -h         Show help  [boolean]
   --schedule, --sch  Schedule on which the task runs  [string]
   --mocks, -x        Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]"
+  --syntax, -s       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent           Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`generate,trigger\`. 1`] = `
@@ -128,7 +130,8 @@ OPTIONS
   --type, -t       The trigger type  [string] [choices: \\"before\\", \\"after\\"]
   --operation, -o  Operation that invokes the trigger  [string]
   --mocks, -x      Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]"
+  --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent         Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`generate,webhook\`. 1`] = `
@@ -140,7 +143,8 @@ OPTIONS
   --path, -p    Path for the url (https:<endpoint>/<path>)  [string]
   --method, -m  HTTP verb to invoke the function  [string] [choices: \\"POST\\", \\"GET\\", \\"DELETE\\", \\"PUT\\"]
   --mocks, -x   Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]"
+  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent      Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`generate\`. 1`] = `
@@ -179,7 +183,7 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`init\`. 1`] = `
 "COMMAND
-  8base export [OPTIONS]
+  8base init [OPTIONS]
 
 DESCRIPTION
   Initializes a new project with example directory structure and custom functions.
@@ -191,6 +195,7 @@ OPTIONS
   --empty, -e      Skip examples  [boolean] [default: false]
   --mocks, -x      Included mocks dir and files  [boolean] [default: true]
   --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent         Disable printing extra info to the console  [boolean] [default: false]
 
 EXAMPLES
   8base init             Initializes project in current folder

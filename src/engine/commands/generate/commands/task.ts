@@ -10,19 +10,21 @@ type TaskParams = {
   schedule?: string,
   mocks: boolean,
   syntax: SyntaxType,
+  silent: boolean,
 };
 
 export default {
   command: "task <name>",
 
   handler: async (params: TaskParams, context: Context) => {
-    let { name, schedule, mocks, syntax } = params;
+    let { name, schedule, mocks, syntax, silent } = params;
 
     ProjectController.generateFunction(context, {
       type: ExtensionType.task,
       name,
       mocks,
       syntax,
+      silent,
     }, {
       schedule,
     });
@@ -49,5 +51,10 @@ export default {
       default: "ts",
       type: "string",
       choices: Object.values(SyntaxType),
+    })
+    .option("silent", {
+      describe: translations.i18n.t("silent_describe"),
+      default: false,
+      type: "boolean",
     })
 };

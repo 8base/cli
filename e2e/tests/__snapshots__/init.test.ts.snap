@@ -1,10 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`As a user, I can init empty project. 1`] = `
-"testdir_init
+"Building a new project called testdir_init 🚀
+testdir_init
+├── .gitignore
 ├── 8base.yml
 └── package.json
-Project testdir_init was successfully created!
+🎉 Project testdir_init was successfully created 🎉
 init done. Time: 100 ms."
 `;
 
@@ -16,35 +18,34 @@ Array [
 `;
 
 exports[`As a user, I can init example project. 1`] = `
-"testdir_init
+"Building a new project called testdir_init 🚀
+testdir_init
+├── .gitignore
 ├── 8base.yml
-└── package.json
-Project testdir_init was successfully created!
-
-Updated file testdir_init/8base.yml
-Created file testdir_init/src/resolvers/resolver/handler.ts
-Created file testdir_init/src/resolvers/resolver/mocks/request.json
-Created file testdir_init/src/resolvers/resolver/schema.graphql
-
-Boom! Your new resolver function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
-
-Updated file testdir_init/8base.yml
-Created file testdir_init/src/tasks/task/handler.ts
-Created file testdir_init/src/tasks/task/mocks/request.json
-
-Boom! Your new task function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
-
-Updated file testdir_init/8base.yml
-Created file testdir_init/src/webhooks/webhook/handler.ts
-Created file testdir_init/src/webhooks/webhook/mocks/request.json
-
-Boom! Your new webhook function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
-
-Updated file testdir_init/8base.yml
-Created file testdir_init/src/triggers/trigger/handler.ts
-Created file testdir_init/src/triggers/trigger/mocks/request.json
-
-Boom! Your new trigger function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.
+├── package.json
+└── src
+    ├── resolvers
+    │   └── resolver
+    │       ├── handler.ts
+    │       ├── mocks
+    │       │   └── request.json
+    │       └── schema.graphql
+    ├── tasks
+    │   └── task
+    │       ├── handler.ts
+    │       └── mocks
+    │           └── request.json
+    ├── triggers
+    │   └── trigger
+    │       ├── handler.ts
+    │       └── mocks
+    │           └── request.json
+    └── webhooks
+        └── webhook
+            ├── handler.ts
+            └── mocks
+                └── request.json
+🎉 Project testdir_init was successfully created 🎉
 init done. Time: 100 ms."
 `;
 
