@@ -40,6 +40,7 @@ export default {
     "describe_empty_triggers": "You don't have triggers",
     "describe_empty_webhooks": "You don't have webhooks",
     "describe_empty_tasks": "You don't have tasks",
+    "describe_function_not_found": "Function with {{- name }} not found",
 
     /**
      * Deploy related messages
