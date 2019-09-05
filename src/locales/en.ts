@@ -14,8 +14,8 @@ export default {
     "inexistent_workspace": "Inexistent workspace",
     "8base_config_is_missing": "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
     "silent_describe": "Disable printing extra info to the console",
-    "mock_with_name_not_defined": "Mock with {{- mockName }} name for the function with {{- functionName }} name not defined",
-    "mock_with_name_already_defined": "Mock with {{- mockName }} name for the function with {{- functionName }} name already defined",
+    "mock_with_name_not_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} not defined",
+    "mock_with_name_already_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} already defined",
     /**
      * Login related messages
      */
@@ -42,7 +42,7 @@ export default {
     "describe_empty_triggers": "You don't have triggers",
     "describe_empty_webhooks": "You don't have webhooks",
     "describe_empty_tasks": "You don't have tasks",
-    "describe_function_not_found": "Function with {{- name }} not found",
+    "describe_function_not_found": "Function with name {{- name }} not found",
 
     /**
      * Deploy related messages
@@ -136,8 +136,8 @@ export default {
     /**
      * Generate [FUNCTION] messages
      */
-    "function_with_name_already_defined": "Function {{- name}} already defined",
-    "function_with_name_not_defined": "Function {{- name}} not defined",
+    "function_with_name_already_defined": "Function with name {{- name}} already defined",
+    "function_with_name_not_defined": "Function with name {{- name}} not defined",
     "generate_function_grettings": "Boom! Your new {{- name }} function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.",
     /**
      * Generate app related messages
