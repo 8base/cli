@@ -14,6 +14,10 @@ export class StaticConfig {
     return this.staticData.functionTemplatesPath;
   }
 
+  static get mockTemplatePath(): string {
+    return this.staticData.mockTemplatePath;
+  }
+
   static get rootProjectDir(): string {
     return this.staticData.projectDir;
   }

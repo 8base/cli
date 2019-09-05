@@ -133,6 +133,7 @@ export default {
      * Generate [FUNCTION] messages
      */
     "function_with_name_already_defined": "Function {{- name}} already defined",
+    "function_with_name_not_defined": "Function {{- name}} not defined",
     "generate_function_grettings": "Boom! Your new {{- name }} function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.",
     /**
      * Generate app related messages
@@ -184,6 +185,13 @@ export default {
     "generate_webhook_path_describe": "Path for the url (https:<endpoint>/<path>)",
     "generate_webhook_method_describe": "HTTP verb to invoke the function ",
     "generate_webhook_invalid_method": "Invalid HTTP verb",
+    /**
+     * Generate webhook related messages
+     */
+    "generate_mock_describe": "8base generate mock [FUNCTION_NAME] [OPTIONS]",
+    "generate_mock_usage": "Generator for a mock for the function.",
+    "generate_mock_name_describe": "Name of the mock request",
+    "generate_mock_grettings": "Boom! Your new {{- name }} request mock has been successfully generated.",
     /**
      * Package related messages
      */

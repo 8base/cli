@@ -26,9 +26,6 @@ export default {
       mocks,
       syntax,
       silent,
-    }, {
-      path,
-      method,
     });
   },
 
