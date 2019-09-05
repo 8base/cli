@@ -1,23 +1,31 @@
 import * as yargs from "yargs";
-import { Context } from "../../../common/context";
-import { translations } from "../../../common/translations";
-import _ = require("lodash");
-import { GraphqlActions } from "../../../consts/GraphqlActions";
+import * as _ from "lodash";
 import * as fs from "fs";
 
-/* Helper function for reading and stringifying mock file */
-const readMock = (filePath: string) => JSON.stringify(fs.readFileSync(filePath) || {});
+import { Context } from "../../../common/context";
+import { translations } from "../../../common/translations";
+import { GraphqlActions } from "../../../consts/GraphqlActions";
+import { ProjectController } from "../../controllers/projectController";
 
 export default {
-  command: "invoke",
+  command: "invoke <name>",
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 
     context.spinner.start(context.i18n.t("invoke_in_progress"));
 
-    const args = params.j ? params.j : params.p ? readMock(params.p) : null;
+    let args = null;
 
-    const result = await context.request(GraphqlActions.invoke, { data: { functionName: params._[1], inputArgs: args } });
+    if (params.m) {
+      args = ProjectController.getMock(context, params.name, params.m);
+    } else if (params.p) {
+      args = fs.readFileSync(params.p).toString();
+    } else if (params.j) {
+      args = params.j;
+    }
+
+    const result = await context.request(GraphqlActions.invoke, { data: { functionName: params.name, inputArgs: args } });
+
     context.spinner.stop();
 
     context.logger.info(result.invoke.responseData);
@@ -26,7 +34,6 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("invoke_usage"))
-      .demand(1)
       .option("data-json", {
         alias: "j",
         describe: translations.i18n.t("invoke_data_json_describe"),
@@ -35,6 +42,11 @@ export default {
       .option("data-path", {
         alias: "p",
         describe: translations.i18n.t("invoke_data_path_describe"),
+        type: "string"
+      })
+      .option("mock", {
+        alias: "m",
+        describe: translations.i18n.t("invoke_mock_describe"),
         type: "string"
       });
   }

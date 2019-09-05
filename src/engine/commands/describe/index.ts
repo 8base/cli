@@ -16,7 +16,7 @@ const WEBHOOKS_HEADER = ["Name", "Description", "Method", "Path"];
 const TASKS_HEADER = ["Name", "Description", "Schedule"];
 
 export default {
-  command: "describe <name>",
+  command: "describe [name]",
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 

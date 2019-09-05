@@ -14,6 +14,7 @@ export default {
     "inexistent_workspace": "Inexistent workspace",
     "8base_config_is_missing": "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
     "silent_describe": "Disable printing extra info to the console",
+    "mock_with_name_not_defined": "Mock with {{- mockName }} name for the function with {{- functionName }} name not defined",
     /**
      * Login related messages
      */
@@ -74,6 +75,7 @@ export default {
     "invoke_describe": "Invokes a custom function in the production workspace.",
     "invoke_data_json_describe": "Input JSON",
     "invoke_data_path_describe": "Path to input JSON",
+    "invoke_mock_describe": "Name of the mock request",
     "invoke_in_progress": "invoking...",
     /**
      * Invoke-local related messages
@@ -82,6 +84,7 @@ export default {
     "invokelocal_describe": "Invokes the custom function in the local development workspace.",
     "invokelocal_data_json_describe": "Input JSON",
     "invokelocal_data_path_describe": "Path to input JSON",
+    "invokelocal_mock_describe": "Name of the mock request",
     "invokelocal_in_progress": "invoking...",
     /**
      * Export related messages

@@ -322,6 +322,24 @@ export class ProjectController {
     }
   }
 
+  static getMock(context: Context, functionName: string, mockName: string) {
+    let config = ProjectController.loadConfigFile(context, ".") || { functions: {} };
+
+    if (!_.has(config, ["functions", functionName])) {
+      throw new Error(context.i18n.t("function_with_name_not_defined", { name: functionName }));
+    }
+
+    const type = _.get(config, ["functions", functionName]).type.match(/^\w+/)[0];
+
+    const mockPath = `src/${type}s/${functionName}/mocks/${mockName}.json`;
+
+    if (!fs.existsSync(mockPath)) {
+      throw new Error(context.i18n.t("mock_with_name_not_defined", { functionName, mockName }));
+    }
+
+    return fs.readFileSync(mockPath).toString();
+  }
+
   static generateMock(
     context: Context,
     { name, functionName, projectPath = ".", silent }: MockGeneratationOptions,
