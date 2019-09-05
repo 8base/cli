@@ -15,6 +15,7 @@ export default {
     "8base_config_is_missing": "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
     "silent_describe": "Disable printing extra info to the console",
     "mock_with_name_not_defined": "Mock with {{- mockName }} name for the function with {{- functionName }} name not defined",
+    "mock_with_name_already_defined": "Mock with {{- mockName }} name for the function with {{- functionName }} name already defined",
     /**
      * Login related messages
      */

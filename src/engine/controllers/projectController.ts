@@ -354,6 +354,12 @@ export class ProjectController {
 
     const type = fn.type.match(/^\w+/)[0];
 
+    const mockPath = `src/${type}s/${functionName}/mocks/${name}.json`;
+
+    if (fs.existsSync(mockPath)) {
+      throw new Error(context.i18n.t("mock_with_name_already_defined", { mockName: name, functionName }));
+    }
+
     const dirPath = `src/${type}s/${functionName}/mocks`;
 
     processTemplate(
