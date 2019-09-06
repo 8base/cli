@@ -31,6 +31,13 @@ type FunctionGeneratationOptions = {
   silent?: boolean,
 };
 
+type MockGeneratationOptions = {
+  name: string,
+  functionName: string,
+  projectPath?: string,
+  silent?: boolean,
+};
+
 const generateFunctionDeclaration = (
   { type, name, mocks, syntax }: FunctionGeneratationOptions,
   dirPath: string,
@@ -302,7 +309,8 @@ export class ProjectController {
     processTemplate(
       context,
       { dirPath: path.join(projectPath, dirPath), templatePath: functionTemplatePath },
-      { type, name, syntax, mocks, silent },
+      { syntax, mocks, silent },
+      { functionName: name, type },
     );
 
     if (!silent) {
@@ -313,12 +321,75 @@ export class ProjectController {
       }));
     }
   }
+
+  static getMock(context: Context, functionName: string, mockName: string) {
+    let config = ProjectController.loadConfigFile(context, ".") || { functions: {} };
+
+    if (!_.has(config, ["functions", functionName])) {
+      throw new Error(context.i18n.t("function_with_name_not_defined", { name: functionName }));
+    }
+
+    const type = _.get(config, ["functions", functionName]).type.match(/^\w+/)[0];
+
+    const mockPath = `src/${type}s/${functionName}/mocks/${mockName}.json`;
+
+    if (!fs.existsSync(mockPath)) {
+      throw new Error(context.i18n.t("mock_with_name_not_defined", { functionName, mockName }));
+    }
+
+    return fs.readFileSync(mockPath).toString();
+  }
+
+  static generateMock(
+    context: Context,
+    { name, functionName, projectPath = ".", silent }: MockGeneratationOptions,
+  ) {
+    let config = ProjectController.loadConfigFile(context, projectPath) || { functions: {} };
+
+    if (!_.has(config, ["functions", functionName])) {
+      throw new Error(context.i18n.t("function_with_name_not_defined", { name: functionName }));
+    }
+
+    const fn = _.get(config, ["functions", functionName]);
+
+    const type = fn.type.match(/^\w+/)[0];
+
+    const mockPath = `src/${type}s/${functionName}/mocks/${name}.json`;
+
+    if (fs.existsSync(mockPath)) {
+      throw new Error(context.i18n.t("mock_with_name_already_defined", { mockName: name, functionName }));
+    }
+
+    const dirPath = `src/${type}s/${functionName}/mocks`;
+
+    processTemplate(
+      context,
+      { dirPath: path.join(projectPath, dirPath), templatePath: context.config.mockTemplatePath },
+      { silent },
+      { mockName: name },
+    );
+
+    if (!silent) {
+      context.logger.info("");
+
+      context.logger.info(context.i18n.t("generate_mock_grettings", {
+        name,
+      }));
+    }
+  }
 }
+
+type ProcessTemplateOptions = {
+  syntax?: SyntaxType,
+  silent?: boolean,
+  mocks?: boolean,
+};
 
 const processTemplate = (
   context: Context,
   { dirPath, templatePath }: { dirPath: string, templatePath: string },
-  { type, name, mocks, syntax, silent }: FunctionGeneratationOptions,
+  { syntax, silent, mocks }: ProcessTemplateOptions,
+  options?: Object,
 ) => {
   mkdirp.sync(dirPath);
 
@@ -329,12 +400,10 @@ const processTemplate = (
           dirPath: path.join(dirPath, file),
           templatePath: path.join(templatePath, file),
         }, {
-          type,
-          name,
-          mocks,
           syntax,
           silent,
-        });
+          mocks,
+        }, options);
       }
 
       return;
@@ -347,11 +416,16 @@ const processTemplate = (
     const data = fs.readFileSync(path.resolve(templatePath, file));
 
     const content = ejs.compile(data.toString())({
-      functionName: name,
+      ...options,
       changeCase,
     });
 
-    const fileName = file.replace(/\.ejs$/, "");
+    let fileName = file.replace(/\.ejs$/, "");
+
+    fileName = ejs.compile(fileName)({
+      ...options,
+      changeCase,
+    });
 
     fs.writeFileSync(path.resolve(dirPath, fileName), content);
 

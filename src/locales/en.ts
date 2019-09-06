@@ -14,6 +14,8 @@ export default {
     "inexistent_workspace": "Inexistent workspace",
     "8base_config_is_missing": "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
     "silent_describe": "Disable printing extra info to the console",
+    "mock_with_name_not_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} not defined",
+    "mock_with_name_already_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} already defined",
     /**
      * Login related messages
      */
@@ -40,6 +42,7 @@ export default {
     "describe_empty_triggers": "You don't have triggers",
     "describe_empty_webhooks": "You don't have webhooks",
     "describe_empty_tasks": "You don't have tasks",
+    "describe_function_not_found": "Function with name {{- name }} not found",
 
     /**
      * Deploy related messages
@@ -73,6 +76,7 @@ export default {
     "invoke_describe": "Invokes a custom function in the production workspace.",
     "invoke_data_json_describe": "Input JSON",
     "invoke_data_path_describe": "Path to input JSON",
+    "invoke_mock_describe": "Name of the mock request",
     "invoke_in_progress": "invoking...",
     /**
      * Invoke-local related messages
@@ -81,6 +85,7 @@ export default {
     "invokelocal_describe": "Invokes the custom function in the local development workspace.",
     "invokelocal_data_json_describe": "Input JSON",
     "invokelocal_data_path_describe": "Path to input JSON",
+    "invokelocal_mock_describe": "Name of the mock request",
     "invokelocal_in_progress": "invoking...",
     /**
      * Export related messages
@@ -131,7 +136,8 @@ export default {
     /**
      * Generate [FUNCTION] messages
      */
-    "function_with_name_already_defined": "Function {{- name}} already defined",
+    "function_with_name_already_defined": "Function with name {{- name}} already defined",
+    "function_with_name_not_defined": "Function with name {{- name}} not defined",
     "generate_function_grettings": "Boom! Your new {{- name }} function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.",
     /**
      * Generate app related messages
@@ -183,6 +189,13 @@ export default {
     "generate_webhook_path_describe": "Path for the url (https:<endpoint>/<path>)",
     "generate_webhook_method_describe": "HTTP verb to invoke the function ",
     "generate_webhook_invalid_method": "Invalid HTTP verb",
+    /**
+     * Generate webhook related messages
+     */
+    "generate_mock_describe": "8base generate mock [FUNCTION_NAME] [OPTIONS]",
+    "generate_mock_usage": "Generator for a mock for the function.",
+    "generate_mock_name_describe": "Name of the mock request",
+    "generate_mock_grettings": "Boom! Your new {{- name }} request mock has been successfully generated.",
     /**
      * Package related messages
      */

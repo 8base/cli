@@ -13,6 +13,7 @@ it.each([
   [['generate', 'trigger']],
   [['generate', 'task']],
   [['generate', 'webhook']],
+  [['generate', 'mock']],
   [['import']],
   [['init']],
   [['invoke']],

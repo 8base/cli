@@ -1,24 +1,25 @@
 import * as yargs from "yargs";
+import * as fs from "fs";
+import chalk from "chalk";
+
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
 import { Utils } from "../../../common/utils";
 import { BuildController } from "../../controllers/buildController";
-import chalk from "chalk";
 import { Colors } from "../../../consts/Colors";
-import * as fs from "fs";
 import { InvokeLocalError } from "../../../errors/invokeLocal";
+import { ProjectController } from "../../controllers/projectController";
 
 export default {
-  command: "invoke-local",
+  command: "invoke-local <name>",
   handler: async (params: any, context: Context) => {
-
     context.initializeProject();
 
     context.spinner.start(context.i18n.t("invokelocal_in_progress"));
 
     const { compiledFiles } = await BuildController.compile(context);
 
-    const targetFunctionName = params._[1];
+    const targetFunctionName = params.name;
     const functionInfo = context.project.extensions.functions.find(r => r.name === targetFunctionName);
     if (!functionInfo) {
       throw new Error(`Function ${chalk.hex(Colors.yellow)(targetFunctionName)} not present.`);
@@ -34,7 +35,17 @@ export default {
     }
 
     const funcToCall = Utils.undefault(result);
-    const args = params.j ? params.j : params.p ? fs.readFileSync(params.p) : null;
+
+    let args = null;
+
+    if (params.m) {
+      args = ProjectController.getMock(context, params.name, params.m);
+    } else if (params.p) {
+      args = fs.readFileSync(params.p);
+    } else if (params.j) {
+      args = params.j;
+    }
+
     context.spinner.stop();
 
     try {
@@ -50,7 +61,6 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("invokelocal_usage"))
-      .demand(1)
       .option("data-json", {
         alias: "j",
         describe: translations.i18n.t("invokelocal_data_json_describe"),
@@ -59,6 +69,11 @@ export default {
       .option("data-path", {
         alias: "p",
         describe: translations.i18n.t("invokelocal_data_path_describe"),
+        type: "string"
+      })
+      .option("mock", {
+        alias: "m",
+        describe: translations.i18n.t("invokelocal_mock_describe"),
         type: "string"
       });
   }

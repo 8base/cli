@@ -2,6 +2,7 @@ import * as yargs from "yargs";
 import * as url from "url";
 import chalk from "chalk";
 import { table } from "table";
+import * as changeCase from "change-case";
 import * as _ from "lodash";
 
 import { Context } from "../../../common/context";
@@ -15,7 +16,7 @@ const WEBHOOKS_HEADER = ["Name", "Description", "Method", "Path"];
 const TASKS_HEADER = ["Name", "Description", "Schedule"];
 
 export default {
-  command: "describe",
+  command: "describe [name]",
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 
@@ -24,6 +25,21 @@ export default {
     let functionsList = (await context.request(GraphqlActions.functionsList)).functionsList;
 
     context.spinner.stop();
+
+    if (params.name) {
+      const fn = _.find(functionsList.items, { name: params.name });
+
+      if (fn) {
+        Object.keys(fn).forEach((name) => {
+          // @ts-ignore
+          context.logger.info(`${chalk.hex(Colors.yellow)(`${changeCase.title(name)}:`)} ${fn[name]}`);
+        });
+      } else {
+        throw new Error(translations.i18n.t("describe_function_not_found", { name: params.name }));
+      }
+
+      return;
+    }
 
     functionsList = _.groupBy(functionsList.items, "functionType");
 
@@ -75,7 +91,7 @@ export default {
           webhook.name,
           webhook.description,
           webhook.httpMethod,
-          url.resolve(context.serverAddress, webhook.workspaceRelativePath.toLowerCase()),
+          webhook.workspaceRelativePath.toLowerCase(),
         ]),
       ]));
     } else {
