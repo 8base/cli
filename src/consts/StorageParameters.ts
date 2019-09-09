@@ -5,5 +5,4 @@ export const StorageParameters = {
   authClientId: "auth-client-id",
   idToken: "id-token",
   refreshToken: "refresh-token",
-  workspaces: "workspaces"
 };

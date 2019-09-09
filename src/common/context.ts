@@ -97,17 +97,9 @@ export class Context {
   }
 
   async chooseWorkspace(workspaceId?: string) {
-
     const data = await this.request(GraphqlActions.listWorkspaces, null, false);
 
-    this.storage.setValues([
-      {
-        name: StorageParameters.workspaces,
-        value: data.workspacesList.items
-      }
-    ]);
-
-    const workspaces = this.storage.getValue(StorageParameters.workspaces);
+    const workspaces = data.workspacesList.items;
 
     if (_.isEmpty(workspaces)) {
       throw new Error(this.i18n.t("logout_error"));
