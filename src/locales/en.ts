@@ -122,6 +122,7 @@ export default {
     "logs_usage": "COMMAND\n  8base logs [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
     "logs_describe": "Authenticates the command line user by letting them log into an 8base account.",
     "logs_num_describe": "Number of lines to display",
+    "logs_name_describe": "The name of the function",
     "logs_tail_describe": "Continually stream logs",
     "logs_in_progress": "getting logs...",
     "logs_tail_in_progress": "Establishing connection with server...",
