@@ -120,7 +120,7 @@ export default {
      * Logs related messages
      */
     "logs_usage": "COMMAND\n  8base logs [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
-    "logs_describe": "Authenticates the command line user by letting them log into an 8base account.",
+    "logs_describe": "Show logs for the function(s).",
     "logs_num_describe": "Number of lines to display",
     "logs_name_describe": "The name of the function",
     "logs_tail_describe": "Continually stream logs",
