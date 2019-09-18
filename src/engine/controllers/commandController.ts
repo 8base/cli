@@ -3,6 +3,7 @@ import { Context } from "../../common/context";
 import chalk from "chalk";
 import { Colors } from "../../consts/Colors";
 
+const NON_PROJECT_COMMANDS = ["init", "login", "logout", "configure"];
 
 export class CommandController {
   static parseError = (error: any) => {
@@ -27,9 +28,16 @@ export class CommandController {
       const context = new Context(params, translations);
 
       const start = Date.now();
+
       try {
+        if (NON_PROJECT_COMMANDS.indexOf(command) === -1) {
+          if (!context.isProjectDir()) {
+            throw new Error(translations.i18n.t("non_8base_project_dir"));
+          }
+        }
 
         await handler(params, context);
+
         context.spinner.stop();
 
         const time = Date.now() - start;

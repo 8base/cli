@@ -16,6 +16,7 @@ export default {
     "silent_describe": "Disable printing extra info to the console",
     "mock_with_name_not_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} not defined",
     "mock_with_name_already_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} already defined",
+    "non_8base_project_dir": "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command when in the root of an existing 8base project or use '8base init' to create a new project.",
     /**
      * Login related messages
      */
@@ -53,9 +54,11 @@ export default {
     /**
      * Config related messages
      */
-    "config_usage": "COMMAND\n  8base config [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.",
-    "config_describe": "Allows you to select a default workspace and retrieve the API endpoint URL.",
-    "config_workspace_option": "Workspace Id",
+    "configure_usage": "COMMAND\n  8base configure [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.",
+    "configure_describe": "Allows you to select a default workspace and retrieve the API endpoint URL.",
+    "configure_workspace_id_describe": "The workspace ID of the project",
+    "configure_select_workspace": "Select workspace for current project",
+    "configure_prevent_select_workspace": "Workspace selection canceled",
     /**
      * Init related messages
      */
@@ -69,6 +72,9 @@ export default {
     "init_undefined_function_name": "Undefined function name",
     "init_functions_describe": "List of functions",
     "init_empty_describe": "Skip examples",
+    "init_workspace_id_describe": "The workspace ID of the project",
+    "init_select_workspace": "What workspace does this project belong to?",
+    "init_prevent_select_workspace": "Workspace selection canceled",
     /**
      * Invoke related messages
      */

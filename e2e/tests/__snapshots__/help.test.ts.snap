@@ -10,7 +10,7 @@ USAGE
   Use 8base command \`--help\` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.
 
 COMMANDS
-  8base config               Allows you to select a default workspace and retrieve the API endpoint URL.
+  8base configure            Allows you to select a default workspace and retrieve the API endpoint URL.
   8base deploy               Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.
   8base describe [name]      Describes your 8base project’s functions and their types through 8base.yml file.
   8base export               Export current workspace data schema
@@ -30,17 +30,17 @@ OPTIONS
   --help, -h     Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`config\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`configure\`. 1`] = `
 "COMMAND
-  8base config [OPTIONS]
+  8base configure [OPTIONS]
 
 DESCRIPTION
   Allows you to select a default workspace and retrieve the API endpoint URL.
 
 OPTIONS
-  --debug, -d      Turn on debug logs  [boolean]
-  --help, -h       Show help  [boolean]
-  --workspace, -w  Workspace Id  [string]"
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --workspaceId, -w  The workspace ID of the project  [string]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`deploy\`. 1`] = `
@@ -200,13 +200,14 @@ DESCRIPTION
   Initializes a new project with example directory structure and custom functions.
 
 OPTIONS
-  --debug, -d      Turn on debug logs  [boolean]
-  --help, -h       Show help  [boolean]
-  --functions, -f  List of functions  [array] [default: [\\"resolver:resolver\\",\\"task:task\\",\\"webhook:webhook\\",\\"trigger:trigger\\"]]
-  --empty, -e      Skip examples  [boolean] [default: false]
-  --mocks, -x      Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
-  --silent         Disable printing extra info to the console  [boolean] [default: false]
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --functions, -f    List of functions  [array] [default: [\\"resolver:resolver\\",\\"task:task\\",\\"webhook:webhook\\",\\"trigger:trigger\\"]]
+  --empty, -e        Skip examples  [boolean] [default: false]
+  --mocks, -x        Included mocks dir and files  [boolean] [default: true]
+  --syntax, -s       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent           Disable printing extra info to the console  [boolean] [default: false]
+  --workspaceId, -w  The workspace ID of the project  [string]
 
 EXAMPLES
   8base init             Initializes project in current folder
