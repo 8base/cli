@@ -1,6 +1,8 @@
 import * as yargs from "yargs";
 import * as fs from "fs";
 import chalk from "chalk";
+import * as dotenv from "dotenv";
+import * as path from "path";
 
 import { Context } from "../../../common/context";
 import { translations } from "../../../common/translations";
@@ -14,6 +16,8 @@ export default {
   command: "invoke-local <name>",
   handler: async (params: any, context: Context) => {
     context.initializeProject();
+
+    dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
     context.spinner.start(context.i18n.t("invokelocal_in_progress"));
 
