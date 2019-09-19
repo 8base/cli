@@ -17,8 +17,8 @@ COMMANDS
   8base generate <command>   Generator for server and client side resources  [aliases: g]
   8base import               Import 8base schema file and data to the current - or specified - workspace.
   8base init                 Initializes a new project with example directory structure and custom functions.
-  8base invoke <name>        Invokes a custom function in the production workspace.
-  8base invoke-local <name>  Invokes the custom function in the local development workspace.
+  8base invoke [name]        Invokes a custom function in the production workspace.
+  8base invoke-local [name]  Invokes the custom function in the local development workspace.
   8base login                Authenticates the command line user by letting them log into an 8base account.
   8base logout               Clears local login credentials and invalidates API session.
   8base logs [name]          Show logs for the function(s).
@@ -216,10 +216,13 @@ EXAMPLES
 
 exports[`As a user, I can use help flag for see help information about \`invoke\`. 1`] = `
 "COMMAND
-  8base invoke [FUNCTION NAME] [OPTIONS]
+  8base invoke [name] [OPTIONS]
 
 DESCRIPTION
   Invokes a custom function in the production workspace.
+
+Positionals:
+  name  The name of the function  [string] [required]
 
 OPTIONS
   --debug, -d      Turn on debug logs  [boolean]
@@ -231,10 +234,13 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`invoke\`. 2`] = `
 "COMMAND
-  8base invoke [FUNCTION NAME] [OPTIONS]
+  8base invoke [name] [OPTIONS]
 
 DESCRIPTION
   Invokes a custom function in the production workspace.
+
+Positionals:
+  name  The name of the function  [string] [required]
 
 OPTIONS
   --debug, -d      Turn on debug logs  [boolean]
@@ -276,7 +282,7 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`logs\`. 1`] = `
 "COMMAND
-  8base logs [FUNCTION NAME] [OPTIONS]
+  8base logs [name] [OPTIONS]
 
 DESCRIPTION
   Authenticates the command line user by letting them log into an 8base account.

@@ -78,20 +78,22 @@ export default {
     /**
      * Invoke related messages
      */
-    "invoke_usage": "COMMAND\n  8base invoke [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.",
+    "invoke_usage": "COMMAND\n  8base invoke [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.",
     "invoke_describe": "Invokes a custom function in the production workspace.",
     "invoke_data_json_describe": "Input JSON",
     "invoke_data_path_describe": "Path to input JSON",
     "invoke_mock_describe": "Name of the mock request",
+    "invoke_name_describe": "The name of the function",
     "invoke_in_progress": "invoking...",
     /**
      * Invoke-local related messages
      */
-    "invokelocal_usage": "COMMAND\n  8base invoke-local [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.",
+    "invokelocal_usage": "COMMAND\n  8base invoke-local [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.",
     "invokelocal_describe": "Invokes the custom function in the local development workspace.",
     "invokelocal_data_json_describe": "Input JSON",
     "invokelocal_data_path_describe": "Path to input JSON",
     "invokelocal_mock_describe": "Name of the mock request",
+    "invokelocal_name_describe": "The name of the function",
     "invokelocal_in_progress": "invoking...",
     /**
      * Export related messages
@@ -125,7 +127,7 @@ export default {
     /**
      * Logs related messages
      */
-    "logs_usage": "COMMAND\n  8base logs [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
+    "logs_usage": "COMMAND\n  8base logs [name] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
     "logs_describe": "Show logs for the function(s).",
     "logs_num_describe": "Number of lines to display",
     "logs_name_describe": "The name of the function",

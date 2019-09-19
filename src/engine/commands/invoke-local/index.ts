@@ -13,7 +13,7 @@ import { InvokeLocalError } from "../../../errors/invokeLocal";
 import { ProjectController } from "../../controllers/projectController";
 
 export default {
-  command: "invoke-local <name>",
+  command: "invoke-local [name]",
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 
@@ -65,6 +65,11 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("invokelocal_usage"))
+      .positional("name", {
+        describe: translations.i18n.t("invokelocal_name_describe"),
+        type: "string",
+      })
+      .demandOption("name")
       .option("data-json", {
         alias: "j",
         describe: translations.i18n.t("invokelocal_data_json_describe"),
