@@ -77,6 +77,8 @@ export default {
     "init_prevent_select_workspace": "Workspace selection canceled",
     "init_workspace_name_labal": "Please enter name for the new workspace",
     "init_prevent_new_workspace": "Workspace creation canceled",
+    "init_confirm_not_empty_dir": "Selected directory is not empty. Are you sure you want to continue?",
+    "init_canceled": "Project init canceled",
     /**
      * Invoke related messages
      */

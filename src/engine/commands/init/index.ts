@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import * as yargs from "yargs";
 import * as path from "path";
+import * as fs from "fs";
 import chalk from "chalk";
 import * as tree from "tree-node-cli";
 import gql from "graphql-tag";
@@ -22,12 +23,41 @@ const CREATE_WORKSPACE_MUTATION = gql`
   }
 `;
 
+const isEmptyDir = (path: string): boolean => {
+  let files = [];
+
+  try {
+    files = fs.readdirSync(path);
+  } catch (e) {}
+
+  return files.length === 0;
+};
+
 export default {
   command: "init",
 
   handler: async (params: any, context: Context) => {
     const { functions, empty, syntax, mocks, silent } = params;
     let { workspaceId } = params;
+
+    const parameters = _.castArray(params._);
+
+    const project = parameters.length > 1
+      ? { fullPath: path.join(context.config.rootExecutionDir, parameters[1]), name: parameters[1] }
+      : { fullPath: context.config.rootExecutionDir, name: path.basename(context.config.rootExecutionDir) };
+
+    if (!isEmptyDir(project.fullPath)) {
+      const { confirm } = await Interactive.ask({
+        name: "confirm",
+        type: "confirm",
+        message: translations.i18n.t("init_confirm_not_empty_dir"),
+        initial: false,
+      });
+
+      if (!confirm) {
+        throw new Error(translations.i18n.t("init_canceled"));
+      }
+    }
 
     if (!empty && Array.isArray(functions)) {
       functions.forEach((declaration) => {
@@ -85,12 +115,6 @@ export default {
         throw new Error(translations.i18n.t("init_prevent_select_workspace"));
       }
     }
-
-    const parameters = _.castArray(params._);
-
-    const project = parameters.length > 1
-      ? { fullPath: path.join(context.config.rootExecutionDir, parameters[1]), name: parameters[1] }
-      : { fullPath: context.config.rootExecutionDir, name: path.basename(context.config.rootExecutionDir) };
 
     context.spinner.start(`Initializing new project ${chalk.hex(Colors.yellow)(project.name)}`);
 
