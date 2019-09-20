@@ -3,9 +3,9 @@ const prompts = require("prompts");
 export type InteractiveInput = {
   name: string,
   message?: string,
-  initial?: string,
+  initial?: string | boolean,
   choices?: any[]
-  type: "select" | "password" | "text" | "multiselect"
+  type: "select" | "password" | "text" | "multiselect" | "confirm"
 };
 
 export namespace Interactive {
