@@ -3,6 +3,7 @@ import * as yargs from "yargs";
 import * as path from "path";
 import chalk from "chalk";
 import * as tree from "tree-node-cli";
+import gql from "graphql-tag";
 
 import { getFileProvider } from "./providers";
 import { install } from "./installer";
@@ -12,6 +13,14 @@ import { Colors } from "../../../consts/Colors";
 import { ProjectController } from "../../controllers/projectController";
 import { ExtensionType, SyntaxType } from "../../../interfaces/Extensions";
 import { Interactive } from "../../../common/interactive";
+
+const CREATE_WORKSPACE_MUTATION = gql`
+  mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
+    workspaceCreate(data: $data) {
+      id
+    }
+  }
+`;
 
 export default {
   command: "init",
@@ -41,11 +50,36 @@ export default {
         name: "workspaceId",
         type: "select",
         message: translations.i18n.t("init_select_workspace"),
-        choices: workspaces.map((workspace: any) => ({
+        choices: [{
+          title: "<New Workspace>",
+          value: "NEW_WORKSPACE",
+        }, ...workspaces.map((workspace: any) => ({
           title: workspace.name,
           value: workspace.id
-        })),
+        }))],
       }));
+
+      if (workspaceId === "NEW_WORKSPACE") {
+        const { workspaceName } = await Interactive.ask({
+          name: "workspaceName",
+          type: "text",
+          message: translations.i18n.t("init_workspace_name_labal"),
+        });
+
+        if (!workspaceName) {
+          throw new Error(translations.i18n.t("init_prevent_new_workspace"));
+        } else {
+          const { workspaceCreate } = await context.request(CREATE_WORKSPACE_MUTATION, {
+            data: {
+              name: workspaceName,
+            },
+          });
+
+          console.log(workspaceCreate);
+
+          workspaceId = workspaceCreate.id;
+        }
+      }
 
       if (!workspaceId) {
         throw new Error(translations.i18n.t("init_prevent_select_workspace"));
