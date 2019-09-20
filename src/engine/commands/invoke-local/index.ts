@@ -53,7 +53,12 @@ export default {
     context.spinner.stop();
 
     try {
-      const funcResult = await funcToCall(JSON.parse(args));
+      const funcResult = await funcToCall(JSON.parse(args), {
+        api: {
+          gqlRequest: context.request.bind(context),
+        },
+        workspaceId: context.workspaceId,
+      });
 
       context.logger.info("\nResult:");
       context.logger.info(JSON.stringify(funcResult, null, 2));
