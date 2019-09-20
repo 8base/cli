@@ -18,13 +18,4 @@ export class User {
 
     return !_.isEmpty(idToken) && !_.isEmpty(refreshToken);
   }
-
-  static get endpoint() {
-    const activeWorkspace = this.storage.getValue(StorageParameters.activeWorkspace);
-    const serverAddress = this.storage.getValue(StorageParameters.serverAddress);
-
-    const separator = serverAddress.slice(-1) === "/" ? "" : "/";
-
-    return serverAddress + separator + activeWorkspace;
-  }
 }

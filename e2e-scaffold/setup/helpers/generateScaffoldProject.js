@@ -24,24 +24,28 @@ const generateScaffoldProject = async () => {
 
     fs.writeFileSync(configPath, mockConfig);
 
-    const { stdout: loginStdout } = await execa("node", ["./dist", "login", `--email=${E2E_SCAFFOLD_EMAIL}`, `--password=${E2E_SCAFFOLD_PASSWORD}`, `--workspace=${E2E_SCAFFOLD_WORKSPACE_ID}`]);
-    console.log(loginStdout);
+    const { stdout: loginStdout } = await execa("node", ["./dist", "login", `--email=${E2E_SCAFFOLD_EMAIL}`, `--password=${E2E_SCAFFOLD_PASSWORD}`]);
 
     await execa("rm", ["-rf", "temp"]);
     await execa("mkdir", ["temp"]);
 
+    await execa("node", ["../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp" });
     const { stdout: createStdout } = await execa("node", ["../dist", "generate", "app", "app-example"], { cwd: "temp" });
     console.log(createStdout);
 
+    await execa("node", ["../../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp/app-example" });
     const { stdout: brokersStdout } = await execa("node", ["../../dist", "generate", "scaffold", "brokers", "--all"], { cwd: "temp/app-example" });
     console.log(brokersStdout);
 
+    await execa("node", ["../../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp/app-example" });
     const { stdout: customersStdout } = await execa("node", ["../../dist", "generate", "scaffold", "customers", "--all"], { cwd: "temp/app-example" });
     console.log(customersStdout);
 
+    await execa("node", ["../../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp/app-example" });
     const { stdout: listingStdout } = await execa("node", ["../../dist", "generate", "scaffold", "listings", "--all"], { cwd: "temp/app-example" });
     console.log(listingStdout);
 
+    await execa("node", ["../../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp/app-example" });
     const { stdout: propertiesStdout } = await execa("node", ["../../dist", "generate", "scaffold", "properties", "--all"], { cwd: "temp/app-example" });
     console.log(propertiesStdout);
 

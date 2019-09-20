@@ -70,7 +70,7 @@ export namespace RunCommand {
   };
 
   export const init = (repPath: string, repName: string) => {
-    return execCmd(repPath, `init ${repName}`);
+    return execCmd(repPath, `init ${repName} -w=workspaceId`);
   };
 }
 

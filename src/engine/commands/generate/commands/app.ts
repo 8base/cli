@@ -28,6 +28,8 @@ export default {
     const { appName } = params;
     const git = simplegit(".");
 
+    const workspaceId = context.workspaceId;
+
     context.spinner.start("Fetching project skeleton");
     await git.clone("https://github.com/8base/react-app-starter.git", appName, ["--branch", REPO_BRANCH_NAME]);
     await fs.remove(path.join(appName, ".git"));
@@ -43,7 +45,7 @@ export default {
     ]);
 
     const replacedFsObject = replaceInitialApp(fsObject, {
-      endpoint: context.user.endpoint,
+      endpoint: `https://api.8base.com/${workspaceId}`,
       authClientId: context.storage.getValue(StorageParameters.authClientId),
       authDomain: context.storage.getValue(StorageParameters.authDomain),
       appName,

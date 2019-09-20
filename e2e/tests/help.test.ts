@@ -2,7 +2,7 @@ import { runner } from '../runner';
 
 it.each([
   [['']],
-  [['config']],
+  [['configure']],
   [['deploy']],
   [['describe']],
   [['export']],

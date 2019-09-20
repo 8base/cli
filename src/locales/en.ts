@@ -16,6 +16,7 @@ export default {
     "silent_describe": "Disable printing extra info to the console",
     "mock_with_name_not_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} not defined",
     "mock_with_name_already_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} already defined",
+    "non_8base_project_dir": "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command when in the root of an existing 8base project or use '8base init' to create a new project.",
     /**
      * Login related messages
      */
@@ -53,9 +54,11 @@ export default {
     /**
      * Config related messages
      */
-    "config_usage": "COMMAND\n  8base config [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.",
-    "config_describe": "Allows you to select a default workspace and retrieve the API endpoint URL.",
-    "config_workspace_option": "Workspace Id",
+    "configure_usage": "COMMAND\n  8base configure [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.",
+    "configure_describe": "Allows you to select a default workspace and retrieve the API endpoint URL.",
+    "configure_workspace_id_describe": "The workspace ID of the project",
+    "configure_select_workspace": "Select workspace for current project",
+    "configure_prevent_select_workspace": "Workspace selection canceled",
     /**
      * Init related messages
      */
@@ -69,23 +72,28 @@ export default {
     "init_undefined_function_name": "Undefined function name",
     "init_functions_describe": "List of functions",
     "init_empty_describe": "Skip examples",
+    "init_workspace_id_describe": "The workspace ID of the project",
+    "init_select_workspace": "What workspace does this project belong to?",
+    "init_prevent_select_workspace": "Workspace selection canceled",
     /**
      * Invoke related messages
      */
-    "invoke_usage": "COMMAND\n  8base invoke [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.",
+    "invoke_usage": "COMMAND\n  8base invoke [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.",
     "invoke_describe": "Invokes a custom function in the production workspace.",
     "invoke_data_json_describe": "Input JSON",
     "invoke_data_path_describe": "Path to input JSON",
     "invoke_mock_describe": "Name of the mock request",
+    "invoke_name_describe": "The name of the function",
     "invoke_in_progress": "invoking...",
     /**
      * Invoke-local related messages
      */
-    "invokelocal_usage": "COMMAND\n  8base invoke-local [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.",
+    "invokelocal_usage": "COMMAND\n  8base invoke-local [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.",
     "invokelocal_describe": "Invokes the custom function in the local development workspace.",
     "invokelocal_data_json_describe": "Input JSON",
     "invokelocal_data_path_describe": "Path to input JSON",
     "invokelocal_mock_describe": "Name of the mock request",
+    "invokelocal_name_describe": "The name of the function",
     "invokelocal_in_progress": "invoking...",
     /**
      * Export related messages
@@ -119,9 +127,10 @@ export default {
     /**
      * Logs related messages
      */
-    "logs_usage": "COMMAND\n  8base logs [FUNCTION NAME] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
-    "logs_describe": "Authenticates the command line user by letting them log into an 8base account.",
+    "logs_usage": "COMMAND\n  8base logs [name] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
+    "logs_describe": "Show logs for the function(s).",
     "logs_num_describe": "Number of lines to display",
+    "logs_name_describe": "The name of the function",
     "logs_tail_describe": "Continually stream logs",
     "logs_in_progress": "getting logs...",
     "logs_tail_in_progress": "Establishing connection with server...",

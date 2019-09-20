@@ -70,19 +70,19 @@ const readLogs = async (functionName: string, context: Context) => {
 };
 
 export default {
-  command: "logs",
+  command: "logs [name]",
   handler: async (params: any, context: Context) => {
     if (params.n > 100) {
       params.n = 100;
     }
 
     if (params["t"] ) {
-      return await readLogs(params._[1], context);
+      return await readLogs(params.name, context);
     }
 
     context.spinner.start(context.i18n.t("logs_in_progress"));
 
-    const result = await context.request(GraphqlActions.logs, { functionName: params._[1], limit: params.n });
+    const result = await context.request(GraphqlActions.logs, { functionName: params.name, limit: params.n });
     context.spinner.stop();
     context.logger.info(result.logs);
   },
@@ -90,7 +90,11 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("logs_usage"))
-      .demand(1)
+      .positional("name", {
+        describe: translations.i18n.t("logs_name_describe"),
+        type: "string",
+      })
+      .demandOption("name")
       .option("num", {
         alias: "n",
         default: 10,

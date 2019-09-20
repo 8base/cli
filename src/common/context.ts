@@ -1,23 +1,32 @@
+import * as _ from "lodash";
+import * as fs from "fs";
+import * as i18next from "i18next";
+import * as Ora from "ora";
+import * as path from "path";
+import * as winston from "winston";
+import chalk from "chalk";
+import { Client } from "@8base/api-client";
+import { TransformableInfo } from "logform";
+
 import { UserDataStorage } from "./userDataStorage";
 import { User } from "./user";
 import { StaticConfig } from "../config";
 import { ProjectDefinition } from "../interfaces/Project";
-import _ = require("lodash");
 import { ProjectController } from "../engine/controllers/projectController";
 import { StorageParameters } from "../consts/StorageParameters";
-import * as winston from "winston";
-import * as i18next       from "i18next";
-import * as Ora from "ora";
 import { Translations } from "./translations";
-import { TransformableInfo } from "logform";
-import chalk from "chalk";
 import { Colors } from "../consts/Colors";
 import { SessionInfo } from "../interfaces/Common";
 import { Utils } from "./utils";
 import { GraphqlActions } from "../consts/GraphqlActions";
-import { Client } from "@8base/api-client";
 
 const pkg = require("../../package.json");
+
+type WorkspaceConfig = {
+  workspaceId: string,
+};
+
+const WORKSPACE_CONFIG_FILENAME = ".workspace.json";
 
 export class Context {
 
@@ -51,6 +60,52 @@ export class Context {
 
     this.i18n = translations.i18n;
     this.version = pkg.version;
+  }
+
+  get workspaceConfig(): WorkspaceConfig | null {
+    const workspaceConfigPath = this.getWorkspaceConfigPath();
+
+    if (this.hasWorkspaceConfig()) {
+      return JSON.parse(String(fs.readFileSync(workspaceConfigPath)));
+    }
+
+    return null;
+  }
+
+  set workspaceConfig(value: WorkspaceConfig) {
+    const workspaceConfigPath = this.getWorkspaceConfigPath();
+
+    fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
+  }
+
+  getWorkspaceConfigPath(customPath?: string): string {
+    return path.join(customPath || process.cwd(), WORKSPACE_CONFIG_FILENAME);
+  }
+
+  updateWorkspaceConfig(value: WorkspaceConfig): void {
+    const currentWorkspaceConfig = this.workspaceConfig;
+
+    this.workspaceConfig = _.merge(currentWorkspaceConfig, value);
+  }
+
+  createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
+    const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
+
+    fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
+  }
+
+  get workspaceId(): string | null {
+    return _.get(this.workspaceConfig, "workspaceId", null);
+  }
+
+  hasWorkspaceConfig(customPath?: string): boolean {
+    const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
+
+    return fs.existsSync(workspaceConfigPath);
+  }
+
+  isProjectDir(): boolean {
+    return this.hasWorkspaceConfig();
   }
 
   get serverAddress(): string {
@@ -96,39 +151,16 @@ export class Context {
     ]);
   }
 
-  async chooseWorkspace(workspaceId?: string) {
-
+  async getWorkspaces() {
     const data = await this.request(GraphqlActions.listWorkspaces, null, false);
 
-    this.storage.setValues([
-      {
-        name: StorageParameters.workspaces,
-        value: data.workspacesList.items
-      }
-    ]);
-
-    const workspaces = this.storage.getValue(StorageParameters.workspaces);
+    const workspaces = data.workspacesList.items;
 
     if (_.isEmpty(workspaces)) {
       throw new Error(this.i18n.t("logout_error"));
     }
 
-    const selectedWorkspaceId = workspaceId ? workspaceId : (await Utils.promptWorkspace(workspaces, this)).id;
-
-    const activeWorkspace = workspaces.find((workspace: any) => workspace.id === selectedWorkspaceId);
-    if (!activeWorkspace) {
-      throw new Error("Workspace " + selectedWorkspaceId + " is absent");
-    }
-
-    this.storage.setValues([
-      {
-        name: StorageParameters.activeWorkspace,
-        value: selectedWorkspaceId
-      }
-    ]);
-
-    this.logger.info(`Workspace ${chalk.hex(Colors.yellow)(activeWorkspace.name)} is active`);
-    this.logger.info(`\nAPI endpoint URL: ${this.user.endpoint}`);
+    return workspaces;
   }
 
   async checkWorkspace(workspaceId: string) {
@@ -164,7 +196,7 @@ export class Context {
       client.setIdToken(idToken);
     }
 
-    const workspaceId = customWorkspaceId || this.storage.getValue(StorageParameters.activeWorkspace);
+    const workspaceId = customWorkspaceId || this.workspaceId;
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));

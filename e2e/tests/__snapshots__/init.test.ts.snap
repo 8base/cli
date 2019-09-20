@@ -3,7 +3,9 @@
 exports[`As a user, I can init empty project. 1`] = `
 "Building a new project called testdir_init 🚀
 testdir_init
+├── .env.local
 ├── .gitignore
+├── .workspace.json
 ├── 8base.yml
 └── package.json
 🎉 Project testdir_init was successfully created 🎉
@@ -20,7 +22,9 @@ Array [
 exports[`As a user, I can init example project. 1`] = `
 "Building a new project called testdir_init 🚀
 testdir_init
+├── .env.local
 ├── .gitignore
+├── .workspace.json
 ├── 8base.yml
 ├── package.json
 └── src

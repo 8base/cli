@@ -17,14 +17,6 @@ export default {
         name: StorageParameters.idToken,
         value: ""
       },
-      {
-        name: StorageParameters.activeWorkspace,
-        value: null
-      },
-      {
-        name: StorageParameters.workspaces,
-        value: null
-      }
     ]);
   },
   describe: translations.i18n.t("logout_describe"),

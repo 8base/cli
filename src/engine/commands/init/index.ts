@@ -11,11 +11,14 @@ import { translations } from "../../../common/translations";
 import { Colors } from "../../../consts/Colors";
 import { ProjectController } from "../../controllers/projectController";
 import { ExtensionType, SyntaxType } from "../../../interfaces/Extensions";
+import { Interactive } from "../../../common/interactive";
 
 export default {
   command: "init",
+
   handler: async (params: any, context: Context) => {
     const { functions, empty, syntax, mocks, silent } = params;
+    let { workspaceId } = params;
 
     if (!empty && Array.isArray(functions)) {
       functions.forEach((declaration) => {
@@ -31,12 +34,29 @@ export default {
       });
     }
 
+    if (!workspaceId) {
+      const workspaces = await context.getWorkspaces();
+
+      ({ workspaceId } = await Interactive.ask({
+        name: "workspaceId",
+        type: "select",
+        message: translations.i18n.t("init_select_workspace"),
+        choices: workspaces.map((workspace: any) => ({
+          title: workspace.name,
+          value: workspace.id
+        })),
+      }));
+
+      if (!workspaceId) {
+        throw new Error(translations.i18n.t("init_prevent_select_workspace"));
+      }
+    }
+
     const parameters = _.castArray(params._);
 
     const project = parameters.length > 1
       ? { fullPath: path.join(context.config.rootExecutionDir, parameters[1]), name: parameters[1] }
       : { fullPath: context.config.rootExecutionDir, name: path.basename(context.config.rootExecutionDir) };
-
 
     context.spinner.start(`Initializing new project ${chalk.hex(Colors.yellow)(project.name)}`);
 
@@ -71,15 +91,17 @@ export default {
           name,
           mocks,
           syntax,
-          projectPath: parameters.length > 1 ? parameters[1] : null,
+          projectPath: parameters.length > 1 ? parameters[1] : undefined,
           silent: true,
         });
       });
     }
 
+    context.createWorkspaceConfig({ workspaceId }, project.fullPath);
+
     if (!silent) {
       // @ts-ignore
-      const fileTree:string = tree(`./${project.name}`, {
+      const fileTree:string = tree(project.fullPath, {
         allFiles: true,
         exclude: [/node_modules/, /\.build/]
       });
@@ -125,6 +147,11 @@ export default {
         describe: translations.i18n.t("silent_describe"),
         default: false,
         type: "boolean",
+      })
+      .option("workspaceId", {
+        alias: "w",
+        describe: translations.i18n.t("init_workspace_id_describe"),
+        type: "string",
       })
       .example(translations.i18n.t("init_no_dir_example_command"), translations.i18n.t("init_example_no_dir"))
       .example(translations.i18n.t("init_with_dir_example_command"), translations.i18n.t("init_example_with_dir"));

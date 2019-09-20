@@ -7,7 +7,7 @@ import { runner } from '../runner';
 const TEST_DIR = 'testdir_init';
 
 it('As a user, I can init example project.', async () => {
-  let { stdout } = await runner()('init', TEST_DIR);
+  let { stdout } = await runner()('init', TEST_DIR, '-w=workspaceId');
 
   stdout = stripAnsi(stdout);
 
@@ -19,7 +19,7 @@ it('As a user, I can init example project.', async () => {
 });
 
 it('As a user, I can init empty project.', async () => {
-  let { stdout } = await runner()('init', TEST_DIR, '-e');
+  let { stdout } = await runner()('init', TEST_DIR, '-w=workspaceId', '-e');
 
   stdout = stripAnsi(stdout);
 
