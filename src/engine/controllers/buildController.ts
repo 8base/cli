@@ -10,6 +10,7 @@ import { getCompiler } from "../compilers";
 import { Context } from "../../common/context";
 import { Utils } from "../../common/utils";
 
+const IGNORE_FILE_PATH = "./.8baseignore";
 
 /*
   paths:
@@ -74,7 +75,9 @@ export class BuildController {
       context.config.modulesFolder
     ];
 
-    const ignoreFilter = ignore().add(fs.readFileSync("./.8baseignore").toString());
+    const ignoreFilter = fs.existsSync(IGNORE_FILE_PATH) ? ignore().add(fs.readFileSync(IGNORE_FILE_PATH).toString()) : {
+      ignores: () => false,
+    };
 
     const files = await recursiveReadDir(context.config.rootExecutionDir, excludedDirectories);
 
