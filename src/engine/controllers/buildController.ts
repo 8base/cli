@@ -1,10 +1,14 @@
 import * as fs from "fs-extra";
+import * as path from "path";
+import ignore from "ignore";
+import * as _ from "lodash";
+import { Readable } from "stream";
+import * as recursiveReadDir from "recursive-readdir";
+
 import { ProjectController } from "./projectController";
 import { getCompiler } from "../compilers";
 import { Context } from "../../common/context";
 import { Utils } from "../../common/utils";
-import _ = require("lodash");
-import { Readable } from "stream";
 
 
 /*
@@ -60,7 +64,7 @@ export class BuildController {
    * Private functions
    */
 
-  private static packageSources(context: Context): Promise<Readable> {
+  private static async packageSources(context: Context): Promise<Readable> {
 
     const excludedDirectories = [
       context.config.buildDistFolder,
@@ -70,9 +74,14 @@ export class BuildController {
       context.config.modulesFolder
     ];
 
-    const sourceToArchive = BuildController.getSourceBuildData(context)
-      .filter(dir => !excludedDirectories.includes(dir))
-      .map(dir => ({ dist: dir, source: dir }));
+    const ignoreFilter = ignore().add(fs.readFileSync("./.8baseignore").toString());
+
+    const files = await recursiveReadDir(context.config.rootExecutionDir, excludedDirectories);
+
+    const sourceToArchive = files
+      .map((file) => path.relative(process.cwd(), file))
+      .filter((file) => !ignoreFilter.ignores(file))
+      .map(file => ({ dist: file, source: file }));
 
     return Utils.archiveToMemory(sourceToArchive, context);
   }
@@ -85,10 +94,6 @@ export class BuildController {
     ProjectController.saveProject(context.project, metaDir);
 
     return Utils.archiveToMemory([ { source: metaDir }], context);
-  }
-
-  private static getSourceBuildData(context: Context): string[] {
-    return fs.readdirSync(context.config.rootExecutionDir);
   }
 
   private static prepare(context: Context) {
