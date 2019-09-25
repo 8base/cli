@@ -1,9 +1,18 @@
+import chalk from "chalk";
+import errorCodes from "@8base/error-codes";
+import * as _ from "lodash";
+
 import { Translations } from "../../common/translations";
 import { Context } from "../../common/context";
-import chalk from "chalk";
 import { Colors } from "../../consts/Colors";
 
 const NON_PROJECT_COMMANDS = ["init", "login", "logout", "configure"];
+
+const hasWorkspaceNotFoundError = (response: any) => {
+  const errors = _.get(response, "errors", []);
+
+  return _.some(errors, { code: errorCodes.EntityNotFoundErrorCode, details: { workspaceId: "Workspace not found" } });
+};
 
 export class CommandController {
   static parseError = (error: any) => {
@@ -46,10 +55,16 @@ export class CommandController {
 
       } catch(ex) {
         context.spinner.stop();
-        const time = Date.now() - start;
-        context.logger.error(`${CommandController.parseError(ex)} \n Time: ${chalk.hex(Colors.red)(time.toLocaleString("en-US"))} ms.`
-        );
 
+        if (hasWorkspaceNotFoundError(_.get(ex, "response", {}))) {
+          context.logger.error(translations.i18n.t("workspace_not_found"));
+        } else {
+          context.logger.error(`${CommandController.parseError(ex)}`);
+        }
+
+        const time = Date.now() - start;
+
+        context.logger.error(`Time: ${chalk.hex(Colors.red)(time.toLocaleString("en-US"))} ms.`);
       }
     };
   }

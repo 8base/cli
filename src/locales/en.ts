@@ -17,6 +17,7 @@ export default {
     "mock_with_name_not_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} not defined",
     "mock_with_name_already_defined": "Mock with name {{- mockName }} for the function with name {{- functionName }} already defined",
     "non_8base_project_dir": "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command when in the root of an existing 8base project or use '8base init' to create a new project.",
+    "workspace_not_found": "Workspace not found. Try to run `8base configure` to select existed workspace for this project.",
     /**
      * Login related messages
      */
