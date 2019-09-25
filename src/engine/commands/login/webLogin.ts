@@ -41,11 +41,8 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
 
   context.setSessionInfo(res);
 
-  const workspaces = await context.request(GraphqlActions.listWorkspaces, null, false);
-
   return {
     idToken: res.idToken,
     refreshToken: res.refreshToken,
-    workspaces: workspaces.workspacesList.items
   };
 };

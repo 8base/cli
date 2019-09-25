@@ -28,11 +28,11 @@ export const passwordLogin = async (params: any, context: Context): Promise<Sess
   };
 
   context.spinner.start(context.i18n.t("login_in_progress"));
-  const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } }, false);
+
+  const result = await context.request(GraphqlActions.login, { data: { email: data.email, password: data.password } }, false, null);
 
   return {
     idToken: result.userLogin.auth.idToken,
     refreshToken: result.userLogin.auth.refreshToken,
-    workspaces: result.userLogin.workspaces.map((w: any) => { return { name: w.name, id: w.workspace };})
   };
 };
