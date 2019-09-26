@@ -152,7 +152,7 @@ export class Context {
   }
 
   async getWorkspaces() {
-    const data = await this.request(GraphqlActions.listWorkspaces, null, false);
+    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
 
     const workspaces = data.workspacesList.items;
 
@@ -164,7 +164,7 @@ export class Context {
   }
 
   async checkWorkspace(workspaceId: string) {
-    const data = await this.request(GraphqlActions.listWorkspaces, null, false);
+    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
 
     const workspaces = _.get(data, ["workspacesList", "items"], []);
 
@@ -196,7 +196,7 @@ export class Context {
       client.setIdToken(idToken);
     }
 
-    const workspaceId = customWorkspaceId || this.workspaceId;
+    const workspaceId = customWorkspaceId !== undefined ? customWorkspaceId : this.workspaceId;
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));
