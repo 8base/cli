@@ -29,7 +29,8 @@ type TriggerResult = {
 export default async (event: any, ctx: any) : Promise<TriggerResult> => {  
   return {
     data: {
-      result: `Trigger recieved: ${event.data.foo}`
+      ...event.data,
+      firstName: 'Override firstName',
     },
     /**
      * Triggers allow for errors to be specified in the response
