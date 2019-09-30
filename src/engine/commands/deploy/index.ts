@@ -1,11 +1,14 @@
+import * as yargs from "yargs";
+import * as _ from "lodash";
+
 import { Utils } from "../../../common/utils";
 import { GraphqlController } from "../../controllers/graphqlController";
 import { BuildController } from "../../controllers/buildController";
-import * as yargs from "yargs";
 import { Context } from "../../../common/context";
 import { GraphqlActions } from "../../../consts/GraphqlActions";
 import { translations } from "../../../common/translations";
 import { DeployStatus } from "../../../consts/DeployStatus";
+import { DeployModeType } from "../../../interfaces/Extensions";
 
 export default {
   command: "deploy",
@@ -29,7 +32,13 @@ export default {
     await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
     context.logger.debug("upload source code complete");
 
-    await context.request(GraphqlActions.deploy, { data: { buildName: prepareDeploy.buildName } });
+    let deployOptions = { mode: params.mode };
+
+    if (Array.isArray(params.plugins) && params.plugins.length > 0) {
+      deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
+    }
+
+    await context.request(GraphqlActions.deploy, { data: { buildName: prepareDeploy.buildName, options: deployOptions } });
 
     let result;
     do {
@@ -55,7 +64,18 @@ export default {
 
   describe: translations.i18n.t("deploy_describe"),
 
-  builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage(translations.i18n.t("deploy_usage"));
-  }
+  builder: (args: yargs.Argv): yargs.Argv => args
+    .usage(translations.i18n.t("deploy_usage"))
+    .option("plugins", {
+      alias: "p",
+      describe: translations.i18n.t("deploy_plugins_describe"),
+      type: "array"
+    })
+    .option("mode", {
+      alias: "m",
+      describe: translations.i18n.t("deploy_mode_describe"),
+      default: DeployModeType.project,
+      type: "string",
+      choices: Object.values(DeployModeType),
+    })
 };

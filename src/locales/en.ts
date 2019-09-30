@@ -60,6 +60,8 @@ export default {
     "deploy_in_progress": "deploying... \nStep: {{status}}\n{{message}}",
     "deploy_usage": "COMMAND\n  8base deploy [OPTIONS]\n\nDESCRIPTION\n  Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
     "deploy_describe": "Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.",
+    "deploy_plugins_describe": "The list of plugins to deploy",
+    "deploy_mode_describe": "The deploy mode",
     /**
      * Config related messages
      */

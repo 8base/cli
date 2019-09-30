@@ -10,6 +10,12 @@ export enum SyntaxType {
   ts = "ts",
 }
 
+export enum DeployModeType {
+  full = "FULL",
+  plugins = "ONLY_PLUGINS",
+  project = "ONLY_PROJECT",
+}
+
 export enum GraphQLFunctionType {
   Mutation = "Mutation",
   Query = "Query",
