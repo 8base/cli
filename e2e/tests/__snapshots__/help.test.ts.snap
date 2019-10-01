@@ -23,6 +23,7 @@ COMMANDS
   8base logout               Clears local login credentials and invalidates API session.
   8base logs [name]          Show logs for the function(s).
   8base package              Package 8base application without deploying it.
+  8base plugin <command>     Plugins management commands.
   8base whoami               Display the current authenticated user.
 
 OPTIONS
@@ -306,6 +307,50 @@ exports[`As a user, I can use help flag for see help information about \`package
 
 DESCRIPTION
   Package 8base application without deploying it.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`plugin,install\`. 1`] = `
+"COMMAND
+  8base plugin install [name]
+
+DESCRIPTION
+  Install plugin to the project.
+
+Positionals:
+  name  The name of the plugin  [string] [required]
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`plugin,remove\`. 1`] = `
+"COMMAND
+  8base plugin remove [name]
+
+DESCRIPTION
+  Remove plugin from the project.
+
+Positionals:
+  name  The name of the plugin  [string] [required]
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`plugin\`. 1`] = `
+"8base plugin <command>
+
+Plugins management commands.
+
+COMMANDS
+  8base plugin install [name]  Install plugin to the project.
+  8base plugin remove [name]   Remove plugin from the project.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]

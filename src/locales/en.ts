@@ -226,6 +226,23 @@ export default {
     "package_usage": "COMMAND\n  8base package [OPTIONS]\n\nDESCRIPTION\n  Package 8base application without deploying it.",
     "package_describe": "Package 8base application without deploying it.",
     "package_progress": "packaging...",
+
+    "plugin_describe": "Plugins management commands.",
+
+    "plugin_install_describe": "Install plugin to the project.",
+    "plugin_install_usage": "COMMAND\n  8base plugin install [name]\n\nDESCRIPTION\n  Install plugin to the project.",
+    "plugin_install_name_describe": "The name of the plugin",
+    "plugin_install_cant_find": "Can't find plugin with name {{- name }}",
+    "plugin_install_cant_download": "Can't download plugin with name {{- name }}",
+    "plugin_successfully_install": "Plugin {{- name }} successfully installed to your project.",
+
+    "plugins_with_name_already_defined": "Plugin with name {{- name }} already defined",
+
+    "plugin_remove_describe": "Remove plugin from the project.",
+    "plugin_remove_usage": "COMMAND\n  8base plugin remove [name]\n\nDESCRIPTION\n  Remove plugin from the project.",
+    "plugin_remove_name_describe": "The name of the plugin",
+    "plugin_successfully_remove": "Plugin {{- name }} successfully removed from your project.",
+    "plugin_remove_plugin_not_found": "Plugin {{- name }} not found in your project."
   },
   /**
    * Debug related messages

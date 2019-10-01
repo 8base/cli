@@ -4,6 +4,7 @@ import * as i18next from "i18next";
 import * as Ora from "ora";
 import * as path from "path";
 import * as winston from "winston";
+import * as yaml from "yaml";
 import chalk from "chalk";
 import { Client } from "@8base/api-client";
 import { TransformableInfo } from "logform";
@@ -22,11 +23,19 @@ import { GraphqlActions } from "../consts/GraphqlActions";
 
 const pkg = require("../../package.json");
 
-type WorkspaceConfig = {
+export type WorkspaceConfig = {
   workspaceId: string,
 };
 
+type Plugin = { name: string, path: string };
+
+export type ProjectConfig = {
+  functions: Object,
+  plugins?: Plugin[],
+};
+
 const WORKSPACE_CONFIG_FILENAME = ".workspace.json";
+const PROJECT_CONFIG_FILENAME = "8base.yml";
 
 export class Context {
 
@@ -38,7 +47,7 @@ export class Context {
 
   i18n: i18next.i18n;
 
-  spinner = new Ora({
+  spinner = Ora({
     color: "white",
     text: "\n"
   });
@@ -106,6 +115,34 @@ export class Context {
 
   isProjectDir(): boolean {
     return this.hasWorkspaceConfig();
+  }
+
+  get projectConfig(): ProjectConfig {
+    const projectConfigPath = this.getProjectConfigPath();
+
+    let projectConfig = { functions: {} };
+
+    if (this.hasProjectConfig()) {
+      projectConfig = yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
+    }
+
+    return projectConfig;
+  }
+
+  set projectConfig(value: ProjectConfig) {
+    const projectConfigPath = this.getProjectConfigPath();
+
+    fs.writeFileSync(projectConfigPath, yaml.stringify(value));
+  }
+
+  getProjectConfigPath(customPath?: string): string {
+    return path.join(customPath || process.cwd(), PROJECT_CONFIG_FILENAME);
+  }
+
+  hasProjectConfig(customPath?: string): boolean {
+    const projectConfigPath = this.getProjectConfigPath(customPath);
+
+    return fs.existsSync(projectConfigPath);
   }
 
   get serverAddress(): string {

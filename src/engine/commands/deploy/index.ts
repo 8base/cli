@@ -35,7 +35,7 @@ export default {
     let deployOptions = { mode: params.mode };
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
-      deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
+      deployOptions = _.set(deployOptions, "pluginNames", params.plugins);
     }
 
     await context.request(GraphqlActions.deploy, { data: { buildName: prepareDeploy.buildName, options: deployOptions } });
