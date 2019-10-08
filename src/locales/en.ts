@@ -3,6 +3,8 @@
  */
 export default {
   "default": {
+    "8base_new_version": "The new version of the 8base CLI (v{{- last }}) is already available.\nPlease update CLI to the latest version using 'yarn global add 8base-cli@latest' or 'npm i -g 8base-cli@latest'",
+
     /**
      * Shared messages
      */
