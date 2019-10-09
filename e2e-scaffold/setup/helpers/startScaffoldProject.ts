@@ -9,7 +9,7 @@ export const startScaffoldProject = async () => {
     npmStart.unref();
 
     await new Promise((resolve) => {
-      setTimeout(() => resolve(), 10000);
+      setTimeout(() => resolve(), 20000);
     });
   } catch(err) {
     console.log(err);
