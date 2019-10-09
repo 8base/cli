@@ -242,7 +242,12 @@ export default {
     "plugin_remove_usage": "COMMAND\n  8base plugin remove [name]\n\nDESCRIPTION\n  Remove plugin from the project.",
     "plugin_remove_name_describe": "The name of the plugin",
     "plugin_successfully_remove": "Plugin {{- name }} successfully removed from your project.",
-    "plugin_remove_plugin_not_found": "Plugin {{- name }} not found in your project."
+    "plugin_remove_plugin_not_found": "Plugin {{- name }} not found in your project.",
+
+    "plugin_list_plugin_info": "Name: {{- name }}\nDescription: {{- description }}\nGitHub: {{- gitHubUrl }}\n",
+    "plugin_list_not_found_plugins": "Not found plugins for your query",
+    "plugin_list_describe": "Show list of available plugins.",
+    "plugin_list_usage": "COMMAND\n  8base plugin list\n\nDESCRIPTION\n  Show list of available plugins.",
   },
   /**
    * Debug related messages

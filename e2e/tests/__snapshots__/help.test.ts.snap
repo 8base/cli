@@ -350,6 +350,7 @@ Plugins management commands.
 
 COMMANDS
   8base plugin install [name]  Install plugin to the project.
+  8base plugin list            Show list of available plugins.
   8base plugin remove [name]   Remove plugin from the project.
 
 OPTIONS

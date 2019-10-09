@@ -6,7 +6,7 @@ import { Translations } from "../../common/translations";
 import { Context } from "../../common/context";
 import { Colors } from "../../consts/Colors";
 
-const NON_PROJECT_COMMANDS = ["init", "login", "logout", "configure", "whoami"];
+const NON_PROJECT_COMMANDS = ["init", "login", "logout", "configure", "plugin list", "p list", "whoami"];
 
 const hasWorkspaceNotFoundError = (response: any) => {
   const errors = _.get(response, "errors", []);
@@ -39,7 +39,7 @@ export class CommandController {
       const start = Date.now();
 
       try {
-        if (NON_PROJECT_COMMANDS.indexOf(command) === -1) {
+        if (NON_PROJECT_COMMANDS.indexOf(command) === -1 && NON_PROJECT_COMMANDS.indexOf(params._.join(" ")) === -1) {
           if (!context.isProjectDir()) {
             throw new Error(translations.i18n.t("non_8base_project_dir"));
           }
