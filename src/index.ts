@@ -2,9 +2,14 @@
 
 import * as yargs from "yargs";
 import * as _ from "lodash";
+import latestVersion from "latest-version";
+import chalk from "chalk";
+
 import { StaticConfig } from "./config";
 import { Utils } from "./common/utils";
 import { translations, Translations } from "./common/translations";
+
+const pkg = require("../package.json");
 
 const start = (translations: Translations) => {
   const argv = yargs
@@ -59,7 +64,13 @@ const start = (translations: Translations) => {
 };
 
 translations.init()
-  .then((translations: Translations) => {
+  .then(async (translations: Translations) => {
+    const last = await latestVersion(pkg.name);
+
+    if (pkg.version !== last) {
+      console.log(chalk.yellow(translations.i18n.t("8base_new_version", { last })));
+    }
+
     start(translations);
   })
   .catch(err => console.error(err.message));

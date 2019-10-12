@@ -54,6 +54,7 @@
     "isomorphic-fetch": "^2.2.1",
     "js-yaml": "^3.9.1",
     "jwt-decode": "^2.2.0",
+    "latest-version": "^5.1.0",
     "lodash": "^4.17.11",
     "memfs": "^2.6.2",
     "memorystream": "^0.3.1",
