@@ -1,6 +1,6 @@
-# 8base CLI  
+# 8base CLI  [![Build Status](https://travis-ci.org/8base/cli.svg?branch=master)](https://travis-ci.org/8base/cli)
 
-[![Build Status](https://travis-ci.org/8base/cli.svg?branch=master)](https://travis-ci.org/8base/cli) [**Sign Up for 8Base**](https://app.8base.com)	🤘	[**Documentation Home**](https://docs.8base.com)	📑	[**Getting Started**](https://docs.8base.com/getting-started/quick-start)	🚀	[**8base Plans**](https://www.8base.com/pricing)
+[**Sign Up for 8Base**](https://app.8base.com)	🤘	[**Documentation Home**](https://docs.8base.com)	📑	[**Getting Started**](https://docs.8base.com/getting-started/quick-start)	🚀	[**8base Plans**](https://www.8base.com/pricing)
 
 The 8base Command Line Interface (CLI) makes it easy to generate custom functions and manage workspaces straight from the terminal.
 
