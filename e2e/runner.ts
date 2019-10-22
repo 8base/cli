@@ -6,6 +6,7 @@ const runner = (cwd?: any, env?: any) => {
     cwd,
     env: Object.assign({
       HOME: process.env.HOME,
+      SKIP_VERSION_CHECK: true,
     }, env),
   };
 
