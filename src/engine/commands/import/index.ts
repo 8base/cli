@@ -42,7 +42,13 @@ export default {
     if (params.data) {
       context.spinner.start(context.i18n.t("import_data_in_progress"));
 
-      await importData(context.request.bind(context), _.get(schema, "data", {}), { maxThreads: 2 });
+      const gqlRequest = context.request.bind(context);
+
+      await importData(
+        (query, variables) => gqlRequest(query, variables, true, params.workspace),
+        _.get(schema, "data", {}),
+        { maxThreads: 2 }
+      );
 
       context.spinner.stop();
     }
