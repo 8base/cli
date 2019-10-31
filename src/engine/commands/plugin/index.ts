@@ -5,7 +5,7 @@ import { Utils } from "../../../common/utils";
 
 export default {
   command: ["plugin <command>", "p <command>"],
-  describe: translations.i18n.t("plugin_describe"),
+  describe: false && translations.i18n.t("plugin_describe"),
   builder: function (yargs: yargs.Argv) {
     return yargs.commandDir("commands", {
       extensions: ["js", "ts"],

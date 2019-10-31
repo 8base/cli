@@ -22,9 +22,6 @@ it.each([
   [['logout']],
   [['logs']],
   [['package']],
-  [['plugin']],
-  [['plugin', 'install']],
-  [['plugin', 'remove']],
 ])('As a user, I can use help flag for see help information about `%s`.', async (cmd) => {
   const { stdout } = await runner()(...cmd, '--help');
 
