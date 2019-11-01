@@ -21,7 +21,15 @@ export default {
     "non_8base_project_dir": "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command when in the root of an existing 8base project or use '8base init' to create a new project.",
     "workspace_not_found": "Workspace not found. Try to run `8base configure` to select existed workspace for this project.",
     /**
-     * Login related messages
+     * Project info related messages
+     */
+    "project_describe": "Project-related commands.",
+    "project_info_usage": "COMMAND\n  8base project info\n\nDESCRIPTION\n Display the info about current project.",
+    "project_info_describe": "Display the info about current project.",
+    "project_info_text": "Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nAPI Endpoint: {{-endpoint}}",
+    "project_info_cant_find_workspace": "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
+    /**
+     * Whoami related messages
      */
     "whoami_usage": "COMMAND\n  8base whoami\n\nDESCRIPTION\n Display the current authenticated user.",
     "whoami_describe": "Display the current authenticated user.",
