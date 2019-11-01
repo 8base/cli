@@ -11,7 +11,7 @@ import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
 import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerType, TriggerOperation, ResolverDefinition, SyntaxType } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
-import { Context } from "../../common/context";
+import { Context, ProjectConfig } from "../../common/context";
 import { translations } from "../../common/translations";
 
 type FunctionDeclarationOptions = {
@@ -275,6 +275,20 @@ export class ProjectController {
       triggers: [],
       schedules: []
     });
+  }
+
+  static addPluginDeclaration(context: Context, name: string, declaration: Object, projectPath?: string, silent?: boolean) {
+    let config = ProjectController.loadConfigFile(context, projectPath);
+
+    const plugins = config.plugins || [];
+
+    if (_.some(plugins, { name })) {
+      throw new Error(context.i18n.t("plugins_with_name_already_defined", { name }));
+    }
+
+    config.plugins = [...plugins, declaration];
+
+    ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
   static addFunctionDeclaration(context: Context, name: string, declaration: Object, projectPath?: string, silent?: boolean) {
