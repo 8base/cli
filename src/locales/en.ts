@@ -23,6 +23,12 @@ export default {
     /**
      * Login related messages
      */
+    "whoami_usage": "COMMAND\n  8base whoami\n\nDESCRIPTION\n Display the current authenticated user.",
+    "whoami_describe": "Display the current authenticated user.",
+    "whoami_text": "You authenticated as {{-email}} ({{-name}}).",
+    /**
+     * Login related messages
+     */
     "login_usage": "COMMAND\n  8base login [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.",
     "login_describe": "Authenticates the command line user by letting them log into an 8base account.",
     "login_browser_example_command": "8base login",

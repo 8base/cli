@@ -23,6 +23,7 @@ COMMANDS
   8base logout               Clears local login credentials and invalidates API session.
   8base logs [name]          Show logs for the function(s).
   8base package              Package 8base application without deploying it.
+  8base whoami               Display the current authenticated user.
 
 OPTIONS
   --version, -v  Show version number  [boolean]

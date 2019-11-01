@@ -6,7 +6,7 @@ import { Translations } from "../../common/translations";
 import { Context } from "../../common/context";
 import { Colors } from "../../consts/Colors";
 
-const NON_PROJECT_COMMANDS = ["init", "login", "logout", "configure"];
+const NON_PROJECT_COMMANDS = ["init", "login", "logout", "configure", "whoami"];
 
 const hasWorkspaceNotFoundError = (response: any) => {
   const errors = _.get(response, "errors", []);
