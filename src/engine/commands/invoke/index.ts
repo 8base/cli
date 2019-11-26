@@ -24,11 +24,33 @@ export default {
       args = params.j;
     }
 
-    const result = await context.request(GraphqlActions.invoke, { data: { functionName: params.name, inputArgs: args } });
+    let resultResponse = null;
+    let resultError = null;
+
+    try {
+      resultResponse = await context.request(GraphqlActions.invoke, { data: { functionName: params.name, inputArgs: args } });
+    } catch (e) {
+      resultError = e;
+    }
 
     context.spinner.stop();
 
-    context.logger.info(result.invoke.responseData);
+    context.logger.info("Result:");
+
+    if (resultError) {
+      context.logger.info(JSON.stringify({
+        data: {
+          [params.name]: null,
+        },
+        errors: resultError.response.errors,
+      }, null, 2));
+
+      throw new Error(translations.i18n.t("invoke_returns_error", { name: params.name }));
+    } else {
+      context.logger.info(JSON.stringify({
+        data: JSON.parse(resultResponse.invoke.responseData)
+      }, null, 2));
+    }
   },
   describe: translations.i18n.t("invoke_describe"),
   builder: (args: yargs.Argv): yargs.Argv => {

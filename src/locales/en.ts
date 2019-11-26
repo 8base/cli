@@ -108,6 +108,7 @@ export default {
     "invoke_mock_describe": "Name of the mock request",
     "invoke_name_describe": "The name of the function",
     "invoke_in_progress": "invoking...",
+    "invoke_returns_error": "\"{{- name }}\" returns an error.",
     /**
      * Invoke-local related messages
      */
@@ -118,6 +119,7 @@ export default {
     "invokelocal_mock_describe": "Name of the mock request",
     "invokelocal_name_describe": "The name of the function",
     "invokelocal_in_progress": "invoking...",
+    "invokelocal_returns_error": "\"{{- name }}\" returns an error.",
     /**
      * Export related messages
      */
