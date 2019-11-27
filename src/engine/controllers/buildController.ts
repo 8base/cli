@@ -72,7 +72,9 @@ export class BuildController {
       context.config.packageFolder,
       context.config.metaFolder,
       context.config.buildRootFolder,
-      context.config.modulesFolder
+      context.config.modulesFolder,
+      ".git",
+      ".idea",
     ];
 
     const ignoreFilter = fs.existsSync(IGNORE_FILE_PATH) ? ignore().add(fs.readFileSync(IGNORE_FILE_PATH).toString()) : {
