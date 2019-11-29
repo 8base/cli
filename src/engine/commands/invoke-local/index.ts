@@ -50,20 +50,46 @@ export default {
       args = params.j;
     }
 
-    context.spinner.stop();
+    let resultResponse = null;
+    let resultError = null;
 
     try {
-      const funcResult = await funcToCall(JSON.parse(args), {
+      resultResponse = await funcToCall(JSON.parse(args), {
         api: {
           gqlRequest: context.request.bind(context),
         },
         workspaceId: context.workspaceId,
       });
+    } catch (e) {
+      resultError = e;
+    }
 
-      context.logger.info("\nResult:");
-      context.logger.info(JSON.stringify(funcResult, null, 2));
-    } catch (ex) {
-      throw new InvokeLocalError(ex.message, functionInfo.name, funcPath);
+    context.spinner.stop();
+
+    context.logger.info("Result:");
+
+    if (resultError) {
+      context.logger.info(JSON.stringify({
+        data: {
+          [functionInfo.name]: null
+        },
+        errors: [{
+          message: String(resultError.message),
+          path: [functionInfo.name],
+          locations: [
+            {
+              line: 2,
+              column: 5
+            }
+          ],
+          code: null,
+          details: null,
+        }]
+      }, null, 2));
+
+      throw new Error(translations.i18n.t("invokelocal_returns_error", { name: functionInfo.name }));
+    } else {
+      context.logger.info(JSON.stringify(resultResponse, null, 2));
     }
   },
   describe: translations.i18n.t("invokelocal_describe"),
