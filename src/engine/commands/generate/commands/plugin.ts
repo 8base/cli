@@ -2,7 +2,7 @@ import * as yargs from "yargs";
 
 import { Context } from "../../../../common/context";
 import { translations } from "../../../../common/translations";
-import { ExtensionType, SyntaxType } from "../../../../interfaces/Extensions";
+import { SyntaxType } from "../../../../interfaces/Extensions";
 import { ProjectController } from "../../../controllers/projectController";
 
 type ResolverParams = {
@@ -13,31 +13,21 @@ type ResolverParams = {
 };
 
 export default {
-  command: "resolver <name>",
+  command: "plugin <name>",
 
   handler: async (params: ResolverParams, context: Context) => {
-    let { name, mocks, syntax, silent } = params;
+    let { name, syntax, silent } = params;
 
-    ProjectController.generateFunction(context, {
-      type: ExtensionType.resolver,
+    ProjectController.generatePlugin(context, {
       name,
-      mocks,
       syntax,
-      silent,
-      extendType: "Query",
     });
   },
 
-  describe: translations.i18n.t("generate_resolver_describe"),
+  describe: translations.i18n.t("generate_plugin_describe"),
 
   builder: (args: yargs.Argv): yargs.Argv => args
-    .usage(translations.i18n.t("generate_resolver_usage"))
-    .option("mocks", {
-      alias: "x",
-      describe: translations.i18n.t("generate_mocks_describe"),
-      default: true,
-      type: "boolean"
-    })
+    .usage(translations.i18n.t("generate_plugin_usage"))
     .option("syntax", {
       alias: "s",
       describe: translations.i18n.t("generate_syntax_describe"),

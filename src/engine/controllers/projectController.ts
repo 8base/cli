@@ -9,10 +9,9 @@ import * as _ from "lodash";
 import { StaticConfig } from "../../config";
 import { InvalidConfiguration } from "../../errors";
 import { GraphqlController } from "../../engine/controllers/graphqlController";
-import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerDefinition, FunctionDefinition, TriggerType, TriggerOperation, ResolverDefinition, SyntaxType } from "../../interfaces/Extensions";
+import { ExtensionsContainer, ExtensionType, GraphQLFunctionType, TriggerType, TriggerOperation, ResolverDefinition, SyntaxType } from "../../interfaces/Extensions";
 import { ProjectDefinition } from "../../interfaces/Project";
-import { Context, ProjectConfig } from "../../common/context";
-import { translations } from "../../common/translations";
+import { Context } from "../../common/context";
 
 type FunctionDeclarationOptions = {
   operation?: string,
@@ -29,11 +28,19 @@ type FunctionGeneratationOptions = {
   syntax: SyntaxType,
   projectPath?: string,
   silent?: boolean,
+  extendType?: string,
 };
 
 type MockGeneratationOptions = {
   name: string,
   functionName: string,
+  projectPath?: string,
+  silent?: boolean,
+};
+
+type PluginGenerationOptions = {
+  name: string,
+  syntax?: SyntaxType,
   projectPath?: string,
   silent?: boolean,
 };
@@ -305,7 +312,7 @@ export class ProjectController {
 
   static generateFunction(
     context: Context,
-    { type, name, mocks, syntax, projectPath = ".", silent }: FunctionGeneratationOptions,
+    { type, name, mocks, syntax, extendType = "Query", projectPath = ".", silent }: FunctionGeneratationOptions,
     options: FunctionDeclarationOptions = {}
   ) {
     const dirPath = `src/${type}s/${name}`;
@@ -324,13 +331,57 @@ export class ProjectController {
       context,
       { dirPath: path.join(projectPath, dirPath), templatePath: functionTemplatePath },
       { syntax, mocks, silent },
-      { functionName: name, type },
+      { functionName: name, type, extendType },
     );
 
     if (!silent) {
       context.logger.info("");
 
       context.logger.info(context.i18n.t("generate_function_grettings", {
+        name,
+      }));
+    }
+  }
+
+  static generatePlugin(
+    context: Context,
+    { name, syntax, silent, projectPath = "." }: PluginGenerationOptions,
+  ) {
+    const functionName = `${name}Resolver`;
+    const extendType = _.upperFirst(`${name}Mutation`);
+    const pluginPath = path.join("plugins", name);
+    const functionPath = path.join(pluginPath, "src", "resolvers", functionName);
+    const pluginTemplatePath = context.config.pluginTemplatePath;
+    const resolverTemplatePath = path.resolve(context.config.functionTemplatesPath, ExtensionType.resolver);
+
+    ProjectController.addPluginDeclaration(
+      context,
+      name, {
+        name,
+        path: path.join(pluginPath, "8base.yml"),
+      },
+      projectPath,
+      silent,
+    );
+
+    processTemplate(
+      context,
+      { dirPath: path.join(projectPath, pluginPath), templatePath: pluginTemplatePath },
+      { syntax, silent },
+      { name, syntax, functionName },
+    );
+
+    processTemplate(
+      context,
+      { dirPath: path.join(projectPath, functionPath), templatePath: resolverTemplatePath },
+      { syntax, mocks: false, silent },
+      { functionName, type: ExtensionType.resolver, extendType, },
+    );
+
+    if (!silent) {
+      context.logger.info("");
+
+      context.logger.info(context.i18n.t("generate_plugin_grettings", {
         name,
       }));
     }

@@ -14,6 +14,10 @@ export class StaticConfig {
     return this.staticData.functionTemplatesPath;
   }
 
+  static get pluginTemplatePath(): string {
+    return this.staticData.pluginTemplatePath;
+  }
+
   static get mockTemplatePath(): string {
     return this.staticData.mockTemplatePath;
   }
