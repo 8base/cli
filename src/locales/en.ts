@@ -229,7 +229,7 @@ export default {
     "generate_mock_describe": "8base generate mock [FUNCTION_NAME] [OPTIONS]",
     "generate_mock_usage": "Generator for a mock for the function.",
     "generate_mock_name_describe": "Name of the mock request",
-    "generate_plugin_grettings": "Boom! Your new {{- name }} request mock has been successfully generated.",
+    "generate_mock_grettings": "Boom! Your new {{- name }} request mock has been successfully generated.",
     /**
      * Generate plugin related messages
      */
