@@ -1,0 +1,7 @@
+functions:
+  <%= functionName %>:
+    description: Runs test mutation
+    type: resolver
+    handler:
+      code: src/resolvers/<%= functionName %>/handler.<%= syntax %>
+    schema: src/resolvers/<%= functionName %>/schema.graphql

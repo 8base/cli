@@ -12,6 +12,6 @@ type <%= resultType %> {
   result: String!
 }
 
-extend type Query {
+extend type <%= extendType %> {
   <%= functionName %>(foo: String!): <%= resultType %>
 }
