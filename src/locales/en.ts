@@ -235,7 +235,7 @@ export default {
      */
     "generate_plugin_usage": "8base generate plugin [PLUGIN_NAME] [OPTIONS]",
     "generate_plugin_describe": "Generator for a plugin.",
-    "generate_plugin_greettings": "Boom! Your new {{- name }} plugin has been successfully generated.",
+    "generate_plugin_grettings": "Boom! Your new {{- name }} plugin has been successfully generated.",
     /**
      * Package related messages
      */
