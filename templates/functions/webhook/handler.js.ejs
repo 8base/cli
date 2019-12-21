@@ -1,9 +1,9 @@
 /**
  * This file was generated using 8base CLI.
- * 
+ *
  * To learn more about writing custom GraphQL resolver functions, visit
  * the 8base documentation at:
- * 
+ *
  * https://docs.8base.com/8base-console/custom-functions/webhooks
  *
  * To update this functions invocation settings, update its configuration block
@@ -25,7 +25,7 @@ module.exports = async (event, ctx) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      result: `Webhook recieved: ${foo}`,
+      result: `Webhook received: ${foo}`,
     }),
   };
 };
