@@ -65,10 +65,14 @@ const start = (translations: Translations) => {
 
 translations.init()
   .then(async (translations: Translations) => {
-    const last = await latestVersion(pkg.name);
+    try {
+      const last = await latestVersion(pkg.name);
 
-    if (pkg.version !== last && process.env.SKIP_VERSION_CHECK !== "true") {
-      console.log(chalk.yellow(translations.i18n.t("8base_new_version", { last })));
+      if (pkg.version !== last && process.env.SKIP_VERSION_CHECK !== "true") {
+        console.log(chalk.yellow(translations.i18n.t("8base_new_version", { last })));
+      }
+    } catch (e) {
+
     }
 
     start(translations);
