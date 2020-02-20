@@ -7,18 +7,19 @@ export enum ExtensionType {
 
 export enum SyntaxType {
   js = "js",
-  ts = "ts",
+  ts = "ts"
 }
 
 export enum DeployModeType {
   full = "FULL",
   plugins = "ONLY_PLUGINS",
   project = "ONLY_PROJECT",
+  functions = "FUNCTIONS"
 }
 
 export enum GraphQLFunctionType {
   Mutation = "Mutation",
-  Query = "Query",
+  Query = "Query"
 }
 
 export enum TriggerOperation {
