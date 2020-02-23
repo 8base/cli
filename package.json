@@ -20,7 +20,7 @@
     "e2e-scaffold:debug": "cross-env E2E_SCAFFOLD_DEBUG=true npm run e2e-scaffold",
     "e2e-scaffold:ci": "cross-env E2E_SCAFFOLD_GENERATE=true npm run e2e-scaffold",
     "upload": "npm version patch && git push --follow-tags",
-    "postinstall": "npm run build && node ./postinstall.js && node dist/index.js --help && echo",
+    "postinstall": "node ./postinstall.js && (test -e dist/index.js && node dist/index.js --help || echo)",
     "preversion": "npm run tslint"
   },
   "dependencies": {
@@ -110,15 +110,15 @@
     "@types/zen-observable": "^0.5.3",
     "cross-env": "^5.2.0",
     "fs": "0.0.1-security",
-    "jest": "^25.1.0",
-    "jest-cli": "^25.1.0",
-    "jest-environment-node-debug": "^2.0.0",
-    "jest-image-snapshot": "^2.8.2",
-    "jest-transform-graphql": "^2.1.0",
+    "jest": "25.1.0",
+    "jest-cli": "25.1.0",
+    "jest-environment-node-debug": "2.0.0",
+    "jest-image-snapshot": "2.8.2",
+    "jest-transform-graphql": "2.1.0",
     "mkdirp": "^0.5.1",
     "nodemon": "^1.18.5",
     "puppeteer": "^1.16.0",
-    "ts-jest": "^25.1.0",
+    "ts-jest": "25.1.0",
     "tslint": "^5.13.0",
     "tslint-eslint-rules": "^5.4.0"
   }
