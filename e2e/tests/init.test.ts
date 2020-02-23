@@ -11,11 +11,13 @@ it('As a user, I can init example project.', async () => {
 
   stdout = stripAnsi(stdout);
 
-  expect(stdout.replace(/Time: \d+ ms\./, 'Time: 100 ms.')).toMatchSnapshot();
+  expect(
+    stdout.replace(/Time: [\d,]+ ms\./, 'Time: 100 ms.')
+  ).toMatchSnapshot();
 
   const { stdout: ls } = await execa.shell(`ls -1 ${TEST_DIR}/** | sort`);
 
-  expect(ls.split("\n").sort()).toMatchSnapshot();
+  expect(ls.split('\n').sort()).toMatchSnapshot();
 });
 
 it('As a user, I can init empty project.', async () => {
@@ -23,11 +25,13 @@ it('As a user, I can init empty project.', async () => {
 
   stdout = stripAnsi(stdout);
 
-  expect(stdout.replace(/Time: \d+ ms\./, 'Time: 100 ms.')).toMatchSnapshot();
+  expect(
+    stdout.replace(/Time: [\d,]+ ms\./, 'Time: 100 ms.')
+  ).toMatchSnapshot();
 
   const { stdout: ls } = await execa.shell(`ls -1 ${TEST_DIR}/** | sort`);
 
-  expect(ls.split("\n").sort()).toMatchSnapshot();
+  expect(ls.split('\n').sort()).toMatchSnapshot();
 });
 
 afterEach(async () => {
