@@ -114,6 +114,7 @@ export default {
     init_describe:
       "Initializes a new project with example directory structure and custom functions.",
     init_invalid_function_type: "Invalid function type",
+    init_invalid_project_name: "Invalid project name: {{validationMessages}}.",
     init_undefined_function_name: "Undefined function name",
     init_functions_describe: "List of functions",
     init_empty_describe: "Skip examples",

@@ -36,6 +36,7 @@
     "@types/ramda": "^0.26.13",
     "@types/rimraf": "^2.0.2",
     "@types/table": "^4.0.6",
+    "@types/validate-npm-package-name": "^3.0.0",
     "@types/yaml": "^1.0.2",
     "adm-zip": "^0.4.13",
     "archiver": "^3.0.0",
@@ -77,6 +78,7 @@
     "table": "^5.4.6",
     "tree-node-cli": "^1.2.5",
     "typescript": "^3.4.3",
+    "validate-npm-package-name": "^3.0.0",
     "winston": "^3.1.0",
     "yaml": "^1.7.0",
     "yargs": "^13.3.0"
