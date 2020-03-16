@@ -11,7 +11,11 @@
   "scripts": {
     "build": "tsc",
     "watch": "npm run build -- --watch",
-    "tslint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
+    "lint": "eslint --ext js,ts src ",
+    "lint:fix": "npm run lint --fix",
+    "prettier:base": "prettier --parser typescript",
+    "prettier:check": "npm run prettier:base -- --list-different \"{src,test}/**/*.{ts,tsx}\"",
+    "prettier:write": "npm run prettier:base -- --write \"{src,test}/**/*.{ts,tsx}\"",
     "e2e": "jest --config e2e/config.json",
     "scaffold:generate": "node ./e2e-scaffold/scripts/generateScaffold.js",
     "scaffold:start": "npm run start --prefix=./temp/app-example",
@@ -20,8 +24,7 @@
     "e2e-scaffold:debug": "cross-env E2E_SCAFFOLD_DEBUG=true npm run e2e-scaffold",
     "e2e-scaffold:ci": "cross-env E2E_SCAFFOLD_GENERATE=true npm run e2e-scaffold",
     "upload": "npm version patch && git push --follow-tags",
-    "postinstall": "node ./postinstall.js && (test -e dist/index.js && node dist/index.js --help || echo)",
-    "preversion": "npm run tslint"
+    "postinstall": "node ./postinstall.js && (test -e dist/index.js && node dist/index.js --help || echo)"
   },
   "dependencies": {
     "@8base/api-client": "^0.30.0",
@@ -84,6 +87,13 @@
     "yargs": "^13.3.0"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^2.3.2",
+    "@typescript-eslint/parser": "^2.3.2",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
     "@types/archiver": "^2.1.2",
     "@types/body-parser": "^1.16.8",
     "@types/chalk": "^2.2.0",
@@ -120,8 +130,6 @@
     "mkdirp": "^0.5.1",
     "nodemon": "^1.18.5",
     "puppeteer": "^1.16.0",
-    "ts-jest": "25.1.0",
-    "tslint": "^5.13.0",
-    "tslint-eslint-rules": "^5.4.0"
+    "ts-jest": "25.1.0"
   }
 }

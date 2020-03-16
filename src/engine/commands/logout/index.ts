@@ -1,26 +1,26 @@
-import * as _ from "lodash";
-import { Context } from "../../../common/context";
-import { UserDataStorage } from "../../../common/userDataStorage";
-import * as yargs from "yargs";
-import { StorageParameters } from "../../../consts/StorageParameters";
-import { translations } from "../../../common/translations";
+import * as _ from 'lodash';
+import { Context } from '../../../common/context';
+import { UserDataStorage } from '../../../common/userDataStorage';
+import * as yargs from 'yargs';
+import { StorageParameters } from '../../../consts/StorageParameters';
+import { translations } from '../../../common/translations';
 
 export default {
-  command: "logout",
+  command: 'logout',
   handler: async () => {
     UserDataStorage.setValues([
       {
         name: StorageParameters.refreshToken,
-        value: ""
+        value: '',
       },
       {
         name: StorageParameters.idToken,
-        value: ""
+        value: '',
       },
     ]);
   },
-  describe: translations.i18n.t("logout_describe"),
+  describe: translations.i18n.t('logout_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage(translations.i18n.t("logout_usage"));
+    return args.usage(translations.i18n.t('logout_usage'));
   },
 };

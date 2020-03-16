@@ -1,8 +1,7 @@
-import { StaticConfig } from "../config";
-import { StorageParameters } from "../consts/StorageParameters";
-import * as path from "path";
-import * as fs from "fs";
-
+import { StaticConfig } from '../config';
+import { StorageParameters } from '../consts/StorageParameters';
+import * as path from 'path';
+import * as fs from 'fs';
 
 const defaultStorageData = {
   [StorageParameters.serverAddress]: StaticConfig.remoteAddress,
@@ -11,8 +10,7 @@ const defaultStorageData = {
 };
 
 class Storage {
-  private static storageFileName = ".8baserc";
-
+  private static storageFileName = '.8baserc';
 
   /**
    *  path to storage file is persistent
@@ -52,14 +50,13 @@ class Storage {
 }
 
 export class UserDataStorage {
-
   /**
    * Function is not thread safe !
    * @param token - user token
    */
-  static setValues(data: { name: string, value: any} []) {
+  static setValues(data: { name: string; value: any }[]) {
     const storage = Storage.getStorage();
-    data.map(d => storage[d.name] = d.value);
+    data.map(d => (storage[d.name] = d.value));
     Storage.saveStorage(storage);
   }
 
@@ -68,10 +65,12 @@ export class UserDataStorage {
     const storegeValue = storage[name];
 
     if (!storegeValue && !!defaultStorageData[name]) {
-      this.setValues([{
-        name,
-        value: defaultStorageData[name],
-      }]);
+      this.setValues([
+        {
+          name,
+          value: defaultStorageData[name],
+        },
+      ]);
 
       return defaultStorageData[name];
     } else if (!storegeValue) {

@@ -82,5 +82,5 @@ export const GraphqlActions = {
 
   fragment FunctionTaskInfo on FunctionTaskInfo {
     scheduleExpression
-  }`
+  }`,
 };
