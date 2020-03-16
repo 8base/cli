@@ -24,6 +24,10 @@ const IGNORE_FILE_PATH = './.8baseignore';
  */
 
 export class BuildController {
+  public static clearBuild(context: Context) {
+    fs.removeSync(context.config.buildRootDirPath);
+  }
+
   /*
     Function workflow
       1. Clean up directory

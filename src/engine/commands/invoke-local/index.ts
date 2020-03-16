@@ -64,6 +64,8 @@ export default {
       resultError = e;
     }
 
+    BuildController.clearBuild(context);
+
     context.spinner.stop();
 
     context.logger.info('Result:');

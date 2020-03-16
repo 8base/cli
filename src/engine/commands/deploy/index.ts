@@ -64,6 +64,8 @@ export default {
       );
     } while (result.status !== DeployStatus.completeSuccess && result.status !== DeployStatus.completeError);
 
+    BuildController.clearBuild(context);
+
     if (result.status === DeployStatus.completeError) {
       let gqlError;
       try {
