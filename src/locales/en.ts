@@ -56,6 +56,8 @@ export default {
     login_browser_example: "",
     login_cli_example_command: "8base login -e my@email.com -p S3cretP@ssw0rd",
     login_cli_example: "",
+    login_token_example_command: "8base login -t 8BASE_API_TOKEN",
+    login_token_example: "",
     login_timeout_error: "Login time out.",
     login_in_progress: "waiting for authentication...",
     login_already_note: "Looks like you've already authenticated as {{email}}!",
@@ -64,6 +66,7 @@ export default {
     login_choice_relogin: "Login to a different 8base account",
     login_password_warning:
       "Email & password login is only available if you registered using email and password authentication method. You can enable password by signing up again with the same email.",
+    token_saving: "Writing API token to '~/.8baserc'",
     /**
      * Describe related messages
      */

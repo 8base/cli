@@ -161,6 +161,20 @@ export class Context {
     return StaticConfig;
   }
 
+  setTokenSessionInfo(token: String) {
+    if (!token) {
+      this.logger.debug("token is empty...");
+      return;
+    }
+
+    this.storage.setValues([
+      {
+        name: StorageParameters.idToken,
+        value: token
+      },
+    ]);
+  }
+
   setSessionInfo(data: SessionInfo) {
     if (!data) {
       this.logger.debug("set session info empty data");

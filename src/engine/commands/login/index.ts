@@ -14,12 +14,28 @@ import * as jwtDecode from "jwt-decode";
 type LoginCommandParams = {
   email: string,
   password: string,
+  token: string,
   w: string,
 };
 
 export default {
   command: "login",
   handler: async (params: LoginCommandParams, context: Context) => {
+    /**
+     * Token based authentication.
+     */
+    if (params.token) {
+      context.spinner.start(context.i18n.t("token_saving"));
+
+      context.setTokenSessionInfo(params.token);
+      context.spinner.stop();
+
+      return;
+    }
+
+    /**
+     * Email and password authentication.
+     */
     if (params.email && params.password) {
       const result = await passwordLogin(params, context);
 
@@ -31,6 +47,9 @@ export default {
 
     await logout.handler();
 
+    /**
+     * Hosted web authentication.
+     */
     const result = await webLogin(params, context);
 
     context.setSessionInfo(result);
@@ -42,6 +61,11 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("login_usage"))
+      .option("token", {
+        alias: "t",
+        describe: "api token",
+        type: "string"
+      })
       .option("email", {
         alias: "e",
         describe: "user email",
@@ -58,6 +82,7 @@ export default {
         hidden: true
       })
       .example(translations.i18n.t("login_browser_example_command"), translations.i18n.t("login_browser_example"))
+      .example(translations.i18n.t("login_token_example_command"), translations.i18n.t("login_token_example"))
       .example(translations.i18n.t("login_cli_example_command"), translations.i18n.t("login_cli_example"));
   }
 };
