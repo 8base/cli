@@ -12,14 +12,22 @@ import { StorageParameters } from "../../../consts/StorageParameters";
 import * as jwtDecode from "jwt-decode";
 
 type LoginCommandParams = {
-  email: string,
-  password: string,
-  w: string,
+  email: string;
+  password: string;
+  token: string;
+  w: string;
 };
 
 export default {
   command: "login",
   handler: async (params: LoginCommandParams, context: Context) => {
+    if (params.token) {
+      context.setSessionInfo({ idToken: params.token });
+      context.spinner.stop();
+
+      return;
+    }
+
     if (params.email && params.password) {
       const result = await passwordLogin(params, context);
 
@@ -44,12 +52,17 @@ export default {
       .usage(translations.i18n.t("login_usage"))
       .option("email", {
         alias: "e",
-        describe: "user email",
+        describe: translations.i18n.t("login_email_describe"),
         type: "string"
       })
       .option("password", {
         alias: "p",
-        describe: "user password",
+        describe: translations.i18n.t("login_password_describe"),
+        type: "string"
+      })
+      .option("token", {
+        alias: "t",
+        describe: translations.i18n.t("login_token_describe"),
         type: "string"
       })
       .option("w", {
@@ -57,7 +70,13 @@ export default {
         default: StaticConfig.webClientAddress,
         hidden: true
       })
-      .example(translations.i18n.t("login_browser_example_command"), translations.i18n.t("login_browser_example"))
-      .example(translations.i18n.t("login_cli_example_command"), translations.i18n.t("login_cli_example"));
+      .example(
+        translations.i18n.t("login_browser_example_command"),
+        translations.i18n.t("login_browser_example")
+      )
+      .example(
+        translations.i18n.t("login_cli_example_command"),
+        translations.i18n.t("login_cli_example")
+      );
   }
 };

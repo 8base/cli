@@ -266,8 +266,9 @@ DESCRIPTION
 OPTIONS
   --debug, -d     Turn on debug logs  [boolean]
   --help, -h      Show help  [boolean]
-  --email, -e     user email  [string]
-  --password, -p  user password  [string]
+  --email, -e     User email  [string]
+  --password, -p  User password  [string]
+  --token, -t     API Token  [string]
 
 EXAMPLES
   8base login
