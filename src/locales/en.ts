@@ -64,6 +64,9 @@ export default {
     login_choice_relogin: "Login to a different 8base account",
     login_password_warning:
       "Email & password login is only available if you registered using email and password authentication method. You can enable password by signing up again with the same email.",
+    login_email_describe: "User email",
+    login_password_describe: "User password",
+    login_token_describe: "API Token",
     /**
      * Describe related messages
      */

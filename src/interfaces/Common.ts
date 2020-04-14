@@ -1,6 +1,6 @@
 export interface SessionInfo {
   idToken: string;
-  refreshToken: string;
+  refreshToken?: string;
 }
 
 export type BuildDirectory = string;

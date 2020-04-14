@@ -14,16 +14,34 @@ export default {
       throw new Error(context.i18n.t("logout_error"));
     }
 
-    const idToken = context.storage.getValue(StorageParameters.idToken);
+    let email, name;
 
-    const { email, name } = jwtDecode(idToken);
+    try {
+      const idToken = context.storage.getValue(StorageParameters.idToken);
 
-    context.logger.info(translations.i18n.t("whoami_text", { email: chalk.green(email), name }));
+      ({ email, name } = jwtDecode(idToken));
+    } catch (e) {}
+
+    if (!email && context.isProjectDir()) {
+      try {
+        const { user } = await context.request(
+          "{ user { email firstName lastName }}"
+        );
+
+        email = user.email;
+
+        name = `${user.firstName} ${user.lastName}`;
+      } catch (e) {}
+    }
+
+    context.logger.info(
+      translations.i18n.t("whoami_text", { email: chalk.green(email), name })
+    );
   },
 
   describe: translations.i18n.t("whoami_describe"),
 
   builder: (args: yargs.Argv): yargs.Argv => {
     return args.usage(translations.i18n.t("whoami_usage"));
-  },
+  }
 };

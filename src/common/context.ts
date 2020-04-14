@@ -24,21 +24,20 @@ import { GraphqlActions } from "../consts/GraphqlActions";
 const pkg = require("../../package.json");
 
 export type WorkspaceConfig = {
-  workspaceId: string,
+  workspaceId: string;
 };
 
-type Plugin = { name: string, path: string };
+type Plugin = { name: string; path: string };
 
 export type ProjectConfig = {
-  functions: Object,
-  plugins?: Plugin[],
+  functions: Object;
+  plugins?: Plugin[];
 };
 
 const WORKSPACE_CONFIG_FILENAME = ".workspace.json";
 const PROJECT_CONFIG_FILENAME = "8base.yml";
 
 export class Context {
-
   private _project: ProjectDefinition = null;
 
   version: string;
@@ -60,7 +59,9 @@ export class Context {
           return info.message;
         }
         if (info.level === "debug") {
-          return `${chalk.hex(Colors.blue)(info.level)} [${Date.now()}]: ${info.message}`;
+          return `${chalk.hex(Colors.blue)(info.level)} [${Date.now()}]: ${
+            info.message
+          }`;
         }
         return `${chalk.hex(Colors.red)(info.level)}: ${info.message}`;
       }),
@@ -123,7 +124,8 @@ export class Context {
     let projectConfig = { functions: {} };
 
     if (this.hasProjectConfig()) {
-      projectConfig = yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
+      projectConfig =
+        yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
     }
 
     return projectConfig;
@@ -146,7 +148,10 @@ export class Context {
   }
 
   get serverAddress(): string {
-    return this.storage.getValue(StorageParameters.serverAddress) || this.config.remoteAddress;
+    return (
+      this.storage.getValue(StorageParameters.serverAddress) ||
+      this.config.remoteAddress
+    );
   }
 
   get storage(): typeof UserDataStorage {
@@ -184,12 +189,17 @@ export class Context {
       {
         name: StorageParameters.idToken,
         value: data.idToken
-      },
+      }
     ]);
   }
 
   async getWorkspaces() {
-    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
+    const data = await this.request(
+      GraphqlActions.listWorkspaces,
+      null,
+      false,
+      null
+    );
 
     const workspaces = data.workspacesList.items;
 
@@ -201,7 +211,12 @@ export class Context {
   }
 
   async checkWorkspace(workspaceId: string) {
-    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
+    const data = await this.request(
+      GraphqlActions.listWorkspaces,
+      null,
+      false,
+      null
+    );
 
     const workspaces = _.get(data, ["workspacesList", "items"], []);
 
@@ -210,11 +225,14 @@ export class Context {
     }
   }
 
-  async request(query: string, variables: any = null, isLoginRequired = true, customWorkspaceId?: string): Promise<any> {
-
+  async request(
+    query: string,
+    variables: any = null,
+    isLoginRequired = true,
+    customWorkspaceId?: string
+  ): Promise<any> {
     const remoteAddress = this.serverAddress;
     this.logger.debug(this.i18n.t("debug:remote_address", { remoteAddress }));
-
 
     const client = new Client(remoteAddress);
 
@@ -233,35 +251,42 @@ export class Context {
       client.setIdToken(idToken);
     }
 
-    const workspaceId = customWorkspaceId !== undefined ? customWorkspaceId : this.workspaceId;
+    const workspaceId =
+      customWorkspaceId !== undefined ? customWorkspaceId : this.workspaceId;
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));
       client.setWorkspaceId(workspaceId);
     }
 
-    if (isLoginRequired && (_.isEmpty(idToken) || _.isEmpty(refreshToken))) {
+    if (isLoginRequired && !this.user.isAuthorized()) {
       throw new Error(this.i18n.t("logout_error"));
     }
 
     this.logger.debug(this.i18n.t("debug:start_request"));
+
     const result = await client.request(query, variables);
+
     this.logger.debug(this.i18n.t("debug:request_complete"));
 
     if (client.idToken !== idToken) {
       this.logger.debug(this.i18n.t("debug:reset_id_token"));
-      this.storage.setValues([{
-        name: StorageParameters.idToken,
-        value: client.idToken
-      }]);
+      this.storage.setValues([
+        {
+          name: StorageParameters.idToken,
+          value: client.idToken
+        }
+      ]);
     }
 
     if (client.refreshToken !== refreshToken) {
       this.logger.debug(this.i18n.t("debug:reset_refresh_token"));
-      this.storage.setValues([{
-        name: StorageParameters.refreshToken,
-        value: client.refreshToken
-      }]);
+      this.storage.setValues([
+        {
+          name: StorageParameters.refreshToken,
+          value: client.refreshToken
+        }
+      ]);
     }
 
     return result;
