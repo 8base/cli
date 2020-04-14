@@ -1,75 +1,70 @@
-import * as yargs from "yargs";
-import * as _ from "lodash";
+import * as yargs from 'yargs';
+import * as _ from 'lodash';
 
-import { Utils } from "../../../common/utils";
-import { GraphqlController } from "../../controllers/graphqlController";
-import { BuildController } from "../../controllers/buildController";
-import { Context } from "../../../common/context";
-import { GraphqlActions } from "../../../consts/GraphqlActions";
-import { translations } from "../../../common/translations";
-import { DeployStatus } from "../../../consts/DeployStatus";
-import { DeployModeType } from "../../../interfaces/Extensions";
+import { Utils } from '../../../common/utils';
+import { GraphqlController } from '../../controllers/graphqlController';
+import { BuildController } from '../../controllers/buildController';
+import { Context } from '../../../common/context';
+import { GraphqlActions } from '../../../consts/GraphqlActions';
+import { translations } from '../../../common/translations';
+import { DeployStatus } from '../../../consts/DeployStatus';
+import { DeployModeType } from '../../../interfaces/Extensions';
 
 export default {
-  command: "deploy",
+  command: 'deploy',
   handler: async (params: any, context: Context) => {
-    context.spinner.start(
-      context.i18n.t("deploy_in_progress", { status: "prepare to upload" })
-    );
+    context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload' }));
 
     context.initializeProject();
 
-    if (params["validate_schema"]) {
+    if (params['validate_schema']) {
       GraphqlController.validateSchema(context.project);
     }
 
     const buildDir = await BuildController.package(context);
     context.logger.debug(`build dir: ${buildDir}`);
 
-    const { prepareDeploy } = await context.request(
-      GraphqlActions.prepareDeploy
-    );
+    const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy);
 
     await Utils.upload(prepareDeploy.uploadMetaDataUrl, buildDir.meta, context);
-    context.logger.debug("upload meta data complete");
+    context.logger.debug('upload meta data complete');
 
     await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
-    context.logger.debug("upload source code complete");
+    context.logger.debug('upload source code complete');
 
     let deployOptions = { mode: params.mode };
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
-      deployOptions = _.set(deployOptions, "pluginNames", params.plugins);
+      deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
     }
 
     if (Array.isArray(params.functions) && params.functions.length > 0) {
-      deployOptions = _.set(deployOptions, "extensionNames", params.functions);
+      deployOptions = _.set(deployOptions, 'extensionNames', params.functions);
     }
 
     await context.request(GraphqlActions.deploy, {
-      data: { buildName: prepareDeploy.buildName, options: deployOptions }
+      data: { buildName: prepareDeploy.buildName, options: deployOptions },
     });
 
     let result;
     do {
       result = (
         await context.request(GraphqlActions.deployStatus, {
-          buildName: prepareDeploy.buildName
+          buildName: prepareDeploy.buildName,
         })
       ).deployStatus;
       context.logger.debug(result);
       await Utils.sleep(2000);
       context.spinner.stop();
       context.spinner.start(
-        context.i18n.t("deploy_in_progress", {
+        context.i18n.t('deploy_in_progress', {
           status: result.status,
-          message: result.message
-        })
+          message: result.message,
+        }),
       );
-    } while (
-      result.status !== DeployStatus.completeSuccess &&
-      result.status !== DeployStatus.completeError
-    );
+    } while (result.status !== DeployStatus.completeSuccess && result.status !== DeployStatus.completeError);
+
+    BuildController.clearBuild(context);
 
     if (result.status === DeployStatus.completeError) {
       let gqlError;
@@ -84,26 +79,26 @@ export default {
     context.spinner.stop();
   },
 
-  describe: translations.i18n.t("deploy_describe"),
+  describe: translations.i18n.t('deploy_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv =>
     args
-      .usage(translations.i18n.t("deploy_usage"))
-      .option("plugins", {
-        alias: "p",
-        describe: translations.i18n.t("deploy_plugins_describe"),
-        type: "array"
+      .usage(translations.i18n.t('deploy_usage'))
+      .option('plugins', {
+        alias: 'p',
+        describe: translations.i18n.t('deploy_plugins_describe'),
+        type: 'array',
       })
-      .option("functions", {
-        alias: "f",
-        describe: translations.i18n.t("deploy_functions_describe"),
-        type: "array"
+      .option('functions', {
+        alias: 'f',
+        describe: translations.i18n.t('deploy_functions_describe'),
+        type: 'array',
       })
-      .option("mode", {
-        alias: "m",
-        describe: translations.i18n.t("deploy_mode_describe"),
+      .option('mode', {
+        alias: 'm',
+        describe: translations.i18n.t('deploy_mode_describe'),
         default: DeployModeType.project,
-        type: "string",
-        choices: Object.values(DeployModeType)
-      })
+        type: 'string',
+        choices: Object.values(DeployModeType),
+      }),
 };

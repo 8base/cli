@@ -1,17 +1,17 @@
-import * as yargs from "yargs";
-import * as jwtDecode from "jwt-decode";
-import chalk from "chalk";
+import * as yargs from 'yargs';
+import * as jwtDecode from 'jwt-decode';
+import chalk from 'chalk';
 
-import { Context } from "../../../common/context";
-import { translations } from "../../../common/translations";
-import { StorageParameters } from "../../../consts/StorageParameters";
+import { Context } from '../../../common/context';
+import { translations } from '../../../common/translations';
+import { StorageParameters } from '../../../consts/StorageParameters';
 
 export default {
-  command: "whoami",
+  command: 'whoami',
 
   handler: async (params: any, context: Context) => {
     if (!context.user.isAuthorized()) {
-      throw new Error(context.i18n.t("logout_error"));
+      throw new Error(context.i18n.t('logout_error'));
     }
 
     let email, name;
@@ -24,9 +24,7 @@ export default {
 
     if (!email && context.isProjectDir()) {
       try {
-        const { user } = await context.request(
-          "{ user { email firstName lastName }}"
-        );
+        const { user } = await context.request('{ user { email firstName lastName }}');
 
         email = user.email;
 
@@ -34,14 +32,12 @@ export default {
       } catch (e) {}
     }
 
-    context.logger.info(
-      translations.i18n.t("whoami_text", { email: chalk.green(email), name })
-    );
+    context.logger.info(translations.i18n.t('whoami_text', { email: chalk.green(email), name }));
   },
 
-  describe: translations.i18n.t("whoami_describe"),
+  describe: translations.i18n.t('whoami_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage(translations.i18n.t("whoami_usage"));
-  }
+    return args.usage(translations.i18n.t('whoami_usage'));
+  },
 };

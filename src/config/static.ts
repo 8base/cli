@@ -1,9 +1,7 @@
-import * as path from "path";
-import { PredefineData } from "./predefineData";
-
+import * as path from 'path';
+import { PredefineData } from './predefineData';
 
 export class StaticConfig {
-
   private static staticData = new PredefineData();
 
   static get projectTemplatePath(): string {
@@ -55,29 +53,29 @@ export class StaticConfig {
   }
 
   static get serviceConfigFileName(): string {
-    return path.join(this.staticData.executionDir, "8base.yml");
+    return path.join(this.staticData.executionDir, '8base.yml');
   }
 
   static get packageFileName(): string {
-    return "package.json";
+    return 'package.json';
   }
 
   /**
    * Compiler paths
    */
 
-  static buildRootFolder = ".build";
-  static buildDistFolder = "dist";
-  static modulesFolder = "node_modules";
-  static metaFolder = "meta";
-  static packageFolder = "package";
+  static buildRootFolder = '.build';
+  static buildDistFolder = 'dist';
+  static modulesFolder = 'node_modules';
+  static metaFolder = 'meta';
+  static packageFolder = 'package';
 
   static buildRootDirPath = path.join(StaticConfig.rootExecutionDir, StaticConfig.buildRootFolder);
   static buildDistPath = path.join(StaticConfig.buildRootDirPath, StaticConfig.buildDistFolder);
   static metaDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.metaFolder);
   static packageDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.packageFolder);
 
-  static FunctionHandlerExt = ".js";
+  static FunctionHandlerExt = '.js';
 
-  static supportedCompileExtension = new Set<string>([".ts", ".js"]);
+  static supportedCompileExtension = new Set<string>(['.ts', '.js']);
 }
