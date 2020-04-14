@@ -15,8 +15,9 @@ import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
+import { DEFAULT_ENVIRONMENT_NAME } from "../../../consts/Environment";
 
-const CREATE_WORKSPACE_MUTATION = gql`
+const CREATE_WORKSPACE_MUTATION = `
   mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
     workspaceCreate(data: $data) {
       id
@@ -177,7 +178,7 @@ export default {
       });
     }
 
-    context.createWorkspaceConfig({ workspaceId }, project.fullPath);
+    context.createWorkspaceConfig({ workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME }, project.fullPath);
 
     if (!silent) {
       // @ts-ignore

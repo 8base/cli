@@ -11,7 +11,7 @@ type PluginListParams = {
   q: string;
 };
 
-const PLUGINS_LIST_QUERY = gql`
+const PLUGINS_LIST_QUERY = `
   query PluginsList($q: String) {
     pluginsList(filter: { OR: { name: { contains: $q }, description: { contains: $q }, _fullText: $q } }) {
       items {

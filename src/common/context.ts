@@ -17,14 +17,15 @@ import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
-import { SessionInfo } from '../interfaces/Common';
-import { Utils } from './utils';
+import { EnvironmentInfo, SessionInfo } from "../interfaces/Common";
 import { GraphqlActions } from '../consts/GraphqlActions';
+import { DEFAULT_ENVIRONMENT_NAME } from "../consts/Environment";
 
 const pkg = require('../../package.json');
 
 export type WorkspaceConfig = {
   workspaceId: string;
+  environmentName: string;
 };
 
 type Plugin = { name: string; path: string };
@@ -74,10 +75,22 @@ export class Context {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
 
     if (this.hasWorkspaceConfig()) {
-      return JSON.parse(String(fs.readFileSync(workspaceConfigPath)));
+      const parsed = JSON.parse(String(fs.readFileSync(workspaceConfigPath)));
+      return { environmentName: DEFAULT_ENVIRONMENT_NAME, ... parsed };
     }
 
     return null;
+  }
+
+  async getEnvironments(workspaceId: string): Promise<EnvironmentInfo[]> {
+    const { system } = await this.request(GraphqlActions.environmentsList, { workspaceId });
+
+    const environments = system.environments.items;
+    if (_.isEmpty(environments)) {
+      throw new Error(this.i18n.t('logout_error'));
+    }
+
+    return environments;
   }
 
   set workspaceConfig(value: WorkspaceConfig) {

@@ -7,7 +7,7 @@ import { BuildController } from '../../controllers/buildController';
 import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { translations } from '../../../common/translations';
-import { DeployStatus } from '../../../consts/DeployStatus';
+import { AsyncStatus } from '../../../consts/AsyncStatus';
 import { DeployModeType } from '../../../interfaces/Extensions';
 
 export default {
@@ -62,11 +62,11 @@ export default {
           message: result.message,
         }),
       );
-    } while (result.status !== DeployStatus.completeSuccess && result.status !== DeployStatus.completeError);
+    } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
 
     BuildController.clearBuild(context);
 
-    if (result.status === DeployStatus.completeError) {
+    if (result.status === AsyncStatus.completeError) {
       let gqlError;
       try {
         gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be threw as is

@@ -4,8 +4,8 @@ import { translations } from '../../../common/translations';
 import { Utils } from '../../../common/utils';
 
 export default {
-  command: ['plugin <command>', 'p <command>'],
-  describe: false && translations.i18n.t('plugin_describe'),
+  command: ['migrations <command>'],
+  describe: translations.i18n.t('project_describe'),
   builder: function(yargs: yargs.Argv) {
     return yargs.commandDir('commands', {
       extensions: ['js', 'ts'],
@@ -13,7 +13,6 @@ export default {
     });
   },
   handler: function() {
-    console.log("hhh")
     // This is parent handler. It is not used.
   },
 };

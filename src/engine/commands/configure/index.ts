@@ -10,7 +10,7 @@ export default {
   command: 'configure',
 
   handler: async (params: any, context: Context) => {
-    let { workspaceId } = params;
+    let { workspaceId, environmentName } = params;
 
     if (!workspaceId) {
       const workspaces = await context.getWorkspaces();
@@ -30,15 +30,36 @@ export default {
       }
     }
 
-    context.updateWorkspaceConfig({ workspaceId });
+    if (!environmentName) {
+      const environments = await context.getEnvironments(workspaceId);
+      ({ environmentName } = await Interactive.ask({
+        name: "environmentName",
+        type:"select",
+        message: translations.i18n.t("configure_select_environment"),
+        choices: environments.map(e => ({ title: e.name, value: e.name }))
+      }));
+
+      if (!environmentName) {
+        throw new Error(translations.i18n.t("configure_prevent_select_workspace"));
+      }
+    }
+
+    context.updateWorkspaceConfig({ workspaceId, environmentName });
   },
 
   describe: translations.i18n.t('configure_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv =>
-    args.usage(translations.i18n.t('configure_usage')).option('workspaceId', {
+    args
+      .usage(translations.i18n.t('configure_usage'))
+      .option('workspaceId', {
       alias: 'w',
       describe: translations.i18n.t('configure_workspace_id_describe'),
       type: 'string',
-    }),
+    })
+      .option('environmentName', {
+        alias: 'e',
+        describe: translations.i18n.t('configure_environment_name_describe'),
+        type: 'string',
+      }),
 };

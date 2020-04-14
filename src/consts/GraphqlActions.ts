@@ -19,6 +19,14 @@ export const GraphqlActions = {
       count
     }
   }`,
+  environmentsList: `
+    query EnvironmentsList($workspaceId: String!) {
+      system {
+        environments: environmentsList(workspaceId: $workspaceId) {
+          items { id name }
+        }
+      }
+    }`,
   invoke: `mutation Invoke($data: InvokeData) {
     invoke(data: $data) {
       responseData
@@ -37,6 +45,11 @@ export const GraphqlActions = {
         endTime: $endTime
       )
   }`,
+  asyncSessionStatus: `
+    query status($sessionId: String!)  {
+      status: asyncSessionStatus(sessionId:$sessionId) { status message }
+    }
+  `,
   deployStatus: `
     query DeployStatus($buildName: String!) {
       deployStatus(buildName: $buildName) {
@@ -84,3 +97,26 @@ export const GraphqlActions = {
     scheduleExpression
   }`,
 };
+
+export const GraphqlAsyncActions = {
+  environmentClone: `
+    mutation clone($environmentName: String!, $mode: SystemCloneEnvironmentMode!, $sourceEnvironmentId: String!) {
+      system {
+        async: environmentClone(environmentName: $environmentName, mode:$mode, sourceEnvironmentId: $sourceEnvironmentId) {
+          sessionId
+        }
+      }
+    }`,
+
+  environmentBackup: `
+    mutation backup($environmentId: String!) {
+      system {
+        async: environmentBackup(environmentId: $environmentId) {
+          sessionId
+        }
+      }
+    }`,
+};
+
+export type GraphqlAsyncActionsType = typeof GraphqlAsyncActions.environmentClone;
+

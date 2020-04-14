@@ -3,15 +3,13 @@ import chalk from 'chalk';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { ExtensionType, SyntaxType } from '../../../../interfaces/Extensions';
-import { ProjectController } from '../../../controllers/projectController';
 import { StorageParameters } from '../../../../consts/StorageParameters';
 
 export default {
   command: 'info',
 
   handler: async (params: any, context: Context) => {
-    const { workspaceId } = context.workspaceConfig;
+    const { workspaceId, environmentName } = context.workspaceConfig;
 
     const workspaces = await context.getWorkspaces();
 
@@ -27,6 +25,7 @@ export default {
       translations.i18n.t('project_info_text', {
         workspaceId: chalk.green(workspaceId),
         workspaceName: chalk.green(workspace.name),
+        environmentName: chalk.green(environmentName),
         endpoint: chalk.green(`${endpoint}/${workspaceId}`),
       }),
     );

@@ -95,7 +95,9 @@ export default {
       'COMMAND\n  8base configure [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_describe: 'Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_workspace_id_describe: 'The workspace ID of the project',
+    configure_environment_name_describe: 'The environment name of the project',
     configure_select_workspace: 'Select workspace for current project',
+    configure_select_environment: 'Select environment for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
     /**
      * Init related messages
@@ -276,6 +278,23 @@ export default {
     package_describe: 'Package 8base application without deploying it.',
     package_progress: 'packaging...',
 
+    /**
+     * Environment clone related messages
+     */
+    environment_clone_in_progress: 'clone in progress...',
+    environment_clone_usage: '8base environment clone ',
+
+    /**
+     * Environment backup related messages
+     */
+    environment_backup_in_progress: 'clone in progress...',
+    environment_backup_usage: '8base environment backup',
+    environment_backup_id_describe: 'The environment id to backup',
+    environment_backup_select_environment: 'Select environment to backup',
+    environment_backup_describe: 'Backup environment.',
+
+    environment_describe: 'Environment commands.',
+
     plugin_describe: 'Plugins management commands.',
 
     plugin_install_describe: 'Install plugin to the project.',
@@ -297,6 +316,10 @@ export default {
     plugin_list_not_found_plugins: 'Not found plugins for your query',
     plugin_list_describe: 'Show list of available plugins.',
     plugin_list_usage: 'COMMAND\n  8base plugin list\n\nDESCRIPTION\n  Show list of available plugins.',
+
+    configuration_required: `You have to configure project before execute the command.`,
+    async_in_progress: 'progress... \nStep: {{- status }}\n{{- message }}',
+
   },
   /**
    * Debug related messages
