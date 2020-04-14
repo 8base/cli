@@ -40,7 +40,7 @@ export default {
       }));
 
       if (!environmentName) {
-        throw new Error(translations.i18n.t("configure_prevent_select_workspace"));
+        throw new Error(translations.i18n.t("configure_prevent_select_environment"));
       }
     }
 

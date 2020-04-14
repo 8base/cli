@@ -283,6 +283,8 @@ export default {
      */
     environment_clone_in_progress: 'clone in progress...',
     environment_clone_usage: '8base environment clone ',
+    environment_clone_describe: 'Clone environment.',
+    environment_clone_source_id_describe: 'Backup environment.',
 
     /**
      * Environment backup related messages

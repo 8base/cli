@@ -20,43 +20,42 @@ export default {
     if (!sourceEnvironmentId) {
       const environments = await context.getEnvironments(workspaceId);
       ({ sourceEnvironmentId } = await Interactive.ask({
-        name: "environment",
+        name: "sourceEnvironmentId",
         type:"select",
-        message: translations.i18n.t(""),
+        message: translations.i18n.t("environment_clone_select_environment"),
         choices: environments.map(e => ({ title: e.name, value: e.id }))
       }));
 
       if (!sourceEnvironmentId) {
-        throw new Error(translations.i18n.t("configure_prevent_select_workspace"));
+        throw new Error(translations.i18n.t("configure_prevent_select_environment"));
       }
     }
 
     await executeAsync(context, GraphqlAsyncActions.environmentClone, { sourceEnvironmentId, environmentName, mode })
   },
 
-  describe: translations.i18n.t("export_describe"),
+  describe: translations.i18n.t("environment_clone_describe"),
 
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage(translations.i18n.t("clone_usage"))
+      .usage(translations.i18n.t("environment_clone_usage"))
       .option("sourceEnvironmentId", {
         alias: "s",
-        describe: translations.i18n.t("export_file_describe"),
+        describe: translations.i18n.t("environment_clone_source_id_describe"),
         type: "string",
-        demandOption: translations.i18n.t("export_file_required_option_error"),
       })
       .option("mode", {
         alias: 'm',
-        describe: translations.i18n.t('deploy_mode_describe'),
+        describe: translations.i18n.t('environment_clone_mode_describe'),
         default: EnvironmentCloneModeType.SYSTEM,
         type: 'string',
         choices: Object.values(EnvironmentCloneModeType),
       })
       .option("environmentName", {
-        alias: "e",
-        describe: translations.i18n.t("export_file_describe"),
+        alias: "n",
+        describe: translations.i18n.t("environment_clone_name_describe"),
         type: "string",
-        demandOption: translations.i18n.t("export_file_required_option_error"),
+        demandOption: translations.i18n.t("environment_clone_name_option_error"),
       });
   }
 };

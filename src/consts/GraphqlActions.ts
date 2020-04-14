@@ -102,7 +102,7 @@ export const GraphqlAsyncActions = {
   environmentClone: `
     mutation clone($environmentName: String!, $mode: SystemCloneEnvironmentMode!, $sourceEnvironmentId: String!) {
       system {
-        async: environmentClone(environmentName: $environmentName, mode:$mode, sourceEnvironmentId: $sourceEnvironmentId) {
+        async: environmentClone(name: $environmentName, mode:$mode, sourceEnvironmentId: $sourceEnvironmentId) {
           sessionId
         }
       }
