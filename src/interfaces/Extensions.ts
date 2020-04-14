@@ -1,36 +1,36 @@
 export enum ExtensionType {
-  resolver = "resolver",
-  trigger = "trigger",
-  webhook = "webhook",
-  task = "task"
+  resolver = 'resolver',
+  trigger = 'trigger',
+  webhook = 'webhook',
+  task = 'task',
 }
 
 export enum SyntaxType {
-  js = "js",
-  ts = "ts"
+  js = 'js',
+  ts = 'ts',
 }
 
 export enum DeployModeType {
-  full = "FULL",
-  plugins = "ONLY_PLUGINS",
-  project = "ONLY_PROJECT",
-  functions = "FUNCTIONS"
+  full = 'FULL',
+  plugins = 'ONLY_PLUGINS',
+  project = 'ONLY_PROJECT',
+  functions = 'FUNCTIONS',
 }
 
 export enum GraphQLFunctionType {
-  Mutation = "Mutation",
-  Query = "Query"
+  Mutation = 'Mutation',
+  Query = 'Query',
 }
 
 export enum TriggerOperation {
-  create = "create",
-  update = "update",
-  delete = "delete"
+  create = 'create',
+  update = 'update',
+  delete = 'delete',
 }
 
 export enum TriggerType {
-  before = "before",
-  after = "after"
+  before = 'before',
+  after = 'after',
 }
 
 export interface BaseDefinition {

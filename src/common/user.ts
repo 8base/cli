@@ -1,7 +1,6 @@
-import * as path from "path";
-import * as _ from "lodash";
-import { UserDataStorage } from "./userDataStorage";
-import { StorageParameters } from "../consts/StorageParameters";
+import * as _ from 'lodash';
+import { UserDataStorage } from './userDataStorage';
+import { StorageParameters } from '../consts/StorageParameters';
 
 type Workspace = {
   name: string;

@@ -1,15 +1,14 @@
-import { Context } from "../../../common/context";
-import { GraphqlActions } from "../../../consts/GraphqlActions";
-import * as cuid from "cuid";
-const opn = require("opn");
-import "isomorphic-fetch";
-import { SessionInfo } from "../../../interfaces/Common";
-import { Utils } from "../../../common/utils";
-import { Selectors } from "../../../common/selectors";
-
+import { Context } from '../../../common/context';
+import { GraphqlActions } from '../../../consts/GraphqlActions';
+import * as cuid from 'cuid';
+const opn = require('opn');
+import 'isomorphic-fetch';
+import { SessionInfo } from '../../../interfaces/Common';
+import { Utils } from '../../../common/utils';
+import { Selectors } from '../../../common/selectors';
 
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
-  context.spinner.start(context.i18n.t("login_in_progress"));
+  context.spinner.start(context.i18n.t('login_in_progress'));
   const session = cuid();
 
   await opn(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
@@ -18,7 +17,7 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   let retryCount = 150; // 150 * 2s = 300s = 5 min
 
   let res = null;
-  while(--retryCount > 0) {
+  while (--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
     const fetchResult = await fetch(`${Selectors.getServerAddress(context)}/loginSessionGet/${session}`);
 
@@ -36,7 +35,7 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   }
 
   if (!res) {
-    throw new Error(context.i18n.t("login_timeout_error"));
+    throw new Error(context.i18n.t('login_timeout_error'));
   }
 
   context.setSessionInfo(res);

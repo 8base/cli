@@ -1,1 +1,1 @@
-export * from "./invalidConfiguration";
+export * from './invalidConfiguration';

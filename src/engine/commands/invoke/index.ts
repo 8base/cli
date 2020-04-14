@@ -1,18 +1,18 @@
-import * as yargs from "yargs";
-import * as _ from "lodash";
-import * as fs from "fs";
+import * as yargs from 'yargs';
+import * as _ from 'lodash';
+import * as fs from 'fs';
 
-import { Context } from "../../../common/context";
-import { translations } from "../../../common/translations";
-import { GraphqlActions } from "../../../consts/GraphqlActions";
-import { ProjectController } from "../../controllers/projectController";
+import { Context } from '../../../common/context';
+import { translations } from '../../../common/translations';
+import { GraphqlActions } from '../../../consts/GraphqlActions';
+import { ProjectController } from '../../controllers/projectController';
 
 export default {
-  command: "invoke [name]",
+  command: 'invoke [name]',
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 
-    context.spinner.start(context.i18n.t("invoke_in_progress"));
+    context.spinner.start(context.i18n.t('invoke_in_progress'));
 
     let args = null;
 
@@ -28,53 +28,67 @@ export default {
     let resultError = null;
 
     try {
-      resultResponse = await context.request(GraphqlActions.invoke, { data: { functionName: params.name, inputArgs: args } });
+      resultResponse = await context.request(GraphqlActions.invoke, {
+        data: { functionName: params.name, inputArgs: args },
+      });
     } catch (e) {
       resultError = e;
     }
 
     context.spinner.stop();
 
-    context.logger.info("Result:");
+    context.logger.info('Result:');
 
     if (resultError) {
-      context.logger.info(JSON.stringify({
-        data: {
-          [params.name]: null,
-        },
-        errors: resultError.response.errors,
-      }, null, 2));
+      context.logger.info(
+        JSON.stringify(
+          {
+            data: {
+              [params.name]: null,
+            },
+            errors: resultError.response.errors,
+          },
+          null,
+          2,
+        ),
+      );
 
-      throw new Error(translations.i18n.t("invoke_returns_error", { name: params.name }));
+      throw new Error(translations.i18n.t('invoke_returns_error', { name: params.name }));
     } else {
-      context.logger.info(JSON.stringify({
-        data: JSON.parse(resultResponse.invoke.responseData)
-      }, null, 2));
+      context.logger.info(
+        JSON.stringify(
+          {
+            data: JSON.parse(resultResponse.invoke.responseData),
+          },
+          null,
+          2,
+        ),
+      );
     }
   },
-  describe: translations.i18n.t("invoke_describe"),
+  describe: translations.i18n.t('invoke_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage(translations.i18n.t("invoke_usage"))
-      .positional("name", {
-        describe: translations.i18n.t("invokelocal_name_describe"),
-        type: "string",
+      .usage(translations.i18n.t('invoke_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('invokelocal_name_describe'),
+        type: 'string',
       })
-      .demandOption("name")
-      .option("data-json", {
-        alias: "j",
-        describe: translations.i18n.t("invoke_data_json_describe"),
-        type: "string"
+      .demandOption('name')
+      .option('data-json', {
+        alias: 'j',
+        describe: translations.i18n.t('invoke_data_json_describe'),
+        type: 'string',
       })
-      .option("data-path", {
-        alias: "p",
-        describe: translations.i18n.t("invoke_data_path_describe"),
-        type: "string"
+      .option('data-path', {
+        alias: 'p',
+        describe: translations.i18n.t('invoke_data_path_describe'),
+        type: 'string',
       })
-      .option("mock", {
-        alias: "m",
-        describe: translations.i18n.t("invoke_mock_describe"),
-        type: "string"
+      .option('mock', {
+        alias: 'm',
+        describe: translations.i18n.t('invoke_mock_describe'),
+        type: 'string',
       });
-  }
+  },
 };

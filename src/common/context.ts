@@ -1,27 +1,27 @@
-import * as _ from "lodash";
-import * as fs from "fs";
-import * as i18next from "i18next";
-import * as Ora from "ora";
-import * as path from "path";
-import * as winston from "winston";
-import * as yaml from "yaml";
-import chalk from "chalk";
-import { Client } from "@8base/api-client";
-import { TransformableInfo } from "logform";
+import * as _ from 'lodash';
+import * as fs from 'fs';
+import * as i18next from 'i18next';
+import * as Ora from 'ora';
+import * as path from 'path';
+import * as winston from 'winston';
+import * as yaml from 'yaml';
+import chalk from 'chalk';
+import { Client } from '@8base/api-client';
+import { TransformableInfo } from 'logform';
 
-import { UserDataStorage } from "./userDataStorage";
-import { User } from "./user";
-import { StaticConfig } from "../config";
-import { ProjectDefinition } from "../interfaces/Project";
-import { ProjectController } from "../engine/controllers/projectController";
-import { StorageParameters } from "../consts/StorageParameters";
-import { Translations } from "./translations";
-import { Colors } from "../consts/Colors";
-import { SessionInfo } from "../interfaces/Common";
-import { Utils } from "./utils";
-import { GraphqlActions } from "../consts/GraphqlActions";
+import { UserDataStorage } from './userDataStorage';
+import { User } from './user';
+import { StaticConfig } from '../config';
+import { ProjectDefinition } from '../interfaces/Project';
+import { ProjectController } from '../engine/controllers/projectController';
+import { StorageParameters } from '../consts/StorageParameters';
+import { Translations } from './translations';
+import { Colors } from '../consts/Colors';
+import { SessionInfo } from '../interfaces/Common';
+import { Utils } from './utils';
+import { GraphqlActions } from '../consts/GraphqlActions';
 
-const pkg = require("../../package.json");
+const pkg = require('../../package.json');
 
 export type WorkspaceConfig = {
   workspaceId: string;
@@ -34,8 +34,8 @@ export type ProjectConfig = {
   plugins?: Plugin[];
 };
 
-const WORKSPACE_CONFIG_FILENAME = ".workspace.json";
-const PROJECT_CONFIG_FILENAME = "8base.yml";
+const WORKSPACE_CONFIG_FILENAME = '.workspace.json';
+const PROJECT_CONFIG_FILENAME = '8base.yml';
 
 export class Context {
   private _project: ProjectDefinition = null;
@@ -47,25 +47,23 @@ export class Context {
   i18n: i18next.i18n;
 
   spinner = Ora({
-    color: "white",
-    text: "\n"
+    color: 'white',
+    text: '\n',
   });
 
   constructor(params: any, translations: Translations) {
     this.logger = winston.createLogger({
-      level: params.d ? "debug" : "info",
+      level: params.d ? 'debug' : 'info',
       format: winston.format.printf((info: TransformableInfo) => {
-        if (info.level === "info") {
+        if (info.level === 'info') {
           return info.message;
         }
-        if (info.level === "debug") {
-          return `${chalk.hex(Colors.blue)(info.level)} [${Date.now()}]: ${
-            info.message
-          }`;
+        if (info.level === 'debug') {
+          return `${chalk.hex(Colors.blue)(info.level)} [${Date.now()}]: ${info.message}`;
         }
         return `${chalk.hex(Colors.red)(info.level)}: ${info.message}`;
       }),
-      transports: [new winston.transports.Console()]
+      transports: [new winston.transports.Console()],
     });
 
     this.i18n = translations.i18n;
@@ -105,7 +103,7 @@ export class Context {
   }
 
   get workspaceId(): string | null {
-    return _.get(this.workspaceConfig, "workspaceId", null);
+    return _.get(this.workspaceConfig, 'workspaceId', null);
   }
 
   hasWorkspaceConfig(customPath?: string): boolean {
@@ -124,8 +122,7 @@ export class Context {
     let projectConfig = { functions: {} };
 
     if (this.hasProjectConfig()) {
-      projectConfig =
-        yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
+      projectConfig = yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
     }
 
     return projectConfig;
@@ -148,10 +145,7 @@ export class Context {
   }
 
   get serverAddress(): string {
-    return (
-      this.storage.getValue(StorageParameters.serverAddress) ||
-      this.config.remoteAddress
-    );
+    return this.storage.getValue(StorageParameters.serverAddress) || this.config.remoteAddress;
   }
 
   get storage(): typeof UserDataStorage {
@@ -168,11 +162,11 @@ export class Context {
 
   setSessionInfo(data: SessionInfo) {
     if (!data) {
-      this.logger.debug("set session info empty data");
+      this.logger.debug('set session info empty data');
       return;
     }
 
-    this.logger.debug("set session info...");
+    this.logger.debug('set session info...');
     if (_.isString(data.idToken)) {
       this.logger.debug(`id token ${data.idToken.substr(0, 10)}`);
     }
@@ -184,44 +178,34 @@ export class Context {
     this.storage.setValues([
       {
         name: StorageParameters.refreshToken,
-        value: data.refreshToken
+        value: data.refreshToken,
       },
       {
         name: StorageParameters.idToken,
-        value: data.idToken
-      }
+        value: data.idToken,
+      },
     ]);
   }
 
   async getWorkspaces() {
-    const data = await this.request(
-      GraphqlActions.listWorkspaces,
-      null,
-      false,
-      null
-    );
+    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
 
     const workspaces = data.workspacesList.items;
 
     if (_.isEmpty(workspaces)) {
-      throw new Error(this.i18n.t("logout_error"));
+      throw new Error(this.i18n.t('logout_error'));
     }
 
     return workspaces;
   }
 
   async checkWorkspace(workspaceId: string) {
-    const data = await this.request(
-      GraphqlActions.listWorkspaces,
-      null,
-      false,
-      null
-    );
+    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
 
-    const workspaces = _.get(data, ["workspacesList", "items"], []);
+    const workspaces = _.get(data, ['workspacesList', 'items'], []);
 
     if (!_.some(workspaces, { id: workspaceId })) {
-      throw new Error(this.i18n.t("inexistent_workspace"));
+      throw new Error(this.i18n.t('inexistent_workspace'));
     }
   }
 
@@ -229,10 +213,10 @@ export class Context {
     query: string,
     variables: any = null,
     isLoginRequired = true,
-    customWorkspaceId?: string
+    customWorkspaceId?: string,
   ): Promise<any> {
     const remoteAddress = this.serverAddress;
-    this.logger.debug(this.i18n.t("debug:remote_address", { remoteAddress }));
+    this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress }));
 
     const client = new Client(remoteAddress);
 
@@ -241,51 +225,48 @@ export class Context {
 
     const refreshToken = this.storage.getValue(StorageParameters.refreshToken);
     if (refreshToken) {
-      this.logger.debug(this.i18n.t("debug:set refresh token"));
+      this.logger.debug(this.i18n.t('debug:set refresh token'));
       client.setRefreshToken(refreshToken);
     }
 
     const idToken = this.storage.getValue(StorageParameters.idToken);
     if (idToken) {
-      this.logger.debug(this.i18n.t("debug:set_id_token"));
+      this.logger.debug(this.i18n.t('debug:set_id_token'));
       client.setIdToken(idToken);
     }
 
-    const workspaceId =
-      customWorkspaceId !== undefined ? customWorkspaceId : this.workspaceId;
+    const workspaceId = customWorkspaceId !== undefined ? customWorkspaceId : this.workspaceId;
 
     if (workspaceId) {
-      this.logger.debug(this.i18n.t("debug:set_workspace_id", { workspaceId }));
+      this.logger.debug(this.i18n.t('debug:set_workspace_id', { workspaceId }));
       client.setWorkspaceId(workspaceId);
     }
 
     if (isLoginRequired && !this.user.isAuthorized()) {
-      throw new Error(this.i18n.t("logout_error"));
+      throw new Error(this.i18n.t('logout_error'));
     }
 
-    this.logger.debug(this.i18n.t("debug:start_request"));
-
+    this.logger.debug(this.i18n.t('debug:start_request'));
     const result = await client.request(query, variables);
-
-    this.logger.debug(this.i18n.t("debug:request_complete"));
+    this.logger.debug(this.i18n.t('debug:request_complete'));
 
     if (client.idToken !== idToken) {
-      this.logger.debug(this.i18n.t("debug:reset_id_token"));
+      this.logger.debug(this.i18n.t('debug:reset_id_token'));
       this.storage.setValues([
         {
           name: StorageParameters.idToken,
-          value: client.idToken
-        }
+          value: client.idToken,
+        },
       ]);
     }
 
     if (client.refreshToken !== refreshToken) {
-      this.logger.debug(this.i18n.t("debug:reset_refresh_token"));
+      this.logger.debug(this.i18n.t('debug:reset_refresh_token'));
       this.storage.setValues([
         {
           name: StorageParameters.refreshToken,
-          value: client.refreshToken
-        }
+          value: client.refreshToken,
+        },
       ]);
     }
 
