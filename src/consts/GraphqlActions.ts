@@ -27,6 +27,14 @@ export const GraphqlActions = {
         }
       }
     }`,
+  environmentBackupsList: `
+    query EnvironmentBackupsList($environmentId: String!) {
+      system {
+        backups: environmentBackupsList(environmentId: $environmentId) {
+          items { name size }
+        }
+      }
+    }`,
   invoke: `mutation Invoke($data: InvokeData) {
     invoke(data: $data) {
       responseData

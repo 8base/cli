@@ -10,27 +10,25 @@ import { DeployModeType } from "../../../../interfaces/Extensions";
 import { EnvironmentCloneModeType } from "../../../../consts/Environment";
 import { executeAsync } from "../../../../common/execute";
 import chalk from "chalk";
+import { table } from "table";
+
+const ENVIRONMENT_TABLE_HEADER = ['Id', 'Name'];
 
 export default {
   command: "list",
   handler: async (params: any, context: Context) => {
     Configuration.expectConfigured(context);
-
-    const { spinner } = context;
-    spinner.start(context.i18n.t("clone_in_progress"));
-
-    const { workspaceId } = context.workspaceConfig;
-
-    const environments = await context.getEnvironments(workspaceId);
-    context.logger.info(chalk.green(environments.map(e => e.name).join(", ")));
-    spinner.stop();
+    const environments = await context.getEnvironments(context.workspaceConfig.workspaceId);
+    context.logger.info(table([ENVIRONMENT_TABLE_HEADER, ...environments.map(e => [e.id, e.name])]));
   },
 
-  describe: translations.i18n.t("export_describe"),
+  describe: translations.i18n.t("environment_list_describe"),
 
   builder: (args: yargs.Argv): yargs.Argv =>
-    args.usage(translations.i18n.t('plugin_list_usage')).option('query', {
-      alias: 'q',
-      type: 'string',
-    }),
+    args
+      .usage(translations.i18n.t('environment_list_usage'))
+      .option('query', {
+        alias: 'q',
+        type: 'string',
+      }),
 };

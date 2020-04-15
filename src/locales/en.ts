@@ -99,6 +99,8 @@ export default {
     configure_select_workspace: 'Select workspace for current project',
     configure_select_environment: 'Select environment for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
+    configure_prevent_select_environment: 'Environment selection canceled',
+
     /**
      * Init related messages
      */
@@ -294,6 +296,16 @@ export default {
     environment_backup_id_describe: 'The environment id to backup',
     environment_backup_select_environment: 'Select environment to backup',
     environment_backup_describe: 'Backup environment.',
+
+    /**
+     * Environment backup list related messages
+     */
+    environment_backup_list_in_progress: 'clone in progress...',
+    environment_backup_list_usage: '8base environment backup',
+    environment_backup_list_id_describe: 'The environment id to backup',
+    environment_backup_list_select_environment: 'Select environment to list backup',
+    environment_backup_list_describe: 'Backup environment.',
+
 
     environment_describe: 'Environment commands.',
 
