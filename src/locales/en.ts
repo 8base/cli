@@ -334,6 +334,11 @@ export default {
     configuration_required: `You have to configure project before execute the command.`,
     async_in_progress: 'progress... \nStep: {{- status }}\n{{- message }}',
 
+    /**
+     * migrate plan related
+     */
+
+
   },
   /**
    * Debug related messages

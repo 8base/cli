@@ -4,7 +4,7 @@ import { Context } from "../../../../common/context";
 import { translations } from "../../../../common/translations";
 import { GraphqlActions, GraphqlAsyncActions } from "../../../../consts/GraphqlActions";
 import { exportTables } from "@8base/api-client";
-import { Configuration } from "../../../../common/configuraion";
+import { ConfigurationState } from "../../../../common/configuraion";
 import { Interactive } from "../../../../common/interactive";
 import { DeployModeType } from "../../../../interfaces/Extensions";
 import { EnvironmentCloneModeType } from "../../../../consts/Environment";
@@ -13,8 +13,8 @@ import { executeAsync } from "../../../../common/execute";
 export default {
   command: "clone",
   handler: async (params: any, context: Context) => {
-    Configuration.expectConfigured(context);
-    let { sourceEnvironmentId, environmentName, mode } = params;
+    ConfigurationState.expectConfigured(context);
+    let { sourceId: sourceEnvironmentId, name, mode } = params;
     const { workspaceId } = context.workspaceConfig;
 
     if (!sourceEnvironmentId) {
@@ -31,7 +31,7 @@ export default {
       }
     }
 
-    await executeAsync(context, GraphqlAsyncActions.environmentClone, { sourceEnvironmentId, environmentName, mode })
+    await executeAsync(context, GraphqlAsyncActions.environmentClone, { sourceEnvironmentId, environmentName: name, mode })
   },
 
   describe: translations.i18n.t("environment_clone_describe"),
@@ -39,7 +39,7 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("environment_clone_usage"))
-      .option("sourceEnvironmentId", {
+      .option("sourceId", {
         alias: "s",
         describe: translations.i18n.t("environment_clone_source_id_describe"),
         type: "string",
@@ -51,7 +51,7 @@ export default {
         type: 'string',
         choices: Object.values(EnvironmentCloneModeType),
       })
-      .option("environmentName", {
+      .option("name", {
         alias: "n",
         describe: translations.i18n.t("environment_clone_name_describe"),
         type: "string",

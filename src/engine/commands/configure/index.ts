@@ -30,6 +30,8 @@ export default {
       }
     }
 
+    context.updateWorkspaceConfig({ workspaceId, environmentName });
+
     if (!environmentName) {
       const environments = await context.getEnvironments(workspaceId);
       ({ environmentName } = await Interactive.ask({
@@ -43,8 +45,6 @@ export default {
         throw new Error(translations.i18n.t("configure_prevent_select_environment"));
       }
     }
-
-    context.updateWorkspaceConfig({ workspaceId, environmentName });
   },
 
   describe: translations.i18n.t('configure_describe'),

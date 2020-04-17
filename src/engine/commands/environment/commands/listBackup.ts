@@ -2,7 +2,7 @@ import * as yargs from "yargs";
 import { Context } from "../../../../common/context";
 import { translations } from "../../../../common/translations";
 import { GraphqlActions, GraphqlAsyncActions } from "../../../../consts/GraphqlActions";
-import { Configuration } from "../../../../common/configuraion";
+import { ConfigurationState } from "../../../../common/configuraion";
 import { Interactive } from "../../../../common/interactive";
 import { executeAsync } from "../../../../common/execute";
 import { table } from "table";
@@ -12,7 +12,7 @@ const ENVIRONMENT_TABLE_HEADER = ['Name', 'Size'];
 export default {
   command: "list-backup",
   handler: async (params: any, context: Context) => {
-    Configuration.expectConfigured(context);
+    ConfigurationState.expectConfigured(context);
 
     let { environmentId } = params;
     if (!environmentId) {

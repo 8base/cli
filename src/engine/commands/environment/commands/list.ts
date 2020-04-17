@@ -4,7 +4,7 @@ import { Context } from "../../../../common/context";
 import { translations } from "../../../../common/translations";
 import { GraphqlActions, GraphqlAsyncActions } from "../../../../consts/GraphqlActions";
 import { exportTables } from "@8base/api-client";
-import { Configuration } from "../../../../common/configuraion";
+import { ConfigurationState } from "../../../../common/configuraion";
 import { Interactive } from "../../../../common/interactive";
 import { DeployModeType } from "../../../../interfaces/Extensions";
 import { EnvironmentCloneModeType } from "../../../../consts/Environment";
@@ -17,7 +17,7 @@ const ENVIRONMENT_TABLE_HEADER = ['Id', 'Name'];
 export default {
   command: "list",
   handler: async (params: any, context: Context) => {
-    Configuration.expectConfigured(context);
+    ConfigurationState.expectConfigured(context);
     const environments = await context.getEnvironments(context.workspaceConfig.workspaceId);
     context.logger.info(table([ENVIRONMENT_TABLE_HEADER, ...environments.map(e => [e.id, e.name])]));
   },

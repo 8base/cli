@@ -9,6 +9,7 @@ import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { translations } from '../../../common/translations';
 import { AsyncStatus } from '../../../consts/AsyncStatus';
 import { DeployModeType } from '../../../interfaces/Extensions';
+import { executeDeploy } from "../../../common/execute";
 
 export default {
   command: 'deploy',
@@ -21,17 +22,6 @@ export default {
       GraphqlController.validateSchema(context.project);
     }
 
-    const buildDir = await BuildController.package(context);
-    context.logger.debug(`build dir: ${buildDir}`);
-
-    const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy);
-
-    await Utils.upload(prepareDeploy.uploadMetaDataUrl, buildDir.meta, context);
-    context.logger.debug('upload meta data complete');
-
-    await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
-    context.logger.debug('upload source code complete');
-
     let deployOptions = { mode: params.mode };
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
@@ -42,41 +32,7 @@ export default {
       deployOptions = _.set(deployOptions, 'extensionNames', params.functions);
     }
 
-    await context.request(GraphqlActions.deploy, {
-      data: { buildName: prepareDeploy.buildName, options: deployOptions },
-    });
-
-    let result;
-    do {
-      result = (
-        await context.request(GraphqlActions.deployStatus, {
-          buildName: prepareDeploy.buildName,
-        })
-      ).deployStatus;
-      context.logger.debug(result);
-      await Utils.sleep(2000);
-      context.spinner.stop();
-      context.spinner.start(
-        context.i18n.t('deploy_in_progress', {
-          status: result.status,
-          message: result.message,
-        }),
-      );
-    } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
-
-    BuildController.clearBuild(context);
-
-    if (result.status === AsyncStatus.completeError) {
-      let gqlError;
-      try {
-        gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be threw as is
-      } catch (e) {
-        throw new Error(result.message);
-      }
-      throw gqlError;
-    }
-
-    context.spinner.stop();
+    await executeDeploy(context, deployOptions);
   },
 
   describe: translations.i18n.t('deploy_describe'),

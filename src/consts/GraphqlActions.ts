@@ -35,6 +35,22 @@ export const GraphqlActions = {
         }
       }
     }`,
+  migrationPlan: `
+    query MigrationPlan($sourceId: String!, $targetId: String!, $output: SystemPlanResponseType) {
+      system {
+        plan(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId, output: $output) {
+          url
+        }
+      }
+    }`,
+  migrationImmediately: `
+    mutation MigrationImmediately($sourceId: String!, $targetId: String!) {
+      system {
+        migrateImmediately(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId) {
+          success
+        }
+      }
+    }`,
   invoke: `mutation Invoke($data: InvokeData) {
     invoke(data: $data) {
       responseData
