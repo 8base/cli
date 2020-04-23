@@ -43,10 +43,10 @@ export const GraphqlActions = {
         }
       }
     }`,
-  migrationImmediately: `
-    mutation MigrationImmediately($sourceId: String!, $targetId: String!) {
+  migrationFast: `
+    mutation MigrationFast($sourceId: String!, $targetId: String!) {
       system {
-        migrateImmediately(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId) {
+        migrateFast(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId) {
           success
         }
       }

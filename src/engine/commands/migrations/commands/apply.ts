@@ -11,12 +11,12 @@ export default {
 
   handler: async (params: any, context: Context) => {
 
-    const { immediately, sourceId, targetId } = params;
+    const { fast, sourceId, targetId } = params;
 
     ConfigurationState.expectConfigured(context);
 
-    if (immediately) {
-      await context.request(GraphqlActions.migrationImmediately, { sourceId, targetId })
+    if (fast) {
+      await context.request(GraphqlActions.migrationFast, { sourceId, targetId })
       return ;
     }
 
@@ -37,8 +37,8 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t("clone_usage"))
-      .option("immediately", {
-        alias: "i",
+      .option("fast", {
+        alias: "f",
         describe: translations.i18n.t("migration_plan_source_id_describe"),
         type: "boolean",
         default: false
