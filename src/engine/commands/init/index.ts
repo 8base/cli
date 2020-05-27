@@ -178,7 +178,10 @@ export default {
       });
     }
 
-    context.createWorkspaceConfig({ workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME }, project.fullPath);
+    context.createWorkspaceConfig(
+      { workspaceId, environment: await context.getDefaultEnvironment(workspaceId) },
+      project.fullPath
+    );
 
     if (!silent) {
       // @ts-ignore

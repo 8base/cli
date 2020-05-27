@@ -36,18 +36,10 @@ export const GraphqlActions = {
       }
     }`,
   migrationPlan: `
-    query MigrationPlan($sourceId: String!, $targetId: String!, $output: SystemPlanResponseType) {
+    query MigrationPlan($environmentId: String!, $output: SystemPlanResponseType) {
       system {
-        plan(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId, output: $output) {
+        plan(environmentId: $environmentId, output: $output) {
           url
-        }
-      }
-    }`,
-  migrationFast: `
-    mutation MigrationFast($sourceId: String!, $targetId: String!) {
-      system {
-        migrateFast(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId) {
-          success
         }
       }
     }`,
@@ -124,9 +116,18 @@ export const GraphqlActions = {
 
 export const GraphqlAsyncActions = {
   environmentClone: `
-    mutation clone($environmentName: String!, $mode: SystemCloneEnvironmentMode!, $sourceEnvironmentId: String!) {
+    mutation clone($environmentName: String!, $mode: SystemCloneEnvironmentMode!, $environmentId: String!) {
       system {
-        async: environmentClone(name: $environmentName, mode:$mode, sourceEnvironmentId: $sourceEnvironmentId) {
+        async: environmentClone(name: $environmentName, mode:$mode, environmentId: $environmentId) {
+          sessionId
+        }
+      }
+    }`,
+
+  environmentBranch: `
+    mutation clone($environmentName: String!, $environmentId: String!) {
+      system {
+        async: environmentBranch(name: $environmentName, environmentId: $environmentId) {
           sessionId
         }
       }
@@ -140,6 +141,24 @@ export const GraphqlAsyncActions = {
         }
       }
     }`,
+  migration: `
+    mutation Migration($sourceId: String!, $targetId: String!, $fast: Boolean) {
+      system {
+        async: migrate(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId, fast: $fast) {
+          sessionId
+        }
+      }
+    }`,
+  merge: `
+    mutation MergeMigration($environmentId: String!) {
+      system { async: merge(environmentId: $environmentId) { sessionId } }
+    }
+  `,
+  commit: `
+    mutation CommitMigration($environmentId: String!) {
+      system { async: commit(environmentId: $environmentId) { sessionId } }
+    }
+  `
 };
 
 export type GraphqlAsyncActionsType = typeof GraphqlAsyncActions.environmentClone;

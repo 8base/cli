@@ -1,6 +1,6 @@
 import { Context } from "./context";
 
-export class ConfigurationState {
+export class ProjectConfigurationState {
 
   public static expectConfigured(context: Context) {
     if (!context.hasWorkspaceConfig()) {
@@ -9,7 +9,7 @@ export class ConfigurationState {
   }
 
   public static expectHasProject(context: Context) {
-    ConfigurationState.expectConfigured(context);
+    ProjectConfigurationState.expectConfigured(context);
     if (!context.hasProjectConfig()) {
       throw new Error(context.i18n.t('you_are_not_in_project'))
     }

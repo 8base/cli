@@ -14,6 +14,7 @@ export const executeAsync = async (context: Context, query: GraphqlAsyncActionsT
     result = (
       await context.request(GraphqlActions.asyncSessionStatus, { sessionId })
     ).status;
+
     context.logger.debug(result);
     await Utils.sleep(2000);
     context.spinner.stop();

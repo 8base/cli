@@ -4,7 +4,7 @@ import { translations } from '../../../common/translations';
 import { Utils } from '../../../common/utils';
 
 export default {
-  command: ['migrations <command>'],
+  command: ['migration <command>'],
   describe: translations.i18n.t('project_describe'),
   builder: function(yargs: yargs.Argv) {
     return yargs.commandDir('commands', {

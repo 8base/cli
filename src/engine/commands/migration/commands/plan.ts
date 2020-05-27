@@ -6,7 +6,8 @@ import { MigrationOutputModeType } from "../../../../consts/Environment";
 import { Utils } from "../../../../common/utils";
 import * as download from "download";
 import { StaticConfig } from "../../../../config";
-import { ConfigurationState } from "../../../../common/configuraion";
+import { ProjectConfigurationState } from "../../../../common/configuraion";
+import en from "../../../../locales/en";
 const path = require("path");
 const fs = require("fs-extra");
 
@@ -16,32 +17,21 @@ export default {
   command: 'plan',
 
   handler: async (params: any, context: Context) => {
-    ConfigurationState.expectHasProject(context);
-    const { sourceId, targetId, output } = params;
+    ProjectConfigurationState.expectHasProject(context);
+    const { output } = params;
+    const { environment } = context.workspaceConfig;
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
 
     fs.removeSync(dist)
 
-    const { system } = await context.request(GraphqlActions.migrationPlan, { sourceId, targetId, output} )
-
+    const { system } = await context.request(GraphqlActions.migrationPlan, { environmentId: environment.id, output });
     await download(system.plan.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
-
   },
 
   describe: translations.i18n.t('migrations_plan_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv =>
     args.usage(translations.i18n.t('migrations_plan_usage'))
-      .option("sourceId", {
-        alias: "s",
-        describe: translations.i18n.t("migration_plan_source_id_describe"),
-        type: "string",
-      })
-      .option("targetId", {
-        alias: "t",
-        describe: translations.i18n.t("migration_plan_target_id_describe"),
-        type: "string",
-      })
       .option("output", {
         alias: 'o',
         describe: translations.i18n.t('migration_plan_output_describe'),

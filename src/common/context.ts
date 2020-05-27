@@ -25,7 +25,7 @@ const pkg = require('../../package.json');
 
 export type WorkspaceConfig = {
   workspaceId: string;
-  environmentName: string;
+  environment: EnvironmentInfo;
 };
 
 type Plugin = { name: string; path: string };
@@ -75,8 +75,7 @@ export class Context {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
 
     if (this.hasWorkspaceConfig()) {
-      const parsed = JSON.parse(String(fs.readFileSync(workspaceConfigPath)));
-      return { environmentName: DEFAULT_ENVIRONMENT_NAME, ... parsed };
+      return JSON.parse(String(fs.readFileSync(workspaceConfigPath)));
     }
 
     return null;
@@ -93,9 +92,18 @@ export class Context {
     return environments;
   }
 
+  async getDefaultEnvironment(workspaceId: string): Promise<EnvironmentInfo> {
+    const environments = await this.getEnvironments(workspaceId);
+    const environment = environments.find(env => env.name === DEFAULT_ENVIRONMENT_NAME)
+    if (_.isEmpty(environment)) {
+      throw new Error(this.i18n.t("default_environment_is_missing"));
+    }
+
+    return environment;
+  }
+
   set workspaceConfig(value: WorkspaceConfig) {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
-
     fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
   }
 
@@ -103,7 +111,7 @@ export class Context {
     return path.join(customPath || process.cwd(), WORKSPACE_CONFIG_FILENAME);
   }
 
-  updateWorkspaceConfig(value: WorkspaceConfig): void {
+  updateWorkspaceConfig(value: Partial<WorkspaceConfig>): void {
     const currentWorkspaceConfig = this.workspaceConfig;
 
     this.workspaceConfig = _.merge(currentWorkspaceConfig, value);
@@ -253,6 +261,12 @@ export class Context {
     if (workspaceId) {
       this.logger.debug(this.i18n.t('debug:set_workspace_id', { workspaceId }));
       client.setWorkspaceId(workspaceId);
+    }
+
+    if (this.workspaceConfig.environment) {
+      client.gqlc.setHeader("environment", this.workspaceConfig.environment.name)
+    } else {
+      client.gqlc.setHeader("environment", undefined)
     }
 
     if (isLoginRequired && !this.user.isAuthorized()) {

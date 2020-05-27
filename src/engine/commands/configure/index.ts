@@ -1,16 +1,14 @@
-import * as _ from 'lodash';
 import * as yargs from 'yargs';
-
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import { ProjectController } from '../../controllers/projectController';
 import { Interactive } from '../../../common/interactive';
+import { DEFAULT_ENVIRONMENT_NAME } from "../../../consts/Environment";
 
 export default {
   command: 'configure',
 
   handler: async (params: any, context: Context) => {
-    let { workspaceId, environmentName } = params;
+    let { workspaceId } = params;
 
     if (!workspaceId) {
       const workspaces = await context.getWorkspaces();
@@ -30,21 +28,8 @@ export default {
       }
     }
 
-    context.updateWorkspaceConfig({ workspaceId, environmentName });
-
-    if (!environmentName) {
-      const environments = await context.getEnvironments(workspaceId);
-      ({ environmentName } = await Interactive.ask({
-        name: "environmentName",
-        type:"select",
-        message: translations.i18n.t("configure_select_environment"),
-        choices: environments.map(e => ({ title: e.name, value: e.name }))
-      }));
-
-      if (!environmentName) {
-        throw new Error(translations.i18n.t("configure_prevent_select_environment"));
-      }
-    }
+    context.updateWorkspaceConfig({ workspaceId });
+    context.updateWorkspaceConfig({ environment: await context.getDefaultEnvironment(workspaceId) });
   },
 
   describe: translations.i18n.t('configure_describe'),
@@ -57,9 +42,4 @@ export default {
       describe: translations.i18n.t('configure_workspace_id_describe'),
       type: 'string',
     })
-      .option('environmentName', {
-        alias: 'e',
-        describe: translations.i18n.t('configure_environment_name_describe'),
-        type: 'string',
-      }),
 };

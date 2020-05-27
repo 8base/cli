@@ -9,7 +9,7 @@ export default {
   command: 'info',
 
   handler: async (params: any, context: Context) => {
-    const { workspaceId, environmentName } = context.workspaceConfig;
+    const { workspaceId, environment } = context.workspaceConfig;
 
     const workspaces = await context.getWorkspaces();
 
@@ -25,7 +25,7 @@ export default {
       translations.i18n.t('project_info_text', {
         workspaceId: chalk.green(workspaceId),
         workspaceName: chalk.green(workspace.name),
-        environmentName: chalk.green(environmentName),
+        environmentName: chalk.green(environment.name),
         endpoint: chalk.green(`${endpoint}/${workspaceId}`),
       }),
     );
