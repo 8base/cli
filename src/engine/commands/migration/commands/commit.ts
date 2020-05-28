@@ -10,7 +10,6 @@ export default {
     ProjectConfigurationState.expectConfigured(context);
     context.spinner.start(context.i18n.t('migration_commit_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.commit, { environmentId: context.workspaceConfig.environment.id })
-    context.spinner.stop();
   },
-  describe: translations.i18n.t('project_info_describe'),
+  describe: translations.i18n.t('migration_commit_describe'),
 };

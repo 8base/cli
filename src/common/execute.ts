@@ -3,7 +3,6 @@ import { Utils } from "./utils";
 import { AsyncStatus } from "../consts/AsyncStatus";
 import { BuildController } from "../engine/controllers/buildController";
 import { Context } from "./context";
-import { Readable } from "stream";
 
 export const executeAsync = async (context: Context, query: GraphqlAsyncActionsType, variables: {[key: string]: any}) => {
 
@@ -26,6 +25,8 @@ export const executeAsync = async (context: Context, query: GraphqlAsyncActionsT
     );
   } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
 
+  context.spinner.stop();
+
   if (result.status === AsyncStatus.completeError) {
     let gqlError;
     try {
@@ -37,6 +38,8 @@ export const executeAsync = async (context: Context, query: GraphqlAsyncActionsT
   }
 }
 export const executeDeploy = async (context: Context, deployOptions: any) => {
+
+  context.spinner.start(context.i18n.t('migration_deploy_in_progress', { status: 'prepare to upload' }));
 
   const buildDir = await BuildController.package(context);
   context.logger.debug(`build dir: ${buildDir}`);

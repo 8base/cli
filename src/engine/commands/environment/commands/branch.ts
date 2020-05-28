@@ -3,8 +3,6 @@ import { Context } from "../../../../common/context";
 import { translations } from "../../../../common/translations";
 import { GraphqlAsyncActions } from "../../../../consts/GraphqlActions";
 import { ProjectConfigurationState } from "../../../../common/configuraion";
-import { Interactive } from "../../../../common/interactive";
-import { EnvironmentCloneModeType } from "../../../../consts/Environment";
 import { executeAsync } from "../../../../common/execute";
 
 export default {
@@ -13,7 +11,9 @@ export default {
     ProjectConfigurationState.expectConfigured(context);
     let { name } = params;
     const { environment } = context.workspaceConfig;
+    context.spinner.start(context.i18n.t('environment_branch_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.environmentBranch, { environmentId: environment.id, environmentName: name })
+    context.spinner.stop();
   },
 
   describe: translations.i18n.t("environment_branch_describe"),

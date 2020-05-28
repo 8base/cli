@@ -27,14 +27,6 @@ export const GraphqlActions = {
         }
       }
     }`,
-  environmentBackupsList: `
-    query EnvironmentBackupsList($environmentId: String!) {
-      system {
-        backups: environmentBackupsList(environmentId: $environmentId) {
-          items { name size }
-        }
-      }
-    }`,
   migrationPlan: `
     query MigrationPlan($environmentId: String!, $output: SystemPlanResponseType) {
       system {
@@ -115,36 +107,10 @@ export const GraphqlActions = {
 };
 
 export const GraphqlAsyncActions = {
-  environmentClone: `
-    mutation clone($environmentName: String!, $mode: SystemCloneEnvironmentMode!, $environmentId: String!) {
-      system {
-        async: environmentClone(name: $environmentName, mode:$mode, environmentId: $environmentId) {
-          sessionId
-        }
-      }
-    }`,
-
   environmentBranch: `
     mutation clone($environmentName: String!, $environmentId: String!) {
       system {
         async: environmentBranch(name: $environmentName, environmentId: $environmentId) {
-          sessionId
-        }
-      }
-    }`,
-
-  environmentBackup: `
-    mutation backup($environmentId: String!) {
-      system {
-        async: environmentBackup(environmentId: $environmentId) {
-          sessionId
-        }
-      }
-    }`,
-  migration: `
-    mutation Migration($sourceId: String!, $targetId: String!, $fast: Boolean) {
-      system {
-        async: migrate(sourceEnvironmentId: $sourceId, targetEnvironmentId: $targetId, fast: $fast) {
           sessionId
         }
       }
@@ -161,5 +127,8 @@ export const GraphqlAsyncActions = {
   `
 };
 
-export type GraphqlAsyncActionsType = typeof GraphqlAsyncActions.environmentClone;
+export type GraphqlAsyncActionsType =
+  typeof GraphqlAsyncActions.commit |
+  typeof GraphqlAsyncActions.merge |
+  typeof GraphqlAsyncActions.environmentBranch;
 

@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import * as yargs from 'yargs';
 import { Context } from "../../../../common/context";
 import { Interactive } from "../../../../common/interactive";

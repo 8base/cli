@@ -95,11 +95,8 @@ export default {
       'COMMAND\n  8base configure [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_describe: 'Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_workspace_id_describe: 'The workspace ID of the project',
-    configure_environment_name_describe: 'The environment name of the project',
     configure_select_workspace: 'Select workspace for current project',
-    configure_select_environment: 'Select environment for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
-    configure_prevent_select_environment: 'Environment selection canceled',
 
     /**
      * Init related messages
@@ -281,33 +278,60 @@ export default {
     package_progress: 'packaging...',
 
     /**
-     * Environment clone related messages
+     * Environment list related messages
      */
-    environment_clone_in_progress: 'clone in progress...',
-    environment_clone_usage: '8base environment clone ',
-    environment_clone_describe: 'Clone environment.',
-    environment_clone_source_id_describe: 'Backup environment.',
+    environment_list_usage: '8base environment list ',
+    environment_list_describe: 'List environment.',
 
     /**
-     * Environment backup related messages
+     * Environment branch related messages
      */
-    environment_backup_in_progress: 'clone in progress...',
-    environment_backup_usage: '8base environment backup',
-    environment_backup_id_describe: 'The environment id to backup',
-    environment_backup_select_environment: 'Select environment to backup',
-    environment_backup_describe: 'Backup environment.',
+    environment_branch_in_progress: "branch in progress...",
+    environment_branch_usage: '8base environment branch',
+    environment_branch_describe: 'Branch environment.',
+    environment_branch_name_describe: "Name of new environment",
+    environment_branch_name_option_error: '"{{- name }}" returns an error.',
 
     /**
-     * Environment backup list related messages
+     * Environment set list related messages
      */
-    environment_backup_list_in_progress: 'clone in progress...',
-    environment_backup_list_usage: '8base environment backup',
-    environment_backup_list_id_describe: 'The environment id to backup',
-    environment_backup_list_select_environment: 'Select environment to list backup',
-    environment_backup_list_describe: 'Backup environment.',
+    environment_set_select_environment: "Select environment for current project",
+    environment_set_prevent_select_environment: "Environment selection canceled",
+    environment_set_describe: "Set environment",
+    environment_set_usage: "Set environment",
+    environment_set_environment_name_describe: "The environment name of the project",
 
+    /**
+     * Migration commit related messages
+     */
+
+    migration_commit_in_progress: "Migration commit in progress",
+    migration_commit_describe: "Migration commit",
+
+    /**
+     * Migration merge related messages
+     */
+
+    migration_merge_in_progress: "Migration merge in progress",
+    migration_merge_describe: "Migration merge",
+
+    /**
+     * Migration deploy related messages
+     */
+    migration_deploy_describe: "Migration deploy",
+
+    /**
+     * Migration plan related messages
+     */
+    migration_plan_dist_describe: "The folder of migrations",
+    migration_plan_usage: "Migration plan",
+    migration_plan_describe: "Migration plan",
 
     environment_describe: 'Environment commands.',
+
+    /**
+     * Plugin related messages
+     */
 
     plugin_describe: 'Plugins management commands.',
 
