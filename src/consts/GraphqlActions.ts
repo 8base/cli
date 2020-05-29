@@ -28,12 +28,12 @@ export const GraphqlActions = {
       }
     }`,
   migrationPlan: `
-    query MigrationPlan($environmentId: String!, $output: SystemPlanResponseType) {
-      system {
-        plan(environmentId: $environmentId, output: $output) {
-          url
-        }
-      }
+    query MigrationPlan($output: SystemPlanResponseType) {
+      system { plan(output: $output) { url } }
+    }`,
+  migrationStatus: `
+    query MigrationStatus {
+      system { status { status, migrations } }
     }`,
   invoke: `mutation Invoke($data: InvokeData) {
     invoke(data: $data) {
@@ -108,21 +108,17 @@ export const GraphqlActions = {
 
 export const GraphqlAsyncActions = {
   environmentBranch: `
-    mutation clone($environmentName: String!, $environmentId: String!) {
-      system {
-        async: environmentBranch(name: $environmentName, environmentId: $environmentId) {
-          sessionId
-        }
-      }
+    mutation clone($environmentName: String!) {
+      system { async: environmentBranch(name: $environmentName) { sessionId } }
     }`,
   merge: `
-    mutation MergeMigration($environmentId: String!) {
-      system { async: merge(environmentId: $environmentId) { sessionId } }
+    mutation MergeMigration {
+      system { async: merge { sessionId } }
     }
   `,
   commit: `
-    mutation CommitMigration($environmentId: String!) {
-      system { async: commit(environmentId: $environmentId) { sessionId } }
+    mutation CommitMigration {
+      system { async: commit { sessionId } }
     }
   `
 };
