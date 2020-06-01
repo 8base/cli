@@ -20,8 +20,6 @@ export default {
     context.logger.info(`${chalk.hex(Colors.green)('Status:')}: '${status}'`);
     if (migrations && !_.isEmpty(migrations))
       context.logger.info(table([["migrations"], ... migrations.map((m:any)=> ([m])) ]));
-    else
-      context.logger.info("Migrations is empty");
   },
 
   describe: translations.i18n.t('migration_status_describe'),
