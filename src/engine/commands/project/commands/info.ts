@@ -25,6 +25,7 @@ export default {
       translations.i18n.t('project_info_text', {
         workspaceId: chalk.green(workspaceId),
         workspaceName: chalk.green(workspace.name),
+        branch: chalk.green(environment.name),
         environmentName: chalk.green(environment.name),
         endpoint: chalk.green(`${endpoint}/${workspaceId}`),
       }),

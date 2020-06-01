@@ -34,7 +34,7 @@ export default {
     project_info_usage: 'COMMAND\n  8base project info\n\nDESCRIPTION\n Display the info about current project.',
     project_info_describe: 'Display the info about current project.',
     project_info_text:
-      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nAPI Endpoint: {{-endpoint}}',
+      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nBranch: {{-branch}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
     /**

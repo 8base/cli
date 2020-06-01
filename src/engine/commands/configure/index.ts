@@ -28,7 +28,7 @@ export default {
       }
     }
 
-    context.updateWorkspaceConfig({ workspaceId });
+    context.updateWorkspaceConfig({ workspaceId, environment: null });
     context.updateWorkspaceConfig({ environment: await context.getDefaultEnvironment(workspaceId) });
   },
 
