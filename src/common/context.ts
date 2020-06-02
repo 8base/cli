@@ -82,7 +82,7 @@ export class Context {
   }
 
   async getEnvironments(workspaceId: string): Promise<EnvironmentInfo[]> {
-    const { system } = await this.request(GraphqlActions.environmentsList, { workspaceId });
+    const { system } = await this.request(GraphqlActions.environmentsList, null, true, workspaceId, false);
 
     const environments = system.environments.items;
     if (_.isEmpty(environments)) {
@@ -125,6 +125,10 @@ export class Context {
 
   get workspaceId(): string | null {
     return _.get(this.workspaceConfig, 'workspaceId', null);
+  }
+
+  get environmentName(): string | null {
+    return _.get(this.workspaceConfig, ['environment', 'name'], null);
   }
 
   hasWorkspaceConfig(customPath?: string): boolean {
@@ -235,6 +239,7 @@ export class Context {
     variables: any = null,
     isLoginRequired = true,
     customWorkspaceId?: string,
+    setEnvironment: boolean = true
   ): Promise<any> {
     const remoteAddress = this.serverAddress;
     this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress }));
@@ -263,10 +268,10 @@ export class Context {
       client.setWorkspaceId(workspaceId);
     }
 
-    if (this.workspaceConfig.environment) {
-      client.gqlc.setHeader("environment", this.workspaceConfig.environment.name)
-    } else {
-      client.gqlc.setHeader("environment", undefined)
+    if (setEnvironment) {
+      const environmentName = this.environmentName;
+      this.logger.debug(this.i18n.t('debug:set_environment_name', { environmentName }));
+      client.gqlc.setHeader("environment", environmentName)
     }
 
     if (isLoginRequired && !this.user.isAuthorized()) {

@@ -15,7 +15,6 @@ import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME } from "../../../consts/Environment";
 
 const CREATE_WORKSPACE_MUTATION = `
   mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {

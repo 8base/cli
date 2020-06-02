@@ -376,5 +376,6 @@ export default {
     reset_refresh_token: 'reset refresh token',
     set_email: 'set email: {{- email}}',
     set_workspace_id: 'set workspace id {{workspaceId}}',
+    set_environment_name: 'set environment id {{environmentName}}',
   },
 };

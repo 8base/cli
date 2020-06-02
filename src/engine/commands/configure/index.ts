@@ -2,7 +2,6 @@ import * as yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME } from "../../../consts/Environment";
 
 export default {
   command: 'configure',
@@ -28,8 +27,7 @@ export default {
       }
     }
 
-    context.updateWorkspaceConfig({ workspaceId, environment: null });
-    context.updateWorkspaceConfig({ environment: await context.getDefaultEnvironment(workspaceId) });
+    context.updateWorkspaceConfig({ workspaceId, environment: await context.getDefaultEnvironment(workspaceId) });
   },
 
   describe: translations.i18n.t('configure_describe'),

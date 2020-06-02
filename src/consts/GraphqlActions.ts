@@ -20,11 +20,9 @@ export const GraphqlActions = {
     }
   }`,
   environmentsList: `
-    query EnvironmentsList($workspaceId: String!) {
+    query EnvironmentsList {
       system {
-        environments: environmentsList(workspaceId: $workspaceId) {
-          items { id name }
-        }
+        environments: environmentsList { items { id name } }
       }
     }`,
   migrationPlan: `

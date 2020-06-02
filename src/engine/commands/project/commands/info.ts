@@ -26,7 +26,6 @@ export default {
         workspaceId: chalk.green(workspaceId),
         workspaceName: chalk.green(workspace.name),
         branch: chalk.green(environment.name),
-        environmentName: chalk.green(environment.name),
         endpoint: chalk.green(`${endpoint}/${workspaceId}`),
       }),
     );
