@@ -277,6 +277,8 @@ export default {
     package_describe: 'Package 8base application without deploying it.',
     package_progress: 'packaging...',
 
+    environment_describe: 'Environment commands.',
+
     /**
      * Environment list related messages
      */
@@ -300,6 +302,8 @@ export default {
     environment_set_describe: "Set environment",
     environment_set_usage: "Set environment",
     environment_set_environment_name_describe: "The environment name of the project",
+
+    migration_describe: 'Migration commands.',
 
     /**
      * Migration commit related messages
@@ -327,7 +331,11 @@ export default {
     migration_plan_usage: "Migration plan",
     migration_plan_describe: "Migration plan",
 
-    environment_describe: 'Environment commands.',
+    /**
+     * Migration apply related messages
+     */
+    migration_apply_in_progress: "Migration apply in progress",
+    migration_apply_describe: "Migration apply",
 
     /**
      * Plugin related messages

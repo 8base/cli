@@ -5,7 +5,7 @@ import { Utils } from '../../../common/utils';
 
 export default {
   command: ['migration <command>'],
-  describe: translations.i18n.t('project_describe'),
+  describe: translations.i18n.t('migration_describe'),
   builder: function(yargs: yargs.Argv) {
     return yargs.commandDir('commands', {
       extensions: ['js', 'ts'],

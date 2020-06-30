@@ -20,7 +20,7 @@ export default {
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
 
     const { system } = await context.request(GraphqlActions.migrationPlan, { environmentId: environment.id, output });
-    await download(system.plan.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
+    await download(system.ciPlan.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
   },
 
   describe: translations.i18n.t('migration_plan_describe'),

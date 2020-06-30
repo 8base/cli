@@ -27,11 +27,11 @@ export const GraphqlActions = {
     }`,
   migrationPlan: `
     query MigrationPlan($output: SystemPlanResponseType) {
-      system { plan(output: $output) { url } }
+      system { ciPlan(output: $output) { url } }
     }`,
   migrationStatus: `
     query MigrationStatus {
-      system { status { status, migrations } }
+      system { ciStatus { status, migrations } }
     }`,
   invoke: `mutation Invoke($data: InvokeData) {
     invoke(data: $data) {
@@ -111,12 +111,17 @@ export const GraphqlAsyncActions = {
     }`,
   merge: `
     mutation MergeMigration {
-      system { async: merge { sessionId } }
+      system { async: ciMerge { sessionId } }
     }
   `,
   commit: `
     mutation CommitMigration {
-      system { async: commit { sessionId } }
+      system { async: ciCommit { sessionId } }
+    }
+  `,
+  apply: `
+    mutation CommitMigration {
+      system { async: ciApply { sessionId } }
     }
   `
 };
