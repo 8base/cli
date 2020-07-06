@@ -13,7 +13,6 @@ export default {
     });
   },
   handler: function() {
-    console.log("hhh")
     // This is parent handler. It is not used.
   },
 };

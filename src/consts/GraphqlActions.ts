@@ -109,21 +109,11 @@ export const GraphqlAsyncActions = {
     mutation clone($environmentName: String!) {
       system { async: environmentBranch(name: $environmentName) { sessionId } }
     }`,
-  merge: `
-    mutation MergeMigration {
-      system { async: ciMerge { sessionId } }
-    }
-  `,
   commit: `
     mutation CommitMigration {
       system { async: ciCommit { sessionId } }
     }
   `,
-  apply: `
-    mutation CommitMigration {
-      system { async: ciApply { sessionId } }
-    }
-  `
 };
 
 export type GraphqlAsyncActionsType =

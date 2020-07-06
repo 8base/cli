@@ -26,6 +26,7 @@ export default {
 
   builder: (args: yargs.Argv): yargs.Argv =>
     args.usage(translations.i18n.t('migration_plan_usage'))
+    // Is not used for now
     //   .option("dist", {
     //     alias: 'd',
     //     describe: translations.i18n.t('migration_plan_dist_describe'),

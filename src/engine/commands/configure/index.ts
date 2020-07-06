@@ -39,5 +39,5 @@ export default {
       alias: 'w',
       describe: translations.i18n.t('configure_workspace_id_describe'),
       type: 'string',
-    })
+    }),
 };
