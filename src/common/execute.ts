@@ -39,7 +39,7 @@ export const executeAsync = async (context: Context, query: GraphqlAsyncActionsT
 }
 export const executeDeploy = async (context: Context, deployOptions: any) => {
 
-  context.spinner.start(context.i18n.t('migration_deploy_in_progress', { status: 'prepare to upload' }));
+  context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload' }));
 
   const buildDir = await BuildController.package(context);
   context.logger.debug(`build dir: ${buildDir}`);

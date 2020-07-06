@@ -1,13 +1,8 @@
 import * as yargs from 'yargs';
 import * as _ from 'lodash';
-
-import { Utils } from '../../../common/utils';
 import { GraphqlController } from '../../controllers/graphqlController';
-import { BuildController } from '../../controllers/buildController';
 import { Context } from '../../../common/context';
-import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { translations } from '../../../common/translations';
-import { AsyncStatus } from '../../../consts/AsyncStatus';
 import { DeployModeType } from '../../../interfaces/Extensions';
 import { executeDeploy } from "../../../common/execute";
 
