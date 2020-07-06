@@ -8,28 +8,27 @@ export default {
   command: 'set',
 
   handler: async (params: any, context: Context) => {
-    let { environmentId } = params;
+    let { environmentName } = params;
     ProjectConfigurationState.expectConfigured(context);
 
-    context.updateWorkspaceConfig({ environment: null });
-    const environments = await context.getEnvironments(context.workspaceConfig.workspaceId);
+    const environments = await context. getEnvironments(context.workspaceConfig.workspaceId);
 
-    if (!environmentId) {
-      ({ environmentId } = await Interactive.ask({
-        name: "environmentId",
+    if (!environmentName) {
+      ({ environmentName } = await Interactive.ask({
+        name: "environmentName",
         type:"select",
         message: translations.i18n.t("environment_set_select_environment"),
-        choices: environments.map(e => ({ title: e.name, value: e.id }))
+        choices: environments.map(e => ({ title: e.name, value: e.name }))
       }));
 
-      if (!environmentId) {
+      if (!environmentName) {
         throw new Error(translations.i18n.t("environment_set_prevent_select_environment"));
       }
     }
 
-    const environment = environments.find(env => env.id === environmentId);
+    const environment = environments.find(env => env.name === environmentName);
     if (!environment) {
-      throw new Error(translations.i18n.t("environment_set_prevent_select_environment"));
+      throw new Error(translations.i18n.t("environment_set_doesnt_exit"));
     }
 
     context.updateWorkspaceConfig({ environment });
@@ -40,8 +39,8 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('environment_set_usage'))
-      .option('environmentId', {
-        alias: 'e',
+      .option('environmentName', {
+        alias: 'n',
         describe: translations.i18n.t('environment_set_environment_name_describe'),
         type: 'string',
       }),

@@ -4,6 +4,7 @@ import { executeAsync, executeDeploy } from "../../../../common/execute";
 import { GraphqlAsyncActions } from "../../../../consts/GraphqlActions";
 import { ProjectConfigurationState } from "../../../../common/configuraion";
 import { DeployModeType } from "../../../../interfaces/Extensions";
+import * as yargs from "yargs";
 
 export default {
   command: 'commit',
@@ -16,4 +17,7 @@ export default {
     await executeAsync(context, GraphqlAsyncActions.commit, { environmentId: context.workspaceConfig.environment.id })
   },
   describe: translations.i18n.t('migration_commit_describe'),
+  builder: (args: yargs.Argv): yargs.Argv =>
+    args.usage(translations.i18n.t('migration_commit_usage'))
+
 };

@@ -26,8 +26,8 @@ export const GraphqlActions = {
       }
     }`,
   migrationPlan: `
-    query MigrationPlan($output: SystemPlanResponseType) {
-      system { ciPlan(output: $output) { url } }
+    query MigrationPlan {
+      system { ciPlan { url } }
     }`,
   migrationStatus: `
     query MigrationStatus {
