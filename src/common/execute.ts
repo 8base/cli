@@ -7,7 +7,7 @@ import { Context } from './context';
 export const executeAsync = async (
   context: Context,
   query: GraphqlAsyncActionsType,
-  variables: { [key: string]: any },
+  variables: { [key: string]: any } = {},
 ) => {
   const {
     system: {

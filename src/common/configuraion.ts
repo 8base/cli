@@ -2,7 +2,11 @@ import { Context } from './context';
 
 export class ProjectConfigurationState {
   public static expectConfigured(context: Context) {
-    if (!context.hasWorkspaceConfig() || !context.workspaceConfig.workspaceId || !context.workspaceConfig.environment) {
+    if (
+      !context.hasWorkspaceConfig() ||
+      !context.workspaceConfig.workspaceId ||
+      !context.workspaceConfig.environmentName
+    ) {
       throw new Error(context.i18n.t('configuration_required'));
     }
   }

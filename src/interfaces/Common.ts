@@ -5,7 +5,6 @@ export interface SessionInfo {
 
 export type EnvironmentInfo = {
   name: string;
-  id: string;
 };
 
 export type BuildDirectory = string;

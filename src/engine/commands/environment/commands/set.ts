@@ -31,7 +31,7 @@ export default {
       throw new Error(translations.i18n.t('environment_set_doesnt_exit'));
     }
 
-    context.updateWorkspaceConfig({ environment });
+    context.updateWorkspaceConfig({ environmentName });
   },
 
   describe: translations.i18n.t('environment_set_describe'),

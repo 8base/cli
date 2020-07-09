@@ -10,12 +10,8 @@ export default {
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectConfigured(context);
     let { name } = params;
-    const { environment } = context.workspaceConfig;
     context.spinner.start(context.i18n.t('environment_branch_in_progress'));
-    await executeAsync(context, GraphqlAsyncActions.environmentBranch, {
-      environmentId: environment.id,
-      environmentName: name,
-    });
+    await executeAsync(context, GraphqlAsyncActions.environmentBranch, { environmentName: name });
     context.spinner.stop();
   },
 

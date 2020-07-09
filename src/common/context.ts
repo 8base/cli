@@ -19,13 +19,12 @@ import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, SessionInfo } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
-import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 
 const pkg = require('../../package.json');
 
 export type WorkspaceConfig = {
   workspaceId: string;
-  environment: EnvironmentInfo;
+  environmentName: string;
 };
 
 type Plugin = { name: string; path: string };
@@ -90,16 +89,6 @@ export class Context {
     }
 
     return environments;
-  }
-
-  async getDefaultEnvironment(workspaceId: string): Promise<EnvironmentInfo> {
-    const environments = await this.getEnvironments(workspaceId);
-    const environment = environments.find(env => env.name === DEFAULT_ENVIRONMENT_NAME);
-    if (_.isEmpty(environment)) {
-      throw new Error(this.i18n.t('default_environment_is_missing'));
-    }
-
-    return environment;
   }
 
   set workspaceConfig(value: WorkspaceConfig) {

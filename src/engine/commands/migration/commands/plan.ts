@@ -15,10 +15,9 @@ export default {
 
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectHasProject(context);
-    const { environment } = context.workspaceConfig;
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
 
-    const { system } = await context.request(GraphqlActions.migrationPlan, { environmentId: environment.id });
+    const { system } = await context.request(GraphqlActions.migrationPlan);
     await download(system.ciPlan.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
   },
 

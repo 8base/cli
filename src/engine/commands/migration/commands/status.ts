@@ -13,9 +13,7 @@ export default {
 
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectHasProject(context);
-    const { output } = params;
-    const { environment } = context.workspaceConfig;
-    const { system } = await context.request(GraphqlActions.migrationStatus, { environmentId: environment.id, output });
+    const { system } = await context.request(GraphqlActions.migrationStatus);
     const { status, migrations } = system.ciStatus;
     context.logger.info(`${chalk.hex(Colors.green)('Status:')}: '${status}'`);
     if (migrations && !_.isEmpty(migrations))

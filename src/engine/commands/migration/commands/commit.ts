@@ -14,7 +14,7 @@ export default {
     await executeDeploy(context, { mode: DeployModeType.migrations });
 
     context.spinner.start(context.i18n.t('migration_commit_in_progress'));
-    await executeAsync(context, GraphqlAsyncActions.commit, { environmentId: context.workspaceConfig.environment.id });
+    await executeAsync(context, GraphqlAsyncActions.commit);
   },
   describe: translations.i18n.t('migration_commit_describe'),
   builder: (args: yargs.Argv): yargs.Argv => args.usage(translations.i18n.t('migration_commit_usage')),
