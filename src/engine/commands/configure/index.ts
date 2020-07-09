@@ -33,9 +33,7 @@ export default {
   describe: translations.i18n.t('configure_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv =>
-    args
-      .usage(translations.i18n.t('configure_usage'))
-      .option('workspaceId', {
+    args.usage(translations.i18n.t('configure_usage')).option('workspaceId', {
       alias: 'w',
       describe: translations.i18n.t('configure_workspace_id_describe'),
       type: 'string',

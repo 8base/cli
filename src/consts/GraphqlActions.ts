@@ -116,7 +116,4 @@ export const GraphqlAsyncActions = {
   `,
 };
 
-export type GraphqlAsyncActionsType =
-  typeof GraphqlAsyncActions.commit |
-  typeof GraphqlAsyncActions.environmentBranch;
-
+export type GraphqlAsyncActionsType = typeof GraphqlAsyncActions.commit | typeof GraphqlAsyncActions.environmentBranch;

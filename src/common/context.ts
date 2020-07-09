@@ -17,9 +17,9 @@ import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
-import { EnvironmentInfo, SessionInfo } from "../interfaces/Common";
+import { EnvironmentInfo, SessionInfo } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
-import { DEFAULT_ENVIRONMENT_NAME } from "../consts/Environment";
+import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 
 const pkg = require('../../package.json');
 
@@ -94,9 +94,9 @@ export class Context {
 
   async getDefaultEnvironment(workspaceId: string): Promise<EnvironmentInfo> {
     const environments = await this.getEnvironments(workspaceId);
-    const environment = environments.find(env => env.name === DEFAULT_ENVIRONMENT_NAME)
+    const environment = environments.find(env => env.name === DEFAULT_ENVIRONMENT_NAME);
     if (_.isEmpty(environment)) {
-      throw new Error(this.i18n.t("default_environment_is_missing"));
+      throw new Error(this.i18n.t('default_environment_is_missing'));
     }
 
     return environment;
@@ -239,7 +239,7 @@ export class Context {
     variables: any = null,
     isLoginRequired = true,
     customWorkspaceId?: string,
-    setEnvironment: boolean = true
+    setEnvironment: boolean = true,
   ): Promise<any> {
     const remoteAddress = this.serverAddress;
     this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress }));
@@ -271,7 +271,7 @@ export class Context {
     if (setEnvironment) {
       const environmentName = this.environmentName;
       this.logger.debug(this.i18n.t('debug:set_environment_name', { environmentName }));
-      client.gqlc.setHeader("environment", environmentName)
+      client.gqlc.setHeader('environment', environmentName);
     }
 
     if (isLoginRequired && !this.user.isAuthorized()) {

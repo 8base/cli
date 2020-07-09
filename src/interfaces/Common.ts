@@ -4,7 +4,7 @@ export interface SessionInfo {
 }
 
 export type EnvironmentInfo = {
-  name: string,
+  name: string;
   id: string;
 };
 

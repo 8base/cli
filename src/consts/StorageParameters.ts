@@ -7,8 +7,8 @@ export const StorageParameters = {
 };
 
 export type StorageParametersType =
-  typeof StorageParameters.serverAddress |
-  typeof StorageParameters.authDomain |
-  typeof StorageParameters.authClientId |
-  typeof StorageParameters.idToken|
-  typeof StorageParameters.refreshToken;
+  | typeof StorageParameters.serverAddress
+  | typeof StorageParameters.authDomain
+  | typeof StorageParameters.authClientId
+  | typeof StorageParameters.idToken
+  | typeof StorageParameters.refreshToken;

@@ -179,7 +179,7 @@ export default {
 
     context.createWorkspaceConfig(
       { workspaceId, environment: await context.getDefaultEnvironment(workspaceId) },
-      project.fullPath
+      project.fullPath,
     );
 
     if (!silent) {

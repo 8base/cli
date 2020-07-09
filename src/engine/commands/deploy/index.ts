@@ -4,12 +4,11 @@ import { GraphqlController } from '../../controllers/graphqlController';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
-import { executeDeploy } from "../../../common/execute";
+import { executeDeploy } from '../../../common/execute';
 
 export default {
   command: 'deploy',
   handler: async (params: any, context: Context) => {
-
     context.initializeProject();
 
     if (params['validate_schema']) {

@@ -6,9 +6,18 @@ import { Translations } from '../../common/translations';
 import { Context } from '../../common/context';
 import { Colors } from '../../consts/Colors';
 
-const NON_PROJECT_COMMANDS = ['init', 'login', 'logout', 'configure', 'plugin list', 'p list', 'whoami', 'environment list'];
+const NON_PROJECT_COMMANDS = [
+  'init',
+  'login',
+  'logout',
+  'configure',
+  'plugin list',
+  'p list',
+  'whoami',
+  'environment list',
+];
 
-const ERROR_CODES_TO_PRINT_MESSAGES = [errorCodes.BillingFeatureAccessErrorCode]
+const ERROR_CODES_TO_PRINT_MESSAGES = [errorCodes.BillingFeatureAccessErrorCode];
 
 const hasWorkspaceNotFoundError = (response: any) => {
   const errors = _.get(response, 'errors', []);
@@ -25,7 +34,7 @@ export class CommandController {
       error.response.errors[0].message
     ) {
       const internalError = error.response.errors[0];
-      if (ERROR_CODES_TO_PRINT_MESSAGES.some(m => m===internalError.code)) {
+      if (ERROR_CODES_TO_PRINT_MESSAGES.some(m => m === internalError.code)) {
         return internalError.message;
       }
 
