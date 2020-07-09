@@ -12,6 +12,32 @@ import { Colors } from '../../../consts/Colors';
 import { InvokeLocalError } from '../../../errors/invokeLocal';
 import { ProjectController } from '../../controllers/projectController';
 
+const getLocalFunction = async (functionName: string, context: Context) => {
+  const { compiledFiles } = await BuildController.compile(context);
+
+  const functionInfo = context.project.extensions.functions.find(r => r.name === functionName);
+
+  if (!functionInfo) {
+    throw new Error(`Function ${chalk.hex(Colors.yellow)(functionName)} not present.`);
+  }
+
+  const safeFunctionPath = functionInfo.pathToFunction.substring(0, functionInfo.pathToFunction.lastIndexOf('.'));
+
+  const functionPath = compiledFiles.find((f: any) => f.search(safeFunctionPath) > 0);
+
+  context.logger.debug(`Function full path: ${functionPath}`);
+
+  const { result, error } = Utils.safeExecution(() => require(functionPath));
+
+  if (error) {
+    throw new InvokeLocalError(error.message, functionInfo.name, functionPath);
+  }
+
+  const functionToCall = Utils.undefault(result);
+
+  return functionToCall;
+};
+
 export default {
   command: 'invoke-local [name]',
   handler: async (params: any, context: Context) => {
@@ -21,24 +47,7 @@ export default {
 
     context.spinner.start(context.i18n.t('invokelocal_in_progress'));
 
-    const { compiledFiles } = await BuildController.compile(context);
-
-    const targetFunctionName = params.name;
-    const functionInfo = context.project.extensions.functions.find(r => r.name === targetFunctionName);
-    if (!functionInfo) {
-      throw new Error(`Function ${chalk.hex(Colors.yellow)(targetFunctionName)} not present.`);
-    }
-
-    const safeFunctionPath = functionInfo.pathToFunction.substring(0, functionInfo.pathToFunction.lastIndexOf('.'));
-    const funcPath = compiledFiles.find((f: any) => f.search(safeFunctionPath) > 0);
-    context.logger.debug(`Function full path: ${funcPath}`);
-    const { result, error } = Utils.safeExecution(() => require(funcPath));
-
-    if (error) {
-      throw new InvokeLocalError(error.message, functionInfo.name, funcPath);
-    }
-
-    const funcToCall = Utils.undefault(result);
+    const functionToCall = await getLocalFunction(params.name, context);
 
     let args = null;
 
@@ -53,13 +62,36 @@ export default {
     let resultResponse = null;
     let resultError = null;
 
+    const ctx = {
+      api: {
+        gqlRequest: context.request.bind(context),
+      },
+      invokeFunction: async (functionName: string, args: any) => {
+        const functionToCall = await getLocalFunction(functionName, context);
+
+        let result: any = null;
+
+        try {
+          result = await functionToCall(args, ctx);
+        } catch (e) {
+          return {
+            completed: false,
+            error: String(e),
+            result,
+          };
+        }
+
+        return {
+          completed: true,
+          error: null,
+          result,
+        };
+      },
+      workspaceId: context.workspaceId,
+    };
+
     try {
-      resultResponse = await funcToCall(JSON.parse(args), {
-        api: {
-          gqlRequest: context.request.bind(context),
-        },
-        workspaceId: context.workspaceId,
-      });
+      resultResponse = await functionToCall(JSON.parse(args), ctx);
     } catch (e) {
       resultError = e;
     }
@@ -75,12 +107,12 @@ export default {
         JSON.stringify(
           {
             data: {
-              [functionInfo.name]: null,
+              [params.name]: null,
             },
             errors: [
               {
                 message: String(resultError.message),
-                path: [functionInfo.name],
+                path: [params.name],
                 locations: [
                   {
                     line: 2,
@@ -97,7 +129,7 @@ export default {
         ),
       );
 
-      throw new Error(translations.i18n.t('invokelocal_returns_error', { name: functionInfo.name }));
+      throw new Error(translations.i18n.t('invokelocal_returns_error', { name: params.name }));
     } else {
       context.logger.info(JSON.stringify(resultResponse, null, 2));
     }
