@@ -117,7 +117,7 @@ export class Context {
   }
 
   get environmentName(): string | null {
-    return _.get(this.workspaceConfig, ['environment', 'name'], null);
+    return _.get(this.workspaceConfig, 'environmentName', null);
   }
 
   hasWorkspaceConfig(customPath?: string): boolean {
