@@ -22,7 +22,7 @@ export default {
       alias: 'n',
       describe: translations.i18n.t('environment_branch_name_describe'),
       type: 'string',
-      demandOption: translations.i18n.t('environment_branch_name_option_error'),
+      demandOption: true,
     });
   },
 };

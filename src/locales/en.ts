@@ -34,7 +34,7 @@ export default {
     project_info_usage: 'COMMAND\n  8base project info\n\nDESCRIPTION\n Display the info about current project.',
     project_info_describe: 'Display the info about current project.',
     project_info_text:
-      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nBranch: {{-branch}}\nAPI Endpoint: {{-endpoint}}',
+      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
     /**
@@ -294,7 +294,6 @@ export default {
       'COMMAND\\n  8base environment branch\\n\\nDESCRIPTION\\n  Create new branch from current environment.',
     environment_branch_describe: 'Branch environment.',
     environment_branch_name_describe: 'Name of new environment',
-    environment_branch_name_option_error: '"{{- name }}" returns an error.',
 
     /**
      * Environment set list related messages
