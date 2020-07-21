@@ -17,7 +17,7 @@ export const executeAsync = async (
 
   let result;
   do {
-    result = (await context.request(GraphqlActions.asyncSessionStatus, { sessionId })).status;
+    result = (await context.request(GraphqlActions.asyncSessionStatus, { sessionId }, true, undefined, false)).status;
 
     context.logger.debug(result);
     await Utils.sleep(2000);

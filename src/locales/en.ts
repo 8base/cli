@@ -277,13 +277,36 @@ export default {
     package_describe: 'Package 8base application without deploying it.',
     package_progress: 'packaging...',
 
+    backup_describe: 'Backup commands.',
+
+    /**
+     * Backup create related messages
+     */
+    backup_create_usage: '8base backup create',
+    backup_create_describe: 'Create backup for environment.',
+    backup_create_in_progress: 'Backup in progress...',
+
+    /**
+     * Backup list related messages
+     */
+    backup_list_describe: 'List all backups for environment.',
+    backup_list_usage: '8base backup list',
+
+    /**
+     * Backup restore related messages
+     */
+    backup_restore_describe: 'Restore environment to backup.',
+    backup_restore_usage: '8base backup restore [OPTIONS].',
+    backup_restore_in_progress: 'Restore backup in progress...',
+    backup_restore_set_environment_name_describe: 'Target environment name',
+    backup_restore_set_backup_describe: 'The name of the target backup',
+
     environment_describe: 'Environment commands.',
 
     /**
      * Environment list related messages
      */
-    environment_list_usage:
-      'COMMAND\\n  8base environment list\\n\\nDESCRIPTION\\n  List all environment in current workspace.',
+    environment_list_usage: '8base environment list',
     environment_list_describe: 'List environment in current workspace.',
 
     /**
@@ -302,7 +325,7 @@ export default {
     environment_set_prevent_select_environment: 'Environment selection canceled',
     environment_set_doesnt_exit: "Environment '{{name}}' doesn't exist.",
     environment_set_describe: 'Set environment',
-    environment_set_usage: 'COMMAND\\n  8base environment set\\n\\nDESCRIPTION\\n  Change current environment.',
+    environment_set_usage: '8base environment set',
     environment_set_environment_name_describe: 'The environment name of the project',
 
     migration_describe: 'Migration commands.',

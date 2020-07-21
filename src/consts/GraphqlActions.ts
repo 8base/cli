@@ -25,6 +25,10 @@ export const GraphqlActions = {
         environments: environmentsList { items { id name } }
       }
     }`,
+  backupList: `
+    query BackupList {
+      system { backups: environmentBackupsList { items { name size } } }
+    }`,
   migrationPlan: `
     query MigrationPlan {
       system { ciPlan { url } }
@@ -106,14 +110,27 @@ export const GraphqlActions = {
 
 export const GraphqlAsyncActions = {
   environmentBranch: `
-    mutation clone($environmentName: String!) {
-      system { async: environmentBranch(name: $environmentName) { sessionId } }
+    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode) {
+      system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
     }`,
   commit: `
     mutation CommitMigration {
       system { async: ciCommit { sessionId } }
     }
   `,
+  backupCreate: `
+    mutation Backup($name: String!){
+      system { async: environmentBackup(environmentName:$name) { sessionId } }
+    }
+  `,
+  backupRestore: `
+    mutation BackupRestore($backup:String!, $name: String!) {
+      system { async: environmentRestore(backup:$backup environmentName: $name) { sessionId } }
+    }
+  `,
 };
 
-export type GraphqlAsyncActionsType = typeof GraphqlAsyncActions.commit | typeof GraphqlAsyncActions.environmentBranch;
+export type GraphqlAsyncActionsType =
+  | typeof GraphqlAsyncActions.commit
+  | typeof GraphqlAsyncActions.environmentBranch
+  | typeof GraphqlAsyncActions.backupCreate;

@@ -9,3 +9,8 @@ export type EnvironmentInfo = {
 };
 
 export type BuildDirectory = string;
+
+export enum MigrateMode {
+  FULL = 'FULL',
+  SYSTEM = 'SYSTEM',
+}

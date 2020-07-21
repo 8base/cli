@@ -4,25 +4,35 @@ import { translations } from '../../../../common/translations';
 import { GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { executeAsync } from '../../../../common/execute';
+import { DeployModeType } from '../../../../interfaces/Extensions';
+import { MigrateMode } from '../../../../interfaces/Common';
 
 export default {
   command: 'branch',
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectConfigured(context);
-    let { name } = params;
+    let { name, mode } = params;
     context.spinner.start(context.i18n.t('environment_branch_in_progress'));
-    await executeAsync(context, GraphqlAsyncActions.environmentBranch, { environmentName: name });
+    await executeAsync(context, GraphqlAsyncActions.environmentBranch, { environmentName: name, mode });
     context.spinner.stop();
   },
 
   describe: translations.i18n.t('environment_branch_describe'),
 
-  builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage(translations.i18n.t('environment_branch_usage')).option('name', {
-      alias: 'n',
-      describe: translations.i18n.t('environment_branch_name_describe'),
-      type: 'string',
-      demandOption: true,
-    });
-  },
+  builder: (args: yargs.Argv): yargs.Argv =>
+    args
+      .usage(translations.i18n.t('environment_branch_usage'))
+      .option('name', {
+        alias: 'n',
+        describe: translations.i18n.t('environment_branch_name_describe'),
+        type: 'string',
+        demandOption: true,
+      })
+      .option('mode', {
+        alias: 'm',
+        describe: translations.i18n.t('deploy_mode_describe'),
+        default: MigrateMode.SYSTEM,
+        type: 'string',
+        choices: Object.values(MigrateMode),
+      }),
 };
