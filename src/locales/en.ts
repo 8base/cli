@@ -298,8 +298,8 @@ export default {
     backup_restore_describe: 'Restore environment to backup.',
     backup_restore_usage: '8base backup restore [OPTIONS].',
     backup_restore_in_progress: 'Restore backup in progress...',
-    backup_restore_set_environment_name_describe: 'Target environment name',
-    backup_restore_set_backup_describe: 'The name of the target backup',
+    backup_restore_set_environment_describe: 'Target environment name',
+    backup_restore_set_backup_name_describe: 'The name of the target backup',
 
     environment_describe: 'Environment commands.',
 
