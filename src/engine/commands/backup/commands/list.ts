@@ -5,7 +5,7 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { table } from 'table';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
 
-const BACKUP_HEADER = ['Name', 'Size (Gb)'];
+const BACKUP_HEADER = ['Name', 'Size (Mb)'];
 
 export default {
   command: 'list',
