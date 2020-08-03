@@ -5,6 +5,8 @@
   "author": "8base",
   "license": "MIT",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "8base": "dist/index.js"
   },
