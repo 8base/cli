@@ -46,10 +46,7 @@ export class Context {
 
   i18n: i18next.i18n;
 
-  spinner = Ora({
-    color: 'white',
-    text: '\n',
-  });
+  spinner: any;
 
   constructor(params: any, translations: Translations) {
     this.logger = winston.createLogger({
@@ -68,6 +65,11 @@ export class Context {
 
     this.i18n = translations.i18n;
     this.version = pkg.version;
+
+    this.spinner = Ora({
+      color: 'white',
+      text: '\n',
+    });
   }
 
   get workspaceConfig(): WorkspaceConfig | null {
