@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as yaml from 'js-yaml';
 import * as ejs from 'ejs';
 import * as mkdirp from 'mkdirp';
 import * as changeCase from 'change-case';
@@ -19,7 +20,6 @@ import {
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context } from '../../common/context';
-import { Utils } from '../../common/utils';
 
 type FunctionDeclarationOptions = {
   operation?: string;
@@ -192,7 +192,7 @@ export class ProjectController {
     }
 
     try {
-      return Utils.yamlStringToJson(fs.readFileSync(pathToYmlConfig, 'utf8'));
+      return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
     } catch (ex) {
       throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, ex.message);
     }
@@ -201,7 +201,7 @@ export class ProjectController {
   private static saveConfigFile(context: Context, config: Object, projectPath?: string, silent?: boolean): any {
     const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
 
-    fs.writeFileSync(pathToYmlConfig, Utils.yamlJsonToString(config));
+    fs.writeFileSync(pathToYmlConfig, yaml.safeDump(config));
 
     if (!silent) {
       context.logger.info(
@@ -538,6 +538,7 @@ const processTemplate = (
     }
 
     const data = fs.readFileSync(path.resolve(templatePath, file));
+
     const content = ejs.compile(data.toString())({
       ...options,
       changeCase,
@@ -546,6 +547,7 @@ const processTemplate = (
     let fileName = file.replace(/\.ejs$/, '');
 
     fileName = fileName.replace('mockName', _.get(options, 'mockName'));
+
     fs.writeFileSync(path.resolve(dirPath, fileName), content);
 
     if (!silent) {
