@@ -113,7 +113,7 @@ export const GraphqlActions = {
           success
         }
       }
-    }`
+    }`,
 };
 
 export const GraphqlAsyncActions = {

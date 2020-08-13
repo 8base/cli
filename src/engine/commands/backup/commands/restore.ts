@@ -25,12 +25,12 @@ export default {
         alias: 'b',
         describe: translations.i18n.t('backup_restore_set_backup_name_describe'),
         type: 'string',
-        demandOption: true
+        demandOption: true,
       })
       .option('environment', {
         alias: 'e',
         describe: translations.i18n.t('backup_restore_set_environment_describe'),
         type: 'string',
-        demandOption: true
+        demandOption: true,
       }),
 };
