@@ -319,6 +319,14 @@ export default {
     environment_branch_name_describe: 'Name of new environment',
 
     /**
+     * Environment delete related messages
+     */
+    environment_delete_in_progress: 'Delete environment in progress.',
+    environment_delete_usage: 'COMMAND\\n  8base environment delete\\n\\nDESCRIPTION\\n .',
+    environment_delete_describe: 'Delete environment.',
+    environment_delete_name_describe: 'Name of deleted environment',
+
+    /**
      * Environment set list related messages
      */
     environment_set_select_environment: 'Select environment for current project',
