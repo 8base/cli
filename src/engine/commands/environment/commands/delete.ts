@@ -10,7 +10,7 @@ export default {
     ProjectConfigurationState.expectConfigured(context);
     let { name } = params;
     context.spinner.start(context.i18n.t('environment_delete_in_progress'));
-    await context.request(GraphqlActions.environmentDelete, { environmentName: name });
+    await context.request(GraphqlActions.environmentDelete, { name });
     context.spinner.stop();
   },
 
