@@ -1,7 +1,6 @@
 import * as yargs from 'yargs';
 import * as fs from 'fs-extra';
-
-import { Utils } from '../../../../common/utils';
+import * as yaml from 'js-yaml';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { Interactive } from '../../../../common/interactive';
@@ -105,9 +104,8 @@ export default {
     context.spinner.stop();
 
     let eightBaseConfig: EightBaseConfig;
-
     try {
-      eightBaseConfig = <any>Utils.yamlStringToJson(fs.readFileSync('.8base.yml', 'utf8'));
+      eightBaseConfig = <any>yaml.safeLoad(await fs.readFile('.8base.yml', 'utf8'));
     } catch (err) {
       if (err.code === 'ENOENT') {
         throw new Error(translations.i18n.t('generate_scaffold_project_file_error', { projectFileName: '.8base.yml' }));

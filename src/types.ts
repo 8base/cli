@@ -25,6 +25,7 @@ export type FunctionEvent<Data = {}, OriginalObject = {}, ExtendObject = {}, Err
   originalObject: OriginalObject;
   errors: Error[];
   body?: string;
+  headers: { [key: string]: string | undefined };
 } & ExtendObject;
 
 export type FunctionResult<Data = {}, OriginalObject = {}, ExtendObject = {}, Error = {}> = Promise<

@@ -1,4 +1,3 @@
-import * as YAML from 'js-yaml';
 import * as path from 'path';
 import 'isomorphic-fetch';
 import * as request from 'request';
@@ -14,11 +13,6 @@ import { translations, Translations } from './translations';
 
 const MemoryStream = require('memorystream');
 const streamToBuffer = require('stream-to-buffer');
-
-/* Yaml Parser consts */
-const LINES_DELIMITER = '\n';
-const COMMENT_TOKEN = '$comment';
-const MIDDLE_LINE_COMMENT_TOKEN = '$MLcomment';
 
 type workspace = { name: string; id: string };
 
@@ -189,50 +183,5 @@ export namespace Utils {
         handler: CommandController.wrapHandler(cmd.handler, translations),
       };
     }
-  };
-
-  /* Parses yaml string to JSON while preserving comments */
-  export const yamlStringToJson = (str: string): Object => {
-    const lines = str.split(LINES_DELIMITER);
-    const middle_of_line_comment = /([^\#]+)(\#\s?)(.*)/;
-    const start_of_line_comment = /^([\s]*)(\#\s?)(-?\s?)(.*)/;
-
-    const strWithComments = lines
-      .map((line, index) => {
-        if (line.match(start_of_line_comment)) {
-          return line.replace(start_of_line_comment, `$1$3${COMMENT_TOKEN}${index}: "$4"`);
-        } else if (line.match(middle_of_line_comment)) {
-          return line.replace(middle_of_line_comment, `$1${MIDDLE_LINE_COMMENT_TOKEN} "$3"`);
-        } else {
-          return line;
-        }
-      })
-      .join(LINES_DELIMITER);
-
-    return YAML.safeLoad(strWithComments, { json: true });
-  };
-
-  /* Creates yaml string from JSON while placing comments */
-  export const yamlJsonToString = (jsonObject: Object): string => {
-    const yamlAsString = YAML.safeDump(jsonObject, { indent: 2 });
-
-    /* Catch middle of line comments */
-    const MIDDLE_LINE_PATTERN = `(\\${MIDDLE_LINE_COMMENT_TOKEN})( ")(.*)(")`;
-    const middleLineRegex = new RegExp(MIDDLE_LINE_PATTERN, 'g');
-
-    const COMMENT_KEY_VALUE_PATTERN = `(\\${COMMENT_TOKEN}.*:)( ')(.*)(')`;
-    const commentKeyValueRegex = new RegExp(COMMENT_KEY_VALUE_PATTERN, 'g');
-
-    const SWITCH_SIGNS_PATTERN = `(- )?(\\${COMMENT_TOKEN}\\d*)(: )`;
-    const switchSignsRegex = new RegExp(SWITCH_SIGNS_PATTERN, 'g');
-
-    const COMMENT_TOKEN_TO_SIGN = `\\${COMMENT_TOKEN}\\d*`;
-    const tokenToSignRegex = new RegExp(COMMENT_TOKEN_TO_SIGN, 'g');
-
-    return yamlAsString
-      .replace(commentKeyValueRegex, '$1 $3')
-      .replace(middleLineRegex, '# $3')
-      .replace(switchSignsRegex, '$2 $1')
-      .replace(tokenToSignRegex, '#');
   };
 }
