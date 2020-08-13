@@ -8,7 +8,7 @@ export default {
   describe: translations.i18n.t('backup_describe'),
   builder: function(yargs: yargs.Argv) {
     return yargs.commandDir('commands', {
-      extensions: ['js', 'ts'],
+      extensions: ['js'],
       visit: Utils.commandDirMiddleware(path.join(__dirname, 'commands')),
     });
   },
