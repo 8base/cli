@@ -35,13 +35,46 @@ OPTIONS
   --help, -h     Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`backup,create\`. 1`] = `""`;
+exports[`As a user, I can use help flag for see help information about \`backup,create\`. 1`] = `
+"8base backup create
 
-exports[`As a user, I can use help flag for see help information about \`backup,list\`. 1`] = `""`;
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
 
-exports[`As a user, I can use help flag for see help information about \`backup,restore\`. 1`] = `""`;
+exports[`As a user, I can use help flag for see help information about \`backup,list\`. 1`] = `
+"8base backup list
 
-exports[`As a user, I can use help flag for see help information about \`backup\`. 1`] = `""`;
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`backup,restore\`. 1`] = `
+"8base backup restore [OPTIONS].
+
+OPTIONS
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --backup, -b       The name of the target backup  [string] [required]
+  --environment, -e  Target environment name  [string] [required]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`backup\`. 1`] = `
+"8base backup <command>
+
+Backup commands.
+
+COMMANDS
+  8base backup create   Create backup for environment.
+  8base backup list     List all backups for environment.
+  8base backup restore  Restore environment to backup.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
 
 exports[`As a user, I can use help flag for see help information about \`configure\`. 1`] = `
 "COMMAND
@@ -83,13 +116,48 @@ OPTIONS
   --help, -h   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`environment,branch\`. 1`] = `""`;
+exports[`As a user, I can use help flag for see help information about \`environment,branch\`. 1`] = `
+"COMMAND\\\\n  8base environment branch\\\\n\\\\nDESCRIPTION\\\\n  Create new branch from current environment.
 
-exports[`As a user, I can use help flag for see help information about \`environment,list\`. 1`] = `""`;
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]
+  --name, -n   Name of new environment  [string] [required]
+  --mode, -m   The deploy mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"SYSTEM\\"]"
+`;
 
-exports[`As a user, I can use help flag for see help information about \`environment,set\`. 1`] = `""`;
+exports[`As a user, I can use help flag for see help information about \`environment,list\`. 1`] = `
+"8base environment list
 
-exports[`As a user, I can use help flag for see help information about \`environment\`. 1`] = `""`;
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`environment,set\`. 1`] = `
+"8base environment set
+
+OPTIONS
+  --debug, -d            Turn on debug logs  [boolean]
+  --help, -h             Show help  [boolean]
+  --environmentName, -n  The environment name of the project  [string]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`environment\`. 1`] = `
+"8base environment <command>
+
+Environment commands.
+
+COMMANDS
+  8base environment branch  Branch environment.
+  8base environment delete  Delete environment.
+  8base environment list    List environment in current workspace.
+  8base environment set     Set environment
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
 
 exports[`As a user, I can use help flag for see help information about \`export\`. 1`] = `
 "COMMAND
@@ -323,13 +391,52 @@ OPTIONS
   --tail, -t   Continually stream logs  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`migration,commit\`. 1`] = `""`;
+exports[`As a user, I can use help flag for see help information about \`migration,commit\`. 1`] = `
+"COMMAND\\\\n  8base migration commit\\\\n\\\\nDESCRIPTION\\\\n  Deploys migration in 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.
 
-exports[`As a user, I can use help flag for see help information about \`migration,plan\`. 1`] = `""`;
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
 
-exports[`As a user, I can use help flag for see help information about \`migration,status\`. 1`] = `""`;
+exports[`As a user, I can use help flag for see help information about \`migration,plan\`. 1`] = `
+"COMMAND
+  8base migration plan
 
-exports[`As a user, I can use help flag for see help information about \`migration\`. 1`] = `""`;
+DESCRIPTION
+ Get committed migrations.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`migration,status\`. 1`] = `
+"COMMAND
+  8base migration status
+
+DESCRIPTION
+ Display migration status.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`migration\`. 1`] = `
+"8base migration <command>
+
+Migration commands.
+
+COMMANDS
+  8base migration commit  Migration commit
+  8base migration plan    Get committed migrations
+  8base migration status  Migration status
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
 
 exports[`As a user, I can use help flag for see help information about \`package\`. 1`] = `
 "COMMAND
