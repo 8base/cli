@@ -287,6 +287,23 @@ export default {
     backup_create_in_progress: 'Backup in progress...',
 
     /**
+     * Backup export related messages
+     */
+    environment_backup_export_describe: 'Generate export url for backup.',
+    environment_backup_export_usage: '8base backup export',
+    environment_backup_export_env_name_describe: 'Target environment',
+    environment_backup_export_name_describe: 'Target backup name',
+
+    /**
+     * Backup import related messages
+     */
+    backup_import_in_progress: 'Backup import in progress...',
+    backup_import_describe: 'Enroll external backup to environment.',
+    backup_import_usage: '8base backup import',
+    backup_import_env_name_describe: 'Target environment name.',
+    backup_import_url_describe: 'External backup url.',
+
+    /**
      * Backup list related messages
      */
     backup_list_describe: 'List all backups for environment.',

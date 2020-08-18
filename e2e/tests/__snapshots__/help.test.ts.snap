@@ -68,6 +68,8 @@ Backup commands.
 
 COMMANDS
   8base backup create   Create backup for environment.
+  8base backup export   Generate export url for backup.
+  8base backup import   Enroll external backup to environment.
   8base backup list     List all backups for environment.
   8base backup restore  Restore environment to backup.
 
