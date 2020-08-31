@@ -16,7 +16,7 @@ export type FunctionContext = {
   invokeFunction: <Result = {}, Args = {}>(
     name: string,
     args?: Args,
-    options?: { waitForResponse: boolean },
+    options?: { waitForResponse: boolean; checkPermissions?: boolean },
   ) => Promise<Result>;
 };
 
