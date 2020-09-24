@@ -98,6 +98,10 @@ export class Context {
     this.workspaceConfig = _.merge(currentWorkspaceConfig, value);
   }
 
+  cleanWorkspaceConfig(): void {
+    this.workspaceConfig = { workspaceId: '' };
+  }
+
   createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
     const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
 
@@ -148,6 +152,10 @@ export class Context {
 
   get serverAddress(): string {
     return this.storage.getValue(StorageParameters.serverAddress) || this.config.remoteAddress;
+  }
+
+  get webAddress(): string {
+    return this.storage.getValue(StorageParameters.webAddress) || this.config.webClientAddress;
   }
 
   get storage(): typeof UserDataStorage {

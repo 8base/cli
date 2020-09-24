@@ -37,6 +37,15 @@ export default {
       'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
+
+    /**
+     * Configure region related messages
+     */
+    project_region_describe: 'Configure project region.',
+    project_region_param_describe: '8base project region',
+    select_region: 'Select region',
+    prevent_project_region_select: 'Region selection canceled',
+
     /**
      * Whoami related messages
      */

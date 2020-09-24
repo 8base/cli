@@ -67,7 +67,6 @@ export default {
       })
       .option('w', {
         type: 'string',
-        default: StaticConfig.webClientAddress,
         hidden: true,
       })
       .example(translations.i18n.t('login_browser_example_command'), translations.i18n.t('login_browser_example'))
