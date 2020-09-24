@@ -26,7 +26,7 @@ export default {
         name: 'region',
         type: 'select',
         message: translations.i18n.t('select_region'),
-        choices: [RegionModeType.us, RegionModeType.uk].map((r: any) => ({ title: r, value: r })),
+        choices: AvailableRegions.map((r: any) => ({ title: r, value: r })),
       }));
     }
 
