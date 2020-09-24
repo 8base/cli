@@ -73,6 +73,8 @@ export class CommandController {
         const time = Date.now() - start;
 
         context.logger.error(`Time: ${chalk.hex(Colors.red)(time.toLocaleString('en-US'))} ms.`);
+
+        process.exit(1);
       }
     };
   };

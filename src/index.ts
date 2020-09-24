@@ -16,7 +16,7 @@ const start = (translations: Translations) => {
     .scriptName('8base')
     .usage(translations.i18n.t('8base_usage'))
     .commandDir(StaticConfig.commandsDir, {
-      extensions: ['js', 'ts'],
+      extensions: ['js'],
       recurse: true,
       visit: Utils.commandDirMiddleware(StaticConfig.commandsDir),
     })
@@ -76,3 +76,5 @@ translations
     start(translations);
   })
   .catch(err => console.error(err.message));
+
+export * from './types';
