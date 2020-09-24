@@ -17,18 +17,22 @@ export default {
     ProjectConfigurationState.expectHasProject(context);
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
 
-    const { system } = await context.request(GraphqlActions.migrationPlan);
+    const { system } = await context.request(GraphqlActions.migrationPlan, { tables: params.tables });
     await download(system.ciPlan.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
   },
 
   describe: translations.i18n.t('migration_plan_describe'),
 
-  builder: (args: yargs.Argv): yargs.Argv => args.usage(translations.i18n.t('migration_plan_usage')),
-  // Is not used for now
-  //   .option("dist", {
-  //     alias: 'd',
-  //     describe: translations.i18n.t('migration_plan_dist_describe'),
-  //     type: 'string',
-  //     default: String(DEFAULT_MIGRATIONS_PATH),
-  //   })
+  builder: (args: yargs.Argv): yargs.Argv => args.usage(translations.i18n.t('migration_plan_usage'))
+    .option("dist", {
+      alias: 'd',
+      describe: translations.i18n.t('migration_plan_dist_describe'),
+      type: 'string',
+      default: String(DEFAULT_MIGRATIONS_PATH),
+    })
+    .option("tables", {
+      alias: 't',
+      describe: translations.i18n.t('migration_plan_dist_describe'),
+      type: 'array',
+    })
 };

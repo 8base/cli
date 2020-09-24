@@ -30,8 +30,8 @@ export const GraphqlActions = {
       system { backups: environmentBackupsList { items { name size } } }
     }`,
   migrationPlan: `
-    query MigrationPlan {
-      system { ciPlan { url } }
+    query MigrationPlan($tables: [String!]) {
+      system { ciPlan(tables:$tables) { url } }
     }`,
   migrationStatus: `
     query MigrationStatus {

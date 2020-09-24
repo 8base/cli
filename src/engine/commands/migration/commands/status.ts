@@ -7,12 +7,15 @@ import chalk from 'chalk';
 import { Colors } from '../../../../consts/Colors';
 import { table } from 'table';
 import _ = require('lodash');
+import { executeDeploy } from "../../../../common/execute";
+import { DeployModeType } from "../../../../interfaces/Extensions";
 
 export default {
   command: 'status',
 
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectHasProject(context);
+    await executeDeploy(context, { mode: DeployModeType.migrations });
     const { system } = await context.request(GraphqlActions.migrationStatus);
     const { status, migrations } = system.ciStatus;
     context.logger.info(`${chalk.hex(Colors.green)('Status:')}: '${status}'`);
