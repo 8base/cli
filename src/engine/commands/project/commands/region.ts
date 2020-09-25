@@ -47,7 +47,6 @@ export default {
       UserDataStorage.setValues([{ name: StorageParameters.webAddress, value: StaticConfig.webClientAddress }]);
     }
 
-    await logout.handler();
     context.cleanWorkspaceConfig();
   },
 
