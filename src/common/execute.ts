@@ -79,6 +79,7 @@ export const executeDeploy = async (context: Context, deployOptions: any) => {
   } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
 
   BuildController.clearBuild(context);
+  context.spinner.stop();
 
   if (result.status === AsyncStatus.completeError) {
     let gqlError;
