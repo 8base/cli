@@ -16,9 +16,10 @@ export default {
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectHasProject(context);
     await executeDeploy(context, { mode: DeployModeType.migrations });
+    context.spinner.start(context.i18n.t('migration_status_in_progress'));
     const { system } = await context.request(GraphqlActions.migrationStatus);
     const { status, migrations } = system.ciStatus;
-    context.logger.info(`${chalk.hex(Colors.green)('Status:')}: '${status}'`);
+    context.logger.info(`${chalk.hex(Colors.green)('Status:')}: ${status}`);
     if (migrations && !_.isEmpty(migrations))
       context.logger.info(table([['migrations'], ...migrations.map((m: any) => [m])]));
   },

@@ -381,6 +381,7 @@ export default {
      */
     migration_status_describe: 'Migration status',
     migration_status_usage: 'COMMAND\n  8base migration status\n\nDESCRIPTION\n Display migration status.',
+    migration_status_in_progress: 'Resolve status...',
 
     /**
      * Migration apply related messages
