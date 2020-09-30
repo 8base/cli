@@ -375,6 +375,7 @@ export default {
     migration_plan_dist_describe: 'The folder of migrations',
     migration_plan_usage: 'COMMAND\n  8base migration plan\n\nDESCRIPTION\n Get committed migrations.',
     migration_plan_describe: 'Get committed migrations',
+    migration_plan_in_progress: 'Migration plan in progress...',
 
     /**
      * Migration status related messages

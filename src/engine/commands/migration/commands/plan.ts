@@ -15,9 +15,11 @@ export default {
 
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectHasProject(context);
+    context.spinner.start(context.i18n.t('migration_plan_in_progress'));
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
     const { system } = await context.request(GraphqlActions.migrationPlan, { tables: params.tables });
     await download(system.ciPlan.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
+    context.spinner.stop();
   },
 
   describe: translations.i18n.t('migration_plan_describe'),
