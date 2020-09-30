@@ -409,8 +409,10 @@ DESCRIPTION
  Get committed migrations.
 
 OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
+  --debug, -d   Turn on debug logs  [boolean]
+  --help, -h    Show help  [boolean]
+  --dist        The folder of migrations  [string] [default: \\"./migrations\\"]
+  --tables, -t  The folder of migrations  [array]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`migration,status\`. 1`] = `
