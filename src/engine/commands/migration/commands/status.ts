@@ -19,6 +19,7 @@ export default {
     context.spinner.start(context.i18n.t('migration_status_in_progress'));
     const { system } = await context.request(GraphqlActions.migrationStatus);
     const { status, migrations } = system.ciStatus;
+    context.spinner.stop();
     context.logger.info(`${chalk.hex(Colors.green)('Status:')}: ${status}`);
     if (migrations && !_.isEmpty(migrations))
       context.logger.info(table([['migrations'], ...migrations.map((m: any) => [m])]));
