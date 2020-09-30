@@ -24,15 +24,17 @@ export default {
 
   describe: translations.i18n.t('migration_plan_describe'),
 
-  builder: (args: yargs.Argv): yargs.Argv => args.usage(translations.i18n.t('migration_plan_usage'))
-    .option("dist", {
-      describe: translations.i18n.t('migration_plan_dist_describe'),
-      type: 'string',
-      default: String(DEFAULT_MIGRATIONS_PATH),
-    })
-    .option("tables", {
-      alias: 't',
-      describe: translations.i18n.t('migration_plan_dist_describe'),
-      type: 'array',
-    })
+  builder: (args: yargs.Argv): yargs.Argv =>
+    args
+      .usage(translations.i18n.t('migration_plan_usage'))
+      .option('dist', {
+        describe: translations.i18n.t('migration_plan_dist_describe'),
+        type: 'string',
+        default: String(DEFAULT_MIGRATIONS_PATH),
+      })
+      .option('tables', {
+        alias: 't',
+        describe: translations.i18n.t('migration_plan_dist_describe'),
+        type: 'array',
+      }),
 };
