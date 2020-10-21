@@ -418,7 +418,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'migr
   8base migration commit
 
 DESCRIPTION
-  Deploys migration in 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.
+  Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
