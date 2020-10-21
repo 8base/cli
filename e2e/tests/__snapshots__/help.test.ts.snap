@@ -404,9 +404,9 @@ exports[`As a user, I can use help flag for see help information about \`[ 'migr
 Migration commands.
 
 COMMANDS
-  8base migration commit  Migration commit
-  8base migration plan    Get committed migrations
-  8base migration status  Migration status
+  8base migration commit    Migration commit
+  8base migration generate  Get committed migrations
+  8base migration status    Migration status
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
@@ -421,23 +421,25 @@ DESCRIPTION
   Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.
 
 OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]
-  --mode, -m   Commit mode.  [string] [choices: \\"FULL\\", \\"ONLY_MIGRATIONS\\", \\"ONLY_PROJECT\\"] [default: \\"ONLY_MIGRATIONS\\"]"
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --mode, -m         Commit mode.  [string] [choices: \\"FULL\\", \\"ONLY_MIGRATIONS\\", \\"ONLY_PROJECT\\"] [default: \\"ONLY_MIGRATIONS\\"]
+  --environment, -e  Specify the environment you want to commit.  [string]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'plan' ]\`. 1`] = `
-"COMMAND
-  8base migration plan
+"8base migration <command>
 
-DESCRIPTION
- Get committed migrations.
+Migration commands.
+
+COMMANDS
+  8base migration commit    Migration commit
+  8base migration generate  Get committed migrations
+  8base migration status    Migration status
 
 OPTIONS
-  --debug, -d   Turn on debug logs  [boolean]
-  --help, -h    Show help  [boolean]
-  --dist        The folder of migrations  [string] [default: \\"./migrations\\"]
-  --tables, -t  The folder of migrations  [array]"
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'status' ]\`. 1`] = `

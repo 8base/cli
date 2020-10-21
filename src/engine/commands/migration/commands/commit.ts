@@ -21,16 +21,27 @@ export default {
         ? await uploadProject(context)
         : { buildName: null };
 
-    await executeAsync(context, GraphqlAsyncActions.commit, { mode: params.mode, build: buildName });
+    await executeAsync(context, GraphqlAsyncActions.commit, {
+      environment: params.environment,
+      mode: params.mode,
+      build: buildName,
+    });
     context.spinner.stop();
   },
   describe: translations.i18n.t('migration_commit_describe'),
   builder: (args: yargs.Argv): yargs.Argv =>
-    args.usage(translations.i18n.t('migration_commit_usage')).option('mode', {
-      alias: 'm',
-      describe: translations.i18n.t('migration_commit_mode_describe'),
-      default: CommitMode.ONLY_MIGRATIONS,
-      type: 'string',
-      choices: Object.values(CommitMode),
-    }),
+    args
+      .usage(translations.i18n.t('migration_commit_usage'))
+      .option('mode', {
+        alias: 'm',
+        describe: translations.i18n.t('migration_commit_mode_describe'),
+        default: CommitMode.ONLY_MIGRATIONS,
+        type: 'string',
+        choices: Object.values(CommitMode),
+      })
+      .option('environment', {
+        alias: 'e',
+        describe: translations.i18n.t('migration_environment_describe'),
+        type: 'string',
+      }),
 };

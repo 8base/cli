@@ -364,6 +364,7 @@ export default {
     migration_commit_usage:
       "COMMAND\n  8base migration commit\n\nDESCRIPTION\n  Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.",
     migration_commit_mode_describe: 'Commit mode.',
+    migration_environment_describe: 'Specify the environment you want to commit.',
 
     /**
      * Migration deploy related messages
@@ -373,10 +374,10 @@ export default {
     /**
      * Migration plan related messages
      */
-    migration_plan_dist_describe: 'The folder of migrations',
-    migration_plan_usage: 'COMMAND\n  8base migration plan\n\nDESCRIPTION\n Get committed migrations.',
-    migration_plan_describe: 'Get committed migrations',
-    migration_plan_in_progress: 'Migration plan in progress...',
+    migration_generate_dist_describe: 'The folder of migrations',
+    migration_generate_usage: 'COMMAND\n  8base migration plan\n\nDESCRIPTION\n Get committed migrations.',
+    migration_generate_describe: 'Get committed migrations',
+    migration_generate_in_progress: 'Migration plan in progress...',
 
     /**
      * Migration status related messages
