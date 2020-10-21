@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`As a user, I can use help flag for see help information about \`\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ '' ]\`. 1`] = `
 "DESCRIPTION
   The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.
 
@@ -35,33 +35,7 @@ OPTIONS
   --help, -h     Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`backup,create\`. 1`] = `
-"8base backup create
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`backup,list\`. 1`] = `
-"8base backup list
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`backup,restore\`. 1`] = `
-"8base backup restore [OPTIONS].
-
-OPTIONS
-  --debug, -d        Turn on debug logs  [boolean]
-  --help, -h         Show help  [boolean]
-  --backup, -b       The name of the target backup  [string] [required]
-  --environment, -e  Target environment name  [string] [required]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`backup\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'backup' ]\`. 1`] = `
 "8base backup <command>
 
 Backup commands.
@@ -78,7 +52,33 @@ OPTIONS
   --help, -h   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`configure\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'backup', 'create' ]\`. 1`] = `
+"8base backup create
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'backup', 'list' ]\`. 1`] = `
+"8base backup list
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'backup', 'restore' ]\`. 1`] = `
+"8base backup restore [OPTIONS].
+
+OPTIONS
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --backup, -b       The name of the target backup  [string] [required]
+  --environment, -e  Target environment name  [string] [required]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'configure' ]\`. 1`] = `
 "COMMAND
   8base configure [OPTIONS]
 
@@ -91,7 +91,7 @@ OPTIONS
   --workspaceId, -w  The workspace ID of the project  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`deploy\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'deploy' ]\`. 1`] = `
 "COMMAND
   8base deploy [OPTIONS]
 
@@ -106,7 +106,7 @@ OPTIONS
   --mode, -m       The deploy mode  [string] [choices: \\"FULL\\", \\"ONLY_PLUGINS\\", \\"ONLY_PROJECT\\", \\"FUNCTIONS\\", \\"MIGRATIONS\\"] [default: \\"ONLY_PROJECT\\"]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`describe\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'describe' ]\`. 1`] = `
 "COMMAND
   8base describe [OPTIONS]
 
@@ -118,34 +118,7 @@ OPTIONS
   --help, -h   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`environment,branch\`. 1`] = `
-"COMMAND\\\\n  8base environment branch\\\\n\\\\nDESCRIPTION\\\\n  Create new branch from current environment.
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]
-  --name, -n   Name of new environment  [string] [required]
-  --mode, -m   The deploy mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"SYSTEM\\"]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`environment,list\`. 1`] = `
-"8base environment list
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`environment,set\`. 1`] = `
-"8base environment set
-
-OPTIONS
-  --debug, -d            Turn on debug logs  [boolean]
-  --help, -h             Show help  [boolean]
-  --environmentName, -n  The environment name of the project  [string]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`environment\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'environment' ]\`. 1`] = `
 "8base environment <command>
 
 Environment commands.
@@ -155,13 +128,45 @@ COMMANDS
   8base environment delete  Delete environment.
   8base environment list    List environment in current workspace.
   8base environment set     Set environment
+  8base environment show    Display the info about current project.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
   --help, -h   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`export\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'environment', 'branch' ]\`. 1`] = `
+"COMMAND
+  8base environment branch
+
+DESCRIPTION
+  Create new branch from current environment.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]
+  --name, -n   Name of new environment  [string] [required]
+  --mode, -m   The deploy mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"SYSTEM\\"]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'environment', 'list' ]\`. 1`] = `
+"8base environment list
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'environment', 'set' ]\`. 1`] = `
+"8base environment set
+
+OPTIONS
+  --debug, -d            Turn on debug logs  [boolean]
+  --help, -h             Show help  [boolean]
+  --environmentName, -n  The environment name of the project  [string]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'export' ]\`. 1`] = `
 "COMMAND
   8base export [OPTIONS]
 
@@ -175,83 +180,7 @@ OPTIONS
   --workspace, -w  Custom workspace id  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`generate,app\`. 1`] = `
-"8base generate app [PROJECT_NAME]
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`generate,mock\`. 1`] = `
-"Generator for a mock for the function.
-
-OPTIONS
-  --debug, -d     Turn on debug logs  [boolean]
-  --help, -h      Show help  [boolean]
-  --silent        Disable printing extra info to the console  [boolean] [default: false]
-  --mockName, -m  Name of the mock request  [string] [default: \\"request\\"]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`generate,resolver\`. 1`] = `
-"8base generate resolver [FUNCTION_NAME] [OPTIONS]
-
-OPTIONS
-  --debug, -d   Turn on debug logs  [boolean]
-  --help, -h    Show help  [boolean]
-  --mocks, -x   Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
-  --silent      Disable printing extra info to the console  [boolean] [default: false]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`generate,scaffold\`. 1`] = `
-"8base generate scaffold [TABLE_NAME] [OPTIONS]
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]
-  --depth      Depth of the generated query  [number] [default: 1]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`generate,task\`. 1`] = `
-"8base generate task [FUNCTION_NAME] [OPTIONS]
-
-OPTIONS
-  --debug, -d        Turn on debug logs  [boolean]
-  --help, -h         Show help  [boolean]
-  --schedule, --sch  Schedule on which the task runs  [string]
-  --mocks, -x        Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
-  --silent           Disable printing extra info to the console  [boolean] [default: false]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`generate,trigger\`. 1`] = `
-"8base generate trigger [FUNCTION_NAME] [OPTIONS]
-
-OPTIONS
-  --debug, -d      Turn on debug logs  [boolean]
-  --help, -h       Show help  [boolean]
-  --type, -t       The trigger type  [string] [choices: \\"before\\", \\"after\\"]
-  --operation, -o  Operation that invokes the trigger  [string]
-  --mocks, -x      Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
-  --silent         Disable printing extra info to the console  [boolean] [default: false]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`generate,webhook\`. 1`] = `
-"8base generate webhook [FUNCTION_NAME] [OPTIONS]
-
-OPTIONS
-  --debug, -d   Turn on debug logs  [boolean]
-  --help, -h    Show help  [boolean]
-  --path, -p    Path for the url (https:<endpoint>/<path>)  [string]
-  --method, -m  HTTP verb to invoke the function  [string] [choices: \\"POST\\", \\"GET\\", \\"DELETE\\", \\"PUT\\"]
-  --mocks, -x   Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
-  --silent      Disable printing extra info to the console  [boolean] [default: false]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`generate\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'generate' ]\`. 1`] = `
 "8base generate <command>
 
 Generator for server and client side resources
@@ -271,7 +200,83 @@ OPTIONS
   --help, -h   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`import\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'app' ]\`. 1`] = `
+"8base generate app [PROJECT_NAME]
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'mock' ]\`. 1`] = `
+"Generator for a mock for the function.
+
+OPTIONS
+  --debug, -d     Turn on debug logs  [boolean]
+  --help, -h      Show help  [boolean]
+  --silent        Disable printing extra info to the console  [boolean] [default: false]
+  --mockName, -m  Name of the mock request  [string] [default: \\"request\\"]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'resolver' ]\`. 1`] = `
+"8base generate resolver [FUNCTION_NAME] [OPTIONS]
+
+OPTIONS
+  --debug, -d   Turn on debug logs  [boolean]
+  --help, -h    Show help  [boolean]
+  --mocks, -x   Included mocks dir and files  [boolean] [default: true]
+  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent      Disable printing extra info to the console  [boolean] [default: false]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'scaffold' ]\`. 1`] = `
+"8base generate scaffold [TABLE_NAME] [OPTIONS]
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]
+  --depth      Depth of the generated query  [number] [default: 1]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'task' ]\`. 1`] = `
+"8base generate task [FUNCTION_NAME] [OPTIONS]
+
+OPTIONS
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --schedule, --sch  Schedule on which the task runs  [string]
+  --mocks, -x        Included mocks dir and files  [boolean] [default: true]
+  --syntax, -s       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent           Disable printing extra info to the console  [boolean] [default: false]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'trigger' ]\`. 1`] = `
+"8base generate trigger [FUNCTION_NAME] [OPTIONS]
+
+OPTIONS
+  --debug, -d      Turn on debug logs  [boolean]
+  --help, -h       Show help  [boolean]
+  --type, -t       The trigger type  [string] [choices: \\"before\\", \\"after\\"]
+  --operation, -o  Operation that invokes the trigger  [string]
+  --mocks, -x      Included mocks dir and files  [boolean] [default: true]
+  --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent         Disable printing extra info to the console  [boolean] [default: false]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'webhook' ]\`. 1`] = `
+"8base generate webhook [FUNCTION_NAME] [OPTIONS]
+
+OPTIONS
+  --debug, -d   Turn on debug logs  [boolean]
+  --help, -h    Show help  [boolean]
+  --path, -p    Path for the url (https:<endpoint>/<path>)  [string]
+  --method, -m  HTTP verb to invoke the function  [string] [choices: \\"POST\\", \\"GET\\", \\"DELETE\\", \\"PUT\\"]
+  --mocks, -x   Included mocks dir and files  [boolean] [default: true]
+  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
+  --silent      Disable printing extra info to the console  [boolean] [default: false]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'import' ]\`. 1`] = `
 "COMMAND
   8base import [OPTIONS]
 
@@ -287,7 +292,7 @@ OPTIONS
   --workspace, -w  Custom workspace id  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`init\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'init' ]\`. 1`] = `
 "COMMAND
   8base init [OPTIONS]
 
@@ -309,7 +314,7 @@ EXAMPLES
   8base init my-project  Creates new folder for initialized project"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`invoke\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'invoke' ]\`. 1`] = `
 "COMMAND
   8base invoke [name] [OPTIONS]
 
@@ -327,7 +332,7 @@ OPTIONS
   --mock, -m       Name of the mock request  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`invoke\`. 2`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'invoke' ]\`. 2`] = `
 "COMMAND
   8base invoke [name] [OPTIONS]
 
@@ -345,7 +350,7 @@ OPTIONS
   --mock, -m       Name of the mock request  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`login\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'login' ]\`. 1`] = `
 "COMMAND
   8base login [OPTIONS]
 
@@ -364,7 +369,7 @@ EXAMPLES
   8base login -e my@email.com -p S3cretP@ssw0rd"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`logout\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'logout' ]\`. 1`] = `
 "COMMAND
   8base logout [OPTIONS]
 
@@ -376,7 +381,7 @@ OPTIONS
   --help, -h   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`logs\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'logs' ]\`. 1`] = `
 "COMMAND
   8base logs [name] [OPTIONS]
 
@@ -393,41 +398,7 @@ OPTIONS
   --tail, -t   Continually stream logs  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`migration,commit\`. 1`] = `
-"COMMAND\\\\n  8base migration commit\\\\n\\\\nDESCRIPTION\\\\n  Deploys migration in 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`migration,plan\`. 1`] = `
-"COMMAND
-  8base migration plan
-
-DESCRIPTION
- Get committed migrations.
-
-OPTIONS
-  --debug, -d   Turn on debug logs  [boolean]
-  --help, -h    Show help  [boolean]
-  --dist        The folder of migrations  [string] [default: \\"./migrations\\"]
-  --tables, -t  The folder of migrations  [array]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`migration,status\`. 1`] = `
-"COMMAND
-  8base migration status
-
-DESCRIPTION
- Display migration status.
-
-OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`migration\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'migration' ]\`. 1`] = `
 "8base migration <command>
 
 Migration commands.
@@ -442,7 +413,46 @@ OPTIONS
   --help, -h   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`package\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'commit' ]\`. 1`] = `
+"COMMAND
+  8base migration commit
+
+DESCRIPTION
+  Deploys migration in 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]
+  --mode, -m   Commit mode.  [string] [choices: \\"FULL\\", \\"ONLY_MIGRATIONS\\", \\"ONLY_PROJECT\\"] [default: \\"ONLY_MIGRATIONS\\"]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'plan' ]\`. 1`] = `
+"COMMAND
+  8base migration plan
+
+DESCRIPTION
+ Get committed migrations.
+
+OPTIONS
+  --debug, -d   Turn on debug logs  [boolean]
+  --help, -h    Show help  [boolean]
+  --dist        The folder of migrations  [string] [default: \\"./migrations\\"]
+  --tables, -t  The folder of migrations  [array]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'status' ]\`. 1`] = `
+"COMMAND
+  8base migration status
+
+DESCRIPTION
+ Display migration status.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'package' ]\`. 1`] = `
 "COMMAND
   8base package [OPTIONS]
 

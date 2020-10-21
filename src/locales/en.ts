@@ -331,7 +331,7 @@ export default {
      */
     environment_branch_in_progress: 'Branch environment in progress.',
     environment_branch_usage:
-      'COMMAND\\n  8base environment branch\\n\\nDESCRIPTION\\n  Create new branch from current environment.',
+      'COMMAND\n  8base environment branch\n\nDESCRIPTION\n  Create new branch from current environment.',
     environment_branch_describe: 'Branch environment.',
     environment_branch_name_describe: 'Name of new environment',
 
@@ -339,7 +339,7 @@ export default {
      * Environment delete related messages
      */
     environment_delete_in_progress: 'Delete environment in progress.',
-    environment_delete_usage: 'COMMAND\\n  8base environment delete\\n\\nDESCRIPTION\\n .',
+    environment_delete_usage: 'COMMAND\n  8base environment delete\n\nDESCRIPTION\n .',
     environment_delete_describe: 'Delete environment.',
     environment_delete_name_describe: 'Name of deleted environment',
 
@@ -362,7 +362,8 @@ export default {
     migration_commit_in_progress: 'Migration commit in progress',
     migration_commit_describe: 'Migration commit',
     migration_commit_usage:
-      "COMMAND\\n  8base migration commit\\n\\nDESCRIPTION\\n  Deploys migration in 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.",
+      "COMMAND\n  8base migration commit\n\nDESCRIPTION\n  Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.",
+    migration_commit_mode_describe: 'Commit mode.',
 
     /**
      * Migration deploy related messages

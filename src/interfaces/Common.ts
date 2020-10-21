@@ -14,3 +14,9 @@ export enum MigrateMode {
   FULL = 'FULL',
   SYSTEM = 'SYSTEM',
 }
+
+export enum CommitMode {
+  FULL = 'FULL',
+  ONLY_MIGRATIONS = 'ONLY_MIGRATIONS',
+  ONLY_PROJECT = 'ONLY_PROJECT',
+}

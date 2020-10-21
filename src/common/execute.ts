@@ -41,7 +41,23 @@ export const executeAsync = async (
     }
     throw gqlError;
   }
+
+  if (result.message) {
+    context.logger.debug(result.message);
+  }
 };
+
+export const uploadProject = async (context: Context): Promise<{ buildName: string }> => {
+  const buildDir = await BuildController.package(context);
+  context.logger.debug(`build dir: ${buildDir}`);
+
+  const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy);
+
+  await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
+  context.logger.debug('upload source code complete');
+  return { buildName: prepareDeploy.buildName };
+};
+
 export const executeDeploy = async (context: Context, deployOptions: any) => {
   context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload' }));
 

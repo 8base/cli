@@ -30,8 +30,12 @@ export const GraphqlActions = {
       system { backups: environmentBackupsList { items { name size } } }
     }`,
   migrationPlan: `
-    query MigrationPlan($tables: [String!]) {
-      system { ciPlan(tables:$tables) { url } }
+    query MigrationPlan($tables: [String!] $sourceEnvironment: String $targetEnvironment: String) {
+      system { ciPlan(
+        tables:$tables
+        sourceEnvironmentId: $sourceEnvironment
+        targetEnvironmentId: $targetEnvironment
+        ) { url } }
     }`,
   migrationStatus: `
     query MigrationStatus {
@@ -118,8 +122,8 @@ export const GraphqlAsyncActions = {
       system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
     }`,
   commit: `
-    mutation CommitMigration {
-      system { async: ciCommit { sessionId } }
+    mutation CommitMigration($mode: SystemCiCommitMode! $build:String) {
+      system { async: ciCommit(mode:$mode build:$build) { sessionId } }
     }
   `,
   backupCreate: `
