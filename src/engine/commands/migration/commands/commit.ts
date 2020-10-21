@@ -53,7 +53,7 @@ export default {
       .option('mode', {
         alias: 'm',
         describe: translations.i18n.t('migration_commit_mode_describe'),
-        default: CommitMode.ONLY_MIGRATIONS,
+        default: CommitMode.FULL,
         type: 'string',
         choices: Object.values(CommitMode),
       })
