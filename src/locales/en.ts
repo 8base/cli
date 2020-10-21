@@ -364,7 +364,11 @@ export default {
     migration_commit_usage:
       "COMMAND\n  8base migration commit\n\nDESCRIPTION\n  Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.",
     migration_commit_mode_describe: 'Commit mode.',
+    migration_commit_dest_env_master: 'Environment you want to commit is Master. Are you sure you want to continue?',
+    migration_commit_canceled: 'Commit canceled',
+
     migration_environment_describe: 'Specify the environment you want to commit.',
+    migration_force_describe: 'You can specify force flag to commit to master without prompt.',
 
     /**
      * Migration deploy related messages

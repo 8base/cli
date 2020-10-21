@@ -4,7 +4,6 @@ import { translations } from '../../../../common/translations';
 import { GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { executeAsync } from '../../../../common/execute';
-import { DeployModeType } from '../../../../interfaces/Extensions';
 import { MigrateMode } from '../../../../interfaces/Common';
 
 export default {
@@ -15,6 +14,8 @@ export default {
     context.spinner.start(context.i18n.t('environment_branch_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.environmentBranch, { environmentName: name, mode });
     context.spinner.stop();
+
+    context.updateWorkspaceConfig({ environmentName: name });
   },
 
   describe: translations.i18n.t('environment_branch_describe'),

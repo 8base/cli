@@ -3,6 +3,7 @@ import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
+import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 
 export default {
   command: 'delete',
@@ -12,6 +13,8 @@ export default {
     context.spinner.start(context.i18n.t('environment_delete_in_progress'));
     await context.request(GraphqlActions.environmentDelete, { name });
     context.spinner.stop();
+
+    context.updateWorkspaceConfig({ environmentName: DEFAULT_ENVIRONMENT_NAME });
   },
 
   describe: translations.i18n.t('environment_delete_describe'),
