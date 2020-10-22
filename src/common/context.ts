@@ -240,11 +240,12 @@ export class Context {
       customWorkspaceId: undefined,
       customEnvironment: undefined,
     };
-    const { customEnvironment, customWorkspaceId, isLoginRequired } =
-      {
-        ...DefaultOptions,
-        ...options,
-      } || DefaultOptions;
+    const { customEnvironment, customWorkspaceId, isLoginRequired } = options
+      ? {
+          ...DefaultOptions,
+          ...options,
+        }
+      : DefaultOptions;
 
     const remoteAddress = this.serverAddress;
     this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress }));

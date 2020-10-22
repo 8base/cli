@@ -5,7 +5,7 @@ import { GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { DeployModeType } from '../../../../interfaces/Extensions';
 import * as yargs from 'yargs';
-import { CommitMode, MigrateMode } from '../../../../interfaces/Common';
+import { CommitMode, MigrateMode, RequestOptions } from '../../../../interfaces/Common';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 import { Interactive } from '../../../../common/interactive';
 
@@ -30,13 +30,14 @@ export default {
       }
     }
 
-    await executeDeploy(context, { mode: DeployModeType.migrations }, { customEnvironment: environment });
+    const options: RequestOptions = { customEnvironment: environment };
+    await executeDeploy(context, { mode: DeployModeType.migrations }, options);
 
     context.spinner.start(context.i18n.t('migration_commit_in_progress'));
 
     const { buildName } =
-      params.mode === CommitMode.ONLY_MIGRATIONS || params.mode === CommitMode.FULL
-        ? await uploadProject(context)
+      params.mode === CommitMode.ONLY_PROJECT || params.mode === CommitMode.FULL
+        ? await uploadProject(context, options)
         : { buildName: null };
 
     await executeAsync(

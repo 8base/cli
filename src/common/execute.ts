@@ -56,11 +56,11 @@ export const executeAsync = async (
   }
 };
 
-export const uploadProject = async (context: Context): Promise<{ buildName: string }> => {
+export const uploadProject = async (context: Context, options?: RequestOptions): Promise<{ buildName: string }> => {
   const buildDir = await BuildController.package(context);
   context.logger.debug(`build dir: ${buildDir}`);
 
-  const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy);
+  const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy, {}, options);
 
   await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
   context.logger.debug('upload source code complete');
