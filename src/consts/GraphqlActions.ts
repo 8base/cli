@@ -118,8 +118,8 @@ export const GraphqlAsyncActions = {
       system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
     }`,
   commit: `
-    mutation CommitMigration($mode: SystemCiCommitMode! $build:String $environment: String) {
-      system { async: ciCommit(mode:$mode build:$build environment: $environment) { sessionId } }
+    mutation CommitMigration($mode: SystemCiCommitMode! $build:String) {
+      system { async: ciCommit(mode:$mode build:$build) { sessionId } }
     }
   `,
   backupCreate: `
