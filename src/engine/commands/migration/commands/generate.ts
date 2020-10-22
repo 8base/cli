@@ -34,7 +34,7 @@ export default {
       })
       .option('tables', {
         alias: 't',
-        describe: translations.i18n.t('migration_generate_dist_describe'),
+        describe: translations.i18n.t('migration_generate_tables_describe'),
         type: 'array',
       }),
 };

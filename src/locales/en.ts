@@ -379,6 +379,7 @@ export default {
      * Migration plan related messages
      */
     migration_generate_dist_describe: 'The folder of migrations',
+    migration_generate_tables_describe: 'Specify table names to generate migrations for data.',
     migration_generate_usage: 'COMMAND\n  8base migration plan\n\nDESCRIPTION\n Get committed migrations.',
     migration_generate_describe: 'Get committed migrations',
     migration_generate_in_progress: 'Migration plan in progress...',
