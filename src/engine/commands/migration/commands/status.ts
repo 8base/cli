@@ -15,9 +15,13 @@ export default {
 
   handler: async (params: any, context: Context) => {
     ProjectConfigurationState.expectHasProject(context);
-    await executeDeploy(context, { mode: DeployModeType.migrations });
+    await executeDeploy(context, { mode: DeployModeType.migrations }, { customEnvironment: params.environment });
     context.spinner.start(context.i18n.t('migration_status_in_progress'));
-    const { system } = await context.request(GraphqlActions.migrationStatus);
+    const { system } = await context.request(
+      GraphqlActions.migrationStatus,
+      {},
+      { customEnvironment: params.environment },
+    );
     const { status, migrations } = system.ciStatus;
     context.spinner.stop();
     context.logger.info(`${chalk.hex(Colors.green)('Status:')}: ${status}`);
@@ -27,5 +31,10 @@ export default {
 
   describe: translations.i18n.t('migration_status_describe'),
 
-  builder: (args: yargs.Argv): yargs.Argv => args.usage(translations.i18n.t('migration_status_usage')),
+  builder: (args: yargs.Argv): yargs.Argv =>
+    args.usage(translations.i18n.t('migration_status_usage')).option('environment', {
+      alias: 'e',
+      describe: translations.i18n.t('migration_status_environment_describe'),
+      type: 'string',
+    }),
 };

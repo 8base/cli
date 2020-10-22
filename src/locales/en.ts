@@ -380,6 +380,7 @@ export default {
      */
     migration_generate_dist_describe: 'The folder of migrations',
     migration_generate_tables_describe: 'Specify table names to generate migrations for data.',
+    migration_generate_environment_describe: `Target environment`,
     migration_generate_usage: 'COMMAND\n  8base migration plan\n\nDESCRIPTION\n Get committed migrations.',
     migration_generate_describe: 'Get committed migrations',
     migration_generate_in_progress: 'Migration plan in progress...',
@@ -390,7 +391,14 @@ export default {
     migration_status_describe: 'Migration status',
     migration_status_usage: 'COMMAND\n  8base migration status\n\nDESCRIPTION\n Display migration status.',
     migration_status_in_progress: 'Resolve status...',
+    migration_status_environment_describe: 'Target environment',
 
+    /**
+     * Migration status related messages
+     */
+    environment_show_usage: 'COMMAND\n  8base environment show\n\nDESCRIPTION\n Display current environment.',
+    environment_show_describe: '',
+    environment_show_text: 'Environment: {{-environment}}',
     /**
      * Migration apply related messages
      */

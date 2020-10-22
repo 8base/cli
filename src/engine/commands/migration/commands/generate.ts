@@ -17,7 +17,11 @@ export default {
     ProjectConfigurationState.expectHasProject(context);
     context.spinner.start(context.i18n.t('migration_generate_in_progress'));
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
-    const { system } = await context.request(GraphqlActions.migrationGenerate, { tables: params.tables });
+    const { system } = await context.request(
+      GraphqlActions.migrationGenerate,
+      { tables: params.tables },
+      { customEnvironment: params.environment },
+    );
     await download(system.ciGenerate.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
     context.spinner.stop();
   },
@@ -36,5 +40,10 @@ export default {
         alias: 't',
         describe: translations.i18n.t('migration_generate_tables_describe'),
         type: 'array',
+      })
+      .option('environment', {
+        alias: 'e',
+        describe: translations.i18n.t('migration_generate_environment_describe'),
+        type: 'string',
       }),
 };

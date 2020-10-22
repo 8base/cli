@@ -18,7 +18,7 @@ export default {
     );
   },
 
-  describe: translations.i18n.t('project_info_describe'),
+  describe: translations.i18n.t('environment_show_describe'),
 
-  builder: (args: yargs.Argv): yargs.Argv => args.usage(translations.i18n.t('project_info_usage')),
+  builder: (args: yargs.Argv): yargs.Argv => args.usage(translations.i18n.t('environment_show_usage')),
 };

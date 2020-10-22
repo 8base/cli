@@ -3,21 +3,30 @@ import { Utils } from './utils';
 import { AsyncStatus } from '../consts/AsyncStatus';
 import { BuildController } from '../engine/controllers/buildController';
 import { Context } from './context';
+import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
+import { RequestOptions } from '../interfaces/Common';
 
 export const executeAsync = async (
   context: Context,
   query: GraphqlAsyncActionsType,
   variables: { [key: string]: any } = {},
+  options?: RequestOptions,
 ) => {
   const {
     system: {
       async: { sessionId },
     },
-  } = await context.request(query, variables);
+  } = await context.request(query, variables, options);
 
   let result;
   do {
-    result = (await context.request(GraphqlActions.asyncSessionStatus, { sessionId }, true, undefined, false)).status;
+    result = (
+      await context.request(
+        GraphqlActions.asyncSessionStatus,
+        { sessionId },
+        { customEnvironment: DEFAULT_ENVIRONMENT_NAME },
+      )
+    ).status;
 
     context.logger.debug(result);
     await Utils.sleep(2000);
@@ -58,13 +67,13 @@ export const uploadProject = async (context: Context): Promise<{ buildName: stri
   return { buildName: prepareDeploy.buildName };
 };
 
-export const executeDeploy = async (context: Context, deployOptions: any) => {
+export const executeDeploy = async (context: Context, deployOptions: any, options?: RequestOptions) => {
   context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload' }));
 
   const buildDir = await BuildController.package(context);
   context.logger.debug(`build dir: ${buildDir}`);
 
-  const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy);
+  const { prepareDeploy } = await context.request(GraphqlActions.prepareDeploy, null, options);
 
   await Utils.upload(prepareDeploy.uploadMetaDataUrl, buildDir.meta, context);
   context.logger.debug('upload meta data complete');
@@ -72,9 +81,11 @@ export const executeDeploy = async (context: Context, deployOptions: any) => {
   await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
   context.logger.debug('upload source code complete');
 
-  await context.request(GraphqlActions.deploy, {
-    data: { buildName: prepareDeploy.buildName, options: deployOptions },
-  });
+  await context.request(
+    GraphqlActions.deploy,
+    { data: { buildName: prepareDeploy.buildName, options: deployOptions } },
+    options,
+  );
 
   let result;
   do {

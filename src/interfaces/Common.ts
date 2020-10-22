@@ -20,3 +20,9 @@ export enum CommitMode {
   ONLY_MIGRATIONS = 'ONLY_MIGRATIONS',
   ONLY_PROJECT = 'ONLY_PROJECT',
 }
+
+export interface RequestOptions {
+  readonly isLoginRequired?: boolean;
+  readonly customWorkspaceId?: string;
+  readonly customEnvironment?: string;
+}

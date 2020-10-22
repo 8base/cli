@@ -30,7 +30,7 @@ export default {
       }
     }
 
-    await executeDeploy(context, { mode: DeployModeType.migrations });
+    await executeDeploy(context, { mode: DeployModeType.migrations }, { customEnvironment: environment });
 
     context.spinner.start(context.i18n.t('migration_commit_in_progress'));
 
@@ -39,11 +39,13 @@ export default {
         ? await uploadProject(context)
         : { buildName: null };
 
-    await executeAsync(context, GraphqlAsyncActions.commit, {
-      environment: params.environment,
-      mode: params.mode,
-      build: buildName,
-    });
+    await executeAsync(
+      context,
+      GraphqlAsyncActions.commit,
+      { mode: params.mode, build: buildName },
+      { customEnvironment: environment },
+    );
+
     context.spinner.stop();
   },
   describe: translations.i18n.t('migration_commit_describe'),
