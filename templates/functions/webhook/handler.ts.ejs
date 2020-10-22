@@ -1,9 +1,9 @@
 /**
  * This file was generated using 8base CLI.
- * 
+ *
  * To learn more about writing custom GraphQL resolver functions, visit
  * the 8base documentation at:
- * 
+ *
  * https://docs.8base.com/8base-console/custom-functions/webhooks
  *
  * To update this functions invocation settings, update its configuration block
@@ -16,7 +16,7 @@
  *  event.data[KEY_NAME]
  *
  * There are two ways to invoke this function locally:
- *  
+ *
  *  (1) Explicit file mock file path using '-p' flag:
  *    8base invoke-local <%= functionName %> -p src/resolvers/<%= functionName %>/mocks/request.json
  *
@@ -28,12 +28,18 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
+import { FunctionContext, FunctionEvent } from '8base-cli-types';
+
+
 type WebhookResult = {
   statusCode: number,
   body: string,
 };
 
-export default async (event: any, ctx: any) : Promise<WebhookResult> => {
+export default async (
+  event: FunctionEvent,
+  ctx: FunctionContext,
+): Promise<WebhookResult> => {
   const { foo } = JSON.parse(event.body);
 
   return {
