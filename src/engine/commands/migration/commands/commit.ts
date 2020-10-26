@@ -63,7 +63,6 @@ export default {
       .option('force', {
         alias: 'f',
         describe: translations.i18n.t('migration_force_describe'),
-        type: 'string',
       })
       .option('environment', {
         alias: 'e',
