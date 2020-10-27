@@ -434,9 +434,7 @@ export default {
     configuration_required: `You have to configure project before execute the command.`,
     async_in_progress: 'progress... \nStep: {{- status }}\n{{- message }}',
 
-    /**
-     * migrate plan related
-     */
+    you_are_not_in_project: 'Current folder does not contain the 8base.yaml file.',
   },
   /**
    * Debug related messages
