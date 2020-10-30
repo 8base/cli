@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@8base/api-client": "^0.30.0",
-    "@8base/error-codes": "^1.0.17",
+    "@8base/error-codes": "^1.0.21",
     "@8base/generators": "^0.33.0",
     "@8base/utils": "^0.30.0",
     "@types/adm-zip": "^0.4.32",
@@ -86,7 +86,8 @@
     "validate-npm-package-name": "^3.0.0",
     "winston": "^3.1.0",
     "yaml": "^1.7.0",
-    "yargs": "^13.3.0"
+    "yargs": "^13.3.0",
+    "download": "^8.0.0"
   },
   "devDependencies": {
     "@types/archiver": "^2.1.2",
@@ -117,6 +118,7 @@
     "@types/zen-observable": "^0.5.3",
     "@typescript-eslint/eslint-plugin": "^2.3.2",
     "@typescript-eslint/parser": "^2.3.2",
+    "@types/download": "^6.2.4",
     "cross-env": "^5.2.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",

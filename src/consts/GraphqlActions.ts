@@ -19,6 +19,24 @@ export const GraphqlActions = {
       count
     }
   }`,
+  environmentsList: `
+    query EnvironmentsList {
+      system {
+        environments: environmentsList { items { id name } }
+      }
+    }`,
+  backupList: `
+    query BackupList {
+      system { backups: environmentBackupsList { items { name size } } }
+    }`,
+  migrationGenerate: `
+    query MigrationPlan($tables: [String!]) {
+      system { ciGenerate(tables:$tables) { url } }
+    }`,
+  migrationStatus: `
+    query MigrationStatus {
+      system { ciStatus { status, migrations } }
+    }`,
   invoke: `mutation Invoke($data: InvokeData) {
     invoke(data: $data) {
       responseData
@@ -37,6 +55,11 @@ export const GraphqlActions = {
         endTime: $endTime
       )
   }`,
+  asyncSessionStatus: `
+    query status($sessionId: String!)  {
+      status: asyncSessionStatus(sessionId:$sessionId) { status message }
+    }
+  `,
   deployStatus: `
     query DeployStatus($buildName: String!) {
       deployStatus(buildName: $buildName) {
@@ -83,4 +106,40 @@ export const GraphqlActions = {
   fragment FunctionTaskInfo on FunctionTaskInfo {
     scheduleExpression
   }`,
+  environmentDelete: `mutation delete($name:String!) { system { environmentDelete(environmentName:$name) { success } } }`,
+  backupUrl: `query url($name: String!, $backup: String!) { 
+    system { environmentBackupUrl(environmentName:$name backup: $backup) { url } } 
+  }`,
 };
+
+export const GraphqlAsyncActions = {
+  environmentBranch: `
+    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode) {
+      system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
+    }`,
+  commit: `
+    mutation CommitMigration($mode: SystemCiCommitMode! $build:String) {
+      system { async: ciCommit(mode:$mode build:$build) { sessionId } }
+    }
+  `,
+  backupCreate: `
+    mutation Backup($name: String!){
+      system { async: environmentBackup(environmentName:$name) { sessionId } }
+    }
+  `,
+  backupRestore: `
+    mutation BackupRestore($backup:String!, $name: String!) {
+      system { async: environmentRestore(backup:$backup environmentName: $name) { sessionId } }
+    }
+  `,
+  backupImport: `
+    mutation RestoreFromTemplate($template:String!, $name: String!) {
+      system { async: environmentRestoreFromTemplate(template:$template environmentName: $name) { sessionId } }
+    }
+  `,
+};
+
+export type GraphqlAsyncActionsType =
+  | typeof GraphqlAsyncActions.commit
+  | typeof GraphqlAsyncActions.environmentBranch
+  | typeof GraphqlAsyncActions.backupCreate;

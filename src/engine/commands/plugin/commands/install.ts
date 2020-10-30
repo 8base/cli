@@ -15,7 +15,7 @@ type PluginInstallParams = {
   name: string;
 };
 
-const PLUGINS_LIST_QUERY = gql`
+const PLUGINS_LIST_QUERY = `
   query PluginsList {
     pluginsList {
       items {

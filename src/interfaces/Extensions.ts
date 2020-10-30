@@ -15,6 +15,7 @@ export enum DeployModeType {
   plugins = 'ONLY_PLUGINS',
   project = 'ONLY_PROJECT',
   functions = 'FUNCTIONS',
+  migrations = 'MIGRATIONS',
 }
 
 export enum GraphQLFunctionType {

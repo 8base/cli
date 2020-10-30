@@ -1,5 +1,5 @@
 import { StaticConfig } from '../config';
-import { StorageParameters } from '../consts/StorageParameters';
+import { StorageParameters, StorageParametersType } from '../consts/StorageParameters';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -60,7 +60,7 @@ export class UserDataStorage {
     Storage.saveStorage(storage);
   }
 
-  static getValue(name: string): any {
+  static getValue(name: StorageParametersType): any {
     const storage = Storage.getStorage();
     const storegeValue = storage[name];
 
