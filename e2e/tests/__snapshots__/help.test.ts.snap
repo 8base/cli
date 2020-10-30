@@ -11,6 +11,7 @@ USAGE
 
 COMMANDS
   8base backup <command>       Backup commands.
+  8base config                 config_describe
   8base configure              Allows you to select a default workspace and retrieve the API endpoint URL.
   8base deploy                 Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.
   8base describe [name]        Describes your 8base project’s functions and their types through 8base.yml file.
