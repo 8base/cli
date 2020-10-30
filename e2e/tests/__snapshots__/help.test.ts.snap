@@ -166,6 +166,18 @@ OPTIONS
   --environmentName, -n  The environment name of the project  [string]"
 `;
 
+exports[`As a user, I can use help flag for see help information about \`[ 'environment', 'show' ]\`. 1`] = `
+"COMMAND
+  8base environment show
+
+DESCRIPTION
+ Display current environment.
+
+OPTIONS
+  --debug, -d  Turn on debug logs  [boolean]
+  --help, -h   Show help  [boolean]"
+`;
+
 exports[`As a user, I can use help flag for see help information about \`[ 'export' ]\`. 1`] = `
 "COMMAND
   8base export [OPTIONS]
@@ -428,19 +440,19 @@ OPTIONS
   --environment, -e  Specify the environment you want to commit.  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'plan' ]\`. 1`] = `
-"8base migration <command>
+exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'generate' ]\`. 1`] = `
+"COMMAND
+  8base migration plan
 
-Migration commands.
-
-COMMANDS
-  8base migration commit    Migration commit
-  8base migration generate  Get committed migrations
-  8base migration status    Migration status
+DESCRIPTION
+ Get committed migrations.
 
 OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --dist             The folder of migrations  [string] [default: \\"./migrations\\"]
+  --tables, -t       Specify table names to generate migrations for data.  [array]
+  --environment, -e  Target environment  [string]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'status' ]\`. 1`] = `
