@@ -128,7 +128,7 @@ COMMANDS
   8base environment delete  Delete environment.
   8base environment list    List environment in current workspace.
   8base environment set     Set environment
-  8base environment show    Display the info about current project.
+  8base environment show
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
@@ -146,7 +146,7 @@ OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
   --help, -h   Show help  [boolean]
   --name, -n   Name of new environment  [string] [required]
-  --mode, -m   The deploy mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"SYSTEM\\"]"
+  --mode, -m   The deploy mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"FULL\\"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'environment', 'list' ]\`. 1`] = `
@@ -423,7 +423,8 @@ DESCRIPTION
 OPTIONS
   --debug, -d        Turn on debug logs  [boolean]
   --help, -h         Show help  [boolean]
-  --mode, -m         Commit mode.  [string] [choices: \\"FULL\\", \\"ONLY_MIGRATIONS\\", \\"ONLY_PROJECT\\"] [default: \\"ONLY_MIGRATIONS\\"]
+  --mode, -m         Commit mode.  [string] [choices: \\"FULL\\", \\"ONLY_MIGRATIONS\\", \\"ONLY_PROJECT\\"] [default: \\"FULL\\"]
+  --force, -f        You can specify force flag to commit to master without prompt.
   --environment, -e  Specify the environment you want to commit.  [string]"
 `;
 
@@ -450,8 +451,9 @@ DESCRIPTION
  Display migration status.
 
 OPTIONS
-  --debug, -d  Turn on debug logs  [boolean]
-  --help, -h   Show help  [boolean]"
+  --debug, -d        Turn on debug logs  [boolean]
+  --help, -h         Show help  [boolean]
+  --environment, -e  Target environment  [string]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'package' ]\`. 1`] = `
