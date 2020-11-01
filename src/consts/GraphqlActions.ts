@@ -107,9 +107,6 @@ export const GraphqlActions = {
     scheduleExpression
   }`,
   environmentDelete: `mutation delete($name:String!) { system { environmentDelete(environmentName:$name) { success } } }`,
-  backupUrl: `query url($name: String!, $backup: String!) { 
-    system { environmentBackupUrl(environmentName:$name backup: $backup) { url } } 
-  }`,
 };
 
 export const GraphqlAsyncActions = {
@@ -130,11 +127,6 @@ export const GraphqlAsyncActions = {
   backupRestore: `
     mutation BackupRestore($backup:String!, $name: String!) {
       system { async: environmentRestore(backup:$backup environmentName: $name) { sessionId } }
-    }
-  `,
-  backupImport: `
-    mutation RestoreFromTemplate($template:String!, $name: String!) {
-      system { async: environmentRestoreFromTemplate(template:$template environmentName: $name) { sessionId } }
     }
   `,
 };
