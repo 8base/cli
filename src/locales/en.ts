@@ -34,7 +34,7 @@ export default {
     project_info_usage: 'COMMAND\n  8base project info\n\nDESCRIPTION\n Display the info about current project.',
     project_info_describe: 'Display the info about current project.',
     project_info_text:
-      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nAPI Endpoint: {{-endpoint}}',
+      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
     /**
@@ -97,6 +97,7 @@ export default {
     configure_workspace_id_describe: 'The workspace ID of the project',
     configure_select_workspace: 'Select workspace for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
+
     /**
      * Init related messages
      */
@@ -276,6 +277,138 @@ export default {
     package_describe: 'Package 8base application without deploying it.',
     package_progress: 'packaging...',
 
+    backup_describe: 'Backup commands.',
+
+    /**
+     * Backup create related messages
+     */
+    backup_create_usage: '8base backup create',
+    backup_create_describe: 'Create backup for environment.',
+    backup_create_in_progress: 'Backup in progress...',
+
+    /**
+     * Backup export related messages
+     */
+    environment_backup_export_describe: 'Generate export url for backup.',
+    environment_backup_export_usage: '8base backup export',
+    environment_backup_export_env_name_describe: 'Target environment',
+    environment_backup_export_name_describe: 'Target backup name',
+
+    /**
+     * Backup import related messages
+     */
+    backup_import_in_progress: 'Backup import in progress...',
+    backup_import_describe: 'Enroll external backup to environment.',
+    backup_import_usage: '8base backup import',
+    backup_import_env_name_describe: 'Target environment name.',
+    backup_import_url_describe: 'External backup url.',
+
+    /**
+     * Backup list related messages
+     */
+    backup_list_describe: 'List all backups for environment.',
+    backup_list_usage: '8base backup list',
+
+    /**
+     * Backup restore related messages
+     */
+    backup_restore_describe: 'Restore environment to backup.',
+    backup_restore_usage: '8base backup restore [OPTIONS].',
+    backup_restore_in_progress: 'Restore backup in progress...',
+    backup_restore_set_environment_describe: 'Target environment name',
+    backup_restore_set_backup_name_describe: 'The name of the target backup',
+
+    environment_describe: 'Environment commands.',
+
+    /**
+     * Environment list related messages
+     */
+    environment_list_usage: '8base environment list',
+    environment_list_describe: 'List environment in current workspace.',
+
+    /**
+     * Environment branch related messages
+     */
+    environment_branch_in_progress: 'Branch environment in progress.',
+    environment_branch_usage:
+      'COMMAND\n  8base environment branch\n\nDESCRIPTION\n  Create new branch from current environment.',
+    environment_branch_describe: 'Branch environment.',
+    environment_branch_name_describe: 'Name of new environment',
+
+    /**
+     * Environment delete related messages
+     */
+    environment_delete_in_progress: 'Delete environment in progress.',
+    environment_delete_usage: 'COMMAND\n  8base environment delete\n\nDESCRIPTION\n .',
+    environment_delete_describe: 'Delete environment.',
+    environment_delete_name_describe: 'Name of deleted environment',
+
+    /**
+     * Environment set list related messages
+     */
+    environment_set_select_environment: 'Select environment for current project',
+    environment_set_prevent_select_environment: 'Environment selection canceled',
+    environment_set_doesnt_exit: "Environment '{{name}}' doesn't exist.",
+    environment_set_describe: 'Set environment',
+    environment_set_usage: '8base environment set',
+    environment_set_environment_name_describe: 'The environment name of the project',
+
+    migration_describe: 'Migration commands.',
+
+    /**
+     * Migration commit related messages
+     */
+
+    migration_commit_in_progress: 'Migration commit in progress',
+    migration_commit_describe: 'Migration commit',
+    migration_commit_usage:
+      "COMMAND\n  8base migration commit\n\nDESCRIPTION\n  Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.",
+    migration_commit_mode_describe: 'Commit mode.',
+    migration_commit_dest_env_master: 'Environment you want to commit is Master. Are you sure you want to continue?',
+    migration_commit_canceled: 'Commit canceled',
+
+    migration_environment_describe: 'Specify the environment you want to commit.',
+    migration_force_describe: 'You can specify force flag to commit to master without prompt.',
+
+    /**
+     * Migration deploy related messages
+     */
+    migration_deploy_describe: 'Migration deploy',
+
+    /**
+     * Migration plan related messages
+     */
+    migration_generate_dist_describe: 'The folder of migrations',
+    migration_generate_tables_describe: 'Specify table names to generate migrations for data.',
+    migration_generate_environment_describe: `Target environment`,
+    migration_generate_usage: 'COMMAND\n  8base migration plan\n\nDESCRIPTION\n Get committed migrations.',
+    migration_generate_describe: 'Get committed migrations',
+    migration_generate_in_progress: 'Migration plan in progress...',
+
+    /**
+     * Migration status related messages
+     */
+    migration_status_describe: 'Migration status',
+    migration_status_usage: 'COMMAND\n  8base migration status\n\nDESCRIPTION\n Display migration status.',
+    migration_status_in_progress: 'Resolve status...',
+    migration_status_environment_describe: 'Target environment',
+
+    /**
+     * Migration status related messages
+     */
+    environment_show_usage: 'COMMAND\n  8base environment show\n\nDESCRIPTION\n Display current environment.',
+    environment_show_describe: '',
+    environment_show_text: 'Environment: {{-environment}}',
+    /**
+     * Migration apply related messages
+     */
+    migration_apply_in_progress: 'Migration apply in progress',
+    migration_apply_describe: 'Migration apply',
+
+    /**
+     * Plugin related messages
+     */
+
     plugin_describe: 'Plugins management commands.',
 
     plugin_install_describe: 'Install plugin to the project.',
@@ -297,6 +430,11 @@ export default {
     plugin_list_not_found_plugins: 'Not found plugins for your query',
     plugin_list_describe: 'Show list of available plugins.',
     plugin_list_usage: 'COMMAND\n  8base plugin list\n\nDESCRIPTION\n  Show list of available plugins.',
+
+    configuration_required: `You have to configure project before execute the command.`,
+    async_in_progress: 'progress... \nStep: {{- status }}\n{{- message }}',
+
+    you_are_not_in_project: 'Current folder does not contain the 8base.yaml file.',
   },
   /**
    * Debug related messages
@@ -310,5 +448,6 @@ export default {
     reset_refresh_token: 'reset refresh token',
     set_email: 'set email: {{- email}}',
     set_workspace_id: 'set workspace id {{workspaceId}}',
+    set_environment_name: 'set environment id {{environmentName}}',
   },
 };

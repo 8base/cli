@@ -31,8 +31,7 @@ export const passwordLogin = async (params: any, context: Context): Promise<Sess
   const result = await context.request(
     GraphqlActions.login,
     { data: { email: data.email, password: data.password } },
-    false,
-    null,
+    { isLoginRequired: false, customWorkspaceId: null },
   );
 
   return {
