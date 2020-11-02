@@ -27,6 +27,7 @@ export default {
       "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command when in the root of an existing 8base project or use '8base init' to create a new project.",
     workspace_not_found:
       'Workspace not found. Try to run `8base configure` to select existed workspace for this project.',
+
     /**
      * Project info related messages
      */
@@ -37,12 +38,14 @@ export default {
       'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
+
     /**
      * Whoami related messages
      */
     whoami_usage: 'COMMAND\n  8base whoami\n\nDESCRIPTION\n Display the current authenticated user.',
     whoami_describe: 'Display the current authenticated user.',
     whoami_text: 'You authenticated as {{-email}} ({{-name}}).',
+
     /**
      * Login related messages
      */
@@ -64,6 +67,7 @@ export default {
     login_email_describe: 'User email',
     login_password_describe: 'User password',
     login_token_describe: 'API Token',
+
     /**
      * Describe related messages
      */
@@ -88,6 +92,7 @@ export default {
     deploy_plugins_describe: 'The list of plugins to deploy',
     deploy_functions_describe: 'The list of functions to deploy',
     deploy_mode_describe: 'The deploy mode',
+
     /**
      * Config related messages
      */
@@ -120,6 +125,7 @@ export default {
     init_prevent_new_workspace: 'Workspace creation canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
     init_canceled: 'Project init canceled',
+
     /**
      * Invoke related messages
      */
@@ -132,6 +138,7 @@ export default {
     invoke_name_describe: 'The name of the function',
     invoke_in_progress: 'invoking...',
     invoke_returns_error: '"{{- name }}" returns an error.',
+
     /**
      * Invoke-local related messages
      */
@@ -144,6 +151,7 @@ export default {
     invokelocal_name_describe: 'The name of the function',
     invokelocal_in_progress: 'invoking...',
     invokelocal_returns_error: '"{{- name }}" returns an error.',
+
     /**
      * Export related messages
      */
@@ -155,6 +163,7 @@ export default {
     export_file_required_option_error:
       'Please specify a relative path and filename for the export.\n\nExample: \n`8base export -f <EXPORT_FILE_PATH>`',
     export_workspace_describe: 'Custom workspace id',
+
     /**
      * Import related messages
      */
@@ -170,6 +179,7 @@ export default {
     import_cant_parse_schema: "Can't parse the schema file.",
     import_file_not_exist: 'Schema file does not exist.',
     import_schema_different_version: 'Schema file has a different version.',
+
     /**
      * Logout related messages
      */
@@ -177,6 +187,7 @@ export default {
     logout_usage:
       'COMMAND\n  8base logout [OPTIONS]\n\nDESCRIPTION\n  Clears local login credentials and invalidates API session.',
     logout_describe: 'Clears local login credentials and invalidates API session.',
+
     /**
      * Logs related messages
      */
@@ -190,12 +201,14 @@ export default {
     logs_tail_in_progress: 'Establishing connection with server...',
     logs_tail_failed: 'Failed to establish connection... Please try again in a few minutes.',
     logs_tail_success: 'Connection established. Tailing logs...',
+
     /**
      * Generate related messages
      */
     generate_describe: 'Generator for server and client side resources',
     generate_mocks_describe: 'Included mocks dir and files',
     generate_syntax_describe: 'Syntax for the generated file',
+
     /**
      * Generate [FUNCTION] messages
      */
@@ -203,11 +216,13 @@ export default {
     function_with_name_not_defined: 'Function with name {{- name}} not defined',
     generate_function_grettings:
       'Boom! Your new {{- name }} function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.',
+
     /**
      * Generate app related messages
      */
     generate_app_describe: 'Generate an app skeleton for a specific framework (framework availability: react)',
     generate_app_usage: '8base generate app [PROJECT_NAME]',
+
     /**
      * Generate scaffold related messages
      */
@@ -226,11 +241,13 @@ export default {
       "Can't find an 'appName' constant. Check you '{{- projectFileName }}' file in the project root directory.",
     generate_scaffold_successfully_created: '{{- screenName }} was successfully created',
     generate_scaffold_was_not_created: "{{- screenName }} wasn't created",
+
     /**
      * Generate resolver related messages
      */
     generate_resolver_usage: '8base generate resolver [FUNCTION_NAME] [OPTIONS]',
     generate_resolver_describe: 'Generator for a custom resolver function.',
+
     /**
      * Generate tasks related messages
      */
@@ -238,6 +255,7 @@ export default {
     generate_task_describe: 'Generator for a custom task function.',
     generate_task_schedule_describe: 'Schedule on which the task runs',
     generate_task_invalid_schedule: 'Invalid schedule option',
+
     /**
      * Generate trigger related messages
      */
@@ -248,6 +266,7 @@ export default {
     generate_trigger_table_name_describe: 'Trigger table name',
     generate_trigger_invalid_type: 'Invalid trigger type, available types: `before` and `after`',
     generate_trigger_invalid_operation: 'Invalid trigger operation, valid example: `Users.create`',
+
     /**
      * Generate webhook related messages
      */
@@ -256,6 +275,7 @@ export default {
     generate_webhook_path_describe: 'Path for the url (https:<endpoint>/<path>)',
     generate_webhook_method_describe: 'HTTP verb to invoke the function ',
     generate_webhook_invalid_method: 'Invalid HTTP verb',
+
     /**
      * Generate webhook related messages
      */
@@ -263,12 +283,14 @@ export default {
     generate_mock_usage: 'Generator for a mock for the function.',
     generate_mock_name_describe: 'Name of the mock request',
     generate_mock_grettings: 'Boom! Your new {{- name }} request mock has been successfully generated.',
+
     /**
      * Generate plugin related messages
      */
     generate_plugin_usage: '8base generate plugin [PLUGIN_NAME] [OPTIONS]',
     generate_plugin_describe: 'Generator for a plugin.',
     generate_plugin_grettings: 'Boom! Your new {{- name }} plugin has been successfully generated.',
+
     /**
      * Package related messages
      */
@@ -358,7 +380,6 @@ export default {
     /**
      * Migration commit related messages
      */
-
     migration_commit_in_progress: 'Migration commit in progress',
     migration_commit_describe: 'Migration commit',
     migration_commit_usage:
@@ -399,6 +420,7 @@ export default {
     environment_show_usage: 'COMMAND\n  8base environment show\n\nDESCRIPTION\n Display current environment.',
     environment_show_describe: '',
     environment_show_text: 'Environment: {{-environment}}',
+
     /**
      * Migration apply related messages
      */
@@ -408,7 +430,6 @@ export default {
     /**
      * Plugin related messages
      */
-
     plugin_describe: 'Plugins management commands.',
 
     plugin_install_describe: 'Install plugin to the project.',
@@ -436,6 +457,7 @@ export default {
 
     you_are_not_in_project: 'Current folder does not contain the 8base.yaml file.',
   },
+
   /**
    * Debug related messages
    */
