@@ -235,17 +235,17 @@ export class Context {
   }
 
   async request(query: string, variables: any = null, options?: RequestOptions): Promise<any> {
-    const DefaultOptions: RequestOptions = {
+    const defaultOptions: RequestOptions = {
       isLoginRequired: true,
       customWorkspaceId: undefined,
       customEnvironment: undefined,
     };
     const { customEnvironment, customWorkspaceId, isLoginRequired } = options
       ? {
-          ...DefaultOptions,
+          ...defaultOptions,
           ...options,
         }
-      : DefaultOptions;
+      : defaultOptions;
 
     const remoteAddress = this.serverAddress;
     this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress }));

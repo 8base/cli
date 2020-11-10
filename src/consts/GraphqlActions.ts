@@ -107,9 +107,6 @@ export const GraphqlActions = {
     scheduleExpression
   }`,
   environmentDelete: `mutation delete($name:String!) { system { environmentDelete(environmentName:$name) { success } } }`,
-  backupUrl: `query url($name: String!, $backup: String!) { 
-    system { environmentBackupUrl(environmentName:$name backup: $backup) { url } } 
-  }`,
 };
 
 export const GraphqlAsyncActions = {
@@ -118,7 +115,7 @@ export const GraphqlAsyncActions = {
       system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
     }`,
   commit: `
-    mutation CommitMigration($mode: SystemCiCommitMode! $build:String) {
+    mutation CommitMigration($mode: SystemCiCommitMode!, $build:String) {
       system { async: ciCommit(mode:$mode build:$build) { sessionId } }
     }
   `,
@@ -130,11 +127,6 @@ export const GraphqlAsyncActions = {
   backupRestore: `
     mutation BackupRestore($backup:String!, $name: String!) {
       system { async: environmentRestore(backup:$backup environmentName: $name) { sessionId } }
-    }
-  `,
-  backupImport: `
-    mutation RestoreFromTemplate($template:String!, $name: String!) {
-      system { async: environmentRestoreFromTemplate(template:$template environmentName: $name) { sessionId } }
     }
   `,
 };
