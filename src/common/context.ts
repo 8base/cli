@@ -112,7 +112,7 @@ export class Context {
   }
 
   cleanWorkspaceConfig(): void {
-    this.workspaceConfig = { workspaceId: '' };
+    this.workspaceConfig = { workspaceId: '', environmentName: '' };
   }
 
   createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
