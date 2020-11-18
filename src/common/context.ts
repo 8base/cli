@@ -17,14 +17,15 @@ import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
-import { SessionInfo } from '../interfaces/Common';
-import { Utils } from './utils';
+import { EnvironmentInfo, RequestOptions, SessionInfo } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
+import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 
 const pkg = require('../../package.json');
 
 export type WorkspaceConfig = {
   workspaceId: string;
+  environmentName: string;
 };
 
 type Plugin = { name: string; path: string };
@@ -82,9 +83,21 @@ export class Context {
     return null;
   }
 
+  async getEnvironments(workspaceId: string): Promise<EnvironmentInfo[]> {
+    const { system } = await this.request(GraphqlActions.environmentsList, null, {
+      customEnvironment: DEFAULT_ENVIRONMENT_NAME,
+    });
+
+    const environments = system.environments.items;
+    if (_.isEmpty(environments)) {
+      throw new Error(this.i18n.t('logout_error'));
+    }
+
+    return environments;
+  }
+
   set workspaceConfig(value: WorkspaceConfig) {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
-
     fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
   }
 
@@ -92,7 +105,7 @@ export class Context {
     return path.join(customPath || process.cwd(), WORKSPACE_CONFIG_FILENAME);
   }
 
-  updateWorkspaceConfig(value: WorkspaceConfig): void {
+  updateWorkspaceConfig(value: Partial<WorkspaceConfig>): void {
     const currentWorkspaceConfig = this.workspaceConfig;
 
     this.workspaceConfig = _.merge(currentWorkspaceConfig, value);
@@ -110,6 +123,10 @@ export class Context {
 
   get workspaceId(): string | null {
     return _.get(this.workspaceConfig, 'workspaceId', null);
+  }
+
+  get environmentName(): string | null {
+    return _.get(this.workspaceConfig, 'environmentName', null);
   }
 
   hasWorkspaceConfig(customPath?: string): boolean {
@@ -198,7 +215,10 @@ export class Context {
   }
 
   async getWorkspaces() {
-    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
+    const data = await this.request(GraphqlActions.listWorkspaces, null, {
+      customWorkspaceId: null,
+      isLoginRequired: false,
+    });
 
     const workspaces = data.workspacesList.items;
 
@@ -210,7 +230,10 @@ export class Context {
   }
 
   async checkWorkspace(workspaceId: string) {
-    const data = await this.request(GraphqlActions.listWorkspaces, null, false, null);
+    const data = await this.request(GraphqlActions.listWorkspaces, null, {
+      isLoginRequired: false,
+      customWorkspaceId: null,
+    });
 
     const workspaces = _.get(data, ['workspacesList', 'items'], []);
 
@@ -219,12 +242,19 @@ export class Context {
     }
   }
 
-  async request(
-    query: string,
-    variables: any = null,
-    isLoginRequired = true,
-    customWorkspaceId?: string,
-  ): Promise<any> {
+  async request(query: string, variables: any = null, options?: RequestOptions): Promise<any> {
+    const defaultOptions: RequestOptions = {
+      isLoginRequired: true,
+      customWorkspaceId: undefined,
+      customEnvironment: undefined,
+    };
+    const { customEnvironment, customWorkspaceId, isLoginRequired } = options
+      ? {
+          ...defaultOptions,
+          ...options,
+        }
+      : defaultOptions;
+
     const remoteAddress = this.serverAddress;
     this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress }));
 
@@ -250,6 +280,12 @@ export class Context {
     if (workspaceId) {
       this.logger.debug(this.i18n.t('debug:set_workspace_id', { workspaceId }));
       client.setWorkspaceId(workspaceId);
+    }
+
+    const environmentName = _.isNil(customEnvironment) ? this.environmentName : customEnvironment;
+    if (environmentName) {
+      this.logger.debug(this.i18n.t('debug:set_environment_name', { environmentName }));
+      client.gqlc.setHeader('environment', environmentName);
     }
 
     if (isLoginRequired && !this.user.isAuthorized()) {

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import * as yargs from 'yargs';
-import * as _ from 'lodash';
 import latestVersion from 'latest-version';
 import chalk from 'chalk';
 
@@ -76,5 +75,3 @@ translations
     start(translations);
   })
   .catch(err => console.error(err.message));
-
-export * from './types';
