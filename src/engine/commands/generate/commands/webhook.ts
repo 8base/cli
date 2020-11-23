@@ -20,13 +20,20 @@ export default {
   handler: async (params: TaskParams, context: Context) => {
     let { name, path, method, mocks, syntax, silent } = params;
 
-    ProjectController.generateFunction(context, {
-      type: ExtensionType.webhook,
-      name,
-      mocks,
-      syntax,
-      silent,
-    });
+    ProjectController.generateFunction(
+      context,
+      {
+        type: ExtensionType.webhook,
+        name,
+        mocks,
+        syntax,
+        silent,
+      },
+      {
+        path,
+        method,
+      },
+    );
   },
 
   describe: translations.i18n.t('generate_webhook_describe'),
