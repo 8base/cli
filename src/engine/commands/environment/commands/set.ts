@@ -11,7 +11,7 @@ export default {
     let { environmentName } = params;
     ProjectConfigurationState.expectConfigured(context);
 
-    const environments = await context.getEnvironments(context.workspaceConfig.workspaceId);
+    const environments = await context.getEnvironments();
 
     if (!environmentName) {
       ({ environmentName } = await Interactive.ask({
@@ -31,7 +31,7 @@ export default {
       throw new Error(translations.i18n.t('environment_set_doesnt_exit'));
     }
 
-    context.updateWorkspaceConfig({ environmentName });
+    context.updateEnvironmentName(environmentName);
   },
 
   describe: translations.i18n.t('environment_set_describe'),

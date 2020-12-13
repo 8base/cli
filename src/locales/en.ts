@@ -35,7 +35,7 @@ export default {
     project_info_usage: 'COMMAND\n  8base project info\n\nDESCRIPTION\n Display the info about current project.',
     project_info_describe: 'Display the info about current project.',
     project_info_text:
-      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
+      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nregion: {{-region}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
 
@@ -456,6 +456,9 @@ export default {
     async_in_progress: 'progress... \nStep: {{- status }}\n{{- message }}',
 
     you_are_not_in_project: 'Current folder does not contain the 8base.yaml file.',
+
+    workspace_with_id_doesnt_exist:
+      'Something went wrong, cannot get workspace with id: {{- id}}. Please contact support@8base.com if the error persists.',
   },
 
   /**

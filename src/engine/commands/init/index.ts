@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import chalk from 'chalk';
 import * as tree from 'tree-node-cli';
-import gql from 'graphql-tag';
 import * as validatePackageName from 'validate-npm-package-name';
 
 import { getFileProvider } from './providers';
@@ -16,6 +15,7 @@ import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import { Workspace } from '../../../interfaces/Common';
 
 const CREATE_WORKSPACE_MUTATION = `
   mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
@@ -178,7 +178,10 @@ export default {
       });
     }
 
-    context.createWorkspaceConfig({ workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME }, project.fullPath);
+    context.createWorkspaceConfig(
+      { workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, region: await resolveRegion(workspaceId, context) },
+      project.fullPath,
+    );
 
     if (!silent) {
       // @ts-ignore
@@ -243,4 +246,12 @@ const replaceServiceName = (packageFile: string, repositoryName: string) => {
   let packageData = JSON.parse(packageFile);
   packageData.name = repositoryName;
   return JSON.stringify(packageData, null, 2);
+};
+
+const resolveRegion = async (workspaceId: string, context: Context): Promise<string> => {
+  const workspace = _.find<Workspace>(await context.getWorkspaces(), { id: workspaceId });
+  if (!workspace) {
+    throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
+  }
+  return workspace.region;
 };

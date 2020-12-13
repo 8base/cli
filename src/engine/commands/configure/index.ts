@@ -3,6 +3,8 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import _ = require('lodash');
+import { Workspace } from '../../../interfaces/Common';
 
 export default {
   command: 'configure',
@@ -10,9 +12,9 @@ export default {
   handler: async (params: any, context: Context) => {
     let { workspaceId } = params;
 
-    if (!workspaceId) {
-      const workspaces = await context.getWorkspaces();
+    const workspaces = await context.getWorkspaces();
 
+    if (!workspaceId) {
       ({ workspaceId } = await Interactive.ask({
         name: 'workspaceId',
         type: 'select',
@@ -28,7 +30,12 @@ export default {
       }
     }
 
-    context.updateWorkspaceConfig({ workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME });
+    const workspace = _.find<Workspace>(workspaces, { id: workspaceId });
+    if (!workspace) {
+      throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
+    }
+
+    context.updateWorkspace({ region: workspace.region, workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME });
   },
 
   describe: translations.i18n.t('configure_describe'),

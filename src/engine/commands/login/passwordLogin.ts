@@ -1,8 +1,8 @@
-import * as _ from 'lodash';
 import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { Interactive } from '../../../common/interactive';
 import { SessionInfo } from '../../../interfaces/Common';
+import { DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
 
 const promptEmail = async (): Promise<string> => {
   return (await Interactive.ask({ type: 'text', name: 'email', message: 'Email:' })).email;
@@ -31,7 +31,7 @@ export const passwordLogin = async (params: any, context: Context): Promise<Sess
   const result = await context.request(
     GraphqlActions.login,
     { data: { email: data.email, password: data.password } },
-    { isLoginRequired: false, customWorkspaceId: null },
+    { isLoginRequired: false, customWorkspaceId: null, address: context.serverAddress(DEFAULT_REMOTE_ADDRESS) },
   );
 
   return {

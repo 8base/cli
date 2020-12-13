@@ -36,10 +36,6 @@ export class StaticConfig {
     return process.env.USERPROFILE || process.env.HOME || process.env.HOMEPATH;
   }
 
-  static get remoteAddress(): string {
-    return this.staticData.remoteAddress;
-  }
-
   static get authDomain(): string {
     return this.staticData.authDomain;
   }
