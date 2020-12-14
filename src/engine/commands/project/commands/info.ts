@@ -3,7 +3,6 @@ import chalk from 'chalk';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { DEFAULT_REMOTE_ADDRESS, REGIONS_ADDRESS_MAP } from '../../../../consts/Environment';
 
 export default {
   command: 'info',
@@ -19,14 +18,12 @@ export default {
       throw new Error(translations.i18n.t('project_info_cant_find_workspace', { workspaceId }));
     }
 
-    const endpoint = context.serverAddress(REGIONS_ADDRESS_MAP[workspace.region]);
-
     context.logger.info(
       translations.i18n.t('project_info_text', {
         workspaceId: chalk.green(workspaceId),
         workspaceName: chalk.green(workspace.name),
         environment: chalk.green(environmentName),
-        endpoint: chalk.green(`${endpoint}/${workspaceId}`),
+        endpoint: chalk.green(`${workspace.apiHost}/${workspaceId}`),
         region: workspace.region,
       }),
     );

@@ -35,7 +35,12 @@ export default {
       throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
     }
 
-    context.updateWorkspace({ region: workspace.region, workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME });
+    context.updateWorkspace({
+      region: workspace.region,
+      workspaceId,
+      environmentName: DEFAULT_ENVIRONMENT_NAME,
+      apiHost: workspace.apiHost,
+    });
   },
 
   describe: translations.i18n.t('configure_describe'),

@@ -32,4 +32,5 @@ export interface Workspace {
   readonly id: string;
   readonly name: string;
   readonly region: string;
+  readonly apiHost: string;
 }

@@ -178,8 +178,13 @@ export default {
       });
     }
 
+    const workspace = _.find<Workspace>(await context.getWorkspaces(), { id: workspaceId });
+    if (!workspace) {
+      throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
+    }
+
     context.createWorkspaceConfig(
-      { workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, region: await resolveRegion(workspaceId, context) },
+      { workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, region: workspace.region, apiHost: workspace.apiHost },
       project.fullPath,
     );
 
@@ -246,12 +251,4 @@ const replaceServiceName = (packageFile: string, repositoryName: string) => {
   let packageData = JSON.parse(packageFile);
   packageData.name = repositoryName;
   return JSON.stringify(packageData, null, 2);
-};
-
-const resolveRegion = async (workspaceId: string, context: Context): Promise<string> => {
-  const workspace = _.find<Workspace>(await context.getWorkspaces(), { id: workspaceId });
-  if (!workspace) {
-    throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
-  }
-  return workspace.region;
 };
