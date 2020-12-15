@@ -26,6 +26,8 @@ const PLUGINS_LIST_QUERY = `
   }
 `;
 
+type ProjectType = { name: string; gitHubUrl: string };
+
 export default {
   command: 'install [name]',
 
@@ -33,14 +35,14 @@ export default {
     const { name } = params;
 
     let plugins = _.get(
-      await gqlRequest<{ pluginsList: { items: { name: string; gitHubUrl: string }[] } }>(
+      await gqlRequest<{ pluginsList: { items: ProjectType[] } }>(
         'https://api.8base.com/ck16gpwki001f01jgh4kvd54j',
         PLUGINS_LIST_QUERY,
       ),
       ['pluginsList', 'items'],
     );
 
-    const plugin = _.find(plugins, { name });
+    const plugin = _.find<ProjectType>(plugins, { name });
 
     if (!plugin) {
       throw new Error(
