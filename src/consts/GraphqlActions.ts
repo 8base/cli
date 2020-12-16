@@ -14,7 +14,10 @@ export const GraphqlActions = {
   listWorkspaces: `query {
     workspacesList {
       items {
-        name id region apiHost
+        name
+        id
+        region
+        apiHost
       }
       count
     }
