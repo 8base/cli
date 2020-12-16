@@ -100,6 +100,8 @@ export default {
       'COMMAND\n  8base configure [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_describe: 'Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_workspace_id_describe: 'The workspace ID of the project',
+    configure_workspace_region_describe: 'The workspace region of the project',
+    configure_workspace_host_describe: 'The workspace host of the project',
     configure_select_workspace: 'Select workspace for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
 
@@ -119,6 +121,8 @@ export default {
     init_functions_describe: 'List of functions',
     init_empty_describe: 'Skip examples',
     init_workspace_id_describe: 'The workspace ID of the project',
+    init_workspace_region_describe: 'The workspace region of the project',
+    init_workspace_host_describe: 'The workspace host of the project',
     init_select_workspace: 'What workspace does this project belong to?',
     init_prevent_select_workspace: 'Workspace selection canceled',
     init_workspace_name_labal: 'Please enter name for the new workspace',
