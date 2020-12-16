@@ -15,7 +15,7 @@ export default {
     await executeAsync(context, GraphqlAsyncActions.environmentBranch, { environmentName: name, mode });
     context.spinner.stop();
 
-    context.updateWorkspaceConfig({ environmentName: name });
+    context.updateEnvironmentName(name);
   },
 
   describe: translations.i18n.t('environment_branch_describe'),

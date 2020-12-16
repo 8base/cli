@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 const defaultStorageData = {
-  [StorageParameters.serverAddress]: StaticConfig.remoteAddress,
   [StorageParameters.authDomain]: StaticConfig.authDomain,
   [StorageParameters.authClientId]: StaticConfig.authClientId,
 };
@@ -62,9 +61,9 @@ export class UserDataStorage {
 
   static getValue(name: StorageParametersType): any {
     const storage = Storage.getStorage();
-    const storegeValue = storage[name];
+    const storageValue = storage[name];
 
-    if (!storegeValue && !!defaultStorageData[name]) {
+    if (!storageValue && !!defaultStorageData[name]) {
       this.setValues([
         {
           name,
@@ -73,11 +72,11 @@ export class UserDataStorage {
       ]);
 
       return defaultStorageData[name];
-    } else if (!storegeValue) {
+    } else if (!storageValue) {
       return null;
     }
 
-    return storegeValue;
+    return storageValue;
   }
 
   static clearAll() {

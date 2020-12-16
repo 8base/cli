@@ -17,15 +17,17 @@ import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
-import { EnvironmentInfo, RequestOptions, SessionInfo } from '../interfaces/Common';
+import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
-import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
 
 const pkg = require('../../package.json');
 
 export type WorkspaceConfig = {
-  workspaceId: string;
-  environmentName: string;
+  readonly workspaceId: string;
+  readonly environmentName: string;
+  readonly region: string;
+  readonly apiHost: string;
 };
 
 type Plugin = { name: string; path: string };
@@ -83,7 +85,7 @@ export class Context {
     return null;
   }
 
-  async getEnvironments(workspaceId: string): Promise<EnvironmentInfo[]> {
+  async getEnvironments(): Promise<EnvironmentInfo[]> {
     const { system } = await this.request(GraphqlActions.environmentsList, null, {
       customEnvironment: DEFAULT_ENVIRONMENT_NAME,
     });
@@ -105,10 +107,15 @@ export class Context {
     return path.join(customPath || process.cwd(), WORKSPACE_CONFIG_FILENAME);
   }
 
-  updateWorkspaceConfig(value: Partial<WorkspaceConfig>): void {
+  updateWorkspace(value: WorkspaceConfig): void {
+    const currentWorkspaceConfig = this.workspaceConfig;
+    this.workspaceConfig = _.merge(currentWorkspaceConfig, value);
+  }
+
+  updateEnvironmentName(environmentName: string): void {
     const currentWorkspaceConfig = this.workspaceConfig;
 
-    this.workspaceConfig = _.merge(currentWorkspaceConfig, value);
+    this.workspaceConfig = _.merge(currentWorkspaceConfig, { environmentName });
   }
 
   createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
@@ -121,8 +128,16 @@ export class Context {
     return _.get(this.workspaceConfig, 'workspaceId', null);
   }
 
+  get region(): string | null {
+    return _.get(this.workspaceConfig, 'region', null);
+  }
+
   get environmentName(): string | null {
     return _.get(this.workspaceConfig, 'environmentName', null);
+  }
+
+  get apiHost(): string | null {
+    return _.get(this.workspaceConfig, 'apiHost', null);
   }
 
   hasWorkspaceConfig(customPath?: string): boolean {
@@ -163,8 +178,8 @@ export class Context {
     return fs.existsSync(projectConfigPath);
   }
 
-  get serverAddress(): string {
-    return this.storage.getValue(StorageParameters.serverAddress) || this.config.remoteAddress;
+  resolveMainServerAddress(): string {
+    return this.storage.getValue(StorageParameters.serverAddress) || DEFAULT_REMOTE_ADDRESS;
   }
 
   get storage(): typeof UserDataStorage {
@@ -206,15 +221,16 @@ export class Context {
     ]);
   }
 
-  async getWorkspaces() {
+  async getWorkspaces(): Promise<Workspace[]> {
     const data = await this.request(GraphqlActions.listWorkspaces, null, {
       customWorkspaceId: null,
       isLoginRequired: false,
+      address: this.resolveMainServerAddress(),
     });
 
     const workspaces = data.workspacesList.items;
 
-    if (_.isEmpty(workspaces)) {
+    if (_.isEmpty(workspaces) || !_.isArray(workspaces)) {
       throw new Error(this.i18n.t('logout_error'));
     }
 
@@ -224,6 +240,7 @@ export class Context {
   async checkWorkspace(workspaceId: string) {
     const data = await this.request(GraphqlActions.listWorkspaces, null, {
       isLoginRequired: false,
+      address: this.resolveMainServerAddress(),
       customWorkspaceId: null,
     });
 
@@ -239,18 +256,27 @@ export class Context {
       isLoginRequired: true,
       customWorkspaceId: undefined,
       customEnvironment: undefined,
+      address: this.apiHost,
     };
-    const { customEnvironment, customWorkspaceId, isLoginRequired } = options
+
+    const { customEnvironment, customWorkspaceId, isLoginRequired, address } = options
       ? {
           ...defaultOptions,
           ...options,
         }
       : defaultOptions;
 
-    const remoteAddress = this.serverAddress;
-    this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress }));
+    this.logger.debug(this.i18n.t('debug:remote_address', { remoteAddress: address }));
 
-    const client = new Client(remoteAddress);
+    if (!address) {
+      /*
+        address has to be passed as parameter (workspace list query) or resolved from workspace info
+        another way it's invalid behaviour
+       */
+      throw new Error(this.i18n.t('logout_error'));
+    }
+
+    const client = new Client(address);
 
     this.logger.debug(`query: ${query}`);
     this.logger.debug(`variables: ${JSON.stringify(variables)}`);

@@ -3,16 +3,18 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import _ = require('lodash');
+import { Workspace } from '../../../interfaces/Common';
 
 export default {
   command: 'configure',
 
   handler: async (params: any, context: Context) => {
-    let { workspaceId } = params;
+    let { workspaceId, region, host } = params;
+
+    const workspaces = await context.getWorkspaces();
 
     if (!workspaceId) {
-      const workspaces = await context.getWorkspaces();
-
       ({ workspaceId } = await Interactive.ask({
         name: 'workspaceId',
         type: 'select',
@@ -26,17 +28,36 @@ export default {
       if (!workspaceId) {
         throw new Error(translations.i18n.t('configure_prevent_select_workspace'));
       }
+
+      const workspace = _.find<Workspace>(workspaces, { id: workspaceId });
+      if (!workspace) {
+        throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
+      }
+
+      region = workspace.region;
+      host = workspace.apiHost;
     }
 
-    context.updateWorkspaceConfig({ workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME });
+    context.updateWorkspace({ region, workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, apiHost: host });
   },
 
   describe: translations.i18n.t('configure_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv =>
-    args.usage(translations.i18n.t('configure_usage')).option('workspaceId', {
-      alias: 'w',
-      describe: translations.i18n.t('configure_workspace_id_describe'),
-      type: 'string',
-    }),
+    args
+      .usage(translations.i18n.t('configure_usage'))
+      .option('workspaceId', {
+        alias: 'w',
+        describe: translations.i18n.t('configure_workspace_id_describe'),
+        type: 'string',
+      })
+      .option('region', {
+        alias: 'r',
+        describe: translations.i18n.t('configure_workspace_region_describe'),
+        type: 'string',
+      })
+      .option('host', {
+        describe: translations.i18n.t('configure_workspace_host_describe'),
+        type: 'string',
+      }),
 };

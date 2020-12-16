@@ -1,11 +1,9 @@
 import { Context } from '../../../common/context';
-import { GraphqlActions } from '../../../consts/GraphqlActions';
 import * as cuid from 'cuid';
 const opn = require('opn');
 import 'isomorphic-fetch';
 import { SessionInfo } from '../../../interfaces/Common';
 import { Utils } from '../../../common/utils';
-import { Selectors } from '../../../common/selectors';
 
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
   context.spinner.start(context.i18n.t('login_in_progress'));
@@ -19,7 +17,9 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   let res = null;
   while (--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
-    const fetchResult = await fetch(`${Selectors.getServerAddress(context)}/loginSessionGet/${session}`);
+    const fetchResult = await fetch(
+      `${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`,
+    );
 
     if (fetchResult.status === 404) {
       context.logger.debug(`session not present`);

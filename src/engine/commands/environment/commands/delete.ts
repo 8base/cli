@@ -14,7 +14,7 @@ export default {
     await context.request(GraphqlActions.environmentDelete, { name });
     context.spinner.stop();
 
-    context.updateWorkspaceConfig({ environmentName: DEFAULT_ENVIRONMENT_NAME });
+    context.updateEnvironmentName(DEFAULT_ENVIRONMENT_NAME);
   },
 
   describe: translations.i18n.t('environment_delete_describe'),

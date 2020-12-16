@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import * as yargs from 'yargs';
@@ -6,10 +5,7 @@ import logout from '../logout';
 import 'isomorphic-fetch';
 import { StaticConfig } from '../../../config';
 import { passwordLogin } from './passwordLogin';
-import { Interactive } from '../../../common/interactive';
 import { webLogin } from './webLogin';
-import { StorageParameters } from '../../../consts/StorageParameters';
-import * as jwtDecode from 'jwt-decode';
 
 type LoginCommandParams = {
   email: string;

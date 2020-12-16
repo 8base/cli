@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import chalk from 'chalk';
 import * as tree from 'tree-node-cli';
-import gql from 'graphql-tag';
 import * as validatePackageName from 'validate-npm-package-name';
 
 import { getFileProvider } from './providers';
@@ -16,6 +15,7 @@ import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import { Workspace } from '../../../interfaces/Common';
 
 const CREATE_WORKSPACE_MUTATION = `
   mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
@@ -41,7 +41,7 @@ export default {
   handler: async (params: any, context: Context) => {
     const { functions, empty, syntax, mocks, silent } = params;
 
-    let { workspaceId } = params;
+    let { workspaceId, region, host } = params;
 
     const [, projectName] = _.castArray(params._);
 
@@ -134,6 +134,14 @@ export default {
       if (!workspaceId) {
         throw new Error(translations.i18n.t('init_prevent_select_workspace'));
       }
+
+      const workspace = _.find<Workspace>(await context.getWorkspaces(), { id: workspaceId });
+      if (!workspace) {
+        throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
+      }
+
+      region = workspace.region;
+      host = workspace.apiHost;
     }
 
     context.spinner.start(`Initializing new project ${chalk.hex(Colors.yellow)(project.name)}`);
@@ -178,7 +186,10 @@ export default {
       });
     }
 
-    context.createWorkspaceConfig({ workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME }, project.fullPath);
+    context.createWorkspaceConfig(
+      { workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, region, apiHost: host },
+      project.fullPath,
+    );
 
     if (!silent) {
       // @ts-ignore
@@ -232,6 +243,15 @@ export default {
       .option('workspaceId', {
         alias: 'w',
         describe: translations.i18n.t('init_workspace_id_describe'),
+        type: 'string',
+      })
+      .option('region', {
+        alias: 'r',
+        describe: translations.i18n.t('init_workspace_region_describe'),
+        type: 'string',
+      })
+      .option('host', {
+        describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
       })
       .example(translations.i18n.t('init_no_dir_example_command'), translations.i18n.t('init_example_no_dir'))

@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { Interactive } from '../../../common/interactive';
@@ -31,7 +30,11 @@ export const passwordLogin = async (params: any, context: Context): Promise<Sess
   const result = await context.request(
     GraphqlActions.login,
     { data: { email: data.email, password: data.password } },
-    { isLoginRequired: false, customWorkspaceId: null },
+    {
+      isLoginRequired: false,
+      address: context.resolveMainServerAddress(),
+      customWorkspaceId: null,
+    },
   );
 
   return {
