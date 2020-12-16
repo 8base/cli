@@ -251,7 +251,6 @@ export default {
         type: 'string',
       })
       .option('host', {
-        alias: 'h',
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
       })

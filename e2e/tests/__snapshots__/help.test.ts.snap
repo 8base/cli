@@ -86,7 +86,9 @@ DESCRIPTION
 OPTIONS
   --debug, -d        Turn on debug logs  [boolean]
   --help, -h         Show help  [boolean]
-  --workspaceId, -w  The workspace ID of the project  [string]"
+  --workspaceId, -w  The workspace ID of the project  [string]
+  --region, -r       The workspace region of the project  [string]
+  --host             The workspace host of the project  [string]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`deploy\`. 1`] = `
@@ -318,6 +320,8 @@ OPTIONS
   --syntax, -s       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
   --silent           Disable printing extra info to the console  [boolean] [default: false]
   --workspaceId, -w  The workspace ID of the project  [string]
+  --region, -r       The workspace region of the project  [string]
+  --host             The workspace host of the project  [string]
 
 EXAMPLES
   8base init             Initializes project in current folder
