@@ -2,7 +2,7 @@ import * as yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REGION, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
 import _ = require('lodash');
 import { Workspace } from '../../../interfaces/Common';
 
@@ -38,7 +38,12 @@ export default {
       host = workspace.apiHost;
     }
 
-    context.updateWorkspace({ region, workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, apiHost: host });
+    context.updateWorkspace({
+      region: region || DEFAULT_REGION,
+      apiHost: host || DEFAULT_REMOTE_ADDRESS,
+      workspaceId,
+      environmentName: DEFAULT_ENVIRONMENT_NAME,
+    });
   },
 
   describe: translations.i18n.t('configure_describe'),
@@ -55,9 +60,11 @@ export default {
         alias: 'r',
         describe: translations.i18n.t('configure_workspace_region_describe'),
         type: 'string',
+        default: DEFAULT_REGION,
       })
       .option('host', {
         describe: translations.i18n.t('configure_workspace_host_describe'),
         type: 'string',
+        default: DEFAULT_REMOTE_ADDRESS,
       }),
 };

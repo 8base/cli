@@ -273,7 +273,7 @@ export class Context {
         address has to be passed as parameter (workspace list query) or resolved from workspace info
         another way it's invalid behaviour
        */
-      throw new Error(this.i18n.t('logout_error'));
+      throw new Error(this.i18n.t('configure_error'));
     }
 
     const client = new Client(address);

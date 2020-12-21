@@ -105,6 +105,8 @@ export default {
     configure_select_workspace: 'Select workspace for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
 
+    configure_error: "Please configure first by running '8base configure'",
+
     /**
      * Init related messages
      */
