@@ -14,7 +14,7 @@ import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REGION, DEFAULT_REMOTE_ADDRESS } from "../../../consts/Environment";
+import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REGION, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
 import { Workspace } from '../../../interfaces/Common';
 
 const CREATE_WORKSPACE_MUTATION = `
