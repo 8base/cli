@@ -26,7 +26,6 @@ const pkg = require('../../package.json');
 export type WorkspaceConfig = {
   readonly workspaceId: string;
   readonly environmentName: string;
-  readonly region: string;
   readonly apiHost: string;
 };
 
