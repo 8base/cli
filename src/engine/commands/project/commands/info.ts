@@ -24,7 +24,6 @@ export default {
         workspaceName: chalk.green(workspace.name),
         environment: chalk.green(environmentName),
         endpoint: chalk.green(`${workspace.apiHost}/${workspaceId}`),
-        region: workspace.region,
       }),
     );
   },

@@ -14,7 +14,7 @@ import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
 import { Workspace } from '../../../interfaces/Common';
 
 const CREATE_WORKSPACE_MUTATION = `
@@ -41,7 +41,7 @@ export default {
   handler: async (params: any, context: Context) => {
     const { functions, empty, syntax, mocks, silent } = params;
 
-    let { workspaceId, region, host } = params;
+    let { workspaceId, host } = params;
 
     const [, projectName] = _.castArray(params._);
 
@@ -140,7 +140,6 @@ export default {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
       }
 
-      region = workspace.region;
       host = workspace.apiHost;
     }
 
@@ -187,7 +186,11 @@ export default {
     }
 
     context.createWorkspaceConfig(
-      { workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, region, apiHost: host },
+      {
+        workspaceId,
+        environmentName: DEFAULT_ENVIRONMENT_NAME,
+        apiHost: host || DEFAULT_REMOTE_ADDRESS,
+      },
       project.fullPath,
     );
 
@@ -245,14 +248,10 @@ export default {
         describe: translations.i18n.t('init_workspace_id_describe'),
         type: 'string',
       })
-      .option('region', {
-        alias: 'r',
-        describe: translations.i18n.t('init_workspace_region_describe'),
-        type: 'string',
-      })
       .option('host', {
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
+        default: DEFAULT_REMOTE_ADDRESS,
       })
       .example(translations.i18n.t('init_no_dir_example_command'), translations.i18n.t('init_example_no_dir'))
       .example(translations.i18n.t('init_with_dir_example_command'), translations.i18n.t('init_example_with_dir'));

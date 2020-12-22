@@ -26,7 +26,6 @@ const pkg = require('../../package.json');
 export type WorkspaceConfig = {
   readonly workspaceId: string;
   readonly environmentName: string;
-  readonly region: string;
   readonly apiHost: string;
 };
 
@@ -256,7 +255,7 @@ export class Context {
       isLoginRequired: true,
       customWorkspaceId: undefined,
       customEnvironment: undefined,
-      address: this.apiHost,
+      address: this.apiHost || this.resolveMainServerAddress(),
     };
 
     const { customEnvironment, customWorkspaceId, isLoginRequired, address } = options
@@ -273,7 +272,7 @@ export class Context {
         address has to be passed as parameter (workspace list query) or resolved from workspace info
         another way it's invalid behaviour
        */
-      throw new Error(this.i18n.t('logout_error'));
+      throw new Error(this.i18n.t('configure_error'));
     }
 
     const client = new Client(address);

@@ -2,7 +2,7 @@ import * as yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
 import _ = require('lodash');
 import { Workspace } from '../../../interfaces/Common';
 
@@ -10,7 +10,7 @@ export default {
   command: 'configure',
 
   handler: async (params: any, context: Context) => {
-    let { workspaceId, region, host } = params;
+    let { workspaceId, host } = params;
 
     const workspaces = await context.getWorkspaces();
 
@@ -34,11 +34,14 @@ export default {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
       }
 
-      region = workspace.region;
       host = workspace.apiHost;
     }
 
-    context.updateWorkspace({ region, workspaceId, environmentName: DEFAULT_ENVIRONMENT_NAME, apiHost: host });
+    context.updateWorkspace({
+      apiHost: host || DEFAULT_REMOTE_ADDRESS,
+      workspaceId,
+      environmentName: DEFAULT_ENVIRONMENT_NAME,
+    });
   },
 
   describe: translations.i18n.t('configure_describe'),
@@ -51,13 +54,9 @@ export default {
         describe: translations.i18n.t('configure_workspace_id_describe'),
         type: 'string',
       })
-      .option('region', {
-        alias: 'r',
-        describe: translations.i18n.t('configure_workspace_region_describe'),
-        type: 'string',
-      })
       .option('host', {
         describe: translations.i18n.t('configure_workspace_host_describe'),
         type: 'string',
+        default: DEFAULT_REMOTE_ADDRESS,
       }),
 };

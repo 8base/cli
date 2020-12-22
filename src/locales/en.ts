@@ -35,7 +35,7 @@ export default {
     project_info_usage: 'COMMAND\n  8base project info\n\nDESCRIPTION\n Display the info about current project.',
     project_info_describe: 'Display the info about current project.',
     project_info_text:
-      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nregion: {{-region}}\nAPI Endpoint: {{-endpoint}}',
+      'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
 
@@ -104,6 +104,8 @@ export default {
     configure_workspace_host_describe: 'The workspace host of the project',
     configure_select_workspace: 'Select workspace for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
+
+    configure_error: "Please configure first by running '8base configure'",
 
     /**
      * Init related messages
