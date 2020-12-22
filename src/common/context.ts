@@ -255,7 +255,7 @@ export class Context {
       isLoginRequired: true,
       customWorkspaceId: undefined,
       customEnvironment: undefined,
-      address: this.apiHost,
+      address: this.apiHost || this.resolveMainServerAddress(),
     };
 
     const { customEnvironment, customWorkspaceId, isLoginRequired, address } = options
