@@ -12,9 +12,9 @@ export default {
   handler: async (params: any, context: Context) => {
     let { workspaceId, host } = params;
 
-    const workspaces = await context.getWorkspaces();
-
     if (!workspaceId) {
+      const workspaces = await context.getWorkspaces();
+
       ({ workspaceId } = await Interactive.ask({
         name: 'workspaceId',
         type: 'select',
