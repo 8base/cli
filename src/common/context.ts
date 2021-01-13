@@ -222,7 +222,7 @@ export class Context {
 
   async getWorkspaces(): Promise<Workspace[]> {
     const data = await this.request(GraphqlActions.listWorkspaces, null, {
-      customWorkspaceId: null,
+      customWorkspaceId: undefined,
       isLoginRequired: false,
       address: this.resolveMainServerAddress(),
     });
@@ -240,7 +240,7 @@ export class Context {
     const data = await this.request(GraphqlActions.listWorkspaces, null, {
       isLoginRequired: false,
       address: this.resolveMainServerAddress(),
-      customWorkspaceId: null,
+      customWorkspaceId: undefined,
     });
 
     const workspaces = _.get(data, ['workspacesList', 'items'], []);
