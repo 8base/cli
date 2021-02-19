@@ -1,10 +1,10 @@
 import * as yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { GraphqlActions, GraphqlAsyncActions } from "../../../../consts/GraphqlActions";
+import { GraphqlActions, GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
-import { executeAsync } from "../../../../common/execute";
+import { executeAsync } from '../../../../common/execute';
 
 export default {
   command: 'delete',
