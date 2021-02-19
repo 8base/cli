@@ -117,6 +117,10 @@ export const GraphqlAsyncActions = {
     mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode) {
       system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
     }`,
+  environmentDelete: `
+    mutation delete($environmentName: String!) {
+      system { async: environmentDeleteAsync(environmentName: $environmentName) { sessionId } }
+    }`,
   commit: `
     mutation CommitMigration($mode: SystemCiCommitMode!, $build:String) {
       system { async: ciCommit(mode:$mode build:$build) { sessionId } }

@@ -1,9 +1,10 @@
 import * as yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { GraphqlActions } from '../../../../consts/GraphqlActions';
+import { GraphqlActions, GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
+import { executeAsync } from '../../../../common/execute';
 
 export default {
   command: 'delete',
@@ -11,7 +12,7 @@ export default {
     ProjectConfigurationState.expectConfigured(context);
     let { name } = params;
     context.spinner.start(context.i18n.t('environment_delete_in_progress'));
-    await context.request(GraphqlActions.environmentDelete, { name });
+    await executeAsync(context, GraphqlAsyncActions.environmentDelete, { environmentName: name });
     context.spinner.stop();
 
     context.updateEnvironmentName(DEFAULT_ENVIRONMENT_NAME);
