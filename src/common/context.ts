@@ -221,13 +221,7 @@ export class Context {
   }
 
   async getWorkspaces(): Promise<Workspace[]> {
-    const data = await this.request(GraphqlActions.listWorkspaces, null, {
-      customWorkspaceId: undefined,
-      isLoginRequired: false,
-      address: this.resolveMainServerAddress(),
-    });
-
-    const workspaces = data.workspacesList.items;
+    const workspaces = await this.workspaceList();
 
     if (_.isEmpty(workspaces) || !_.isArray(workspaces)) {
       throw new Error(this.i18n.t('logout_error'));
@@ -237,17 +231,20 @@ export class Context {
   }
 
   async checkWorkspace(workspaceId: string) {
+    if (!_.some(await this.workspaceList(), { id: workspaceId })) {
+      throw new Error(this.i18n.t('inexistent_workspace'));
+    }
+  }
+
+  private async workspaceList(): Promise<Workspace[]> {
     const data = await this.request(GraphqlActions.listWorkspaces, null, {
       isLoginRequired: false,
       address: this.resolveMainServerAddress(),
-      customWorkspaceId: undefined,
+      // custom workspace id is "" to ignore this parameter during requesting
+      customWorkspaceId: '',
     });
 
-    const workspaces = _.get(data, ['workspacesList', 'items'], []);
-
-    if (!_.some(workspaces, { id: workspaceId })) {
-      throw new Error(this.i18n.t('inexistent_workspace'));
-    }
+    return _.get(data, ['workspacesList', 'items'], []);
   }
 
   async request(query: string, variables: any = null, options?: RequestOptions): Promise<any> {
