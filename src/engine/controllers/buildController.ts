@@ -1,7 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import ignore from 'ignore';
-import * as _ from 'lodash';
 import { Readable } from 'stream';
 import * as recursiveReadDir from 'recursive-readdir';
 
@@ -67,21 +66,21 @@ export class BuildController {
    */
 
   private static async packageSources(context: Context): Promise<Readable> {
-    const excludedDirectories = [
-      context.config.buildDistFolder,
-      context.config.packageFolder,
-      context.config.metaFolder,
+    const excludedDirectories = ['.git', '.idea'];
+
+    const excludedRoots = [
       context.config.buildRootFolder,
+      context.config.buildDistFolder,
       context.config.modulesFolder,
-      '.git',
-      '.idea',
+      context.config.metaFolder,
+      context.config.packageFolder,
     ];
 
-    const ignoreFilter = fs.existsSync(IGNORE_FILE_PATH)
-      ? ignore().add(fs.readFileSync(IGNORE_FILE_PATH).toString())
-      : {
-          ignores: () => false,
-        };
+    const ignoreFilter = ignore().add(excludedRoots.map(item => '/' + item));
+
+    if (fs.existsSync(IGNORE_FILE_PATH)) {
+      ignoreFilter.add(fs.readFileSync(IGNORE_FILE_PATH).toString());
+    }
 
     const files = await recursiveReadDir(context.config.rootExecutionDir, excludedDirectories);
 

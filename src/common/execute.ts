@@ -52,7 +52,7 @@ export const executeAsync = async (
   }
 
   if (result.message) {
-    context.logger.debug(result.message);
+    context.logger.info(result.message);
   }
 };
 
