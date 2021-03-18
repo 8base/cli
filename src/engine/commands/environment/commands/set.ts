@@ -11,9 +11,9 @@ export default {
     let { environmentName } = params;
     ProjectConfigurationState.expectConfigured(context);
 
-    const environments = await context.getEnvironments();
-
     if (!environmentName) {
+      const environments = await context.getEnvironments();
+
       ({ environmentName } = await Interactive.ask({
         name: 'environmentName',
         type: 'select',
@@ -24,11 +24,11 @@ export default {
       if (!environmentName) {
         throw new Error(translations.i18n.t('environment_set_prevent_select_environment'));
       }
-    }
 
-    const environment = environments.find(env => env.name === environmentName);
-    if (!environment) {
-      throw new Error(translations.i18n.t('environment_set_doesnt_exit'));
+      const environment = environments.find(env => env.name === environmentName);
+      if (!environment) {
+        throw new Error(translations.i18n.t('environment_set_doesnt_exit'));
+      }
     }
 
     context.updateEnvironmentName(environmentName);
