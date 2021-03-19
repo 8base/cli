@@ -76,6 +76,7 @@ export class BuildController {
       context.config.packageFolder,
     ];
 
+    // have to add '/' at the beginning to ignore only root folder. avoid recursive
     const ignoreFilter = ignore().add(excludedRoots.map(item => '/' + item));
 
     if (fs.existsSync(IGNORE_FILE_PATH)) {
