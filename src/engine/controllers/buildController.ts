@@ -76,7 +76,7 @@ export class BuildController {
       context.config.packageFolder,
     ];
 
-    const ignoreFilter = ignore().add(excludedRoots);
+    const ignoreFilter = ignore().add(excludedRoots.map(item => '/' + item));
 
     if (fs.existsSync(IGNORE_FILE_PATH)) {
       ignoreFilter.add(fs.readFileSync(IGNORE_FILE_PATH).toString());
