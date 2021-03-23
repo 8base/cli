@@ -382,7 +382,7 @@ export default {
     environment_set_doesnt_exit: "Environment '{{name}}' doesn't exist.",
     environment_set_describe: 'Allows you to set the environment of your current project',
     environment_set_usage:
-    'COMMAND\n  8base environment set\n\nDESCRIPTION\n Allows you to select and set the environment of your current project',
+      'COMMAND\n  8base environment set\n\nDESCRIPTION\n Allows you to select and set the environment of your current project',
     environment_set_environment_name_describe: 'The environment name of the project',
 
     migration_describe: 'Migration commands.',
@@ -412,7 +412,8 @@ export default {
     migration_generate_dist_describe: 'The folder of migrations',
     migration_generate_tables_describe: 'Specify table names to generate migrations for data.',
     migration_generate_environment_describe: `Target environment`,
-    migration_generate_usage: "COMMAND\n  8base migration generate\n\nDESCRIPTION\n Generates migration files based on changes in your environment to your local 'migrations' directory.",
+    migration_generate_usage:
+      "COMMAND\n  8base migration generate\n\nDESCRIPTION\n Generates migration files based on changes in your environment to your local 'migrations' directory.",
     migration_generate_describe: 'Generates local migration files based on changes in your environment',
     migration_generate_in_progress: 'Migration plan in progress...',
 
@@ -420,7 +421,8 @@ export default {
      * Migration status related messages
      */
     migration_status_describe: 'Displays migrations which can be commited to target environment',
-    migration_status_usage: 'COMMAND\n  8base migration status\n\nDESCRIPTION\n Shows the difference between your local migration files and any migrations which have been already committed to target environment.',
+    migration_status_usage:
+      'COMMAND\n  8base migration status\n\nDESCRIPTION\n Shows the difference between your local migration files and any migrations which have been already committed to target environment.',
     migration_status_in_progress: 'Resolve status...',
     migration_status_environment_describe: 'Target environment',
 
