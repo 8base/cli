@@ -24,26 +24,26 @@ export default {
     mock_with_name_already_defined:
       'Mock with name {{- mockName }} for the function with name {{- functionName }} already defined',
     non_8base_project_dir:
-      "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command when in the root of an existing 8base project or use '8base init' to create a new project.",
+      "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command from the root of an existing 8base project or use '8base init' to create a new project.",
     workspace_not_found:
-      'Workspace not found. Try to run `8base configure` to select existed workspace for this project.',
+      'Workspace not found. Try to run `8base configure` to select existing workspace for this project.',
 
     /**
      * Project info related messages
      */
     project_describe: 'Project-related commands.',
-    project_info_usage: 'COMMAND\n  8base project info\n\nDESCRIPTION\n Display the info about current project.',
-    project_info_describe: 'Display the info about current project.',
+    project_info_usage: 'COMMAND\n  8base project info\n\nDESCRIPTION\n Displays the info about current project.',
+    project_info_describe: 'Displays the info about current project.',
     project_info_text:
       'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
-      "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using a various account or project workspace was deleted.",
+      "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using different account or project workspace was deleted.",
 
     /**
      * Whoami related messages
      */
-    whoami_usage: 'COMMAND\n  8base whoami\n\nDESCRIPTION\n Display the current authenticated user.',
-    whoami_describe: 'Display the current authenticated user.',
+    whoami_usage: 'COMMAND\n  8base whoami\n\nDESCRIPTION\n Displays the current authenticated user.',
+    whoami_describe: 'Displays the current authenticated user.',
     whoami_text: 'You authenticated as {{-email}} ({{-name}}).',
 
     /**
@@ -86,12 +86,12 @@ export default {
      */
     deploy_in_progress: 'deploying... \nStep: {{status}}\n{{message}}',
     deploy_usage:
-      'COMMAND\n  8base deploy [OPTIONS]\n\nDESCRIPTION\n  Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.',
+      'COMMAND\n  8base deploy [OPTIONS]\n\nDESCRIPTION\n  Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.',
     deploy_describe:
-      'Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.',
+      'Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.',
     deploy_plugins_describe: 'The list of plugins to deploy',
     deploy_functions_describe: 'The list of functions to deploy',
-    deploy_mode_describe: 'The deploy mode',
+    deploy_mode_describe: 'Deploy mode',
 
     /**
      * Config related messages
@@ -162,9 +162,9 @@ export default {
      * Export related messages
      */
     export_in_progress: 'exporting...',
-    export_describe: 'Export current workspace data schema',
+    export_describe: 'Exports current workspace data schema',
     export_usage:
-      'COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Export current - or specified - workspace data schema to a local file',
+      'COMMAND\n  8base export [OPTIONS]\n\nDESCRIPTION\n  Exports current - or specified - workspace data schema to a local file',
     export_file_describe: 'Destination file',
     export_file_required_option_error:
       'Please specify a relative path and filename for the export.\n\nExample: \n`8base export -f <EXPORT_FILE_PATH>`',
@@ -174,8 +174,8 @@ export default {
      * Import related messages
      */
     import_usage:
-      'COMMAND\n  8base import [OPTIONS]\n\nDESCRIPTION\n  Import 8base schema file and data to the current - or specified - workspace.',
-    import_describe: 'Import 8base schema file and data to the current - or specified - workspace.',
+      'COMMAND\n  8base import [OPTIONS]\n\nDESCRIPTION\n  Imports 8base schema file and data to the current - or specified - workspace.',
+    import_describe: 'Imports 8base schema file and data to the current - or specified - workspace.',
     import_schema_in_progress: 'importing schema...',
     import_data_in_progress: 'importing data...',
     import_file_describe: 'Path to file with schema',
@@ -226,7 +226,7 @@ export default {
     /**
      * Generate app related messages
      */
-    generate_app_describe: 'Generate an app skeleton for a specific framework (framework availability: react)',
+    generate_app_describe: 'Generates an app skeleton for a specific framework (framework availability: react)',
     generate_app_usage: '8base generate app [PROJECT_NAME]',
 
     /**
@@ -234,7 +234,7 @@ export default {
      */
     generate_scaffold_usage: '8base generate scaffold [TABLE_NAME] [OPTIONS]',
     generate_scaffold_describe:
-      'Generate CRUD screens for a table in a specific framework (framework availability: react)',
+      'Generates CRUD screens for a table in a specific framework (framework availability: react)',
     generate_scaffold_table_describe: 'Table name',
     generate_scaffold_template_describe: 'Type of template (crud, create, edit, delete, table, index) ',
     generate_scaffold_depth_describe: 'Depth of the generated query',
@@ -310,8 +310,9 @@ export default {
     /**
      * Backup create related messages
      */
-    backup_create_usage: '8base backup create',
-    backup_create_describe: 'Create backup for environment.',
+    backup_create_usage:
+      'COMMAND\n  8base backup create [OPTIONS]\n\nDESCRIPTION\n  Creates backup (snapshot) of the currently selected environment.',
+    backup_create_describe: 'Creates backup of the environment.',
     backup_create_in_progress: 'Backup in progress...',
 
     /**
@@ -334,13 +335,13 @@ export default {
     /**
      * Backup list related messages
      */
-    backup_list_describe: 'List all backups for environment.',
+    backup_list_describe: 'Lists all the backups of current environment.',
     backup_list_usage: '8base backup list',
 
     /**
      * Backup restore related messages
      */
-    backup_restore_describe: 'Restore environment to backup.',
+    backup_restore_describe: 'Restores environment from the backup.',
     backup_restore_usage: '8base backup restore [OPTIONS].',
     backup_restore_in_progress: 'Restore backup in progress...',
     backup_restore_set_environment_describe: 'Target environment name',
@@ -351,25 +352,27 @@ export default {
     /**
      * Environment list related messages
      */
-    environment_list_usage: '8base environment list',
-    environment_list_describe: 'List environment in current workspace.',
+    environment_list_usage:
+      'COMMAND\n  8base environment list\n\nDESCRIPTION\n  Lists all the environments of current workspace.',
+    environment_list_describe: 'Lists all the environments of current workspace.',
 
     /**
      * Environment branch related messages
      */
     environment_branch_in_progress: 'Branch environment in progress.',
     environment_branch_usage:
-      'COMMAND\n  8base environment branch\n\nDESCRIPTION\n  Create new branch from current environment.',
-    environment_branch_describe: 'Branch environment.',
+      'COMMAND\n  8base environment branch\n\nDESCRIPTION\n  Creates a new branch (environment) based on your currently selected environment.',
+    environment_branch_describe: 'Creates branch of the environment.',
     environment_branch_name_describe: 'Name of new environment',
+    environment_branch_mode_describe: 'Branching mode',
 
     /**
      * Environment delete related messages
      */
     environment_delete_in_progress: 'Delete environment in progress.',
-    environment_delete_usage: 'COMMAND\n  8base environment delete\n\nDESCRIPTION\n .',
-    environment_delete_describe: 'Delete environment.',
-    environment_delete_name_describe: 'Name of deleted environment',
+    environment_delete_usage: 'COMMAND\n  8base environment delete\n\nDESCRIPTION\n Deletes specified environment',
+    environment_delete_describe: 'Deletes the environment.',
+    environment_delete_name_describe: 'Name of environment to delete',
 
     /**
      * Environment set list related messages
@@ -377,8 +380,9 @@ export default {
     environment_set_select_environment: 'Select environment for current project',
     environment_set_prevent_select_environment: 'Environment selection canceled',
     environment_set_doesnt_exit: "Environment '{{name}}' doesn't exist.",
-    environment_set_describe: 'Set environment',
-    environment_set_usage: '8base environment set',
+    environment_set_describe: 'Allows you to set the environment of your current project',
+    environment_set_usage:
+      'COMMAND\n  8base environment set\n\nDESCRIPTION\n Allows you to select and set the environment of your current project',
     environment_set_environment_name_describe: 'The environment name of the project',
 
     migration_describe: 'Migration commands.',
@@ -387,9 +391,9 @@ export default {
      * Migration commit related messages
      */
     migration_commit_in_progress: 'Migration commit in progress',
-    migration_commit_describe: 'Migration commit',
+    migration_commit_describe: 'Commits migrations and/or Custom Logic from your local project to 8base',
     migration_commit_usage:
-      "COMMAND\n  8base migration commit\n\nDESCRIPTION\n  Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.",
+      "COMMAND\n  8base migration commit\n\nDESCRIPTION\n  Deploys migration files from your local 'migrations' directory and/or your Custom Logic to 8base server. You must be in the root directory of your 8base project to use this command.",
     migration_commit_mode_describe: 'Commit mode.',
     migration_commit_dest_env_master: 'Environment you want to commit is Master. Are you sure you want to continue?',
     migration_commit_canceled: 'Commit canceled',
@@ -408,23 +412,25 @@ export default {
     migration_generate_dist_describe: 'The folder of migrations',
     migration_generate_tables_describe: 'Specify table names to generate migrations for data.',
     migration_generate_environment_describe: `Target environment`,
-    migration_generate_usage: 'COMMAND\n  8base migration plan\n\nDESCRIPTION\n Get committed migrations.',
-    migration_generate_describe: 'Get committed migrations',
+    migration_generate_usage:
+      "COMMAND\n  8base migration generate\n\nDESCRIPTION\n Generates migration files based on changes in your environment to your local 'migrations' directory.",
+    migration_generate_describe: 'Generates local migration files based on changes in your environment',
     migration_generate_in_progress: 'Migration plan in progress...',
 
     /**
      * Migration status related messages
      */
-    migration_status_describe: 'Migration status',
-    migration_status_usage: 'COMMAND\n  8base migration status\n\nDESCRIPTION\n Display migration status.',
+    migration_status_describe: 'Displays migrations which can be commited to target environment',
+    migration_status_usage:
+      'COMMAND\n  8base migration status\n\nDESCRIPTION\n Shows the difference between your local migration files and any migrations which have been already committed to target environment.',
     migration_status_in_progress: 'Resolve status...',
     migration_status_environment_describe: 'Target environment',
 
     /**
      * Migration status related messages
      */
-    environment_show_usage: 'COMMAND\n  8base environment show\n\nDESCRIPTION\n Display current environment.',
-    environment_show_describe: '',
+    environment_show_usage: 'COMMAND\n  8base environment show\n\nDESCRIPTION\n Displays current environment.',
+    environment_show_describe: 'Displays currently selected environment',
     environment_show_text: 'Environment: {{-environment}}',
 
     /**
@@ -461,7 +467,7 @@ export default {
     configuration_required: `You have to configure project before execute the command.`,
     async_in_progress: 'progress... \nStep: {{- status }}\n{{- message }}',
 
-    you_are_not_in_project: 'Current folder does not contain the 8base.yaml file.',
+    you_are_not_in_project: 'Current folder does not contain the 8base.yml file.',
 
     workspace_with_id_doesnt_exist:
       'Something went wrong, cannot get workspace with id: {{- id}}. Please contact support@8base.com if the error persists.',
