@@ -1,21 +1,21 @@
 import {
   addFileToProject,
-  addResolverToProject, RunCommand,
+  addResolverToProject,
+  RunCommand,
   expectInString,
-  prepareTestEnvironment
-} from "../../../utils";
+  prepareTestEnvironment,
+} from '../../../utils';
 
 let project: any = null;
-const repositoryName = "test_rep";
+const repositoryName = 'test_rep';
 
-it("As a user, I can invoke resolver locally.", async () => {
-
+it('As a user, I can invoke resolver locally.', async () => {
   // @ts-ignore
   jest.setTimeout(12000);
 
   expect.assertions(1);
 
-  const funcName = "invokeFuncTest";
+  const funcName = 'invokeFuncTest';
 
   const funcCode = `
     import * as path from "path";
@@ -33,16 +33,18 @@ it("As a user, I can invoke resolver locally.", async () => {
 
   addResolverToProject(funcName, funcCode, gqlData, project.repPath);
 
-  const fileData = JSON.stringify({ data: { value: "kokoko" } });
-  const { relativePathToFile } = addFileToProject("someData.json", fileData, project.repPath, "data");
+  const fileData = JSON.stringify({ data: { value: 'kokoko' } });
+  const { relativePathToFile } = addFileToProject('someData.json', fileData, project.repPath, 'data');
 
   const result = await RunCommand.invokeLocal(funcName, project.repPath, { path: relativePathToFile });
 
-  expectInString(result, `Result:
+  expectInString(
+    result,
+    `Result:
     {
       "data": "kokoko"
     }
-    invoke-local done. Time:`
+    invoke-local done. Time:`,
   );
 });
 

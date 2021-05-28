@@ -9,10 +9,10 @@ const runner = (cwd?: any, env?: any) => {
     env: Object.assign(
       {
         HOME: process.env.HOME,
-        SKIP_VERSION_CHECK: true
+        SKIP_VERSION_CHECK: true,
       },
-      env
-    )
+      env,
+    ),
   };
 
   return (...args: any[]) => execa('node', [CLI_BIN].concat(args), opts);
