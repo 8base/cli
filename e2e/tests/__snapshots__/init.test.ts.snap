@@ -9,7 +9,7 @@ testdir_init
 ├── 8base.yml
 └── package.json
 🎉 Project testdir_init was successfully created 🎉
-init done. Time: 100 ms."
+init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init empty project. 2`] = `
@@ -50,7 +50,7 @@ testdir_init
             └── mocks
                 └── request.json
 🎉 Project testdir_init was successfully created 🎉
-init done. Time: 100 ms."
+init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init example project. 2`] = `
