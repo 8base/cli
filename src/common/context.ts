@@ -20,7 +20,7 @@ import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
-import { RequestHeaderNotSet, RequestHeaderIgnored } from "../consts/request";
+import { RequestHeaderNotSet, RequestHeaderIgnored } from '../consts/request';
 
 const pkg = require('../../package.json');
 
@@ -126,10 +126,6 @@ export class Context {
 
   get workspaceId(): string | null {
     return _.get(this.workspaceConfig, 'workspaceId', null);
-  }
-
-  get region(): string | null {
-    return _.get(this.workspaceConfig, 'region', null);
   }
 
   get environmentName(): string | null {

@@ -2,7 +2,7 @@ import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { Interactive } from '../../../common/interactive';
 import { SessionInfo } from '../../../interfaces/Common';
-import { RequestHeaderIgnored } from "../../../consts/request";
+import { RequestHeaderIgnored } from '../../../consts/request';
 
 const promptEmail = async (): Promise<string> => {
   return (await Interactive.ask({ type: 'text', name: 'email', message: 'Email:' })).email;

@@ -3,9 +3,8 @@ import { Utils } from './utils';
 import { AsyncStatus } from '../consts/AsyncStatus';
 import { BuildController } from '../engine/controllers/buildController';
 import { Context } from './context';
-import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { RequestOptions } from '../interfaces/Common';
-import { RequestHeaderIgnored } from "../consts/request";
+import { RequestHeaderIgnored } from '../consts/request';
 
 export const executeAsync = async (
   context: Context,
