@@ -24,7 +24,7 @@ export const executeAsync = async (
       await context.request(
         GraphqlActions.asyncSessionStatus,
         { sessionId },
-        { customEnvironment: DEFAULT_ENVIRONMENT_NAME },
+        { customEnvironment: null, customWorkspaceId: null },
       )
     ).status;
 
