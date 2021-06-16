@@ -31,7 +31,7 @@ export default {
       })
       .option('mode', {
         alias: 'm',
-        describe: translations.i18n.t('deploy_mode_describe'),
+        describe: translations.i18n.t('environment_branch_mode_describe'),
         default: MigrateMode.FULL,
         type: 'string',
         choices: Object.values(MigrateMode),

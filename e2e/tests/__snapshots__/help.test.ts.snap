@@ -12,12 +12,12 @@ USAGE
 COMMANDS
   8base backup <command>       Backup commands.
   8base configure              Allows you to select a default workspace and retrieve the API endpoint URL.
-  8base deploy                 Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.
+  8base deploy                 Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.
   8base describe [name]        Describes your 8base project’s functions and their types through 8base.yml file.
   8base environment <command>  Environment commands.
-  8base export                 Export current workspace data schema
+  8base export                 Exports current workspace data schema
   8base generate <command>     Generator for server and client side resources  [aliases: g]
-  8base import                 Import 8base schema file and data to the current - or specified - workspace.
+  8base import                 Imports 8base schema file and data to the current - or specified - workspace.
   8base init                   Initializes a new project with example directory structure and custom functions.
   8base invoke [name]          Invokes a custom function in the production workspace.
   8base invoke-local [name]    Invokes the custom function in the local development workspace.
@@ -27,7 +27,7 @@ COMMANDS
   8base migration <command>    Migration commands.
   8base package                Package 8base application without deploying it.
   8base project <command>      Project-related commands.
-  8base whoami                 Display the current authenticated user.
+  8base whoami                 Displays the current authenticated user.
 
 OPTIONS
   --version, -v  Show version number  [boolean]
@@ -36,7 +36,11 @@ OPTIONS
 `;
 
 exports[`As a user, I can use help flag for see help information about \`backup,create\`. 1`] = `
-"8base backup create
+"COMMAND
+  8base backup create [OPTIONS]
+
+DESCRIPTION
+  Creates backup (snapshot) of the currently selected environment.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
@@ -67,9 +71,9 @@ exports[`As a user, I can use help flag for see help information about \`backup\
 Backup commands.
 
 COMMANDS
-  8base backup create   Create backup for environment.
-  8base backup list     List all backups for environment.
-  8base backup restore  Restore environment to backup.
+  8base backup create   Creates backup of the environment.
+  8base backup list     Lists all the backups of current environment.
+  8base backup restore  Restores environment from the backup.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
@@ -95,14 +99,14 @@ exports[`As a user, I can use help flag for see help information about \`deploy\
   8base deploy [OPTIONS]
 
 DESCRIPTION
-  Deploys project in current directory to 8base using 8base.yml config file. To use this command, you must be in the root directory of your 8base project.
+  Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.
 
 OPTIONS
   --debug, -d      Turn on debug logs  [boolean]
   --help, -h       Show help  [boolean]
   --plugins, -p    The list of plugins to deploy  [array]
   --functions, -f  The list of functions to deploy  [array]
-  --mode, -m       The deploy mode  [string] [choices: \\"FULL\\", \\"ONLY_PLUGINS\\", \\"ONLY_PROJECT\\", \\"FUNCTIONS\\", \\"MIGRATIONS\\"] [default: \\"ONLY_PROJECT\\"]"
+  --mode, -m       Deploy mode  [string] [choices: \\"FULL\\", \\"ONLY_PLUGINS\\", \\"ONLY_PROJECT\\", \\"FUNCTIONS\\", \\"MIGRATIONS\\"] [default: \\"ONLY_PROJECT\\"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`describe\`. 1`] = `
@@ -122,17 +126,21 @@ exports[`As a user, I can use help flag for see help information about \`environ
   8base environment branch
 
 DESCRIPTION
-  Create new branch from current environment.
+  Creates a new branch (environment) based on your currently selected environment.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
   --help, -h   Show help  [boolean]
   --name, -n   Name of new environment  [string] [required]
-  --mode, -m   The deploy mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"FULL\\"]"
+  --mode, -m   Branching mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"FULL\\"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`environment,list\`. 1`] = `
-"8base environment list
+"COMMAND
+  8base environment list
+
+DESCRIPTION
+  Lists all the environments of current workspace.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
@@ -140,7 +148,11 @@ OPTIONS
 `;
 
 exports[`As a user, I can use help flag for see help information about \`environment,set\`. 1`] = `
-"8base environment set
+"COMMAND
+  8base environment set
+
+DESCRIPTION
+ Allows you to select and set the environment of your current project
 
 OPTIONS
   --debug, -d            Turn on debug logs  [boolean]
@@ -153,7 +165,7 @@ exports[`As a user, I can use help flag for see help information about \`environ
   8base environment show
 
 DESCRIPTION
- Display current environment.
+ Displays current environment.
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
@@ -166,11 +178,11 @@ exports[`As a user, I can use help flag for see help information about \`environ
 Environment commands.
 
 COMMANDS
-  8base environment branch  Branch environment.
-  8base environment delete  Delete environment.
-  8base environment list    List environment in current workspace.
-  8base environment set     Set environment
-  8base environment show
+  8base environment branch  Creates branch of the environment.
+  8base environment delete  Deletes the environment.
+  8base environment list    Lists all the environments of current workspace.
+  8base environment set     Allows you to set the environment of your current project
+  8base environment show    Displays currently selected environment
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
@@ -182,7 +194,7 @@ exports[`As a user, I can use help flag for see help information about \`export\
   8base export [OPTIONS]
 
 DESCRIPTION
-  Export current - or specified - workspace data schema to a local file
+  Exports current - or specified - workspace data schema to a local file
 
 OPTIONS
   --debug, -d      Turn on debug logs  [boolean]
@@ -273,11 +285,11 @@ exports[`As a user, I can use help flag for see help information about \`generat
 Generator for server and client side resources
 
 COMMANDS
-  8base generate app <appName>         Generate an app skeleton for a specific framework (framework availability: react)
+  8base generate app <appName>         Generates an app skeleton for a specific framework (framework availability: react)
   8base generate mock <name>           8base generate mock [FUNCTION_NAME] [OPTIONS]
   8base generate plugin <name>         Generator for a plugin.
   8base generate resolver <name>       Generator for a custom resolver function.
-  8base generate scaffold <tableName>  Generate CRUD screens for a table in a specific framework (framework availability: react)
+  8base generate scaffold <tableName>  Generates CRUD screens for a table in a specific framework (framework availability: react)
   8base generate task <name>           Generator for a custom task function.
   8base generate trigger <name>        Generator for a custom trigger function.
   8base generate webhook <name>        Generator for a custom webhook function.
@@ -292,7 +304,7 @@ exports[`As a user, I can use help flag for see help information about \`import\
   8base import [OPTIONS]
 
 DESCRIPTION
-  Import 8base schema file and data to the current - or specified - workspace.
+  Imports 8base schema file and data to the current - or specified - workspace.
 
 OPTIONS
   --debug, -d      Turn on debug logs  [boolean]
@@ -415,7 +427,7 @@ exports[`As a user, I can use help flag for see help information about \`migrati
   8base migration commit
 
 DESCRIPTION
-  Deploys migration in the 'migrations' directory to 8base. To use this command, you must be in the root directory of your 8base project.
+  Deploys migration files from your local 'migrations' directory and/or your Custom Logic to 8base server. You must be in the root directory of your 8base project to use this command.
 
 OPTIONS
   --debug, -d        Turn on debug logs  [boolean]
@@ -427,10 +439,10 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`migration,generate\`. 1`] = `
 "COMMAND
-  8base migration plan
+  8base migration generate
 
 DESCRIPTION
- Get committed migrations.
+ Generates migration files based on changes in your environment to your local 'migrations' directory.
 
 OPTIONS
   --debug, -d        Turn on debug logs  [boolean]
@@ -445,7 +457,7 @@ exports[`As a user, I can use help flag for see help information about \`migrati
   8base migration status
 
 DESCRIPTION
- Display migration status.
+ Shows the difference between your local migration files and any migrations which have been already committed to target environment.
 
 OPTIONS
   --debug, -d        Turn on debug logs  [boolean]
@@ -459,9 +471,9 @@ exports[`As a user, I can use help flag for see help information about \`migrati
 Migration commands.
 
 COMMANDS
-  8base migration commit    Migration commit
-  8base migration generate  Get committed migrations
-  8base migration status    Migration status
+  8base migration commit    Commits migrations and/or Custom Logic from your local project to 8base
+  8base migration generate  Generates local migration files based on changes in your environment
+  8base migration status    Displays migrations which can be commited to target environment
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
