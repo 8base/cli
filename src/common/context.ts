@@ -20,6 +20,7 @@ import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
+import { RequestHeaderNotSet, RequestHeaderIgnored } from "../consts/request";
 
 const pkg = require('../../package.json');
 
@@ -240,8 +241,7 @@ export class Context {
     const data = await this.request(GraphqlActions.listWorkspaces, null, {
       isLoginRequired: false,
       address: this.resolveMainServerAddress(),
-      // custom workspace id is "" to ignore this parameter during requesting
-      customWorkspaceId: '',
+      customWorkspaceId: RequestHeaderIgnored,
     });
 
     return _.get(data, ['workspacesList', 'items'], []);
@@ -250,8 +250,8 @@ export class Context {
   async request(query: string, variables: any = null, options?: RequestOptions): Promise<any> {
     const defaultOptions: RequestOptions = {
       isLoginRequired: true,
-      customWorkspaceId: undefined,
-      customEnvironment: undefined,
+      customWorkspaceId: RequestHeaderNotSet,
+      customEnvironment: RequestHeaderNotSet,
       address: this.apiHost || this.resolveMainServerAddress(),
     };
 
@@ -289,14 +289,14 @@ export class Context {
       client.setIdToken(idToken);
     }
 
-    const workspaceId = customWorkspaceId !== undefined ? customWorkspaceId : this.workspaceId;
+    const workspaceId = customWorkspaceId !== RequestHeaderNotSet ? customWorkspaceId : this.workspaceId;
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t('debug:set_workspace_id', { workspaceId }));
       client.setWorkspaceId(workspaceId);
     }
 
-    const environmentName = _.isNil(customEnvironment) ? this.environmentName : customEnvironment;
+    const environmentName = customEnvironment !== RequestHeaderNotSet ? customEnvironment : this.environmentName;
     if (environmentName) {
       this.logger.debug(this.i18n.t('debug:set_environment_name', { environmentName }));
       client.gqlc.setHeader('environment', environmentName);

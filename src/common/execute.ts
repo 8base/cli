@@ -5,6 +5,7 @@ import { BuildController } from '../engine/controllers/buildController';
 import { Context } from './context';
 import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { RequestOptions } from '../interfaces/Common';
+import { RequestHeaderIgnored } from "../consts/request";
 
 export const executeAsync = async (
   context: Context,
@@ -24,7 +25,7 @@ export const executeAsync = async (
       await context.request(
         GraphqlActions.asyncSessionStatus,
         { sessionId },
-        { customEnvironment: null, customWorkspaceId: null },
+        { customEnvironment: RequestHeaderIgnored, customWorkspaceId: RequestHeaderIgnored },
       )
     ).status;
 
