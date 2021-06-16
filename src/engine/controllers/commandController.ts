@@ -74,7 +74,7 @@ export class CommandController {
         context.logger.info(
           `${chalk.hex(Colors.green)(command)} done. Time: ${chalk.hex(Colors.green)(
             time.toLocaleString('en-US'),
-          )} ms.`,
+          )} sec.`,
         );
       } catch (ex) {
         context.spinner.stop();
@@ -87,7 +87,7 @@ export class CommandController {
 
         const time = Date.now() - start;
 
-        context.logger.error(`Time: ${chalk.hex(Colors.red)(time.toLocaleString('en-US'))} ms.`);
+        context.logger.error(`Time: ${chalk.hex(Colors.red)(time.toLocaleString('en-US'))} sec.`);
 
         process.exit(1);
       }
