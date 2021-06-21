@@ -2,7 +2,7 @@ import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { Interactive } from '../../../common/interactive';
 import { SessionInfo } from '../../../interfaces/Common';
-import { RequestHeaderIgnored } from '../../../consts/request';
+import { REQUEST_HEADER_IGNORED } from '../../../consts/request';
 
 const promptEmail = async (): Promise<string> => {
   return (await Interactive.ask({ type: 'text', name: 'email', message: 'Email:' })).email;
@@ -32,9 +32,9 @@ export const passwordLogin = async (params: any, context: Context): Promise<Sess
     GraphqlActions.login,
     { data: { email: data.email, password: data.password } },
     {
-      isLoginRequired: false,
+      customAuthorization: REQUEST_HEADER_IGNORED,
       address: context.resolveMainServerAddress(),
-      customWorkspaceId: RequestHeaderIgnored,
+      customWorkspaceId: REQUEST_HEADER_IGNORED,
     },
   );
 

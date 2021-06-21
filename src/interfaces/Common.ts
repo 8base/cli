@@ -22,7 +22,7 @@ export enum CommitMode {
 }
 
 export interface RequestOptions {
-  readonly isLoginRequired?: boolean;
+  readonly customAuthorization?: string;
   readonly customWorkspaceId?: string;
   readonly customEnvironment?: string;
   readonly address?: string;
