@@ -8,6 +8,9 @@ import * as yargs from 'yargs';
 import { CommitMode, MigrateMode, RequestOptions } from '../../../../interfaces/Common';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 import { Interactive } from '../../../../common/interactive';
+import * as fs from 'fs';
+const path = require('path');
+import { PredefineData } from '../../../../config/predefineData';
 
 export default {
   command: 'commit',
@@ -40,10 +43,26 @@ export default {
         ? await uploadProject(context, options)
         : { buildName: null };
 
+      let migrationNames: string[] = [];
+
+      if (typeof params.target === 'string') {
+          migrationNames.push(params.target);
+      } else if (typeof params.target === 'object') {
+          migrationNames = params.target;
+      }
+
+      const paths: PredefineData = new PredefineData();
+
+      migrationNames.forEach(name => {
+          if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
+              throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
+          }
+      });
+
     await executeAsync(
       context,
       GraphqlAsyncActions.commit,
-      { mode: params.mode, build: buildName },
+      { mode: params.mode, build: buildName, migrationNames: migrationNames },
       { customEnvironment: environment },
     );
 
