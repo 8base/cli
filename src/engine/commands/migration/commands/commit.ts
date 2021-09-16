@@ -9,7 +9,7 @@ import { CommitMode, MigrateMode, RequestOptions } from '../../../../interfaces/
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 import { Interactive } from '../../../../common/interactive';
 import * as fs from 'fs';
-const path = require('path');
+import * as path from 'path';
 import { PredefineData } from '../../../../config/predefineData';
 
 export default {
@@ -43,21 +43,23 @@ export default {
         ? await uploadProject(context, options)
         : { buildName: null };
 
-      let migrationNames: string[] = [];
+    if (params.mode === CommitMode.ONLY_PROJECT || params.mode === CommitMode.FULL) {
+      var migrationNames: string[] = [];
 
       if (typeof params.target === 'string') {
-          migrationNames.push(params.target);
+        migrationNames.push(params.target);
       } else if (typeof params.target === 'object') {
-          migrationNames = params.target;
+        migrationNames = params.target;
       }
 
       const paths: PredefineData = new PredefineData();
 
       migrationNames.forEach(name => {
-          if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
-              throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
-          }
+        if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
+          throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
+        }
       });
+    }
 
     await executeAsync(
       context,
@@ -86,6 +88,11 @@ export default {
       .option('environment', {
         alias: 'e',
         describe: translations.i18n.t('migration_environment_describe'),
+        type: 'string',
+      })
+      .option('target', {
+        alias: 't',
+        describe: translations.i18n.t('migration_commit_select_file_describe'),
         type: 'string',
       }),
 };
