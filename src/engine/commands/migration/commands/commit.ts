@@ -43,9 +43,9 @@ export default {
         ? await uploadProject(context, options)
         : { buildName: null };
 
+    let migrationNames: string[] | undefined = undefined;
     if (params.mode === CommitMode.ONLY_PROJECT || params.mode === CommitMode.FULL) {
-      var migrationNames: string[] = [];
-
+      migrationNames = [];
       if (typeof params.target === 'string') {
         migrationNames.push(params.target);
       } else if (typeof params.target === 'object') {
