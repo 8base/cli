@@ -3,6 +3,7 @@ import * as path from 'path';
 export class PredefineData {
   projectDir = path.join(__dirname, '../');
   executionDir = process.cwd();
+  pluginsDir = path.join(this.executionDir, './plugins');
   projectTemplatePath = path.join(this.projectDir, '../templates/project');
   functionTemplatesPath = path.join(this.projectDir, '../templates/functions');
   pluginTemplatePath = path.join(this.projectDir, '../templates/plugin');

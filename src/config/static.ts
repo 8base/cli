@@ -28,6 +28,10 @@ export class StaticConfig {
     return this.staticData.executionDir;
   }
 
+  static get pluginsDir(): string {
+    return this.staticData.pluginsDir;
+  }
+
   static get commandsDir(): string {
     return this.staticData.commandsPath;
   }

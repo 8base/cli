@@ -97,13 +97,18 @@ export class ProjectController {
     const name = path.basename(context.config.rootExecutionDir);
     context.logger.debug('start initialize project "' + name + '"');
 
-    context.logger.debug('load main yml file');
-    const config = ProjectController.loadConfigFile(context);
+    const projectFile = ProjectController.checkProjectFileExist(context);
+    const extensions = projectFile.extensions;
+    const gqlSchema = projectFile.gqlSchema;
 
-    context.logger.debug('load extensions');
-    const extensions = ProjectController.loadExtensions(config);
-
-    const gqlSchema = GraphqlController.loadSchema(ProjectController.getSchemaPaths(extensions));
+    context.logger.debug('initialize plugins structure');
+    fs.readdirSync(context.config.pluginsDir)
+      .filter(file => {
+        return file.charAt(0) != '.';
+      })
+      .forEach(file => {
+        ProjectController.checkProjectFileExist(context, path.join(context.config.pluginsDir, file));
+      });
 
     context.logger.debug('load functions count = ' + extensions.functions.length);
 
@@ -116,6 +121,21 @@ export class ProjectController {
       extensions,
       name,
       gqlSchema,
+    };
+  }
+
+  static checkProjectFileExist(context: Context, projectPath?: string): any {
+    context.logger.debug('load main yml file');
+    const config = ProjectController.loadConfigFile(context, projectPath);
+
+    context.logger.debug('load extensions');
+    const extensions = ProjectController.loadExtensions(config, projectPath);
+
+    const gqlSchema = GraphqlController.loadSchema(ProjectController.getSchemaPaths(extensions, projectPath));
+
+    return {
+      extensions: extensions,
+      gqlSchema: gqlSchema,
     };
   }
 
@@ -168,9 +188,10 @@ export class ProjectController {
     );
   }
 
-  static getSchemaPaths(extensions: ExtensionsContainer): string[] {
+  static getSchemaPaths(extensions: ExtensionsContainer, projectPath?: string): string[] {
+    const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
     return _.map(extensions.resolvers, f => {
-      const p = path.join(StaticConfig.rootExecutionDir, f.gqlSchemaPath);
+      const p = path.join(pathToWorkDir, f.gqlSchemaPath);
       if (!fs.existsSync(p)) {
         throw new Error('schema path "' + p + '" not present');
       }
@@ -194,7 +215,7 @@ export class ProjectController {
     try {
       return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
     } catch (ex) {
-      throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, ex.message);
+      throw new InvalidConfiguration(pathToYmlConfig, ex.message);
     }
   }
 
@@ -212,11 +233,11 @@ export class ProjectController {
     }
   }
 
-  private static loadExtensions(config: any): ExtensionsContainer {
+  private static loadExtensions(config: any, projectPath?: string): ExtensionsContainer {
     return _.reduce<any, ExtensionsContainer>(
       config.functions,
       (extensions, data, functionName) => {
-        FunctionUtils.validateFunctionDefinition(data, functionName);
+        FunctionUtils.validateFunctionDefinition(data, functionName, projectPath);
 
         extensions.functions.push({
           name: functionName,
@@ -592,7 +613,9 @@ namespace FunctionUtils {
     );
   }
 
-  export function validateFunctionDefinition(func: any, name: string) {
+  export function validateFunctionDefinition(func: any, name: string, projectPath?: string) {
+    const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
+
     if (_.isNil(func.handler)) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
@@ -600,7 +623,7 @@ namespace FunctionUtils {
       );
     }
 
-    if (func.handler.code && !fs.existsSync(path.join(StaticConfig.rootExecutionDir, func.handler.code))) {
+    if (func.handler.code && !fs.existsSync(path.join(pathToWorkDir, func.handler.code))) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
         'unable to determine function "' + name + '" source code',
