@@ -45,12 +45,7 @@ export default {
 
     let migrationNames: string[] | undefined = undefined;
     if (params.mode === CommitMode.ONLY_PROJECT || params.mode === CommitMode.FULL) {
-      migrationNames = [];
-      if (typeof params.target === 'string') {
-        migrationNames.push(params.target);
-      } else if (typeof params.target === 'object') {
-        migrationNames = params.target;
-      }
+      migrationNames = params.target;
 
       const paths: PredefineData = new PredefineData();
 
@@ -93,6 +88,6 @@ export default {
       .option('target', {
         alias: 't',
         describe: translations.i18n.t('migration_commit_select_file_describe'),
-        type: 'string',
+        type: 'array',
       }),
 };
