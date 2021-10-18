@@ -284,7 +284,7 @@ export class Context {
         ? customAuthorization
         : this.storage.getValue(StorageParameters.idToken);
     this.logger.debug(this.i18n.t('debug:set_id_token'));
-    client.setIdToken(authToken);
+    client.setIdToken(authToken || '');
 
     if (customAuthorization === REQUEST_HEADER_NOT_SET && !this.user.isAuthorized()) {
       throw new Error(this.i18n.t('logout_error'));
