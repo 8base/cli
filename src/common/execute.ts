@@ -3,8 +3,8 @@ import { Utils } from './utils';
 import { AsyncStatus } from '../consts/AsyncStatus';
 import { BuildController } from '../engine/controllers/buildController';
 import { Context } from './context';
-import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { RequestOptions } from '../interfaces/Common';
+import { REQUEST_HEADER_IGNORED } from '../consts/request';
 
 export const executeAsync = async (
   context: Context,
@@ -24,7 +24,11 @@ export const executeAsync = async (
       await context.request(
         GraphqlActions.asyncSessionStatus,
         { sessionId },
-        { customEnvironment: DEFAULT_ENVIRONMENT_NAME },
+        {
+          customEnvironment: REQUEST_HEADER_IGNORED,
+          customWorkspaceId: REQUEST_HEADER_IGNORED,
+          customAuthorization: REQUEST_HEADER_IGNORED,
+        },
       )
     ).status;
 
