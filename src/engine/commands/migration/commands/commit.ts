@@ -43,18 +43,19 @@ export default {
         ? await uploadProject(context, options)
         : { buildName: null };
 
-    let migrationNames: string[] | undefined = undefined;
-    if (params.mode === CommitMode.ONLY_PROJECT || params.mode === CommitMode.FULL) {
-      migrationNames = params.target;
-
-      const paths: PredefineData = new PredefineData();
-
-      migrationNames.forEach(name => {
-        if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
-          throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
-        }
-      });
+    if (params.mode === CommitMode.ONLY_PROJECT && params.target) {
+      throw new Error(context.i18n.t('migration_commit_in_project_mode'));
     }
+
+    let migrationNames: string[] | undefined = params.target;
+
+    const paths: PredefineData = new PredefineData();
+
+    migrationNames.forEach(name => {
+      if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
+        throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
+      }
+    });
 
     await executeAsync(
       context,
