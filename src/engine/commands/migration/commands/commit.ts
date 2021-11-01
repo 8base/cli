@@ -37,15 +37,17 @@ export default {
       throw new Error(context.i18n.t('migration_commit_in_project_mode'));
     }
 
-    let migrationNames: string[] | undefined = params.target;
+    const migrationNames: string[] | undefined = params.target;
 
-    const paths: PredefineData = new PredefineData();
+    if (migrationNames) {
+      const paths: PredefineData = new PredefineData();
 
-    migrationNames.forEach(name => {
-      if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
-        throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
-      }
-    });
+      migrationNames.forEach(name => {
+        if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
+          throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
+        }
+      });
+    }
 
     const options: RequestOptions = { customEnvironment: environment };
     await executeDeploy(context, { mode: DeployModeType.migrations }, options);
