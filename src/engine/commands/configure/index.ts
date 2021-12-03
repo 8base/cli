@@ -38,7 +38,7 @@ export default {
     }
 
     context.updateWorkspace({
-      apiHost: host || DEFAULT_REMOTE_ADDRESS,
+      apiHost: host,
       workspaceId,
       environmentName: DEFAULT_ENVIRONMENT_NAME,
     });
