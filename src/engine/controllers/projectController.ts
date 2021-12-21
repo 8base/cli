@@ -20,6 +20,7 @@ import {
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context } from '../../common/context';
+import plugin from "../commands/generate/commands/plugin";
 
 type FunctionDeclarationOptions = {
   operation?: string;
@@ -102,14 +103,13 @@ export class ProjectController {
     const gqlSchema = projectFile.gqlSchema;
 
     context.logger.debug('initialize plugins structure');
-    fs.readdirSync(context.config.pluginsDir)
-      .filter(file => {
-        return file.charAt(0) != '.';
-      })
-      .forEach(file => {
-        ProjectController.checkProjectFileExist(context, path.join(context.config.pluginsDir, file));
+    const pluginPaths = this.loadConfigFile(context).plugins;
+    if (pluginPaths) {
+      pluginPaths.map((plugin: { path: string }) => {
+        const pluginDirname = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
+        ProjectController.checkProjectFileExist(context, pluginDirname);
       });
-
+    }
     context.logger.debug('load functions count = ' + extensions.functions.length);
 
     context.logger.debug('resolve function graphql types');
