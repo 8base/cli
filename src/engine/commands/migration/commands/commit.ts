@@ -1,16 +1,16 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import * as yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { executeAsync, executeDeploy, uploadProject } from '../../../../common/execute';
 import { GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { DeployModeType } from '../../../../interfaces/Extensions';
-import * as yargs from 'yargs';
-import { CommitMode, MigrateMode, RequestOptions } from '../../../../interfaces/Common';
+import { CommitMode, RequestOptions } from '../../../../interfaces/Common';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 import { Interactive } from '../../../../common/interactive';
-import * as fs from 'fs';
-import * as path from 'path';
-import { PredefineData } from '../../../../config/predefineData';
+import { StaticConfig } from '../../../../config';
 
 export default {
   command: 'commit',
@@ -40,10 +40,8 @@ export default {
     const migrationNames: string[] | undefined = params.target;
 
     if (migrationNames) {
-      const paths: PredefineData = new PredefineData();
-
       migrationNames.forEach(name => {
-        if (!fs.existsSync(path.join(paths.executionDir, 'migrations', name))) {
+        if (!fs.existsSync(path.join(StaticConfig.rootExecutionDir, 'migrations', name))) {
           throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
         }
       });
