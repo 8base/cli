@@ -102,10 +102,11 @@ export class ProjectController {
 
     context.logger.debug('initialize plugins structure');
     const pluginPaths = this.loadConfigFile(context).plugins;
+
     if (pluginPaths) {
       pluginPaths.map((plugin: { path: string }) => {
-        const pluginDirname = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
-        ProjectController.getProjectData(context, pluginDirname);
+        const pluginDir = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
+        ProjectController.getProjectData(context, pluginDir);
       });
     }
     context.logger.debug('load functions count = ' + extensions.functions.length);
