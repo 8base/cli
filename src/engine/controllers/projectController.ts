@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 import { StaticConfig } from '../../config';
 import { InvalidConfiguration } from '../../errors';
-import { GraphqlController } from '../../engine/controllers/graphqlController';
+import { GraphqlController } from './graphqlController';
 import {
   ExtensionsContainer,
   ExtensionType,
@@ -20,7 +20,6 @@ import {
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context } from '../../common/context';
-import plugin from "../commands/generate/commands/plugin";
 
 type FunctionDeclarationOptions = {
   operation?: string;
@@ -98,16 +97,15 @@ export class ProjectController {
     const name = path.basename(context.config.rootExecutionDir);
     context.logger.debug('start initialize project "' + name + '"');
 
-    const projectFile = ProjectController.checkProjectFileExist(context);
-    const extensions = projectFile.extensions;
-    const gqlSchema = projectFile.gqlSchema;
+    const projectData = ProjectController.getProjectData(context);
+    const { extensions, gqlSchema } = projectData;
 
     context.logger.debug('initialize plugins structure');
     const pluginPaths = this.loadConfigFile(context).plugins;
     if (pluginPaths) {
       pluginPaths.map((plugin: { path: string }) => {
         const pluginDirname = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
-        ProjectController.checkProjectFileExist(context, pluginDirname);
+        ProjectController.getProjectData(context, pluginDirname);
       });
     }
     context.logger.debug('load functions count = ' + extensions.functions.length);
@@ -124,7 +122,7 @@ export class ProjectController {
     };
   }
 
-  static checkProjectFileExist(context: Context, projectPath?: string): any {
+  static getProjectData(context: Context, projectPath?: string): any {
     context.logger.debug('load main yml file');
     const config = ProjectController.loadConfigFile(context, projectPath);
 
@@ -133,10 +131,7 @@ export class ProjectController {
 
     const gqlSchema = GraphqlController.loadSchema(ProjectController.getSchemaPaths(extensions, projectPath));
 
-    return {
-      extensions: extensions,
-      gqlSchema: gqlSchema,
-    };
+    return { extensions, gqlSchema };
   }
 
   static getFunctionSourceCode(context: Context): string[] {
