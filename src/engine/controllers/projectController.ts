@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 import { StaticConfig } from '../../config';
 import { InvalidConfiguration } from '../../errors';
-import { GraphqlController } from '../../engine/controllers/graphqlController';
+import { GraphqlController } from './graphqlController';
 import {
   ExtensionsContainer,
   ExtensionType,
@@ -97,14 +97,18 @@ export class ProjectController {
     const name = path.basename(context.config.rootExecutionDir);
     context.logger.debug('start initialize project "' + name + '"');
 
-    context.logger.debug('load main yml file');
-    const config = ProjectController.loadConfigFile(context);
+    const projectData = ProjectController.getProjectData(context);
+    const { extensions, gqlSchema } = projectData;
 
-    context.logger.debug('load extensions');
-    const extensions = ProjectController.loadExtensions(config);
+    context.logger.debug('initialize plugins structure');
+    const pluginPaths = this.loadConfigFile(context).plugins;
 
-    const gqlSchema = GraphqlController.loadSchema(ProjectController.getSchemaPaths(extensions));
-
+    if (pluginPaths) {
+      pluginPaths.map((plugin: { path: string }) => {
+        const pluginDir = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
+        ProjectController.getProjectData(context, pluginDir);
+      });
+    }
     context.logger.debug('load functions count = ' + extensions.functions.length);
 
     context.logger.debug('resolve function graphql types');
@@ -117,6 +121,18 @@ export class ProjectController {
       name,
       gqlSchema,
     };
+  }
+
+  static getProjectData(context: Context, projectPath?: string): any {
+    context.logger.debug('load main yml file');
+    const config = ProjectController.loadConfigFile(context, projectPath);
+
+    context.logger.debug('load extensions');
+    const extensions = ProjectController.loadExtensions(config, projectPath);
+
+    const gqlSchema = GraphqlController.loadSchema(ProjectController.getSchemaPaths(extensions, projectPath));
+
+    return { extensions, gqlSchema };
   }
 
   static getFunctionSourceCode(context: Context): string[] {
@@ -168,9 +184,10 @@ export class ProjectController {
     );
   }
 
-  static getSchemaPaths(extensions: ExtensionsContainer): string[] {
+  static getSchemaPaths(extensions: ExtensionsContainer, projectPath?: string): string[] {
+    const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
     return _.map(extensions.resolvers, f => {
-      const p = path.join(StaticConfig.rootExecutionDir, f.gqlSchemaPath);
+      const p = path.join(pathToWorkDir, f.gqlSchemaPath);
       if (!fs.existsSync(p)) {
         throw new Error('schema path "' + p + '" not present');
       }
@@ -194,7 +211,7 @@ export class ProjectController {
     try {
       return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
     } catch (ex) {
-      throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, ex.message);
+      throw new InvalidConfiguration(pathToYmlConfig, ex.message);
     }
   }
 
@@ -212,11 +229,11 @@ export class ProjectController {
     }
   }
 
-  private static loadExtensions(config: any): ExtensionsContainer {
+  private static loadExtensions(config: any, projectPath?: string): ExtensionsContainer {
     return _.reduce<any, ExtensionsContainer>(
       config.functions,
       (extensions, data, functionName) => {
-        FunctionUtils.validateFunctionDefinition(data, functionName);
+        FunctionUtils.validateFunctionDefinition(data, functionName, projectPath);
 
         extensions.functions.push({
           name: functionName,
@@ -592,7 +609,9 @@ namespace FunctionUtils {
     );
   }
 
-  export function validateFunctionDefinition(func: any, name: string) {
+  export function validateFunctionDefinition(func: any, name: string, projectPath?: string) {
+    const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
+
     if (_.isNil(func.handler)) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
@@ -600,7 +619,7 @@ namespace FunctionUtils {
       );
     }
 
-    if (func.handler.code && !fs.existsSync(path.join(StaticConfig.rootExecutionDir, func.handler.code))) {
+    if (func.handler.code && !fs.existsSync(path.join(pathToWorkDir, func.handler.code))) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
         'unable to determine function "' + name + '" source code',
