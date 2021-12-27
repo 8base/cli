@@ -91,7 +91,7 @@ OPTIONS
   --debug, -d        Turn on debug logs  [boolean]
   --help, -h         Show help  [boolean]
   --workspaceId, -w  The workspace ID of the project  [string]
-  --host             The workspace host of the project  [string] [default: \\"https://api.8base.com\\"]"
+  --host             The workspace host of the project  [string]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`deploy\`. 1`] = `
