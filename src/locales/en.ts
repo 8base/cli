@@ -397,7 +397,9 @@ export default {
     migration_commit_mode_describe: 'Commit mode.',
     migration_commit_dest_env_master: 'Environment you want to commit is Master. Are you sure you want to continue?',
     migration_commit_canceled: 'Commit canceled',
-
+    migration_commit_file_does_not_exist: 'Migration file with name "{{name}}" doesn\'t exist',
+    migration_commit_in_project_mode: "You can't specify migrations in 'ONLY_PROJECT' mode.",
+    migration_commit_select_file_describe: 'You can specify the necessary migration files.',
     migration_environment_describe: 'Specify the environment you want to commit.',
     migration_force_describe: 'You can specify force flag to commit to master without prompt.',
 
