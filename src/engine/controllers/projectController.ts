@@ -13,10 +13,10 @@ import {
   ExtensionsContainer,
   ExtensionType,
   GraphQLFunctionType,
-  TriggerType,
-  TriggerOperation,
   ResolverDefinition,
   SyntaxType,
+  TriggerOperation,
+  TriggerType,
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context } from '../../common/context';
@@ -95,44 +95,23 @@ export class ProjectController {
 
   static initialize(context: Context): ProjectDefinition {
     const name = path.basename(context.config.rootExecutionDir);
-    context.logger.debug('start initialize project "' + name + '"');
+    context.logger.debug(`start initialize project "${name}"`);
 
-    const projectData = ProjectController.getProjectData(context);
-    const { extensions, gqlSchema } = projectData;
+    const { extensions, gqlSchema, plugins } = ProjectController.loadProjectData(context);
+    context.logger.debug(`load functions count = ${extensions.functions.length}`);
 
-    context.logger.debug('initialize plugins structure');
-    const pluginPaths = this.loadConfigFile(context).plugins;
+    if (plugins) {
+      context.logger.debug('initialize plugins structure');
 
-    if (pluginPaths) {
-      pluginPaths.map((plugin: { path: string }) => {
+      plugins.map((plugin: { path: string }) => {
         const pluginDir = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
-        ProjectController.getProjectData(context, pluginDir);
+        ProjectController.loadProjectData(context, pluginDir);
       });
     }
-    context.logger.debug('load functions count = ' + extensions.functions.length);
-
-    context.logger.debug('resolve function graphql types');
-    const functionGqlTypes = GraphqlController.defineGqlFunctionsType(gqlSchema);
-    extensions.resolvers = ResolverUtils.resolveGqlFunctionTypes(extensions.resolvers, functionGqlTypes);
 
     context.logger.debug('initialize project complete');
-    return {
-      extensions,
-      name,
-      gqlSchema,
-    };
-  }
 
-  static getProjectData(context: Context, projectPath?: string): any {
-    context.logger.debug('load main yml file');
-    const config = ProjectController.loadConfigFile(context, projectPath);
-
-    context.logger.debug('load extensions');
-    const extensions = ProjectController.loadExtensions(config, projectPath);
-
-    const gqlSchema = GraphqlController.loadSchema(ProjectController.getSchemaPaths(extensions, projectPath));
-
-    return { extensions, gqlSchema };
+    return { extensions, name, gqlSchema };
   }
 
   static getFunctionSourceCode(context: Context): string[] {
@@ -184,23 +163,29 @@ export class ProjectController {
     );
   }
 
-  static getSchemaPaths(extensions: ExtensionsContainer, projectPath?: string): string[] {
-    const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
-    return _.map(extensions.resolvers, f => {
-      const p = path.join(pathToWorkDir, f.gqlSchemaPath);
-      if (!fs.existsSync(p)) {
-        throw new Error('schema path "' + p + '" not present');
-      }
-      return p;
-    });
-  }
-
   /**
    * private functions
    */
 
+  private static loadProjectData(context: Context, projectPath?: string): any {
+    context.logger.debug('load main yml file');
+    const config = ProjectController.loadConfigFile(context, projectPath);
+
+    context.logger.debug('load extensions');
+    const extensions = ProjectController.loadExtensions(context, config, projectPath);
+
+    context.logger.debug('load schema');
+    const gqlSchema = GraphqlController.loadSchema(context, ProjectController.makeSchemaPaths(extensions, projectPath));
+
+    context.logger.debug('resolve function graphql types');
+    const functionGqlTypes = GraphqlController.defineGqlFunctionsType(gqlSchema);
+    extensions.resolvers = ResolverUtils.resolveGqlFunctionTypes(extensions.resolvers, functionGqlTypes);
+
+    return { extensions, gqlSchema, plugins: config.plugins };
+  }
+
   private static loadConfigFile(context: Context, projectPath?: string): any {
-    const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
+    const pathToYmlConfig = this.resolvePathToConfig(projectPath);
 
     context.logger.debug('check exist yaml file = ' + pathToYmlConfig);
 
@@ -216,7 +201,7 @@ export class ProjectController {
   }
 
   private static saveConfigFile(context: Context, config: Object, projectPath?: string, silent?: boolean): any {
-    const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
+    const pathToYmlConfig = this.resolvePathToConfig(projectPath);
 
     fs.writeFileSync(pathToYmlConfig, yaml.safeDump(config));
 
@@ -229,16 +214,16 @@ export class ProjectController {
     }
   }
 
-  private static loadExtensions(config: any, projectPath?: string): ExtensionsContainer {
+  private static loadExtensions(context: Context, config: any, projectPath?: string): ExtensionsContainer {
     return _.reduce<any, ExtensionsContainer>(
       config.functions,
       (extensions, data, functionName) => {
-        FunctionUtils.validateFunctionDefinition(data, functionName, projectPath);
+        FunctionUtils.validateFunctionDefinition(context, data, functionName, projectPath);
 
         extensions.functions.push({
           name: functionName,
           // TODO: create class FunctionDefinition
-          handler: functionName + '.handler', // this handler generate in compile step
+          handler: functionName + '.handler', // this handler generates in compile step
           pathToFunction: FunctionUtils.resolveHandler(functionName, data.handler),
         });
 
@@ -319,6 +304,15 @@ export class ProjectController {
     );
   }
 
+  private static resolvePathToConfig(projectPath?: string) {
+    return projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
+  }
+
+  private static makeSchemaPaths(extensions: ExtensionsContainer, projectPath?: string): string[] {
+    const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
+    return extensions.resolvers.map(resolver => path.join(pathToWorkDir, resolver.gqlSchemaPath));
+  }
+
   static addPluginDeclaration(
     context: Context,
     name: string,
@@ -346,15 +340,17 @@ export class ProjectController {
     projectPath?: string,
     silent?: boolean,
   ) {
-    let config = ProjectController.loadConfigFile(context, projectPath) || {
-      functions: {},
-    };
+    if (!FunctionUtils.isFunctionNameValid(name)) {
+      throw new Error(context.i18n.t('function_name_is_invalid', { name }));
+    }
+
+    const config = ProjectController.loadConfigFile(context, projectPath) || { functions: {} };
 
     if (_.has(config, ['functions', name])) {
       throw new Error(context.i18n.t('function_with_name_already_defined', { name }));
     }
 
-    config = _.set(config, ['functions', name], declaration);
+    _.set(config, ['functions', name], declaration);
 
     ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
@@ -609,8 +605,15 @@ namespace FunctionUtils {
     );
   }
 
-  export function validateFunctionDefinition(func: any, name: string, projectPath?: string) {
+  export function validateFunctionDefinition(context: Context, func: any, name: string, projectPath?: string) {
     const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
+
+    if (!FunctionUtils.isFunctionNameValid(name)) {
+      throw new InvalidConfiguration(
+        StaticConfig.serviceConfigFileName,
+        context.i18n.t('function_name_is_invalid', { name }),
+      );
+    }
 
     if (_.isNil(func.handler)) {
       throw new InvalidConfiguration(
@@ -637,6 +640,7 @@ namespace FunctionUtils {
   /**
    *
    * @param type "resolve", "trigger.before", "trigger.after", "subscription", "webhook"
+   * @param functionName
    * @return FunctionType
    */
   export function resolveFunctionType(type: string, functionName: string): ExtensionType {
@@ -651,6 +655,9 @@ namespace FunctionUtils {
 
     return <ExtensionType>resolvedType;
   }
+
+  const FUNCTION_NAME_REGEXP = /^[^.]+$/;
+  export const isFunctionNameValid = (functionName: string) => FUNCTION_NAME_REGEXP.test(functionName);
 }
 
 namespace TriggerUtils {
@@ -669,6 +676,7 @@ namespace TriggerUtils {
   /**
    *
    * @param type "resolve", "trigger.before", "trigger.after", "subscription"
+   * @param functionName
    * @return TriggerStageType
    */
   export function resolveTriggerType(type: string, functionName: string): TriggerType {

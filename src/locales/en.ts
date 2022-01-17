@@ -39,6 +39,9 @@ export default {
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using different account or project workspace was deleted.",
 
+    schema_file_does_not_exists: `Schema file '{{-filePath}}' does not exists.`,
+    schema_file_parse_error: `Schema file '{{-filePath}}' parse error.\n{{-errorMessage}}`,
+
     /**
      * Whoami related messages
      */
@@ -222,6 +225,7 @@ export default {
     function_with_name_not_defined: 'Function with name {{- name}} not defined',
     generate_function_grettings:
       'Boom! Your new {{- name }} function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.',
+    function_name_is_invalid: `You can't use "{{- name}}" as function name`,
 
     /**
      * Generate app related messages
