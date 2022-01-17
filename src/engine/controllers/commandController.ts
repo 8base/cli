@@ -71,8 +71,9 @@ export class CommandController {
         const elapsed = Date.now() - started;
 
         context.logger.info(
-          '%s done. Time: %s sec.',
+          '%s done. Started: %s. Elapsed: %s sec.',
           chalk.green(command),
+          chalk.green(new Date(started).toLocaleString()),
           chalk.green(elapsed.toLocaleString('en-US')),
         );
       } catch (ex) {
@@ -86,7 +87,11 @@ export class CommandController {
 
         const elapsed = Date.now() - started;
 
-        context.logger.error('Time: %s sec.', chalk.red(elapsed.toLocaleString('en-US')));
+        context.logger.error(
+          'Started: %s. Elapsed: %s sec.',
+          chalk.red(new Date(started).toLocaleString()),
+          chalk.red(elapsed.toLocaleString('en-US')),
+        );
 
         process.exit(1);
       }

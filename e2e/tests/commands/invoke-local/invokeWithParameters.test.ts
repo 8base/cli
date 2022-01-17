@@ -44,7 +44,7 @@ it('As a user, I can invoke resolver locally.', async () => {
     {
       "data": "kokoko"
     }
-    invoke-local done. Time:`,
+    invoke-local done. Started:`,
   );
 });
 
