@@ -55,9 +55,9 @@ export const addFileToProject = (
   projectPath: string,
   pathPrefix: string = '',
 ): { relativePathToFile: string; fullPathToFile: string } => {
-  const pathTodir = path.join(projectPath, pathPrefix);
-  const pathToFile: string = path.join(pathTodir, fileName);
-  execSync(`mkdir ${pathTodir}`);
+  const pathToDir = path.join(projectPath, pathPrefix);
+  const pathToFile: string = path.join(pathToDir, fileName);
+  execSync(`mkdir ${pathToDir}`);
   fs.writeFileSync(pathToFile, fileData);
   return {
     relativePathToFile: path.join(pathPrefix, fileName),

@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 
 import { Translations } from '../../common/translations';
 import { Context } from '../../common/context';
-import { Colors } from '../../consts/Colors';
 
 const NON_PROJECT_COMMANDS = [
   'init',
@@ -56,7 +55,7 @@ export class CommandController {
 
       const context = new Context(params, translations);
 
-      const start = Date.now();
+      const started = Date.now();
 
       try {
         if (NON_PROJECT_COMMANDS.indexOf(command) === -1 && NON_PROJECT_COMMANDS.indexOf(params._.join(' ')) === -1) {
@@ -69,12 +68,12 @@ export class CommandController {
 
         context.spinner.stop();
 
-        const time = Date.now() - start;
+        const elapsed = Date.now() - started;
 
         context.logger.info(
-          `${chalk.hex(Colors.green)(command)} done. Time: ${chalk.hex(Colors.green)(
-            time.toLocaleString('en-US'),
-          )} sec.`,
+          '%s done. Time: %s sec.',
+          chalk.green(command),
+          chalk.green(elapsed.toLocaleString('en-US')),
         );
       } catch (ex) {
         context.spinner.stop();
@@ -85,9 +84,9 @@ export class CommandController {
           context.logger.error(`${CommandController.parseError(ex)}`);
         }
 
-        const time = Date.now() - start;
+        const elapsed = Date.now() - started;
 
-        context.logger.error(`Time: ${chalk.hex(Colors.red)(time.toLocaleString('en-US'))} sec.`);
+        context.logger.error('Time: %s sec.', chalk.red(elapsed.toLocaleString('en-US')));
 
         process.exit(1);
       }

@@ -1,12 +1,8 @@
 import * as i18next from 'i18next';
-// eslint-disable-next-line import/named
-import { i18n } from 'i18next';
-
-import { Utils } from './utils';
 import locales from '../locales';
 
-const initTranslations = async (i18next: i18n): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
+const initTranslations = async (i18next: i18next.i18n): Promise<void> => {
+  return new Promise((resolve, reject) => {
     i18next.init(
       {
         fallbackLng: 'en',
@@ -14,7 +10,7 @@ const initTranslations = async (i18next: i18n): Promise<void> => {
         defaultNS: 'default',
         resources: locales,
       },
-      (err, t) => {
+      err => {
         if (err) {
           return reject(err);
         }
@@ -26,6 +22,7 @@ const initTranslations = async (i18next: i18n): Promise<void> => {
 
 export class Translations {
   i18n: i18next.i18n;
+
   async init(): Promise<Translations> {
     await initTranslations(i18next);
     this.i18n = i18next.cloneInstance();

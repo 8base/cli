@@ -3,6 +3,8 @@ module.exports = {
   env: {
     es6: true,
     node: true,
+    jest: true,
+    jasmine: true
   },
   extends: ['plugin:prettier/recommended', 'plugin:import/errors', 'plugin:import/warnings'],
   parserOptions: {

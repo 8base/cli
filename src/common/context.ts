@@ -16,7 +16,6 @@ import { ProjectDefinition } from '../interfaces/Project';
 import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
-import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
@@ -54,15 +53,19 @@ export class Context {
   constructor(params: any, translations: Translations) {
     this.logger = winston.createLogger({
       level: params.d ? 'debug' : 'info',
-      format: winston.format.printf((info: TransformableInfo) => {
-        if (info.level === 'info') {
-          return info.message;
-        }
-        if (info.level === 'debug') {
-          return `${chalk.hex(Colors.blue)(info.level)} [${Date.now()}]: ${info.message}`;
-        }
-        return `${chalk.hex(Colors.red)(info.level)}: ${info.message}`;
-      }),
+      format: winston.format.combine(
+        winston.format.splat(),
+        winston.format.printf((info: TransformableInfo) => {
+          switch (info.level) {
+            case 'info':
+              return info.message;
+            case 'debug':
+              return `[${chalk.blueBright(info.level)}] [${new Date().toLocaleString()}]: ${info.message}`;
+            default:
+              return `[${chalk.red(info.level)}]: ${info.message}`;
+          }
+        }),
+      ),
       transports: [new winston.transports.Console()],
     });
 
