@@ -420,6 +420,8 @@ OPTIONS
   --help, -h   Show help  [boolean]
   --num, -n    Number of lines to display  [number] [default: 10]
   --tail, -t   Continually stream logs  [boolean]"
+  --startTime, -s  Log start time  [string]
+  --endTime, -e  Log end time  [string]
 `;
 
 exports[`As a user, I can use help flag for see help information about \`migration,commit\`. 1`] = `

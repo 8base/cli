@@ -200,6 +200,7 @@ export default {
     logs_usage:
       'COMMAND\n  8base logs [name] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.',
     logs_describe: 'Show logs for the function(s).',
+    logs_migration_describe: 'Show logs for the migration',
     logs_num_describe: 'Number of lines to display',
     logs_name_describe: 'The name of the function',
     logs_tail_describe: 'Continually stream logs',
@@ -207,6 +208,8 @@ export default {
     logs_tail_in_progress: 'Establishing connection with server...',
     logs_tail_failed: 'Failed to establish connection... Please try again in a few minutes.',
     logs_tail_success: 'Connection established. Tailing logs...',
+    logs_start_time_describe: 'Log start time',
+    logs_end_time_describe: 'Log end time',
 
     /**
      * Generate related messages

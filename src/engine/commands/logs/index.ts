@@ -203,6 +203,8 @@ export default {
     const result = await context.request(GraphqlActions.logs, {
       functionName: params.name,
       limit: params.n,
+      startTime: params.startTime,
+      endTime: params.endTime,
     });
     context.spinner.stop();
 
@@ -227,6 +229,16 @@ export default {
         alias: 't',
         describe: translations.i18n.t('logs_tail_describe'),
         type: 'boolean',
+      })
+      .option('startTime', {
+        alias: 's',
+        describe: translations.i18n.t('logs_start_time_describe'),
+        type: 'string',
+      })
+      .option('endTime', {
+        alias: 'e',
+        describe: translations.i18n.t('logs_end_time_describe'),
+        type: 'string',
       });
   },
 };
