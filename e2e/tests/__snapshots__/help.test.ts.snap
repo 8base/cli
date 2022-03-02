@@ -468,7 +468,7 @@ OPTIONS
   --environment, -e  Target environment  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`migration,logs\`. 1`] =
+exports[`As a user, I can use help flag for see help information about \`migration,logs\`. 1`] = `
 "COMMAND
   8base migration logs [OPTIONS]
 
