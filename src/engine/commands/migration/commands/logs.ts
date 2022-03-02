@@ -14,7 +14,7 @@ export default {
 
   builder: (args: yargs.Argv): yargs.Argv =>
     args
-      .usage(translations.i18n.t('logs_usage'))
+      .usage(translations.i18n.t('migration_logs_usage'))
       .option('num', {
         alias: 'n',
         default: 10,

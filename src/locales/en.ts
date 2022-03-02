@@ -443,6 +443,12 @@ export default {
     migration_apply_describe: 'Migration apply',
 
     /**
+     * Log output from migration files
+     */
+    migration_logs_usage:
+      'COMMAND\n  8base migration logs [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them migration log into an 8base account.',
+
+    /**
      * Plugin related messages
      */
     plugin_describe: 'Plugins management commands.',
