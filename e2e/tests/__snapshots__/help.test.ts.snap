@@ -468,22 +468,6 @@ OPTIONS
   --environment, -e  Target environment  [string]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`[ 'migration', 'logs' ]\`. 1`] = `
-"COMMAND
-  8base migration logs [OPTIONS]
-
-DESCRIPTION
-  Authenticates the command line user by letting them migration log into an 8base account.
-
-OPTIONS
-  --debug, -d      Turn on debug logs  [boolean]
-  --help, -h       Show help  [boolean]
-  --num, -n        Number of lines to display  [number] [default: 10]
-  --tail, -t       Continually stream logs  [boolean]
-  --startTime, -s  Log start time  [string]
-  --endTime, -e    Log end time  [string]"
-`;
-
 exports[`As a user, I can use help flag for see help information about \`migration\`. 1`] = `
 "8base migration <command>
 
