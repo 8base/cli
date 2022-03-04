@@ -1,23 +1,23 @@
-import  * as ejs from 'ejs';
+import * as ejs from 'ejs';
 
 // @ts-ignore
-const  createEditComponents = '';
+import createEditComponents from './createEditComponents.js.ejs';
 // @ts-ignore
-const  fieldsInputsList = '';
+import fieldsInputsList from './fieldsInputsList.js.ejs';
 // @ts-ignore
-const  fieldsQueries = './fieldsQueries.js.ejs';
+import fieldsQueries from './fieldsQueries.js.ejs';
 // @ts-ignore
-const  routeComponent = './routeComponent.js.ejs';
+import routeComponent from './routeComponent.js.ejs';
 // @ts-ignore
-const  routeconst  = './routeconst .js.ejs';
+import routeImport from './routeImport.js.ejs';
 // @ts-ignore
-const  routeLink = './routeLink.js.ejs';
+import routeLink from './routeLink.js.ejs';
 
 export const chunks = {
   createEditComponents: (data?: { [key: string]: any }) => ejs.render(createEditComponents, data),
   fieldsInputsList: (data?: { [key: string]: any }) => ejs.render(fieldsInputsList, data),
   fieldsQueries: (data?: { [key: string]: any }) => ejs.render(fieldsQueries, data),
   routeComponent: (data?: { [key: string]: any }) => ejs.render(routeComponent, data),
-  routeconst : (data?: { [key: string]: any }) => ejs.render(routeconst , data),
+  routeImport: (data?: { [key: string]: any }) => ejs.render(routeImport, data),
   routeLink: (data?: { [key: string]: any }) => ejs.render(routeLink, data),
 };

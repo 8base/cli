@@ -1,0 +1,124 @@
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query, graphql } from 'react-apollo';
+import { Form as FormLogic, Field, FieldArray } from '@8base/forms';
+import {
+  AsyncContent,
+  Dialog,
+  Grid,
+  Button,
+  Form,
+  Row,
+  Column,
+  Icon,
+  Text,
+  SelectField,
+  InputField,
+  CheckboxField,
+  DateInputField,
+  Label,
+  ModalContext,
+} from '@8base/boost';
+import { AddressInputField, PhoneInputField, ListFields, FileInputField } from '../../shared/components'
+
+const <%= changeCase.upper(entityName)%>_QUERY = gql`
+  <%= queryEntityText%> 
+`;
+
+const <%= changeCase.upper(entityName)%>_UPDATE_MUTATION = gql`
+  mutation <%= changeCase.pascal(entityName)%>Update($data: <%= SchemaNameGenerator.getUpdateInputName(tableName)%>!) {
+    <%= SchemaNameGenerator.getUpdateItemFieldName(tableName)%>(data: $data) {
+      id
+    }
+  }
+`;
+
+<%- chunks.createEditComponents({
+    fields: fields,
+    SchemaNameGenerator: SchemaNameGenerator,
+    changeCase: changeCase,
+    chunks: chunks,
+    tableSelectors: tableSelectors,
+    table: table,
+}); %>
+
+const ehnhancer = graphql(<%= changeCase.upper(entityName)%>_UPDATE_MUTATION, {
+  name: '<%= SchemaNameGenerator.getUpdateItemFieldName(tableName)%>',
+  options: {
+    refetchQueries: ['<%=changeCase.pascal(tableName)%>TableContent', '<%= changeCase.pascal(SchemaNameGenerator.getTableListFieldName(tableName))%>'],
+    context: {
+      TOAST_SUCCESS_MESSAGE: '<%= changeCase.pascal(entityName)%> successfully updated',
+    },
+  },
+});
+
+const <%= changeCase.pascal(entityName)%>EditDialog = ehnhancer(
+  class <%= changeCase.pascal(entityName)%>EditDialog extends React.PureComponent {
+    static contextType = ModalContext;
+
+    updateOnSubmit = id => async data => {
+      await this.props.<%= SchemaNameGenerator.getUpdateItemFieldName(tableName)%>({ variables: { data: { ...data, id } } });
+
+      this.context.closeModal('<%= changeCase.upper(entityName)%>_EDIT_DIALOG_ID');
+    };
+
+    onClose = () => {
+      this.context.closeModal('<%= changeCase.upper(entityName)%>_EDIT_DIALOG_ID');
+    };
+
+    renderForm = ({ args }) => {
+      return (
+        <Query query={<%= changeCase.upper(entityName)%>_QUERY} variables={{ id: args.id }}>
+          {({ data, loading }) => (
+          <FormLogic
+            type="UPDATE"
+            tableSchemaName="<%= tableName%>"
+            onSubmit={this.updateOnSubmit(args.id)}
+            initialValues={data.<%= changeCase.lower(entityName) %>}
+            formatRelationToIds
+          >
+            {({ handleSubmit, invalid, submitting, pristine }) => (
+              <form onSubmit={handleSubmit}>
+                <Dialog.Header title="Edit <%= changeCase.pascal(entityName)%>" onClose={this.onClose} />
+                <Dialog.Body scrollable>
+                  <AsyncContent loading={ loading } stretch>
+                    <Grid.Layout gap="md" stretch>
+                      <%-
+                            chunks.fieldsInputsList({ 
+                              fields: fields,
+                              chunks: chunks,
+                              changeCase: changeCase,
+                              pluralize: pluralize,
+                              SchemaNameGenerator: SchemaNameGenerator,
+                            }); %>
+                    </Grid.Layout>
+                  </AsyncContent>
+                </Dialog.Body>
+                <Dialog.Footer>
+                  <Button color="neutral" type="button" variant="outlined" disabled={submitting} onClick={this.onClose}>
+                    Cancel
+                  </Button>
+                  <Button color="primary" type="submit" disabled={pristine || invalid} loading={submitting}>
+                    Update
+                    <%= changeCase.pascal(entityName)%>
+                  </Button>
+                </Dialog.Footer>
+              </form>
+              )}
+          </FormLogic>
+        )}
+        </Query>
+      );
+    };
+
+    render() {
+      return (
+        <Dialog id={'<%= changeCase.upper(entityName)%>_EDIT_DIALOG_ID'} size="sm">
+          {this.renderForm}
+        </Dialog>
+      );
+    }
+  }
+);
+
+export { <%= changeCase.pascal(entityName)%>EditDialog };
