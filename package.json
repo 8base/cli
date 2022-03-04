@@ -8,7 +8,13 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "8base": "dist/index.js"
+    "xbase": "dist/index.js"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "scripts": {
     "build": "tsc",
@@ -87,7 +93,13 @@
     "winston": "^3.1.0",
     "yaml": "^1.7.0",
     "yargs": "^13.3.0",
-    "download": "^8.0.0"
+    "download": "^8.0.0",
+    "@8base/schema-name-generator": "^0.1.6",
+    "@babel/runtime": "^7.3.1",
+    "copyfiles": "^2.1.0",
+    "os": "^0.1.1",
+    "pluralize": "^7.0.0",
+    "prettier": "^1.16.4"
   },
   "devDependencies": {
     "@types/archiver": "^2.1.2",
@@ -134,6 +146,25 @@
     "nodemon": "^1.18.5",
     "prettier": "^1.19.1",
     "puppeteer": "^1.16.0",
-    "ts-jest": "25.1.0"
+    "ts-jest": "25.1.0",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/change-case": "^2.3.1",
+    "@types/ejs": "^2.6.3",
+    "@types/pluralize": "^0.0.29",
+    "@types/prettier": "^1.16.3",
+    "@types/ramda": "^0.26.8",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-inline-import": "^3.0.0",
+    "documentation": "^8.0.0",
+    "flow-copy-source": "^2.0.2",
+    "tslint": "^5.16.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.4.5"
   }
 }

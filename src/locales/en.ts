@@ -13,8 +13,8 @@ export default {
     project_updated_file: 'Updated file {{- path }}',
     invalid_syntax: "Invalid syntax, available ['js', 'ts']",
     error_command_end: '{{command}} failed. Error: {{error}}.',
-    '8base_usage':
-      'DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.',
+    'usage':
+      'DESCRIPTION\n  This is an experimental tool to generate code from 8base database.',
     inexistent_workspace: 'Inexistent workspace',
     '8base_config_is_missing':
       "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
@@ -226,7 +226,7 @@ export default {
     /**
      * Generate app related messages
      */
-    generate_app_describe: 'Generates an app skeleton for a specific framework (framework availability: react)',
+    generate_app_describe: 'Generates an app skeleton using React: https://github.com/cobuildlab/create-react-cra-typescript-app',
     generate_app_usage: '8base generate app [PROJECT_NAME]',
 
     /**
