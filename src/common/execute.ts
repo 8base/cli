@@ -11,7 +11,7 @@ export const executeAsync = async (
   query: GraphqlAsyncActionsType,
   variables: { [key: string]: any } = {},
   options?: RequestOptions,
-) => {
+): Promise<string> => {
   const {
     system: {
       async: { sessionId },
@@ -54,6 +54,8 @@ export const executeAsync = async (
   if (result.message) {
     context.logger.info(result.message);
   }
+
+  return result.message;
 };
 
 export const uploadProject = async (context: Context, options?: RequestOptions): Promise<{ buildName: string }> => {

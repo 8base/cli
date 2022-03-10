@@ -5,8 +5,8 @@ import { GraphqlActions } from '../../../../consts/GraphqlActions';
 import * as download from 'download';
 import { StaticConfig } from '../../../../config';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
+import { executeAsync } from '../../../../common/execute';
 const path = require('path');
-const fs = require('fs-extra');
 
 const DEFAULT_MIGRATIONS_PATH = './migrations';
 
@@ -17,12 +17,15 @@ export default {
     ProjectConfigurationState.expectHasProject(context);
     context.spinner.start(context.i18n.t('migration_generate_in_progress'));
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
-    const { system } = await context.request(
+
+    const url = await executeAsync(
+      context,
       GraphqlActions.migrationGenerate,
       { tables: params.tables },
       { customEnvironment: params.environment },
     );
-    await download(system.ciGenerate.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
+
+    await download(url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
     context.spinner.stop();
   },
 

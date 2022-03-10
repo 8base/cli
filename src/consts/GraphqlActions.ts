@@ -34,7 +34,7 @@ export const GraphqlActions = {
     }`,
   migrationGenerate: `
     query MigrationPlan($tables: [String!]) {
-      system { ciGenerate(tables:$tables) { url } }
+      system { async: ciGenerateAsync(tables:$tables) { sessionId } }
     }`,
   migrationStatus: `
     query MigrationStatus {
