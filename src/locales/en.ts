@@ -27,6 +27,7 @@ export default {
       "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command from the root of an existing 8base project or use '8base init' to create a new project.",
     workspace_not_found:
       'Workspace not found. Try to run `8base configure` to select existing workspace for this project.',
+    empty_workspaces: 'No workspaces found. Try to create a new workspace first',
 
     /**
      * Project info related messages
