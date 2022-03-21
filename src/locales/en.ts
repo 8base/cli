@@ -78,6 +78,7 @@ export default {
     describe_progress: 'describing...',
     describe_empty_resolvers: "You don't have resolvers",
     describe_empty_triggers: "You don't have triggers",
+    trigger_duplicate_invalid: 'Duplicate trigger by type and operation fields',
     describe_empty_webhooks: "You don't have webhooks",
     describe_empty_tasks: "You don't have tasks",
     describe_function_not_found: 'Function with name {{- name }} not found',

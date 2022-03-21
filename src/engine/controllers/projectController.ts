@@ -653,7 +653,7 @@ namespace FunctionUtils {
   }
 }
 
-namespace TriggerUtils {
+export namespace TriggerUtils {
   export function resolveTriggerOperation(operation: string, funcName: string): TriggerOperation {
     const resolvedOperation = (<any>TriggerOperation)[operation];
     if (_.isNil(resolvedOperation)) {
@@ -682,5 +682,18 @@ namespace TriggerUtils {
     }
 
     return <TriggerType>resolvedType;
+  }
+
+  export function triggersDuplicateValidation(context: Context): void {
+    const triggers = ProjectController.getProjectData(context).extensions.triggers;
+
+    if (
+      _.uniqWith(
+        triggers,
+        (t1: any, t2: any) => t1.type === t2.type && t1.operation === t2.operation && t1.tableName === t2.tableName,
+      ).length !== triggers.length
+    ) {
+      throw new Error(context.i18n.t('trigger_duplicate_invalid'));
+    }
   }
 }

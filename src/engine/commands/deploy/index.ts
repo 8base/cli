@@ -5,11 +5,14 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
 import { executeDeploy } from '../../../common/execute';
+import { TriggerUtils } from '../../controllers/projectController';
 
 export default {
   command: 'deploy',
   handler: async (params: any, context: Context) => {
     context.initializeProject();
+
+    TriggerUtils.triggersDuplicateValidation(context);
 
     if (params['validate_schema']) {
       GraphqlController.validateSchema(context.project);
