@@ -96,4 +96,4 @@ export class CommandController {
   };
 }
 
-const isProjectCommand = (command: string) => NON_PROJECT_COMMANDS.indexOf(command) === -1;
+const isProjectCommand = (command: string) => !NON_PROJECT_COMMANDS.includes(command);
