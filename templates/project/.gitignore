@@ -1,3 +1,10 @@
 node_modules
+
 .build
 .env.local
+
+# 8base specific
+.workspace.json
+
+.schema.graphql
+.graphqlconfig
