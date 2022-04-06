@@ -224,7 +224,7 @@ export class Context {
     const workspaces = await this.workspaceList();
 
     if (_.isEmpty(workspaces) || !_.isArray(workspaces)) {
-      throw new Error(this.i18n.t('logout_error'));
+      throw new Error(this.i18n.t('empty_workspaces'));
     }
 
     return workspaces;
