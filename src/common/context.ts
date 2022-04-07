@@ -12,7 +12,7 @@ import { TransformableInfo } from 'logform';
 import { UserDataStorage } from './userDataStorage';
 import { User } from './user';
 import { StaticConfig } from '../config';
-import { ProjectDefinition } from '../interfaces/Project';
+import { ProjectConfig, ProjectDefinition } from '../interfaces/Project';
 import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
@@ -28,13 +28,6 @@ export type WorkspaceConfig = {
   readonly workspaceId: string;
   readonly environmentName: string;
   readonly apiHost: string;
-};
-
-type Plugin = { name: string; path: string };
-
-export type ProjectConfig = {
-  functions: Object;
-  plugins?: Plugin[];
 };
 
 const WORKSPACE_CONFIG_FILENAME = '.workspace.json';

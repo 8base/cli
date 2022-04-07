@@ -1,27 +1,28 @@
 import * as _ from 'lodash';
 import * as fs from 'fs';
-import { parse, FieldDefinitionNode } from 'graphql';
-import { ObjectTypeExtensionNode } from 'graphql/language/ast';
+import { parse } from 'graphql';
 import { GraphQLFunctionType } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { makeExecutableSchema } from 'graphql-tools';
 import { rootGraphqlSchema } from '../../consts/RootSchema';
+import { Context } from '../../common/context';
 
 export class GraphqlController {
-  static loadSchema(schemaPaths: string[], predefineSchema: string = ''): string {
-    return _.reduce<string, string>(
-      schemaPaths,
-      (res: string, file: string): string => {
-        res += fs.readFileSync(file);
-        return res;
-      },
-      predefineSchema,
-    );
+  static loadSchema(context: Context, schemaPaths: string[], predefineSchema = ''): string {
+    return schemaPaths.reduce((res, filePath) => {
+      try {
+        const schemaFile = fs.readFileSync(filePath).toString();
+        parse(schemaFile);
+        return `${res}\n${schemaFile}`;
+      } catch (e) {
+        throw new Error(context.i18n.t('schema_file_parse_error', { errorMessage: e.toLocaleString(), filePath }));
+      }
+    }, predefineSchema);
   }
 
   /**
    *
-   * @param project
+   * @param gqlSchema
    * @return { functionName: "Query/Mutation" }
    */
   static defineGqlFunctionsType(gqlSchema: string): { [functionName: string]: GraphQLFunctionType } {
@@ -30,16 +31,15 @@ export class GraphqlController {
     if (!gqlSchema) {
       return;
     }
+
     const parsedSchema = parse(gqlSchema);
     return _.transform(
       parsedSchema.definitions,
-      (res: any, data: any) => {
-        switch (data.kind) {
+      (res, extension) => {
+        switch (extension.kind) {
           case 'ObjectTypeExtension': {
-            const extension = data as ObjectTypeExtensionNode;
-            const graphqlType = data.name.value;
-            const extendedFieldNames = GraphqlController.processFields(extension.fields);
-            extendedFieldNames.forEach(field => (res[field] = graphqlType));
+            const graphqlType = extension.name.value;
+            extension.fields.forEach(field => (res[field.name.value] = graphqlType as GraphQLFunctionType));
           }
         }
       },
@@ -61,19 +61,5 @@ export class GraphqlController {
         Query: {},
       },
     });
-  }
-
-  /**
-   * private functions
-   */
-
-  private static processFields(fields: FieldDefinitionNode[]): string[] {
-    return _.transform(
-      fields,
-      (res: any[], f: any) => {
-        res.push(f.name.value);
-      },
-      [],
-    );
   }
 }
