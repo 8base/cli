@@ -28,17 +28,17 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, FunctionEvent, TriggerResponse } from '@8base/functions-types';
+import { FunctionContext, AfterCreateTriggerFunctionEvent, TriggerResponse } from '@8base/functions-types';
 
 export default (
-  event: BeforeCreateTriggerFunctionEvent,
+  event: AfterCreateTriggerFunctionEvent<UserData, OriginalObjectData>,
   ctx: FunctionContext,
-): TriggerResponse => {
+): TriggerResponse<UserData, TriggerError> => {
+  const { data, originalObject } = event;
+
   return {
-    data: {
-      ...event.data,
-      firstName: 'Override firstName',
-    },
+    data,
+
     /**
      * Triggers allow for errors to be specified in the response
      * as an array of user defined objects.
@@ -52,4 +52,19 @@ export default (
      */
     errors: [],
   };
+};
+
+type UserData = {
+  email: string;
+  lastName?: string;
+  firstName?: string;
+};
+
+type OriginalObjectData = UserData & {
+  status: string;
+};
+
+type TriggerError = {
+  code: string;
+  message: string;
 };

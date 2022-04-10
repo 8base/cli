@@ -259,8 +259,9 @@ exports[`As a user, I can use help flag for see help information about \`generat
 OPTIONS
   --debug, -d      Turn on debug logs  [boolean]
   --help, -h       Show help  [boolean]
-  --type, -t       The trigger type  [string] [choices: \\"before\\", \\"after\\"]
-  --operation, -o  Operation that invokes the trigger  [string]
+  --type, -t       The trigger type  [string] [choices: \\"before\\", \\"after\\"] [default: \\"before\\"]
+  --table, -m      The table for which the operation is invokes.  [string] [required]
+  --operation, -o  Operation that invokes the trigger  [string] [choices: \\"create\\", \\"update\\", \\"delete\\"] [default: \\"create\\"]
   --mocks, -x      Included mocks dir and files  [boolean] [default: true]
   --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
   --silent         Disable printing extra info to the console  [boolean] [default: false]"
@@ -325,7 +326,7 @@ DESCRIPTION
 OPTIONS
   --debug, -d        Turn on debug logs  [boolean]
   --help, -h         Show help  [boolean]
-  --functions, -f    List of functions  [array] [default: [\\"resolver:resolver\\",\\"task:task\\",\\"webhook:webhook\\",\\"trigger:trigger\\"]]
+  --functions, -f    List of functions  [array] [default: [\\"resolver:resolver\\",\\"task:task\\",\\"webhook:webhook\\",\\"trigger:Users:before:create\\"]]
   --empty, -e        Skip examples  [boolean] [default: false]
   --mocks, -x        Included mocks dir and files  [boolean] [default: true]
   --syntax, -s       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]

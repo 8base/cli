@@ -5,9 +5,10 @@ import { translations } from '../../../../common/translations';
 import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type TiggerParams = {
+type TriggerParams = {
   name: string;
   type?: string;
+  table?: string;
   operation?: string;
   mocks: boolean;
   syntax: SyntaxType;
@@ -17,11 +18,12 @@ type TiggerParams = {
 export default {
   command: 'trigger <name>',
 
-  handler: async (params: TiggerParams, context: Context) => {
-    let { name, type, operation, mocks, syntax, silent } = params;
+  handler: async (params: TriggerParams, context: Context) => {
+    const { name, type, table, operation, mocks, syntax, silent } = params;
 
-    if (operation && !/[\w\d]+\.(create|update|delete)/.test(operation)) {
-      throw new Error(translations.i18n.t('generate_trigger_invalid_operation'));
+    const operations: string[] = Object.values(TriggerOperation);
+    if (operation && !operations.includes(operation)) {
+      throw new Error(translations.i18n.t('generate_trigger_invalid_operation', { operations }));
     }
 
     ProjectController.generateFunction(
@@ -34,8 +36,9 @@ export default {
         silent,
       },
       {
-        type,
-        operation,
+        triggerTable: table,
+        triggerFireOn: type,
+        triggerOperation: operation,
       },
     );
   },
@@ -50,11 +53,20 @@ export default {
         describe: translations.i18n.t('generate_trigger_type_describe'),
         type: 'string',
         choices: Object.values(TriggerType),
+        default: TriggerType.before,
+      })
+      .option('table', {
+        alias: 'm',
+        describe: translations.i18n.t('generate_trigger_table_describe'),
+        type: 'string',
+        demandOption: true,
       })
       .option('operation', {
         alias: 'o',
         describe: translations.i18n.t('generate_trigger_operation_describe'),
         type: 'string',
+        choices: Object.values(TriggerOperation),
+        default: TriggerOperation.create,
       })
       .option('mocks', {
         alias: 'x',
