@@ -266,10 +266,9 @@ export default {
     /**
      * Generate trigger related messages
      */
-    generate_trigger_usage: '8base generate trigger [FUNCTION_NAME] [OPTIONS]',
+    generate_trigger_usage: '8base generate trigger [TABLE_NAME] [OPTIONS]',
     generate_trigger_describe: 'Generator for a custom trigger function.',
     generate_trigger_type_describe: 'The trigger type',
-    generate_trigger_table_describe: 'The table for which the operation is invokes.',
     generate_trigger_operation_describe: 'Operation that invokes the trigger',
     generate_trigger_table_name_describe: 'Trigger table name',
     generate_trigger_invalid_type: 'Invalid trigger type, available types: `before` and `after`',

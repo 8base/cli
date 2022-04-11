@@ -6,9 +6,8 @@ import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../
 import { ProjectController } from '../../../controllers/projectController';
 
 type TriggerParams = {
-  name: string;
+  tableName: string;
   type?: string;
-  table?: string;
   operation?: string;
   mocks: boolean;
   syntax: SyntaxType;
@@ -16,10 +15,10 @@ type TriggerParams = {
 };
 
 export default {
-  command: 'trigger <name>',
+  command: 'trigger <tableName>',
 
   handler: async (params: TriggerParams, context: Context) => {
-    const { name, type, table, operation, mocks, syntax, silent } = params;
+    const { tableName, type, operation, mocks, syntax, silent } = params;
 
     const operations: string[] = Object.values(TriggerOperation);
     if (operation && !operations.includes(operation)) {
@@ -30,13 +29,13 @@ export default {
       context,
       {
         type: ExtensionType.trigger,
-        name,
+        name: tableName,
         mocks,
         syntax,
         silent,
       },
       {
-        triggerTable: table,
+        triggerTable: tableName,
         triggerFireOn: type,
         triggerOperation: operation,
       },
@@ -48,18 +47,13 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_trigger_usage'))
+      // There is a suggestion to rename the "type" parameter to "fireOn".
       .option('type', {
         alias: 't',
         describe: translations.i18n.t('generate_trigger_type_describe'),
         type: 'string',
         choices: Object.values(TriggerType),
         default: TriggerType.before,
-      })
-      .option('table', {
-        alias: 'm',
-        describe: translations.i18n.t('generate_trigger_table_describe'),
-        type: 'string',
-        demandOption: true,
       })
       .option('operation', {
         alias: 'o',

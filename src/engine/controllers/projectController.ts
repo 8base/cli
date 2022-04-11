@@ -387,7 +387,7 @@ export class ProjectController {
         templatePath: functionTemplatePath,
       },
       { syntax, mocks, silent },
-      { functionName, type, extendType, functionDeclarationOptions: options },
+      { functionName, type, extendType },
     );
 
     if (!silent) {
