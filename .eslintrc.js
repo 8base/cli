@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-undef': ['error', { typeof: true }],
+    'import/no-named-as-default': 0,
   },
   settings: {
     'import/resolver': {
