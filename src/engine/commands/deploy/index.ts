@@ -11,6 +11,7 @@ export default {
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 
+    // TODO: It is actual?
     if (params['validate_schema']) {
       GraphqlController.validateSchema(context.project);
     }

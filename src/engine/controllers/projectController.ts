@@ -5,6 +5,7 @@ import * as ejs from 'ejs';
 import * as mkdirp from 'mkdirp';
 import * as changeCase from 'change-case';
 import * as _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 import { StaticConfig } from '../../config';
 import { InvalidConfiguration } from '../../errors';
@@ -18,9 +19,10 @@ import {
   TriggerOperation,
   TriggerType,
 } from '../../interfaces/Extensions';
-import { ProjectConfig, ProjectDefinition } from '../../interfaces/Project';
-import { Context } from '../../common/context';
+import { ProjectDefinition } from '../../interfaces/ProjectDefinition';
+import { ProjectConfig } from '../../interfaces/ProjectConfig';
 import { PluginDefinition } from '../../interfaces/Plugin';
+import { Context } from '../../common/context';
 
 type FunctionDeclarationOptions = {
   operation?: string;
@@ -98,21 +100,27 @@ export class ProjectController {
     const name = path.basename(context.config.rootExecutionDir);
     context.logger.debug(`start initialize project "${name}"`);
 
-    const { extensions, gqlSchema, plugins } = ProjectController.loadProjectData(context);
+    const { extensions, gqlSchema, config } = ProjectController.loadProjectData(context);
     context.logger.debug(`load functions count = ${extensions.functions.length}`);
 
-    if (plugins) {
+    context.projectConfig = config;
+    const project: ProjectDefinition = { name, extensions, gqlSchema, plugins: [] };
+
+    if (config.plugins?.length) {
       context.logger.debug('initialize plugins structure');
 
-      plugins.map((plugin: { path: string }) => {
-        const pluginDir = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
-        ProjectController.loadProjectData(context, pluginDir);
-      });
+      project.plugins.push(
+        ...config.plugins.map(plugin => {
+          const pluginDir = path.dirname(path.join(context.config.rootExecutionDir, plugin.path));
+          const { extensions, gqlSchema, config } = ProjectController.loadProjectData(context, pluginDir);
+          return { name: plugin.name, extensions, gqlSchema };
+        }),
+      );
     }
 
     context.logger.debug('initialize project complete');
 
-    return { extensions, name, gqlSchema };
+    return project;
   }
 
   static getFunctionSourceCode(context: Context): string[] {
@@ -176,14 +184,13 @@ export class ProjectController {
     const extensions = ProjectController.loadExtensions(context, config, projectPath);
 
     context.logger.debug('load schema');
-    const schemaPaths = ProjectController.loadSchemaPaths(context, extensions, projectPath);
-    const gqlSchema = GraphqlController.loadSchema(context, schemaPaths);
+    const gqlSchema = ProjectController.loadSchema(context, extensions, projectPath);
 
     context.logger.debug('resolve function graphql types');
     const functionGqlTypes = GraphqlController.defineGqlFunctionsType(gqlSchema);
     extensions.resolvers = ResolverUtils.resolveGqlFunctionTypes(extensions.resolvers, functionGqlTypes);
 
-    return { extensions, gqlSchema, plugins: config.plugins };
+    return { config, extensions, gqlSchema };
   }
 
   private static loadConfigFile(context: Context, projectPath?: string) {
@@ -196,7 +203,13 @@ export class ProjectController {
     }
 
     try {
-      return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8')) as ProjectConfig;
+      const config = yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8')) as ProjectConfig;
+
+      if (isEmpty(config.functions)) {
+        return { functions: {} };
+      }
+
+      return config;
     } catch (ex) {
       throw new InvalidConfiguration(pathToYmlConfig, ex.message);
     }
@@ -310,11 +323,11 @@ export class ProjectController {
     return projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
   }
 
-  private static loadSchemaPaths(context: Context, extensions: ExtensionsContainer, projectPath?: string): string[] {
+  private static loadSchema(context: Context, extensions: ExtensionsContainer, projectPath?: string): string {
     const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
     const configPath = this.resolvePathToConfig(projectPath);
 
-    return extensions.resolvers.map(resolver => {
+    const schemaPaths = extensions.resolvers.map(resolver => {
       const filePath = path.join(pathToWorkDir, resolver.gqlSchemaPath);
 
       if (fs.existsSync(filePath)) {
@@ -323,6 +336,8 @@ export class ProjectController {
 
       throw new InvalidConfiguration(configPath, context.i18n.t('schema_file_does_not_exists', { filePath }));
     });
+
+    return GraphqlController.loadSchema(context, schemaPaths);
   }
 
   static addPluginDeclaration(
@@ -356,7 +371,7 @@ export class ProjectController {
       throw new Error(context.i18n.t('function_name_is_invalid', { name }));
     }
 
-    const config = ProjectController.loadConfigFile(context, projectPath) || { functions: {} };
+    const config = ProjectController.loadConfigFile(context, projectPath);
 
     if (_.has(config, ['functions', name])) {
       throw new Error(context.i18n.t('function_with_name_already_defined', { name }));
@@ -456,9 +471,7 @@ export class ProjectController {
   }
 
   static getMock(context: Context, functionName: string, mockName: string) {
-    let config = ProjectController.loadConfigFile(context, '.') || {
-      functions: {},
-    };
+    const config = ProjectController.loadConfigFile(context, '.');
 
     if (!_.has(config, ['functions', functionName])) {
       throw new Error(context.i18n.t('function_with_name_not_defined', { name: functionName }));
@@ -476,9 +489,7 @@ export class ProjectController {
   }
 
   static generateMock(context: Context, { name, functionName, projectPath = '.', silent }: MockGenerationOptions) {
-    let config = ProjectController.loadConfigFile(context, projectPath) || {
-      functions: {},
-    };
+    const config = ProjectController.loadConfigFile(context, projectPath);
 
     if (!_.has(config, ['functions', functionName])) {
       throw new Error(context.i18n.t('function_with_name_not_defined', { name: functionName }));
