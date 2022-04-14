@@ -2,7 +2,7 @@
   "preset": "ts-jest",
   "globals": {
     "ts-jest": {
-      "tsconfig": "<rootDir>/../tsconfig.json",
+      "tsconfig": "tsconfig.json",
       "isolatedModules": true
     }
   },
