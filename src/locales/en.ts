@@ -39,6 +39,7 @@ export default {
       'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
     project_info_cant_find_workspace:
       "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using different account or project workspace was deleted.",
+    settings_timeout_wrong_value: 'Specified timeout must be between {{from}} and {{to}} seconds.',
 
     schema_file_does_not_exists: `Schema file '{{-filePath}}' does not exists.`,
     schema_file_parse_error: `Schema file '{{-filePath}}' parse error.\n{{-errorMessage}}`,

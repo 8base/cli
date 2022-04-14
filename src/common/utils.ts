@@ -5,11 +5,11 @@ import * as fs from 'fs';
 import * as archiver from 'archiver';
 import { Interactive } from './interactive';
 import * as _ from 'lodash';
+import { inRange, isInteger } from 'lodash';
 import { Context } from './context';
 import { Readable } from 'stream';
 import { CommandController } from '../engine/controllers/commandController';
-import { StaticConfig } from '../config';
-import { translations, Translations } from './translations';
+import { translations } from './translations';
 
 const MemoryStream = require('memorystream');
 const streamToBuffer = require('stream-to-buffer');
@@ -185,3 +185,13 @@ export namespace Utils {
     }
   };
 }
+
+/**
+ * End not inclusive
+ * @param {number} value
+ * @param {number} start
+ * @param {number} end
+ * @returns {boolean}
+ */
+export const isIntegerInRange = (value: number, [start, end]: [number, number?]) =>
+  isInteger(value) && inRange(value, start, end);
