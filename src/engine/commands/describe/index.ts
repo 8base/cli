@@ -31,7 +31,6 @@ export default {
 
       if (fn) {
         Object.keys(fn).forEach(name => {
-          // @ts-ignore
           context.logger.info(`${chalk.hex(Colors.yellow)(`${changeCase.title(name)}:`)} ${fn[name]}`);
         });
       } else {

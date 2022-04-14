@@ -19,7 +19,7 @@ export const prepareTestEnvironment = async (
   return {
     repPath: path.join(fullPath, repName),
     onComplete: () => {
-      execSync(`rm -r ${fullPath}`);
+      execSync(`rm -rf ${fullPath}`);
     },
   };
 };

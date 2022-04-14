@@ -1,0 +1,15 @@
+{
+  "preset": "ts-jest",
+  "globals": {
+    "ts-jest": {
+      "tsconfig": "<rootDir>/../tsconfig.json",
+      "isolatedModules": true
+    }
+  },
+  "moduleFileExtensions": ["ts", "js", "json"],
+  "transform": {
+    "\\.(gql|graphql)$": "jest-transform-graphql",
+    "^.+\\.(ts|tsx)$": "ts-jest"
+  },
+  "testMatch": ["<rootDir>/tests/**/*.test.(ts|js)"]
+}

@@ -39,7 +39,6 @@ export default {
 
     let projectConfig = context.projectConfig;
 
-    // @ts-ignore
     projectConfig = R.evolve({
       plugins: R.reject(R.propEq('name', name)),
     })(projectConfig);
