@@ -259,7 +259,7 @@ export class ProjectController {
             });
             break;
 
-          case ExtensionType.trigger:
+          case ExtensionType.trigger: {
             if (_.isNil(data.operation)) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
@@ -277,6 +277,7 @@ export class ProjectController {
               type: TriggerUtils.resolveTriggerType(data.type, functionName),
             });
             break;
+          }
 
           case ExtensionType.webhook:
             if (!data.method) {

@@ -75,11 +75,11 @@ export default {
 
             zipEntries.forEach((zipEntry: any) => {
               if (!zipEntry.isDirectory) {
-                let targetPath = zipEntry.entryName.replace(/^[^\/]+\//, '');
+                let targetPath = zipEntry.entryName.replace(/^[^/]+\//, '');
 
                 const filePath = `plugins/${name}/${targetPath}`;
 
-                targetPath = targetPath.replace(/\/?[^\/]+$/, '');
+                targetPath = targetPath.replace(/\/?[^/]+$/, '');
 
                 targetPath = path.resolve(`./plugins/${name}/${targetPath}`);
 
