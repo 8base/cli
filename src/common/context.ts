@@ -12,7 +12,8 @@ import { TransformableInfo } from 'logform';
 import { UserDataStorage } from './userDataStorage';
 import { User } from './user';
 import { StaticConfig } from '../config';
-import { ProjectDefinition } from '../interfaces/Project';
+import { ProjectDefinition } from '../interfaces/ProjectDefinition';
+import { ProjectConfig } from '../interfaces/ProjectConfig';
 import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
@@ -20,7 +21,7 @@ import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
-import { REQUEST_HEADER_NOT_SET, REQUEST_HEADER_IGNORED } from '../consts/request';
+import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
 
 const pkg = require('../../package.json');
 
@@ -28,13 +29,6 @@ export type WorkspaceConfig = {
   readonly workspaceId: string;
   readonly environmentName: string;
   readonly apiHost: string;
-};
-
-type Plugin = { name: string; path: string };
-
-export type ProjectConfig = {
-  functions: Object;
-  plugins?: Plugin[];
 };
 
 const WORKSPACE_CONFIG_FILENAME = '.workspace.json';
@@ -149,10 +143,10 @@ export class Context {
   get projectConfig(): ProjectConfig {
     const projectConfigPath = this.getProjectConfigPath();
 
-    let projectConfig = { functions: {} };
+    const projectConfig = { functions: {} };
 
     if (this.hasProjectConfig()) {
-      projectConfig = yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
+      return yaml.parse(fs.readFileSync(projectConfigPath).toString()) || projectConfig;
     }
 
     return projectConfig;

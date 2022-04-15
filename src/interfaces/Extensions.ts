@@ -52,8 +52,8 @@ export interface ScheduleDefinition extends BaseDefinition {
 }
 
 export interface TriggerDefinition extends BaseDefinition {
-  type: string;
-  operation: string;
+  type: string; // ex. trigger.before
+  operation: string; // ex. Users.create
   tableName: string;
 }
 
