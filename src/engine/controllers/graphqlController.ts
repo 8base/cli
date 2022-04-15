@@ -35,7 +35,7 @@ export class GraphqlController {
     const parsedSchema = parse(gqlSchema);
     return _.transform(
       parsedSchema.definitions,
-      (res, extension) => {
+      (res: any, extension) => {
         switch (extension.kind) {
           case 'ObjectTypeExtension': {
             const graphqlType = extension.name.value;
