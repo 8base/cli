@@ -259,7 +259,7 @@ export class ProjectController {
             });
             break;
 
-          case ExtensionType.trigger:
+          case ExtensionType.trigger: {
             if (_.isNil(data.operation)) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
@@ -277,6 +277,7 @@ export class ProjectController {
               type: TriggerUtils.resolveTriggerType(data.type, functionName),
             });
             break;
+          }
 
           case ExtensionType.webhook:
             if (!data.method) {
@@ -637,6 +638,7 @@ namespace FunctionUtils {
   /**
    *
    * @param type "resolve", "trigger.before", "trigger.after", "subscription", "webhook"
+   * @param functionName
    * @return FunctionType
    */
   export function resolveFunctionType(type: string, functionName: string): ExtensionType {
@@ -669,6 +671,7 @@ namespace TriggerUtils {
   /**
    *
    * @param type "resolve", "trigger.before", "trigger.after", "subscription"
+   * @param functionName
    * @return TriggerStageType
    */
   export function resolveTriggerType(type: string, functionName: string): TriggerType {
