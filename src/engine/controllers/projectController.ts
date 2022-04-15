@@ -205,7 +205,7 @@ export class ProjectController {
     try {
       const config = yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8')) as ProjectConfig;
 
-      if (isEmpty(config.functions)) {
+      if (!config || isEmpty(config.functions)) {
         return { functions: {} };
       }
 
