@@ -14,11 +14,13 @@ jobs:
         with:
           node-version: 14
           registry-url: 'https://registry.npmjs.org'
-      - run: |
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Publish
+        run: |
           npm install
           npm run build
           npm run lint
           npm run e2e
           npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

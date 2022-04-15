@@ -17,7 +17,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: |
+
+      - name: Run e2e tests
+        run: |
           npm install
           npm run build
           npm run lint
