@@ -106,7 +106,7 @@ export default {
             reject(e);
           }
 
-          resolve(true);
+          resolve();
         },
       );
     });

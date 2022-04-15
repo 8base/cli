@@ -5,7 +5,7 @@ import * as ejs from 'ejs';
 import * as mkdirp from 'mkdirp';
 import * as changeCase from 'change-case';
 import * as _ from 'lodash';
-import { isEmpty } from 'lodash';
+import { isArray, isEmpty } from 'lodash';
 
 import { StaticConfig } from '../../config';
 import { InvalidConfiguration } from '../../errors';
@@ -106,7 +106,7 @@ export class ProjectController {
     context.projectConfig = config;
     const project: ProjectDefinition = { name, extensions, gqlSchema, plugins: [] };
 
-    if (config.plugins?.length) {
+    if (isArray(config.plugins) && config.plugins.length) {
       context.logger.debug('initialize plugins structure');
 
       project.plugins.push(
