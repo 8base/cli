@@ -1,4 +1,4 @@
-import * as execa from 'execa';
+import execa from 'execa';
 import { CLI_BIN } from './consts';
 
 jest.setTimeout(60000);

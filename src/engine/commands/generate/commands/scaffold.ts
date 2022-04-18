@@ -1,13 +1,13 @@
 import * as yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as yaml from 'js-yaml';
+import { createQueryColumnsList, TableSchema } from '@8base/utils';
+import { generateScreen } from '@8base/generators';
+import { exportTables } from '@8base/api-client';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { Interactive } from '../../../../common/interactive';
 import { writeFs } from '../../../../common/memfs';
-import { createQueryColumnsList, TableSchema } from '@8base/utils';
-import { generateScreen } from '@8base/generators';
-import { exportTables } from '@8base/api-client';
 
 type ViewCommandConfig = {
   tableName: string;

@@ -1,6 +1,5 @@
-import * as yargs from 'yargs';
-import * as _ from 'lodash';
 import * as fs from 'fs';
+import * as yargs from 'yargs';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
@@ -8,7 +7,8 @@ import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { ProjectController } from '../../controllers/projectController';
 
 export default {
-  command: 'invoke [name]',
+  command: 'invoke <name>',
+
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 
@@ -74,7 +74,6 @@ export default {
         describe: translations.i18n.t('invokelocal_name_describe'),
         type: 'string',
       })
-      .demandOption('name')
       .option('data-json', {
         alias: 'j',
         describe: translations.i18n.t('invoke_data_json_describe'),

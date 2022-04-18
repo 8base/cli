@@ -1,12 +1,11 @@
+import * as path from "path";
 import * as yargs from 'yargs';
+import download from 'download';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
-import * as download from 'download';
 import { StaticConfig } from '../../../../config';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
-const path = require('path');
-const fs = require('fs-extra');
 
 const DEFAULT_MIGRATIONS_PATH = './migrations';
 

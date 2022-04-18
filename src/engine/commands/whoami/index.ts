@@ -1,5 +1,5 @@
 import * as yargs from 'yargs';
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import chalk from 'chalk';
 
 import { Context } from '../../../common/context';

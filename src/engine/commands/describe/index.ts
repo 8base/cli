@@ -1,5 +1,4 @@
 import * as yargs from 'yargs';
-import * as url from 'url';
 import chalk from 'chalk';
 import { table } from 'table';
 import * as changeCase from 'change-case';
@@ -30,7 +29,7 @@ export default {
       const fn = _.find(functionsList.items, { name: params.name });
 
       if (fn) {
-        Object.keys(fn).forEach(name => {
+        Object.keys(fn).forEach((name) => {
           context.logger.info(`${chalk.hex(Colors.yellow)(`${changeCase.title(name)}:`)} ${fn[name]}`);
         });
       } else {

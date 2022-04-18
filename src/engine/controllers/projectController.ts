@@ -9,7 +9,6 @@ import { isArray, isEmpty } from 'lodash';
 
 import { StaticConfig } from '../../config';
 import { InvalidConfiguration } from '../../errors';
-import { GraphqlController } from './graphqlController';
 import {
   ExtensionsContainer,
   ExtensionType,
@@ -23,6 +22,7 @@ import { ProjectDefinition } from '../../interfaces/ProjectDefinition';
 import { ProjectConfig } from '../../interfaces/ProjectConfig';
 import { PluginDefinition } from '../../interfaces/Plugin';
 import { Context } from '../../common/context';
+import { GraphqlController } from './graphqlController';
 
 type FunctionDeclarationOptions = {
   operation?: string;

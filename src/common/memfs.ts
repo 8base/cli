@@ -1,5 +1,5 @@
-import * as fs from 'fs-extra';
 import * as path from 'path';
+import * as fs from 'fs-extra';
 import * as mkdirp from 'mkdirp';
 
 const asyncForEach = async <T extends Object>(array: T[], callback: (arg0: T, arg1: number, arg2: T[]) => void) => {

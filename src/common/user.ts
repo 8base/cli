@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import { UserDataStorage } from './userDataStorage';
 import { StorageParameters } from '../consts/StorageParameters';
+import { UserDataStorage } from './userDataStorage';
 
 type Workspace = {
   name: string;

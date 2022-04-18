@@ -1,9 +1,8 @@
 import * as fs from 'fs';
 import * as yargs from 'yargs';
+import { exportTables } from '@8base/api-client';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import { GraphqlActions } from '../../../consts/GraphqlActions';
-import { exportTables } from '@8base/api-client';
 
 export default {
   command: 'export',

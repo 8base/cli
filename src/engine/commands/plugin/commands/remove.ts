@@ -1,17 +1,10 @@
-import * as yargs from 'yargs';
-import * as request from 'request';
 import * as path from 'path';
-import * as fs from 'fs';
-import * as rimraf from 'rimraf';
-import * as R from 'ramda';
-
-import { request as gqlRequest } from 'graphql-request';
-import gql from 'graphql-tag';
-import * as changeCase from 'change-case';
+import * as yargs from 'yargs';
+import * as fs from 'fs-extra';
+import { remove } from 'lodash';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { ProjectController } from '../../../controllers/projectController';
 
 type PluginRemoveParams = {
   name: string;
@@ -29,27 +22,13 @@ export default {
       throw new Error(translations.i18n.t('plugin_remove_plugin_not_found', { name }));
     }
 
-    await new Promise((resolve, reject) => {
-      try {
-        rimraf(path.resolve(pluginPath), {}, resolve);
-      } catch (e) {
-        reject(e);
-      }
-    });
+    await fs.remove(path.resolve(pluginPath));
 
-    let projectConfig = context.projectConfig;
-
-    projectConfig = R.evolve({
-      plugins: R.reject(R.propEq('name', name)),
-    })(projectConfig);
-
+    const projectConfig = context.projectConfig;
+    remove(projectConfig.plugins, (plugin) => plugin.name === name);
     context.projectConfig = projectConfig;
 
-    context.logger.info(
-      context.i18n.t('plugin_successfully_remove', {
-        name,
-      }),
-    );
+    context.logger.info(context.i18n.t('plugin_successfully_remove', { name }));
   },
 
   describe: translations.i18n.t('plugin_remove_describe'),

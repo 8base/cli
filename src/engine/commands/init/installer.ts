@@ -1,6 +1,6 @@
 import * as path from 'path';
-import * as _ from 'lodash';
 import * as fs from 'fs';
+import * as _ from 'lodash';
 import { Utils } from '../../../common/utils';
 import { Context } from '../../../common/context';
 

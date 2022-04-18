@@ -1,8 +1,8 @@
 import * as yargs from 'yargs';
+import { table } from 'table';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
-import { table } from 'table';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
 
 const BACKUP_HEADER = ['Name', 'Size (Mb)'];

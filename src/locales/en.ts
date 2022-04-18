@@ -116,12 +116,13 @@ export default {
      * Init related messages
      */
     init_usage:
-      'COMMAND\n  8base init [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.',
+      'COMMAND\n  8base init [name] [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.',
     init_no_dir_example_command: '8base init',
     init_with_dir_example_command: '8base init my-project',
     init_example_no_dir: 'Initializes project in current folder',
     init_example_with_dir: 'Creates new folder for initialized project',
     init_describe: 'Initializes a new project with example directory structure and custom functions.',
+    init_name_describe: 'The name of the project',
     init_invalid_function_type: 'Invalid function type',
     init_invalid_project_name: 'Invalid project name: {{validationMessages}}.',
     init_undefined_function_name: 'Undefined function name',
@@ -141,7 +142,7 @@ export default {
      * Invoke related messages
      */
     invoke_usage:
-      'COMMAND\n  8base invoke [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.',
+      'COMMAND\n  8base invoke <name> [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.',
     invoke_describe: 'Invokes a custom function in the production workspace.',
     invoke_data_json_describe: 'Input JSON',
     invoke_data_path_describe: 'Path to input JSON',
@@ -154,7 +155,7 @@ export default {
      * Invoke-local related messages
      */
     invokelocal_usage:
-      'COMMAND\n  8base invoke-local [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.',
+      'COMMAND\n  8base invoke-local <name> [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.',
     invokelocal_describe: 'Invokes the custom function in the local development workspace.',
     invokelocal_data_json_describe: 'Input JSON',
     invokelocal_data_path_describe: 'Path to input JSON',

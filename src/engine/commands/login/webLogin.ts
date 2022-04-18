@@ -1,6 +1,6 @@
+import cuid from 'cuid';
+import open from 'open';
 import { Context } from '../../../common/context';
-import * as cuid from 'cuid';
-const opn = require('opn');
 import 'isomorphic-fetch';
 import { SessionInfo } from '../../../interfaces/Common';
 import { Utils } from '../../../common/utils';
@@ -9,7 +9,7 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   context.spinner.start(context.i18n.t('login_in_progress'));
   const session = cuid();
 
-  await opn(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
+  await open(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
 
   const timeoutMs = 2000;
   let retryCount = 150; // 150 * 2s = 300s = 5 min
@@ -37,8 +37,6 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   if (!res) {
     throw new Error(context.i18n.t('login_timeout_error'));
   }
-
-  context.setSessionInfo(res);
 
   return {
     idToken: res.idToken,

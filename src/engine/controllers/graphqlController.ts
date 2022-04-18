@@ -1,9 +1,9 @@
-import * as _ from 'lodash';
 import * as fs from 'fs';
+import * as _ from 'lodash';
 import { parse } from 'graphql';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLFunctionType } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/ProjectDefinition';
-import { makeExecutableSchema } from 'graphql-tools';
 import { rootGraphqlSchema } from '../../consts/RootSchema';
 import { Context } from '../../common/context';
 

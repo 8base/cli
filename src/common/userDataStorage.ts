@@ -1,7 +1,7 @@
-import { StaticConfig } from '../config';
-import { StorageParameters, StorageParametersType } from '../consts/StorageParameters';
 import * as path from 'path';
 import * as fs from 'fs';
+import { StaticConfig } from '../config';
+import { StorageParameters, StorageParametersType } from '../consts/StorageParameters';
 
 const defaultStorageData = {
   [StorageParameters.authDomain]: StaticConfig.authDomain,
@@ -11,10 +11,12 @@ const defaultStorageData = {
 class Storage {
   private static storageFileName = '.8baserc';
 
-  /**
-   *  path to storage file is persistent
-   */
   private static get pathToStorage(): string {
+    const projectPath = path.join(StaticConfig.rootExecutionDir, this.storageFileName);
+    if (fs.existsSync(projectPath)) {
+      return projectPath;
+    }
+
     return path.join(StaticConfig.homePath, this.storageFileName);
   }
 
@@ -51,7 +53,7 @@ class Storage {
 export class UserDataStorage {
   /**
    * Function is not thread safe !
-   * @param token - user token
+   * @param data
    */
   static setValues(data: { name: string; value: any }[]) {
     const storage = Storage.getStorage();

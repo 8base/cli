@@ -1,8 +1,8 @@
-import * as yargs from 'yargs';
-import * as request from 'request';
 import * as path from 'path';
+import * as yargs from 'yargs';
+import request from 'request';
 import * as _ from 'lodash';
-import * as AdmZip from 'adm-zip';
+import AdmZip from 'adm-zip';
 import { request as gqlRequest } from 'graphql-request';
 import gql from 'graphql-tag';
 import * as changeCase from 'change-case';

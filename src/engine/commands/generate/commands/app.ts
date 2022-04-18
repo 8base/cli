@@ -1,12 +1,12 @@
+import * as path from 'path';
 import * as yargs from 'yargs';
 import * as fs from 'fs-extra';
-import * as path from 'path';
-import * as simplegit from 'simple-git/promise';
+import simpleGit from 'simple-git/promise';
+import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
 import { translations } from '../../../../common/translations';
 import { Context } from '../../../../common/context';
 import { StorageParameters } from '../../../../consts/StorageParameters';
 import { writeFs, readFs } from '../../../../common/memfs';
-import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
 
 type AppParams = {
   _: string[];
@@ -23,7 +23,7 @@ export default {
     }
 
     const { appName } = params;
-    const git = simplegit('.');
+    const git = simpleGit('.');
 
     const workspaceId = context.workspaceId;
 
