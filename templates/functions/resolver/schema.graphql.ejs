@@ -6,12 +6,12 @@
 # https://docs.8base.com/8base-console/custom-functions/resolvers
 #
 <%
-  const resultType = changeCase.pascalCase(functionName + ' result'); 
--%> 
-type <%= resultType %> {
+  const responseType = changeCase.pascalCase(functionName + ' response');
+-%>
+type <%= responseType %> {
   result: String!
 }
 
 extend type <%= extendType %> {
-  <%= functionName %>(foo: String!): <%= resultType %>
+  <%= functionName %>(foo: String!): <%= responseType %>
 }

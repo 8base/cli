@@ -154,18 +154,26 @@ export default {
     }
 
     /* Generate project files before printing tree */
-    if (!empty && Array.isArray(params.functions)) {
-      params.functions.forEach((declaration: string) => {
-        const [type, name] = declaration.split(':');
+    if (!empty && Array.isArray(functions)) {
+      functions.forEach((declaration: string) => {
+        const [type, name, triggerFireOn, triggerOperation] = declaration.split(':');
 
-        ProjectController.generateFunction(context, {
-          type: <ExtensionType>type,
-          name,
-          mocks,
-          syntax,
-          projectPath: initialName,
-          silent: true,
-        });
+        ProjectController.generateFunction(
+          context,
+          {
+            type: <ExtensionType>type,
+            name,
+            mocks,
+            syntax,
+            projectPath: initialName,
+            silent: true,
+          },
+          {
+            triggerTable: name,
+            triggerFireOn,
+            triggerOperation,
+          },
+        );
       });
     }
 
@@ -204,7 +212,7 @@ export default {
         alias: 'f',
         describe: translations.i18n.t('init_functions_describe'),
         type: 'array',
-        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:trigger'],
+        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:Users:before:create'],
       })
       .option('empty', {
         alias: 'e',

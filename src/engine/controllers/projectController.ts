@@ -21,15 +21,17 @@ import {
 import { ProjectDefinition } from '../../interfaces/ProjectDefinition';
 import { ProjectConfig } from '../../interfaces/ProjectConfig';
 import { PluginDefinition } from '../../interfaces/Plugin';
-import { Context } from '../../common/context';
+import { Context, ProjectConfig } from '../../common/context';
 import { GraphqlController } from './graphqlController';
 
 type FunctionDeclarationOptions = {
-  operation?: string;
   method?: string;
   path?: string;
   type?: string;
   schedule?: string;
+  triggerTable?: string;
+  triggerFireOn?: string;
+  triggerOperation?: string;
 };
 
 type FunctionGenerationOptions = {
@@ -78,8 +80,9 @@ const generateFunctionDeclaration = (
     });
   } else if (type === ExtensionType.trigger) {
     declaration = _.merge(declaration, {
-      type: `trigger.${options.type || 'before'}`,
-      operation: options.operation || 'Users.create',
+      type: `trigger.${options.triggerFireOn}`,
+      // For triggers name parameter is the trigger table name
+      operation: `${name}.${options.triggerOperation}`,
     });
   } else if (type === ExtensionType.webhook) {
     declaration = _.merge(declaration, {
@@ -229,7 +232,7 @@ export class ProjectController {
     }
   }
 
-  private static loadExtensions(context: Context, config: any, projectPath?: string): ExtensionsContainer {
+  private static loadExtensions(context: Context, config: ProjectConfig, projectPath?: string): ExtensionsContainer {
     return _.reduce<any, ExtensionsContainer>(
       config.functions,
       (extensions, data, functionName) => {
@@ -267,12 +270,12 @@ export class ProjectController {
               );
             }
 
-            const operation = data.operation.split('.'); // TableName.TriggerType
+            const [tableName, operation] = data.operation.split('.'); // TableName.TriggerOperation
 
             extensions.triggers.push({
               name: functionName,
-              operation: TriggerUtils.resolveTriggerOperation(operation[1], functionName),
-              tableName: operation[0],
+              operation: TriggerUtils.resolveTriggerOperation(operation, functionName),
+              tableName: tableName,
               functionName,
               type: TriggerUtils.resolveTriggerType(data.type, functionName),
             });
@@ -388,17 +391,18 @@ export class ProjectController {
     { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGenerationOptions,
     options: FunctionDeclarationOptions = {},
   ) {
-    const dirPath = `src/${type}s/${name}`;
+    const functionName = FunctionUtils.resolveFunctionName(type, name, options);
+    const dirPath = `src/${type}s/${functionName}`;
 
     ProjectController.addFunctionDeclaration(
       context,
-      name,
+      functionName,
       generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
       projectPath,
       silent,
     );
 
-    const functionTemplatePath = path.resolve(context.config.functionTemplatesPath, type);
+    const functionTemplatePath = FunctionUtils.resolveFunctionTemplatePath(context, type, name, options);
 
     processTemplate(
       context,
@@ -407,7 +411,7 @@ export class ProjectController {
         templatePath: functionTemplatePath,
       },
       { syntax, mocks, silent },
-      { functionName: name, type, extendType },
+      { functionName, type, extendType },
     );
 
     if (!silent) {
@@ -549,6 +553,29 @@ const processTemplate = (
 ) => {
   mkdirp.sync(dirPath);
 
+  const compile = (file: string) => {
+    const data = fs.readFileSync(path.resolve(templatePath, file));
+
+    const content = ejs.compile(data.toString())({
+      ...options,
+      changeCase,
+    });
+
+    let fileName = file.replace(/\.ejs$/, '');
+
+    fileName = fileName.replace('mockName', _.get(options, 'mockName'));
+
+    fs.writeFileSync(path.resolve(dirPath, fileName), content);
+
+    if (!silent) {
+      context.logger.info(
+        context.i18n.t('project_created_file', {
+          path: path.join(dirPath, fileName),
+        }),
+      );
+    }
+  };
+
   fs.readdirSync(templatePath).forEach(file => {
     if (file.indexOf('.') === -1) {
       if (file !== 'mocks' || mocks) {
@@ -574,26 +601,7 @@ const processTemplate = (
       return;
     }
 
-    const data = fs.readFileSync(path.resolve(templatePath, file));
-
-    const content = ejs.compile(data.toString())({
-      ...options,
-      changeCase,
-    });
-
-    let fileName = file.replace(/\.ejs$/, '');
-
-    fileName = fileName.replace('mockName', _.get(options, 'mockName'));
-
-    fs.writeFileSync(path.resolve(dirPath, fileName), content);
-
-    if (!silent) {
-      context.logger.info(
-        context.i18n.t('project_created_file', {
-          path: path.join(dirPath, fileName),
-        }),
-      );
-    }
+    compile(file);
   });
 };
 
@@ -661,6 +669,26 @@ namespace FunctionUtils {
     }
   }
 
+  export const resolveFunctionName = (type: ExtensionType, name: string, options: FunctionDeclarationOptions) => {
+    return type === ExtensionType.trigger
+      ? changeCase.camelCase(`${name}_${options.triggerFireOn}_${options.triggerOperation}`)
+      : name;
+  };
+
+  export const resolveFunctionTemplatePath = (
+    context: Context,
+    type: string,
+    name: string,
+    options: FunctionDeclarationOptions,
+  ) => {
+    const pathParts = [type];
+
+    if (type === ExtensionType.trigger) {
+      pathParts.push(options.triggerFireOn, options.triggerOperation);
+    }
+
+    return path.resolve(context.config.functionTemplatesPath, ...pathParts);
+  };
   /**
    *
    * @param type "resolve", "trigger.before", "trigger.after", "subscription", "webhook"

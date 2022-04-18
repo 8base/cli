@@ -28,17 +28,17 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, FunctionEvent, FunctionResult } from '8base-cli-types';
+import { FunctionContext, FunctionEvent, FunctionResponseObject } from '@8base/functions-types';
 
 
-type ResolverResult = FunctionResult<{
+type ResolverResponse = FunctionResponseObject<{
   result: string,
 }>;
 
-export default async (
+export default (
   event: FunctionEvent<{ foo: string }>,
   ctx: FunctionContext,
-): ResolverResult => {
+): ResolverResponse => {
   return {
     data: {
       result: `Resolver received: ${event.data.foo}`,

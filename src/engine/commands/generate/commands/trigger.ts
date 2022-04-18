@@ -5,8 +5,8 @@ import { translations } from '../../../../common/translations';
 import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type TiggerParams = {
-  name: string;
+type TriggerParams = {
+  tableName: string;
   type?: string;
   operation?: string;
   mocks: boolean;
@@ -15,27 +15,29 @@ type TiggerParams = {
 };
 
 export default {
-  command: 'trigger <name>',
+  command: 'trigger <tableName>',
 
-  handler: async (params: TiggerParams, context: Context) => {
-    let { name, type, operation, mocks, syntax, silent } = params;
+  handler: async (params: TriggerParams, context: Context) => {
+    const { tableName, type, operation, mocks, syntax, silent } = params;
 
-    if (operation && !/[\w\d]+\.(create|update|delete)/.test(operation)) {
-      throw new Error(translations.i18n.t('generate_trigger_invalid_operation'));
+    const operations: string[] = Object.values(TriggerOperation);
+    if (operation && !operations.includes(operation)) {
+      throw new Error(translations.i18n.t('generate_trigger_invalid_operation', { operations }));
     }
 
     ProjectController.generateFunction(
       context,
       {
         type: ExtensionType.trigger,
-        name,
+        name: tableName,
         mocks,
         syntax,
         silent,
       },
       {
-        type,
-        operation,
+        triggerTable: tableName,
+        triggerFireOn: type,
+        triggerOperation: operation,
       },
     );
   },
@@ -45,16 +47,20 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_trigger_usage'))
+      // There is a suggestion to rename the "type" parameter to "fireOn".
       .option('type', {
         alias: 't',
         describe: translations.i18n.t('generate_trigger_type_describe'),
         type: 'string',
         choices: Object.values(TriggerType),
+        default: TriggerType.before,
       })
       .option('operation', {
         alias: 'o',
         describe: translations.i18n.t('generate_trigger_operation_describe'),
         type: 'string',
+        choices: Object.values(TriggerOperation),
+        default: TriggerOperation.create,
       })
       .option('mocks', {
         alias: 'x',
