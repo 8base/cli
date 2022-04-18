@@ -52,15 +52,15 @@ export class CommandController {
 
   static wrapHandler = (handler: Function, translations: Translations) => {
     return async (params: any) => {
-      const command = params._[0];
+      const [command] = params._;
 
       const context = new Context(params, translations);
 
       const start = Date.now();
 
       try {
-        if (NON_PROJECT_COMMANDS.indexOf(command) === -1 && NON_PROJECT_COMMANDS.indexOf(params._.join(' ')) === -1) {
-          if (!context.isProjectDir()) {
+        if (isProjectCommand(command) && isProjectCommand(params._.join(' '))) {
+          if (!context.hasProjectConfig()) {
             throw new Error(translations.i18n.t('non_8base_project_dir'));
           }
         }
@@ -94,3 +94,5 @@ export class CommandController {
     };
   };
 }
+
+const isProjectCommand = (command: string) => !NON_PROJECT_COMMANDS.includes(command);
