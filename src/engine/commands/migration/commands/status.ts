@@ -1,12 +1,12 @@
 import * as yargs from 'yargs';
+import chalk from 'chalk';
+import { table } from 'table';
+import * as _ from 'lodash';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
-import chalk from 'chalk';
 import { Colors } from '../../../../consts/Colors';
-import { table } from 'table';
-import _ = require('lodash');
 import { executeDeploy } from '../../../../common/execute';
 import { DeployModeType } from '../../../../interfaces/Extensions';
 

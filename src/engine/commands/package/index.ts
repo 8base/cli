@@ -1,7 +1,7 @@
-import { BuildController } from '../../controllers/buildController';
+import * as path from 'path';
 import * as yargs from 'yargs';
 import * as fs from 'fs-extra';
-import * as path from 'path';
+import { BuildController } from '../../controllers/buildController';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 

@@ -1,9 +1,9 @@
-import * as _ from 'lodash';
 import * as fs from 'fs';
+import * as _ from 'lodash';
 import * as yargs from 'yargs';
+import { importTables, importData } from '@8base/api-client';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import { importTables, importData } from '@8base/api-client';
 
 export default {
   command: 'import',

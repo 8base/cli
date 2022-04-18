@@ -8,7 +8,6 @@ import * as _ from 'lodash';
 
 import { StaticConfig } from '../../config';
 import { InvalidConfiguration } from '../../errors';
-import { GraphqlController } from './graphqlController';
 import {
   ExtensionsContainer,
   ExtensionType,
@@ -20,6 +19,7 @@ import {
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context } from '../../common/context';
+import { GraphqlController } from './graphqlController';
 
 type FunctionDeclarationOptions = {
   operation?: string;

@@ -1,13 +1,11 @@
-import * as _ from 'lodash';
-import * as yargs from 'yargs';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as yargs from 'yargs';
+import * as _ from 'lodash';
 import chalk from 'chalk';
-import * as tree from 'tree-node-cli';
-import * as validatePackageName from 'validate-npm-package-name';
+import tree from 'tree-node-cli';
+import validatePackageName from 'validate-npm-package-name';
 
-import { getFileProvider } from './providers';
-import { install } from './installer';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Colors } from '../../../consts/Colors';
@@ -16,14 +14,9 @@ import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
 import { Workspace } from '../../../interfaces/Common';
-
-const CREATE_WORKSPACE_MUTATION = `
-  mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
-    workspaceCreate(data: $data) {
-      id
-    }
-  }
-`;
+import { GraphqlActions } from '../../../consts/GraphqlActions';
+import { install } from './installer';
+import { getFileProvider } from './providers';
 
 const isEmptyDir = (path: string): boolean => {
   let files = [];
@@ -36,34 +29,25 @@ const isEmptyDir = (path: string): boolean => {
 };
 
 export default {
-  command: 'init',
+  command: 'init [name]',
 
   handler: async (params: any, context: Context) => {
-    const { functions, empty, syntax, mocks, silent } = params;
+    const { name: initialName, functions, empty, syntax, mocks, silent } = params;
 
     let { workspaceId, host } = params;
 
-    const [, projectName] = _.castArray(params._);
+    const projectName = initialName || path.basename(context.config.rootExecutionDir);
 
     const { errors = [] } = validatePackageName(projectName);
 
     if (errors.length > 0) {
-      throw new Error(
-        translations.i18n.t('init_invalid_project_name', {
-          validationMessages: errors.join(', '),
-        }),
-      );
+      throw new Error(translations.i18n.t('init_invalid_project_name', { validationMessages: errors.join(', ') }));
     }
 
-    const project = projectName
-      ? {
-          fullPath: path.join(context.config.rootExecutionDir, projectName),
-          name: projectName,
-        }
-      : {
-          fullPath: context.config.rootExecutionDir,
-          name: path.basename(context.config.rootExecutionDir),
-        };
+    const project = {
+      name: projectName,
+      fullPath: initialName ? path.join(context.config.rootExecutionDir, projectName) : context.config.rootExecutionDir,
+    };
 
     if (!isEmptyDir(project.fullPath)) {
       const { confirm } = await Interactive.ask({
@@ -79,7 +63,7 @@ export default {
     }
 
     if (!empty && Array.isArray(functions)) {
-      functions.forEach(declaration => {
+      functions.forEach((declaration) => {
         const [type, name] = declaration.split(':');
 
         if (!(type in ExtensionType)) {
@@ -121,7 +105,7 @@ export default {
         if (!workspaceName) {
           throw new Error(translations.i18n.t('init_prevent_new_workspace'));
         } else {
-          const { workspaceCreate } = await context.request(CREATE_WORKSPACE_MUTATION, {
+          const { workspaceCreate } = await context.request(GraphqlActions.createWorkspace, {
             data: {
               name: workspaceName,
             },
@@ -149,12 +133,12 @@ export default {
 
     context.logger.debug(`initialize success: initialize repository: ${project.name}`);
 
-    let files = await getFileProvider().provide(context);
+    const files = await getFileProvider().readDir(context, context.config.projectTemplatePath);
     context.logger.debug('files provided count = ' + files.size);
 
     files.set(
       context.config.packageFileName,
-      replaceServiceName(files.get(context.config.packageFileName), project.name),
+      replacePackageName(files.get(context.config.packageFileName), project.name),
     );
 
     context.logger.debug('try to install files');
@@ -179,7 +163,7 @@ export default {
           name,
           mocks,
           syntax,
-          projectPath: projectName,
+          projectPath: initialName,
           silent: true,
         });
       });
@@ -195,8 +179,7 @@ export default {
     );
 
     if (!silent) {
-      // @ts-ignore
-      const fileTree: string = tree(project.fullPath, {
+      const fileTree = tree(project.fullPath, {
         allFiles: true,
         exclude: [/node_modules/, /\.build/],
       });
@@ -213,6 +196,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t('init_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('init_name_describe'),
+        type: 'string',
+      })
       .option('functions', {
         alias: 'f',
         describe: translations.i18n.t('init_functions_describe'),
@@ -258,7 +245,7 @@ export default {
   },
 };
 
-const replaceServiceName = (packageFile: string, repositoryName: string) => {
+const replacePackageName = (packageFile: string, repositoryName: string) => {
   let packageData = JSON.parse(packageFile);
   packageData.name = repositoryName;
   return JSON.stringify(packageData, null, 2);

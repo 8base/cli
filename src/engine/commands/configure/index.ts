@@ -1,9 +1,9 @@
 import * as yargs from 'yargs';
+import * as _ from 'lodash';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
-import _ = require('lodash');
 import { Workspace } from '../../../interfaces/Common';
 
 export default {

@@ -1,20 +1,17 @@
 import * as path from 'path';
-import * as readdir from 'readdir';
-import * as _ from 'lodash';
 import * as fs from 'fs';
+import * as _ from 'lodash';
 import { Context } from '../../../common/context';
 
 interface IFileProvider {
-  /*async*/ provide(context: Context): Promise<Map<string, string>>;
+  readDir(context: Context, dirPath: string): Promise<Map<string, string>>;
 }
 
 class StaticFileProvider implements IFileProvider {
-  async provide(context: Context): Promise<Map<string, string>> {
-    return _.reduce<string, Map<string, string>>(
-      readdir.readSync(context.config.projectTemplatePath),
-      (result, file) => {
-        return result.set(file, fs.readFileSync(path.join(context.config.projectTemplatePath, file)).toString());
-      },
+  async readDir(context: Context, dirPath: string): Promise<Map<string, string>> {
+    return _.reduce(
+      fs.readdirSync(dirPath),
+      (result, file) => result.set(file, fs.readFileSync(path.join(dirPath, file)).toString()),
       new Map<string, string>(),
     );
   }

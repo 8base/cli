@@ -1,13 +1,13 @@
-import * as fs from 'fs-extra';
 import * as path from 'path';
-import ignore from 'ignore';
 import { Readable } from 'stream';
-import * as recursiveReadDir from 'recursive-readdir';
+import ignore from 'ignore';
+import * as fs from 'fs-extra';
+import recursiveReadDir from 'recursive-readdir';
 
-import { ProjectController } from './projectController';
 import { getCompiler } from '../compilers';
 import { Context } from '../../common/context';
 import { Utils } from '../../common/utils';
+import { ProjectController } from './projectController';
 
 const IGNORE_FILE_PATH = './.8baseignore';
 
@@ -77,7 +77,7 @@ export class BuildController {
     ];
 
     // have to add '/' at the beginning to ignore only root folder. avoid recursive
-    const ignoreFilter = ignore().add(excludedRoots.map(item => '/' + item));
+    const ignoreFilter = ignore().add(excludedRoots.map((item) => '/' + item));
 
     if (fs.existsSync(IGNORE_FILE_PATH)) {
       ignoreFilter.add(fs.readFileSync(IGNORE_FILE_PATH).toString());
@@ -86,9 +86,9 @@ export class BuildController {
     const files = await recursiveReadDir(context.config.rootExecutionDir, excludedDirectories);
 
     const sourceToArchive = files
-      .map(file => path.relative(process.cwd(), file))
-      .filter(file => !ignoreFilter.ignores(file))
-      .map(file => ({ dist: file, source: file }));
+      .map((file) => path.relative(process.cwd(), file))
+      .filter((file) => !ignoreFilter.ignores(file))
+      .map((file) => ({ dist: file, source: file }));
 
     return Utils.archiveToMemory(sourceToArchive, context);
   }

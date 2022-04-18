@@ -1,15 +1,14 @@
 import * as path from 'path';
 import 'isomorphic-fetch';
-import * as request from 'request';
 import * as fs from 'fs';
-import * as archiver from 'archiver';
-import { Interactive } from './interactive';
-import * as _ from 'lodash';
-import { Context } from './context';
 import { Readable } from 'stream';
+import request from 'request';
+import archiver from 'archiver';
+import { isEmpty, isString } from 'lodash';
 import { CommandController } from '../engine/controllers/commandController';
-import { StaticConfig } from '../config';
-import { translations, Translations } from './translations';
+import { Interactive } from './interactive';
+import { Context } from './context';
+import { translations } from './translations';
 
 const MemoryStream = require('memorystream');
 const streamToBuffer = require('stream-to-buffer');
@@ -95,7 +94,7 @@ export namespace Utils {
 
       zip.pipe(memoryStream);
 
-      directories.forEach(sourcePath => {
+      directories.forEach((sourcePath) => {
         const source = fs.statSync(sourcePath.source);
         context.logger.debug(
           'archive files from directory = ' +
@@ -133,7 +132,7 @@ export namespace Utils {
   };
 
   export const promptWorkspace = async (workspaces: workspace[], context: Context): Promise<{ id: string }> => {
-    if (_.isEmpty(workspaces)) {
+    if (isEmpty(workspaces)) {
       throw new Error(context.i18n.t('logout_error'));
     }
 
@@ -145,7 +144,7 @@ export namespace Utils {
       name: 'workspace',
       type: 'select',
       message: 'choose workspace',
-      choices: workspaces.map(workspace => {
+      choices: workspaces.map((workspace) => {
         return {
           title: workspace.name,
           value: workspace.id,
@@ -159,29 +158,28 @@ export namespace Utils {
   };
 
   export const sleep = (ms: number): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
   export const trimLastSlash = (url: string): string => {
-    if (!_.isString(url) || url.length === 0) {
+    if (!isString(url) || url.length === 0) {
       return '';
     }
 
     return url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
   };
 
-  export const commandDirMiddleware = (commandsDirPath: string) => (
-    commandObject: { [key: string]: any },
-    pathName: string,
-  ): Object => {
-    const cmd = commandObject.default || commandObject;
-    const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
+  export const commandDirMiddleware =
+    (commandsDirPath: string) =>
+    (commandObject: { [key: string]: any }, pathName: string): Object => {
+      const cmd = commandObject.default || commandObject;
+      const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
 
-    if (fileDepth <= 2 && !!cmd.command) {
-      return {
-        ...cmd,
-        handler: CommandController.wrapHandler(cmd.handler, translations),
-      };
-    }
-  };
+      if (fileDepth <= 2 && !!cmd.command) {
+        return {
+          ...cmd,
+          handler: CommandController.wrapHandler(cmd.handler, translations),
+        };
+      }
+    };
 }

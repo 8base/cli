@@ -1,26 +1,27 @@
-import * as _ from 'lodash';
 import * as fs from 'fs';
-import * as i18next from 'i18next';
-import * as Ora from 'ora';
 import * as path from 'path';
+import * as _ from 'lodash';
+import * as i18next from 'i18next';
+import ora from 'ora';
 import * as winston from 'winston';
 import * as yaml from 'yaml';
 import chalk from 'chalk';
 import { Client } from '@8base/api-client';
 import { TransformableInfo } from 'logform';
+import { DocumentNode } from 'graphql';
 
-import { UserDataStorage } from './userDataStorage';
-import { User } from './user';
 import { StaticConfig } from '../config';
 import { ProjectDefinition } from '../interfaces/Project';
 import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
-import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
 import { REQUEST_HEADER_NOT_SET, REQUEST_HEADER_IGNORED } from '../consts/request';
+import { Translations } from './translations';
+import { User } from './user';
+import { UserDataStorage } from './userDataStorage';
 
 const pkg = require('../../package.json');
 
@@ -69,7 +70,7 @@ export class Context {
     this.i18n = translations.i18n;
     this.version = pkg.version;
 
-    this.spinner = Ora({
+    this.spinner = ora({
       color: 'white',
       text: '\n',
     });
@@ -243,7 +244,7 @@ export class Context {
     return _.get(data, ['workspacesList', 'items'], []);
   }
 
-  async request(query: string, variables: any = null, options?: RequestOptions): Promise<any> {
+  async request(query: string | DocumentNode, variables: any = null, options?: RequestOptions): Promise<any> {
     const defaultOptions: RequestOptions = {
       customAuthorization: REQUEST_HEADER_NOT_SET,
       customWorkspaceId: REQUEST_HEADER_NOT_SET,

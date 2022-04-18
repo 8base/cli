@@ -1,10 +1,10 @@
 import { GraphqlActions, GraphqlAsyncActionsType } from '../consts/GraphqlActions';
-import { Utils } from './utils';
 import { AsyncStatus } from '../consts/AsyncStatus';
 import { BuildController } from '../engine/controllers/buildController';
-import { Context } from './context';
 import { RequestOptions } from '../interfaces/Common';
 import { REQUEST_HEADER_IGNORED } from '../consts/request';
+import { Context } from './context';
+import { Utils } from './utils';
 
 export const executeAsync = async (
   context: Context,

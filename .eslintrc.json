@@ -20,15 +20,19 @@
   "extends": [
     "eslint:recommended",
     //    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "prettier"
   ],
   "rules": {
     "no-unused-vars": "off",
     "no-empty": "off",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-undef": ["error", { "typeof": true }],
+    "import/order": "error",
+    "import/no-default-export": "off",
+    "import/prefer-default-export": "off",
+    "import/no-unresolved": "error",
     "import/no-named-as-default": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",

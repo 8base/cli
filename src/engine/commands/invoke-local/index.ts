@@ -1,8 +1,8 @@
-import * as yargs from 'yargs';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as yargs from 'yargs';
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
-import * as path from 'path';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
@@ -39,7 +39,8 @@ const getLocalFunction = async (functionName: string, context: Context) => {
 };
 
 export default {
-  command: 'invoke-local [name]',
+  command: 'invoke-local <name>',
+
   handler: async (params: any, context: Context) => {
     context.initializeProject();
 
@@ -142,7 +143,6 @@ export default {
         describe: translations.i18n.t('invokelocal_name_describe'),
         type: 'string',
       })
-      .demandOption('name')
       .option('data-json', {
         alias: 'j',
         describe: translations.i18n.t('invokelocal_data_json_describe'),
