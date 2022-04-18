@@ -11,10 +11,12 @@ const defaultStorageData = {
 class Storage {
   private static storageFileName = '.8baserc';
 
-  /**
-   *  path to storage file is persistent
-   */
   private static get pathToStorage(): string {
+    const projectPath = path.join(StaticConfig.rootExecutionDir, this.storageFileName);
+    if (fs.existsSync(projectPath)) {
+      return projectPath;
+    }
+
     return path.join(StaticConfig.homePath, this.storageFileName);
   }
 
