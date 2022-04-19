@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { Readable } from 'stream';
 import request from 'request';
 import archiver from 'archiver';
-import { inRange, isEmpty, isInteger, isString } from "lodash";
+import { inRange, isEmpty, isInteger, isString } from 'lodash';
 import { CommandController } from '../engine/controllers/commandController';
 import { Interactive } from './interactive';
 import { Context } from './context';
@@ -182,14 +182,13 @@ export namespace Utils {
         };
       }
     };
-}
 
-/**
- * End not inclusive
- * @param {number} value
- * @param {number} start
- * @param {number} end
- * @returns {boolean}
- */
-export const isIntegerInRange = (value: number, [start, end]: [number, number?]) =>
-  isInteger(value) && inRange(value, start, end);
+  /**
+   * End not inclusive
+   * @param {number} value
+   * @param {number} start
+   * @param {number} end
+   * @returns {boolean}
+   */
+  export const isIntegerInRange = (value: number, [start, end]: [number, number?]) =>
+    isInteger(value) && inRange(value, start, end);

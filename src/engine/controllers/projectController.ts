@@ -21,7 +21,7 @@ import {
 import { ProjectDefinition } from '../../interfaces/ProjectDefinition';
 import { ProjectConfig } from '../../interfaces/ProjectConfig';
 import { PluginDefinition } from '../../interfaces/Plugin';
-import { Context, ProjectConfig } from '../../common/context';
+import { Context } from '../../common/context';
 import { GraphqlController } from './graphqlController';
 
 type FunctionDeclarationOptions = {
