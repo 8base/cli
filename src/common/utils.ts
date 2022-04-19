@@ -192,3 +192,4 @@ export namespace Utils {
    */
   export const isIntegerInRange = (value: number, [start, end]: [number, number?]) =>
     isInteger(value) && inRange(value, start, end);
+}
