@@ -158,6 +158,7 @@ export default {
     invokelocal_name_describe: 'The name of the function',
     invokelocal_in_progress: 'invoking...',
     invokelocal_returns_error: '"{{- name }}" returns an error.',
+    invoke_local_warning_env_file: 'Env file not found. Your need to create `{{- envFile }}` file to propagate ',
 
     /**
      * Export related messages

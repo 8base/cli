@@ -184,4 +184,6 @@ export namespace Utils {
       };
     }
   };
+
+  export const jsonPrettify = (json: object) => JSON.stringify(json, null, 2);
 }

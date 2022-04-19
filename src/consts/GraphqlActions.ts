@@ -40,9 +40,13 @@ export const GraphqlActions = {
     query MigrationStatus {
       system { ciStatus { status, migrations } }
     }`,
-  invoke: `mutation Invoke($data: InvokeData) {
-    invoke(data: $data) {
-      responseData
+  invoke: `
+    mutation Invoke($data: SystemInvokeData) {
+      system {
+        invoke(data: $data) {
+          responseData
+        }
+      }
     }
   }`,
   logs: `query Logs(
