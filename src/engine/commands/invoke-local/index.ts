@@ -10,129 +10,38 @@ import { Utils } from '../../../common/utils';
 import { BuildController } from '../../controllers/buildController';
 import { Colors } from '../../../consts/Colors';
 import { InvokeLocalError } from '../../../errors/invokeLocal';
-import { ProjectController } from '../../controllers/projectController';
-
-const getLocalFunction = async (functionName: string, context: Context) => {
-  const { compiledFiles } = await BuildController.compile(context);
-
-  const functionInfo = context.project.extensions.functions.find(r => r.name === functionName);
-
-  if (!functionInfo) {
-    throw new Error(`Function ${chalk.hex(Colors.yellow)(functionName)} not present.`);
-  }
-
-  const safeFunctionPath = functionInfo.pathToFunction.substring(0, functionInfo.pathToFunction.lastIndexOf('.'));
-
-  const functionPath = compiledFiles.find((f: any) => f.search(safeFunctionPath) > 0);
-
-  context.logger.debug(`Function full path: ${functionPath}`);
-
-  const { result, error } = Utils.safeExecution(() => require(functionPath));
-
-  if (error) {
-    throw new InvokeLocalError(error.message, functionInfo.name, functionPath);
-  }
-
-  const functionToCall = Utils.undefault(result);
-
-  return functionToCall;
-};
+import { InvokeParams, resolveInvocationArgs } from '../invoke/util';
 
 export default {
   command: 'invoke-local <name>',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: InvokeParams, context: Context) => {
+    const { name: functionName } = params;
     context.initializeProject();
 
-    dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+    loadLocalDotenv();
 
     context.spinner.start(context.i18n.t('invokelocal_in_progress'));
 
-    const functionToCall = await getLocalFunction(params.name, context);
+    const functionToCall = await resolveLocalFunctionHandler(functionName, context);
 
-    let args = null;
-
-    if (params.m) {
-      args = ProjectController.getMock(context, params.name, params.m);
-    } else if (params.p) {
-      args = fs.readFileSync(params.p);
-    } else if (params.j) {
-      args = params.j;
-    }
-
-    let resultResponse = null;
-    let resultError = null;
-
-    const ctx = {
-      api: {
-        gqlRequest: context.request.bind(context),
-      },
-      invokeFunction: async (functionName: string, args: any) => {
-        const functionToCall = await getLocalFunction(functionName, context);
-
-        let result: any = null;
-
-        try {
-          result = await functionToCall(args, ctx);
-        } catch (e) {
-          return {
-            completed: false,
-            error: String(e),
-            result,
-          };
-        }
-
-        return {
-          completed: true,
-          error: null,
-          result,
-        };
-      },
-      workspaceId: context.workspaceId,
-    };
+    const args = resolveInvocationArgs(context, params);
 
     try {
-      resultResponse = await functionToCall(JSON.parse(args), ctx);
+      const ctx = mockFunctionContext(context);
+      const responseData = await functionToCall(JSON.parse(args || '{}'), ctx);
+
+      context.spinner.stop();
+      context.logger.info('Result:');
+      context.logger.info(Utils.jsonPrettify(responseData));
     } catch (e) {
-      resultError = e;
-    }
+      context.spinner.stop();
+      context.logger.info('Result:');
+      context.logger.info(Utils.jsonPrettify({ data: { [functionName]: null }, errors: [e.message] }));
 
-    BuildController.clearBuild(context);
-
-    context.spinner.stop();
-
-    context.logger.info('Result:');
-
-    if (resultError) {
-      context.logger.info(
-        JSON.stringify(
-          {
-            data: {
-              [params.name]: null,
-            },
-            errors: [
-              {
-                message: String(resultError.message),
-                path: [params.name],
-                locations: [
-                  {
-                    line: 2,
-                    column: 5,
-                  },
-                ],
-                code: null,
-                details: null,
-              },
-            ],
-          },
-          null,
-          2,
-        ),
-      );
-
-      throw new Error(translations.i18n.t('invokelocal_returns_error', { name: params.name }));
-    } else {
-      context.logger.info(JSON.stringify(resultResponse, null, 2));
+      throw new Error(translations.i18n.t('invokelocal_returns_error', { name: functionName }));
+    } finally {
+      BuildController.clearBuild(context);
     }
   },
   describe: translations.i18n.t('invokelocal_describe'),
@@ -159,4 +68,71 @@ export default {
         type: 'string',
       });
   },
+};
+
+const mockFunctionContext = (context: Context) => {
+  const ctx = {
+    api: {
+      gqlRequest: context.request.bind(context),
+    },
+    invokeFunction: async (functionName: string, args: any) => {
+      const functionToCall = await resolveLocalFunctionHandler(functionName, context);
+
+      let result: any = null;
+
+      try {
+        result = await functionToCall(args, ctx);
+      } catch (e) {
+        return {
+          completed: false,
+          error: String(e),
+          result,
+        };
+      }
+
+      return {
+        completed: true,
+        error: null,
+        result,
+      };
+    },
+    workspaceId: context.workspaceId,
+  };
+
+  return ctx;
+};
+
+const resolveLocalFunctionHandler = async (functionName: string, context: Context) => {
+  const { compiledFiles } = await BuildController.compile(context);
+
+  const functionInfo = context.project.extensions.functions.find(r => r.name === functionName);
+
+  if (!functionInfo) {
+    throw new Error(`Function ${chalk.hex(Colors.yellow)(functionName)} not present.`);
+  }
+
+  const safeFunctionPath = functionInfo.pathToFunction.substring(0, functionInfo.pathToFunction.lastIndexOf('.'));
+
+  const functionPath = compiledFiles.find(f => f.search(safeFunctionPath) > 0);
+
+  context.logger.debug(`Function full path: ${functionPath}`);
+
+  const { result, error } = Utils.safeExecution(() => require(functionPath));
+
+  if (error) {
+    throw new InvokeLocalError(error.message, functionInfo.name, functionPath);
+  }
+
+  return Utils.undefault(result);
+};
+
+const LOCAL_ENV_FILE = '.env.local';
+const loadLocalDotenv = () => {
+  const envLocalPath = path.resolve(process.cwd(), LOCAL_ENV_FILE);
+  if (fs.existsSync(envLocalPath)) {
+    dotenv.config({ path: envLocalPath });
+    return;
+  }
+
+  console.warn(translations.i18n.t('invoke_local_warning_env_file'));
 };

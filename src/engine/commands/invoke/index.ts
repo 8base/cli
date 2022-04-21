@@ -1,69 +1,36 @@
-import * as fs from 'fs';
 import * as yargs from 'yargs';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
-import { ProjectController } from '../../controllers/projectController';
+import { Utils } from '../../../common/utils';
+import { InvokeParams, resolveInvocationArgs } from './util';
 
 export default {
   command: 'invoke <name>',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: InvokeParams, context: Context) => {
+    const { name: functionName } = params;
     context.initializeProject();
 
     context.spinner.start(context.i18n.t('invoke_in_progress'));
 
-    let args = null;
-
-    if (params.m) {
-      args = ProjectController.getMock(context, params.name, params.m);
-    } else if (params.p) {
-      args = fs.readFileSync(params.p).toString();
-    } else if (params.j) {
-      args = params.j;
-    }
-
-    let resultResponse = null;
-    let resultError = null;
+    const args = resolveInvocationArgs(context, params);
 
     try {
-      resultResponse = await context.request(GraphqlActions.invoke, {
-        data: { functionName: params.name, inputArgs: args },
+      const resultResponse = await context.request(GraphqlActions.invoke, {
+        data: { functionName, inputArgs: args },
       });
+
+      context.spinner.stop();
+      context.logger.info('Result:');
+      context.logger.info(Utils.jsonPrettify({ data: JSON.parse(resultResponse.invoke.responseData) }));
     } catch (e) {
-      resultError = e;
-    }
+      context.spinner.stop();
+      context.logger.info('Result:');
+      context.logger.info(Utils.jsonPrettify({ data: { [functionName]: null }, errors: e.response.errors }));
 
-    context.spinner.stop();
-
-    context.logger.info('Result:');
-
-    if (resultError) {
-      context.logger.info(
-        JSON.stringify(
-          {
-            data: {
-              [params.name]: null,
-            },
-            errors: resultError.response.errors,
-          },
-          null,
-          2,
-        ),
-      );
-
-      throw new Error(translations.i18n.t('invoke_returns_error', { name: params.name }));
-    } else {
-      context.logger.info(
-        JSON.stringify(
-          {
-            data: JSON.parse(resultResponse.invoke.responseData),
-          },
-          null,
-          2,
-        ),
-      );
+      throw new Error(translations.i18n.t('invoke_returns_error', { name: functionName }));
     }
   },
   describe: translations.i18n.t('invoke_describe'),

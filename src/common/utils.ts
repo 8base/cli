@@ -175,13 +175,15 @@ export namespace Utils {
       const cmd = commandObject.default || commandObject;
       const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
 
-      if (fileDepth <= 2 && !!cmd.command) {
-        return {
-          ...cmd,
-          handler: CommandController.wrapHandler(cmd.handler, translations),
-        };
-      }
-    };
+    if (fileDepth <= 2 && !!cmd.command) {
+      return {
+        ...cmd,
+        handler: CommandController.wrapHandler(cmd.handler, translations),
+      };
+    }
+  };
+
+  export const jsonPrettify = (json: object) => JSON.stringify(json, null, 2);
 
   /**
    * End not inclusive

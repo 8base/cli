@@ -79,9 +79,11 @@ export const GraphqlActions = {
     }
   `,
   invoke: gql`
-    mutation Invoke($data: InvokeData) {
-      invoke(data: $data) {
-        responseData
+    mutation Invoke($data: SystemInvokeData) {
+      system {
+        invoke(data: $data) {
+          responseData
+        }
       }
     }
   `,
