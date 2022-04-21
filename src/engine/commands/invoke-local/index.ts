@@ -106,7 +106,7 @@ const mockFunctionContext = (context: Context) => {
 const resolveLocalFunctionHandler = async (functionName: string, context: Context) => {
   const { compiledFiles } = await BuildController.compile(context);
 
-  const functionInfo = context.project.extensions.functions.find((r) => r.name === functionName);
+  const functionInfo = context.project.extensions.functions.find(r => r.name === functionName);
 
   if (!functionInfo) {
     throw new Error(`Function ${chalk.hex(Colors.yellow)(functionName)} not present.`);
@@ -114,7 +114,7 @@ const resolveLocalFunctionHandler = async (functionName: string, context: Contex
 
   const safeFunctionPath = functionInfo.pathToFunction.substring(0, functionInfo.pathToFunction.lastIndexOf('.'));
 
-  const functionPath = compiledFiles.find((f) => f.search(safeFunctionPath) > 0);
+  const functionPath = compiledFiles.find(f => f.search(safeFunctionPath) > 0);
 
   context.logger.debug(`Function full path: ${functionPath}`);
 
