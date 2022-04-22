@@ -1,5 +1,5 @@
 export const StorageParameters = {
-  serverAddress: 'server-address',
+  serverApiAddress: 'server-address',
   authDomain: 'auth-domain',
   authClientId: 'auth-client-id',
   idToken: 'id-token',
@@ -7,7 +7,7 @@ export const StorageParameters = {
 };
 
 export type StorageParametersType =
-  | typeof StorageParameters.serverAddress
+  | typeof StorageParameters.serverApiAddress
   | typeof StorageParameters.authDomain
   | typeof StorageParameters.authClientId
   | typeof StorageParameters.idToken

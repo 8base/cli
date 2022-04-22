@@ -18,18 +18,18 @@ import { StorageParameters } from '../consts/StorageParameters';
 import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
-import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
 import { Translations } from './translations';
 import { User } from './user';
 import { UserDataStorage } from './userDataStorage';
+import { Utils } from './utils';
 
 const pkg = require('../../package.json');
 
 export type WorkspaceConfig = {
   readonly workspaceId: string;
   readonly environmentName: string;
-  readonly apiHost: string;
 };
 
 const WORKSPACE_CONFIG_FILENAME = '.workspace.json';
@@ -95,14 +95,14 @@ export class Context {
 
   set workspaceConfig(value: WorkspaceConfig) {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
-    fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
+    fs.writeFileSync(workspaceConfigPath, Utils.jsonPrettify(value));
   }
 
   getWorkspaceConfigPath(customPath?: string): string {
     return path.join(customPath || process.cwd(), WORKSPACE_CONFIG_FILENAME);
   }
 
-  updateWorkspace(value: WorkspaceConfig): void {
+  updateWorkspaceConfig(value: WorkspaceConfig): void {
     const currentWorkspaceConfig = this.workspaceConfig;
     this.workspaceConfig = _.merge(currentWorkspaceConfig, value);
   }
@@ -119,17 +119,6 @@ export class Context {
     fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
   }
 
-  get workspaceId(): string | null {
-    return _.get(this.workspaceConfig, 'workspaceId', null);
-  }
-
-  get environmentName(): string | null {
-    return _.get(this.workspaceConfig, 'environmentName', null);
-  }
-
-  get apiHost(): string | null {
-    return _.get(this.workspaceConfig, 'apiHost', null);
-  }
 
   hasWorkspaceConfig(customPath?: string): boolean {
     const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
@@ -170,7 +159,7 @@ export class Context {
   }
 
   resolveMainServerAddress(): string {
-    return this.storage.getValue(StorageParameters.serverAddress) || DEFAULT_REMOTE_ADDRESS;
+    return this.storage.getValue(StorageParameters.serverApiAddress);
   }
 
   get storage(): typeof UserDataStorage {
@@ -243,7 +232,7 @@ export class Context {
       customAuthorization: REQUEST_HEADER_NOT_SET,
       customWorkspaceId: REQUEST_HEADER_NOT_SET,
       customEnvironment: REQUEST_HEADER_NOT_SET,
-      address: this.apiHost || this.resolveMainServerAddress(),
+      address: this.resolveMainServerAddress(),
     };
 
     const { customEnvironment, customWorkspaceId, customAuthorization, address } = options
@@ -287,14 +276,14 @@ export class Context {
       throw new Error(this.i18n.t('logout_error'));
     }
 
-    const workspaceId = customWorkspaceId !== REQUEST_HEADER_NOT_SET ? customWorkspaceId : this.workspaceId;
+    const workspaceId = customWorkspaceId !== REQUEST_HEADER_NOT_SET ? customWorkspaceId : this.workspaceConfig.workspaceId;
 
     if (workspaceId) {
       this.logger.debug(this.i18n.t('debug:set_workspace_id', { workspaceId }));
       client.setWorkspaceId(workspaceId);
     }
 
-    const environmentName = customEnvironment !== REQUEST_HEADER_NOT_SET ? customEnvironment : this.environmentName;
+    const environmentName = customEnvironment !== REQUEST_HEADER_NOT_SET ? customEnvironment : this.workspaceConfig.environmentName;
     if (environmentName) {
       this.logger.debug(this.i18n.t('debug:set_environment_name', { environmentName }));
       client.gqlc.setHeader('environment', environmentName);

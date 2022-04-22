@@ -5,6 +5,8 @@ node_modules
 
 # 8base specific
 .workspace.json
+.8baserc
 
+# GraphQL specific
 .schema.graphql
 .graphqlconfig

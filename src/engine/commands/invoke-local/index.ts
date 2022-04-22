@@ -96,13 +96,13 @@ const mockFunctionContext = (context: Context) => {
         result,
       };
     },
-    workspaceId: context.workspaceId,
+    workspaceId: context.workspaceConfig.workspaceId,
   };
 
   return ctx;
 };
 
-const resolveLocalFunctionHandler = async (functionName: string, context: Context) => {
+const resolveLocalFunctionHandler = async (functionName: string, context: Context): Promise<CallableFunction> => {
   const { compiledFiles } = await BuildController.compile(context);
 
   const functionInfo = context.project.extensions.functions.find(r => r.name === functionName);
@@ -113,7 +113,7 @@ const resolveLocalFunctionHandler = async (functionName: string, context: Contex
 
   const safeFunctionPath = functionInfo.pathToFunction.substring(0, functionInfo.pathToFunction.lastIndexOf('.'));
 
-  const functionPath = compiledFiles.find(f => f.search(safeFunctionPath) > 0);
+  const functionPath = compiledFiles.find((f) => f.search(safeFunctionPath) > 0);
 
   context.logger.debug(`Function full path: ${functionPath}`);
 
@@ -126,9 +126,10 @@ const resolveLocalFunctionHandler = async (functionName: string, context: Contex
   return Utils.undefault(result);
 };
 
-const LOCAL_ENV_FILE = '.env.local';
 const loadLocalDotenv = () => {
+  const LOCAL_ENV_FILE = '.env.local';
   const envLocalPath = path.resolve(process.cwd(), LOCAL_ENV_FILE);
+
   if (fs.existsSync(envLocalPath)) {
     dotenv.config({ path: envLocalPath });
     return;

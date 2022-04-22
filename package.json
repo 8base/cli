@@ -11,7 +11,7 @@
     "8base": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "watch": "npm run build -- --watch",
     "lint": "eslint --ext js,ts src e2e",
     "lint:fix": "npm run lint --fix",

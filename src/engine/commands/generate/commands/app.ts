@@ -25,7 +25,7 @@ export default {
     const { appName } = params;
     const git = simpleGit('.');
 
-    const workspaceId = context.workspaceId;
+    const workspaceId = context.workspaceConfig.workspaceId;
 
     context.spinner.start('Fetching project skeleton');
     await git.clone('https://github.com/8base/react-app-starter.git', appName, ['--branch', REPO_BRANCH_NAME]);

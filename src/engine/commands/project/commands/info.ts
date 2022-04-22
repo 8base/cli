@@ -5,7 +5,6 @@ import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { Workspace } from '../../../../interfaces/Common';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
-import { DEFAULT_REMOTE_ADDRESS } from '../../../../consts/Environment';
 
 export default {
   command: 'info',
@@ -16,17 +15,19 @@ export default {
     const { workspaceId, environmentName } = context.workspaceConfig;
 
     const workspace = (await resolveWorkspace(context, workspaceId)) || {
-      apiHost: DEFAULT_REMOTE_ADDRESS,
       id: workspaceId,
       name: '',
+      apiHost: ''
     };
+
+    const endpoint = `${context.resolveMainServerAddress()}/${workspaceId}`;
 
     context.logger.info(
       translations.i18n.t('project_info_text', {
         workspaceId: chalk.green(workspaceId),
         workspaceName: chalk.green(workspace.name),
         environment: chalk.green(environmentName),
-        endpoint: chalk.green(`${workspace.apiHost}/${workspaceId}`),
+        endpoint: chalk.green(endpoint),
       }),
     );
   },

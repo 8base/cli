@@ -12,21 +12,13 @@ import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { Workspace } from '../../../interfaces/Common';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
+import { StorageParameters } from '../../../consts/StorageParameters';
+import { StaticConfig } from '../../../config';
 import { install } from './installer';
 import { getFileProvider } from './providers';
-
-const isEmptyDir = (path: string): boolean => {
-  let files = [];
-
-  try {
-    files = fs.readdirSync(path);
-  } catch (e) {}
-
-  return files.length === 0;
-};
 
 export default {
   command: 'init [name]',
@@ -124,7 +116,9 @@ export default {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
       }
 
-      host = workspace.apiHost;
+      if (workspace.apiHost && !host) {
+        host = workspace.apiHost;
+      }
     }
 
     context.spinner.start(`Initializing new project ${chalk.hex(Colors.yellow)(project.name)}`);
@@ -177,11 +171,15 @@ export default {
       });
     }
 
+    context.storage.setValues([{
+      name: StorageParameters.serverApiAddress,
+      value: host,
+    }]);
+
     context.createWorkspaceConfig(
       {
         workspaceId,
         environmentName: DEFAULT_ENVIRONMENT_NAME,
-        apiHost: host || DEFAULT_REMOTE_ADDRESS,
       },
       project.fullPath,
     );
@@ -246,7 +244,7 @@ export default {
       .option('host', {
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
-        default: DEFAULT_REMOTE_ADDRESS,
+        default: StaticConfig.serverApiAddress,
       })
       .example(translations.i18n.t('init_no_dir_example_command'), translations.i18n.t('init_example_no_dir'))
       .example(translations.i18n.t('init_with_dir_example_command'), translations.i18n.t('init_example_with_dir'));
@@ -254,7 +252,17 @@ export default {
 };
 
 const replacePackageName = (packageFile: string, repositoryName: string) => {
-  let packageData = JSON.parse(packageFile);
+  const packageData = JSON.parse(packageFile);
   packageData.name = repositoryName;
   return JSON.stringify(packageData, null, 2);
+};
+
+const isEmptyDir = (path: string): boolean => {
+  let files = [];
+
+  try {
+    files = fs.readdirSync(path);
+  } catch (e) {}
+
+  return files.length === 0;
 };

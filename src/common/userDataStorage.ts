@@ -4,6 +4,7 @@ import { StaticConfig } from '../config';
 import { StorageParameters, StorageParametersType } from '../consts/StorageParameters';
 
 const defaultStorageData = {
+  [StorageParameters.serverApiAddress]: StaticConfig.serverApiAddress,
   [StorageParameters.authDomain]: StaticConfig.authDomain,
   [StorageParameters.authClientId]: StaticConfig.authClientId,
 };
@@ -12,12 +13,7 @@ class Storage {
   private static storageFileName = '.8baserc';
 
   private static get pathToStorage(): string {
-    const projectPath = path.join(StaticConfig.rootExecutionDir, this.storageFileName);
-    if (fs.existsSync(projectPath)) {
-      return projectPath;
-    }
-
-    return path.join(StaticConfig.homePath, this.storageFileName);
+    return path.join(StaticConfig.rootExecutionDir, this.storageFileName);
   }
 
   /**
@@ -32,7 +28,7 @@ class Storage {
     }
   }
 
-  private static parseStorageData(): any {
+  private static parseStorageData() {
     return JSON.parse(fs.readFileSync(this.pathToStorage).toString());
   }
 
@@ -57,21 +53,16 @@ export class UserDataStorage {
    */
   static setValues(data: { name: string; value: any }[]) {
     const storage = Storage.getStorage();
-    data.map(d => (storage[d.name] = d.value));
+    data.map((d) => (storage[d.name] = d.value));
     Storage.saveStorage(storage);
   }
 
-  static getValue(name: StorageParametersType): any {
+  static getValue(name: StorageParametersType) {
     const storage = Storage.getStorage();
     const storageValue = storage[name];
 
     if (!storageValue && !!defaultStorageData[name]) {
-      this.setValues([
-        {
-          name,
-          value: defaultStorageData[name],
-        },
-      ]);
+      this.setValues([{ name, value: defaultStorageData[name] }]);
 
       return defaultStorageData[name];
     } else if (!storageValue) {
@@ -79,15 +70,6 @@ export class UserDataStorage {
     }
 
     return storageValue;
-  }
-
-  static clearAll() {
-    const storage = Storage.getStorage();
-    delete storage.auth;
-    delete storage.email;
-    delete storage.accountId;
-    delete storage.remoteCliEndpoint;
-    Storage.saveStorage(storage);
   }
 
   static toString(): string {

@@ -265,7 +265,7 @@ export class ProjectController {
           case ExtensionType.trigger: {
             if (_.isNil(data.operation)) {
               throw new InvalidConfiguration(
-                StaticConfig.serviceConfigFileName,
+                StaticConfig.serviceConfigFilePath,
                 'operation field not present in trigger ' + functionName,
               );
             }
@@ -285,7 +285,7 @@ export class ProjectController {
           case ExtensionType.webhook:
             if (!data.method) {
               throw new InvalidConfiguration(
-                StaticConfig.serviceConfigFileName,
+                StaticConfig.serviceConfigFilePath,
                 "Parameter 'method' is missing in webhook '" + functionName + "'",
               );
             }
@@ -324,7 +324,7 @@ export class ProjectController {
   }
 
   private static resolvePathToConfig(projectPath?: string) {
-    return projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
+    return projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFilePath;
   }
 
   private static loadSchema(context: Context, extensions: ExtensionsContainer, projectPath?: string): string {
@@ -632,7 +632,7 @@ namespace FunctionUtils {
       return handler.code;
     }
     throw new InvalidConfiguration(
-      StaticConfig.serviceConfigFileName,
+      StaticConfig.serviceConfigFilePath,
       'handler is invalid for function "' + name + '"',
     );
   }
@@ -642,28 +642,28 @@ namespace FunctionUtils {
 
     if (!FunctionUtils.isFunctionNameValid(name)) {
       throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
+        StaticConfig.serviceConfigFilePath,
         context.i18n.t('function_name_is_invalid', { name }),
       );
     }
 
     if (_.isNil(func.handler)) {
       throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
+        StaticConfig.serviceConfigFilePath,
         'handler is absent for function "' + name + '"',
       );
     }
 
     if (func.handler.code && !fs.existsSync(path.join(pathToWorkDir, func.handler.code))) {
       throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
+        StaticConfig.serviceConfigFilePath,
         'unable to determine function "' + name + '" source code',
       );
     }
 
     if (!StaticConfig.supportedCompileExtension.has(path.extname(func.handler.code))) {
       throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
+        StaticConfig.serviceConfigFilePath,
         'function "' + name + '" have unsupported file extension',
       );
     }
@@ -700,7 +700,7 @@ namespace FunctionUtils {
     const resolvedType = (<any>ExtensionType)[funcType];
     if (_.isNil(resolvedType)) {
       throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
+        StaticConfig.serviceConfigFilePath,
         'Invalid function type ' + type + ' in function ' + functionName,
       );
     }
@@ -717,7 +717,7 @@ namespace TriggerUtils {
     const resolvedOperation = (<any>TriggerOperation)[operation];
     if (_.isNil(resolvedOperation)) {
       throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
+        StaticConfig.serviceConfigFilePath,
         'Invalid trigger operation ' + operation + ' in function ' + funcName,
       );
     }
@@ -736,7 +736,7 @@ namespace TriggerUtils {
     const resolvedType = (<any>TriggerType)[triggerType];
     if (_.isNil(resolvedType)) {
       throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
+        StaticConfig.serviceConfigFilePath,
         'Invalid trigger type ' + type + ' in function ' + functionName,
       );
     }

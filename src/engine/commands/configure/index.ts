@@ -5,6 +5,7 @@ import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { Workspace } from '../../../interfaces/Common';
+import { StorageParameters } from '../../../consts/StorageParameters';
 
 export default {
   command: 'configure',
@@ -34,11 +35,19 @@ export default {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
       }
 
-      host = workspace.apiHost;
+      if (workspace.apiHost && !host) {
+        host = workspace.apiHost;
+      }
     }
 
-    context.updateWorkspace({
-      apiHost: host,
+    if (host) {
+      context.storage.setValues([{
+        name: StorageParameters.serverApiAddress,
+        value: host,
+      }]);  
+    }
+
+    context.updateWorkspaceConfig({
       workspaceId,
       environmentName: DEFAULT_ENVIRONMENT_NAME,
     });
