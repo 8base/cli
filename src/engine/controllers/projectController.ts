@@ -17,6 +17,7 @@ import {
   TriggerOperation,
   ResolverDefinition,
   SyntaxType,
+  TriggerDefinition,
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context } from '../../common/context';
@@ -690,7 +691,8 @@ export namespace TriggerUtils {
     if (
       _.uniqWith(
         triggers,
-        (t1: any, t2: any) => t1.type === t2.type && t1.operation === t2.operation && t1.tableName === t2.tableName,
+        (t1: TriggerDefinition, t2: TriggerDefinition) =>
+          t1.type === t2.type && t1.operation === t2.operation && t1.tableName === t2.tableName,
       ).length !== triggers.length
     ) {
       throw new Error(context.i18n.t('trigger_duplicate_invalid'));
