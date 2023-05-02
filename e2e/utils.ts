@@ -10,7 +10,7 @@ export const prepareTestEnvironment = async (
   repName: string = cuid.createId(),
 ): Promise<{ onComplete: () => void; repPath: string }> => {
   const dir = cuid.createId();
-  const fullPath = path.join(process.cwd(), dir);
+  const fullPath = path.join(__dirname, dir);
 
   execSync(`mkdir ${fullPath}`);
 
@@ -36,7 +36,7 @@ export const addResolverToProject = async (
   await fs.writeFile(path.join(projectPath, subDir, funcName).concat(ext), code);
   await fs.writeFile(path.join(projectPath, subDir, funcName).concat('.graphql'), graphQLData);
   const yamlFilePath = path.join(projectPath, '8base.yml');
-  const yamlData: { functions: { [key: string]: any } } = <any>yaml.load(fs.readFileSync(yamlFilePath, 'utf8'));
+  const yamlData: { functions: { [key: string]: any } } = <any>yaml.load(await fs.readFile(yamlFilePath, 'utf8'));
 
   yamlData.functions[funcName] = {
     handler: {
@@ -49,16 +49,16 @@ export const addResolverToProject = async (
   await fs.writeFile(yamlFilePath, yaml.dump(yamlData));
 };
 
-export const addFileToProject = (
+export const addFileToProject = async (
   fileName: string,
   fileData: string,
   projectPath: string,
   pathPrefix: string = '',
-): { relativePathToFile: string; fullPathToFile: string } => {
+): Promise<{ relativePathToFile: string; fullPathToFile: string }> => {
   const pathTodir = path.join(projectPath, pathPrefix);
   const pathToFile: string = path.join(pathTodir, fileName);
   execSync(`mkdir ${pathTodir}`);
-  fs.writeFileSync(pathToFile, fileData);
+  await fs.writeFile(pathToFile, fileData);
   return {
     relativePathToFile: path.join(pathPrefix, fileName),
     fullPathToFile: pathToFile,
@@ -84,6 +84,7 @@ export namespace RunCommand {
 }
 
 const execCmd = (repPath: string, command: string) => {
+  const data = `cd ${repPath} && node ${CLI_BIN} ${command}`;
   return execSync(`cd ${repPath} && node ${CLI_BIN} ${command}`).toString();
 };
 

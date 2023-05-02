@@ -1,11 +1,11 @@
 import {
   addFileToProject,
   addResolverToProject,
-  RunCommand,
   expectInString,
   prepareTestEnvironment,
+  RunCommand,
 } from '../../../utils';
-import {jest} from "@jest/globals";
+import { jest } from '@jest/globals';
 
 let project: any;
 const repositoryName = 'test_rep';
@@ -34,7 +34,7 @@ it('As a user, I can invoke resolver locally.', async () => {
   await addResolverToProject(funcName, funcCode, gqlData, project.repPath);
 
   const fileData = JSON.stringify({ data: { value: 'kokoko' } });
-  const { relativePathToFile } = addFileToProject('someData.json', fileData, project.repPath, 'data');
+  const { relativePathToFile } = await addFileToProject('someData.json', fileData, project.repPath, 'data');
 
   const result = await RunCommand.invokeLocal(funcName, project.repPath, { path: relativePathToFile });
 

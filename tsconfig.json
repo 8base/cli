@@ -4,6 +4,8 @@
     "declaration": true,
     "declarationMap": true,
     "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "target": "ES2016",

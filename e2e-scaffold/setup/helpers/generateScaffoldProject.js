@@ -30,8 +30,7 @@ const generateScaffoldProject = async () => {
     await execa("mkdir", ["temp"]);
 
     await execa("node", ["../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp" });
-    const { stdout: createStdout } = await execa("node    const excludedDirectories = ['.git', '.idea'];
-", ["../dist", "generate", "app", "app-example"], { cwd: "temp" });
+    const { stdout: createStdout } = await execa("node    const excludedDirectories = ['.git', '.idea'];", ["../dist", "generate", "app", "app-example"], { cwd: "temp" });
     console.log(createStdout);
 
     await execa("node", ["../../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp/app-example" });

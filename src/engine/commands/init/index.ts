@@ -3,7 +3,7 @@ import * as yargs from 'yargs';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
-import * as tree from 'tree-node-cli';
+import tree from 'tree-node-cli';
 import validatePackageName from 'validate-npm-package-name';
 
 import { getFileProvider } from './providers';
@@ -197,8 +197,7 @@ export default {
     );
 
     if (!silent) {
-      // @ts-ignore
-      const fileTree: string = tree(project.fullPath, {
+      const fileTree = tree(project.fullPath, {
         allFiles: true,
         exclude: [/node_modules/, /\.build/],
       });

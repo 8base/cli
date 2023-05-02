@@ -88,7 +88,7 @@ export default {
       }
     });
 
-    await ProjectController.addPluginDeclaration(
+    ProjectController.addPluginDeclaration(
       context,
       _.camelCase(name),
       {

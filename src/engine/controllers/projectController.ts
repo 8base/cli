@@ -213,15 +213,11 @@ export class ProjectController {
     }
   }
 
-  private static async saveConfigFile(
-    context: Context,
-    config: Object,
-    projectPath?: string,
-    silent?: boolean,
-  ): Promise<any> {
+  private static saveConfigFile(context: Context, config: Object, projectPath?: string, silent?: boolean): void {
     const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
 
-    await fs.writeFile(pathToYmlConfig, yaml.dump(config));
+    const dump = yaml.dump(config);
+    fs.writeFileSync(pathToYmlConfig, dump);
 
     if (!silent) {
       context.logger.info(
@@ -322,7 +318,7 @@ export class ProjectController {
     );
   }
 
-  static async addPluginDeclaration(
+  static addPluginDeclaration(
     context: Context,
     name: string,
     declaration: Object,
@@ -339,7 +335,7 @@ export class ProjectController {
 
     config.plugins = [...plugins, declaration];
 
-    await ProjectController.saveConfigFile(context, config, projectPath, silent);
+    ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
   static async addFunctionDeclaration(
@@ -359,7 +355,7 @@ export class ProjectController {
 
     config = _.set(config, ['functions', name], declaration);
 
-    await ProjectController.saveConfigFile(context, config, projectPath, silent);
+    ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
   static async generateFunction(
@@ -408,7 +404,7 @@ export class ProjectController {
     const pluginTemplatePath = context.config.pluginTemplatePath;
     const resolverTemplatePath = path.resolve(context.config.functionTemplatesPath, ExtensionType.resolver);
 
-    await ProjectController.addPluginDeclaration(
+    ProjectController.addPluginDeclaration(
       context,
       name,
       {

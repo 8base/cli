@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import latestVersion from 'latest-version';
 import chalk from 'chalk';
 
@@ -29,7 +29,6 @@ const start = async (translations: Translations) => {
       type: 'boolean',
     })
     .recommendCommands()
-    .strict()
     .fail((msg, err) => {
       // certain yargs validations throw strings :P
       const actual = err || new Error(msg);
