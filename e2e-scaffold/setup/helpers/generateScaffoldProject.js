@@ -7,10 +7,10 @@ const { mockConfig } = require("./mockConfig");
 
 dotenv.config();
 
-const { 
-  E2E_SCAFFOLD_WORKSPACE_ID, 
-  E2E_SCAFFOLD_EMAIL, 
-  E2E_SCAFFOLD_PASSWORD, 
+const {
+  E2E_SCAFFOLD_WORKSPACE_ID,
+  E2E_SCAFFOLD_EMAIL,
+  E2E_SCAFFOLD_PASSWORD,
 } = process.env;
 
 const generateScaffoldProject = async () => {
@@ -30,7 +30,8 @@ const generateScaffoldProject = async () => {
     await execa("mkdir", ["temp"]);
 
     await execa("node", ["../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp" });
-    const { stdout: createStdout } = await execa("node", ["../dist", "generate", "app", "app-example"], { cwd: "temp" });
+    const { stdout: createStdout } = await execa("node    const excludedDirectories = ['.git', '.idea'];
+", ["../dist", "generate", "app", "app-example"], { cwd: "temp" });
     console.log(createStdout);
 
     await execa("node", ["../../dist", "configure", `--workspaceId=${E2E_SCAFFOLD_WORKSPACE_ID}`], { cwd: "temp/app-example" });

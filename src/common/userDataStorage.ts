@@ -51,7 +51,7 @@ class Storage {
 export class UserDataStorage {
   /**
    * Function is not thread safe !
-   * @param token - user token
+   * @param data
    */
   static setValues(data: { name: string; value: any }[]) {
     const storage = Storage.getStorage();

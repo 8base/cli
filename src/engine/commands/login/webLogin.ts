@@ -1,15 +1,15 @@
 import { Context } from '../../../common/context';
-import * as cuid from 'cuid';
-const opn = require('opn');
+import * as cuid from '@paralleldrive/cuid2';
+import open from 'open';
 import 'isomorphic-fetch';
 import { SessionInfo } from '../../../interfaces/Common';
 import { Utils } from '../../../common/utils';
 
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
   context.spinner.start(context.i18n.t('login_in_progress'));
-  const session = cuid();
+  const session = cuid.createId();
 
-  await opn(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
+  await open(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
 
   const timeoutMs = 2000;
   let retryCount = 150; // 150 * 2s = 300s = 5 min

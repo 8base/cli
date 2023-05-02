@@ -1,9 +1,7 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
 import * as ejs from 'ejs';
-import * as mkdirp from 'mkdirp';
-import * as changeCase from 'change-case';
 import * as _ from 'lodash';
 
 import { StaticConfig } from '../../config';
@@ -141,24 +139,24 @@ export class ProjectController {
     );
   }
 
-  static saveSchema(project: ProjectDefinition, outDir: string) {
+  static async saveSchema(project: ProjectDefinition, outDir: string) {
     const graphqlFilePath = path.join(outDir, 'schema.graphql');
-    fs.writeFileSync(graphqlFilePath, project.gqlSchema);
+    await fs.writeFile(graphqlFilePath, project.gqlSchema);
   }
 
-  static saveProject(project: ProjectDefinition, outDir: string) {
+  static async saveProject(project: ProjectDefinition, outDir: string) {
     const projectObject = {
       name: project.name,
       functions: project.extensions.functions,
     };
 
     const projectFilePath = path.join(outDir, 'project.json');
-    return fs.writeFileSync(projectFilePath, JSON.stringify(projectObject, null, 2));
+    await fs.writeFile(projectFilePath, JSON.stringify(projectObject, null, 2));
   }
 
-  static saveMetaDataFile(project: ProjectDefinition, outDir: string) {
+  static async saveMetaDataFile(project: ProjectDefinition, outDir: string) {
     const summaryFile = path.join(outDir, '__summary__functions.json');
-    fs.writeFileSync(
+    await fs.writeFile(
       summaryFile,
       JSON.stringify(
         {
@@ -209,16 +207,21 @@ export class ProjectController {
     }
 
     try {
-      return yaml.safeLoad(fs.readFileSync(pathToYmlConfig, 'utf8'));
+      return yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'));
     } catch (ex) {
       throw new InvalidConfiguration(pathToYmlConfig, ex.message);
     }
   }
 
-  private static saveConfigFile(context: Context, config: Object, projectPath?: string, silent?: boolean): any {
+  private static async saveConfigFile(
+    context: Context,
+    config: Object,
+    projectPath?: string,
+    silent?: boolean,
+  ): Promise<any> {
     const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
 
-    fs.writeFileSync(pathToYmlConfig, yaml.safeDump(config));
+    await fs.writeFile(pathToYmlConfig, yaml.dump(config));
 
     if (!silent) {
       context.logger.info(
@@ -319,7 +322,7 @@ export class ProjectController {
     );
   }
 
-  static addPluginDeclaration(
+  static async addPluginDeclaration(
     context: Context,
     name: string,
     declaration: Object,
@@ -336,10 +339,10 @@ export class ProjectController {
 
     config.plugins = [...plugins, declaration];
 
-    ProjectController.saveConfigFile(context, config, projectPath, silent);
+    await ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
-  static addFunctionDeclaration(
+  static async addFunctionDeclaration(
     context: Context,
     name: string,
     declaration: Object,
@@ -356,17 +359,17 @@ export class ProjectController {
 
     config = _.set(config, ['functions', name], declaration);
 
-    ProjectController.saveConfigFile(context, config, projectPath, silent);
+    await ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
-  static generateFunction(
+  static async generateFunction(
     context: Context,
     { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGeneratationOptions,
     options: FunctionDeclarationOptions = {},
   ) {
     const dirPath = `src/${type}s/${name}`;
 
-    ProjectController.addFunctionDeclaration(
+    await ProjectController.addFunctionDeclaration(
       context,
       name,
       generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
@@ -397,7 +400,7 @@ export class ProjectController {
     }
   }
 
-  static generatePlugin(context: Context, { name, syntax, silent, projectPath = '.' }: PluginGenerationOptions) {
+  static async generatePlugin(context: Context, { name, syntax, silent, projectPath = '.' }: PluginGenerationOptions) {
     const functionName = `${name}Resolver`;
     const extendType = _.upperFirst(`${name}Mutation`);
     const pluginPath = path.join('plugins', name);
@@ -405,7 +408,7 @@ export class ProjectController {
     const pluginTemplatePath = context.config.pluginTemplatePath;
     const resolverTemplatePath = path.resolve(context.config.functionTemplatesPath, ExtensionType.resolver);
 
-    ProjectController.addPluginDeclaration(
+    await ProjectController.addPluginDeclaration(
       context,
       name,
       {
@@ -447,7 +450,7 @@ export class ProjectController {
     }
   }
 
-  static getMock(context: Context, functionName: string, mockName: string) {
+  static async getMock(context: Context, functionName: string, mockName: string) {
     let config = ProjectController.loadConfigFile(context, '.') || {
       functions: {},
     };
@@ -460,14 +463,17 @@ export class ProjectController {
 
     const mockPath = `src/${type}s/${functionName}/mocks/${mockName}.json`;
 
-    if (!fs.existsSync(mockPath)) {
+    if (!(await fs.exists(mockPath))) {
       throw new Error(context.i18n.t('mock_with_name_not_defined', { functionName, mockName }));
     }
 
-    return fs.readFileSync(mockPath).toString();
+    return (await fs.readFile(mockPath)).toString();
   }
 
-  static generateMock(context: Context, { name, functionName, projectPath = '.', silent }: MockGeneratationOptions) {
+  static async generateMock(
+    context: Context,
+    { name, functionName, projectPath = '.', silent }: MockGeneratationOptions,
+  ) {
     let config = ProjectController.loadConfigFile(context, projectPath) || {
       functions: {},
     };
@@ -482,7 +488,7 @@ export class ProjectController {
 
     const mockPath = `src/${type}s/${functionName}/mocks/${name}.json`;
 
-    if (fs.existsSync(mockPath)) {
+    if (await fs.exists(mockPath)) {
       throw new Error(
         context.i18n.t('mock_with_name_already_defined', {
           mockName: name,
@@ -527,7 +533,7 @@ const processTemplate = (
   { syntax, silent, mocks }: ProcessTemplateOptions,
   options?: Object,
 ) => {
-  mkdirp.sync(dirPath);
+  fs.ensureDirSync(dirPath);
 
   fs.readdirSync(templatePath).forEach(file => {
     if (file.indexOf('.') === -1) {
@@ -558,7 +564,7 @@ const processTemplate = (
 
     const content = ejs.compile(data.toString())({
       ...options,
-      changeCase,
+      _,
     });
 
     let fileName = file.replace(/\.ejs$/, '');
@@ -637,6 +643,7 @@ namespace FunctionUtils {
   /**
    *
    * @param type "resolve", "trigger.before", "trigger.after", "subscription", "webhook"
+   * @param functionName
    * @return FunctionType
    */
   export function resolveFunctionType(type: string, functionName: string): ExtensionType {
@@ -669,6 +676,7 @@ namespace TriggerUtils {
   /**
    *
    * @param type "resolve", "trigger.before", "trigger.after", "subscription"
+   * @param functionName
    * @return TriggerStageType
    */
   export function resolveTriggerType(type: string, functionName: string): TriggerType {

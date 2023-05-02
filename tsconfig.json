@@ -4,6 +4,8 @@
     "declaration": true,
     "declarationMap": true,
     "module": "commonjs",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     "target": "ES2016",
     "noImplicitAny": true,
     "lib": ["es2017", "esnext.asynciterable", "es2016.array.include", "dom"],
@@ -14,9 +16,6 @@
     "baseUrl": ".",
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"],
-    "paths": {
-      "*": ["types/*"]
-    }
   },
   "include": ["src/**/*"]
 }

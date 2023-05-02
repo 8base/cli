@@ -3,7 +3,7 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
-import _ = require('lodash');
+import * as _ from 'lodash';
 import { Workspace } from '../../../interfaces/Common';
 
 export default {

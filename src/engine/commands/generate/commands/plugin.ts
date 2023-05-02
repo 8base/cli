@@ -16,9 +16,9 @@ export default {
   command: 'plugin <name>',
 
   handler: async (params: ResolverParams, context: Context) => {
-    let { name, syntax, silent } = params;
+    let { name, syntax } = params;
 
-    ProjectController.generatePlugin(context, {
+    await ProjectController.generatePlugin(context, {
       name,
       syntax,
     });

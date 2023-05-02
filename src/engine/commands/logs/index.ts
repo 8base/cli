@@ -1,7 +1,6 @@
 import * as yargs from 'yargs';
 import * as _ from 'lodash';
 import chalk from 'chalk';
-import { DateTime } from 'luxon';
 
 import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
@@ -76,7 +75,7 @@ const beautifyLogLine = (line: string) => {
           printRequestId(id) +
           ' ' +
           printTag(LogTagType.ERROR) +
-          chalk.red(` Datetime: ${DateTime.fromISO(dt).toFormat('F')}\n`) +
+          chalk.red(` Datetime: ${new Date(dt).toLocaleString()}\n`) +
           text
         );
       },
@@ -95,7 +94,7 @@ const beautifyLogLine = (line: string) => {
           printRequestId(id) +
           ' ' +
           printTag(LogTagType.INFO) +
-          chalk.cyan(` Datetime: ${DateTime.fromISO(dt).toFormat('F')} \n`) +
+          chalk.cyan(` Datetime: ${new Date(dt).toLocaleString()} \n`) +
           text
         );
       },

@@ -10,7 +10,7 @@ export default {
 
   handler: async (params: any, context: Context) => {
     let { environment, backup } = params;
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
     context.spinner.start(context.i18n.t('backup_restore_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.backupRestore, { name: environment, backup });
     context.spinner.stop();

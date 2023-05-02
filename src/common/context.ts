@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as i18next from 'i18next';
-import * as Ora from 'ora';
+import Ora from 'ora';
 import * as path from 'path';
 import * as winston from 'winston';
-import * as yaml from 'yaml';
+import * as yaml from 'js-yaml';
 import chalk from 'chalk';
 import { Client } from '@8base/api-client';
 import { TransformableInfo } from 'logform';
@@ -118,10 +118,10 @@ export class Context {
     this.workspaceConfig = _.merge(currentWorkspaceConfig, { environmentName });
   }
 
-  createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
+  async createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
     const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
 
-    fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
+    await fs.writeFile(workspaceConfigPath, JSON.stringify(value, null, 2));
   }
 
   get workspaceId(): string | null {
@@ -152,7 +152,7 @@ export class Context {
     let projectConfig = { functions: {} };
 
     if (this.hasProjectConfig()) {
-      projectConfig = yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
+      projectConfig = <ProjectConfig>yaml.load(fs.readFileSync(projectConfigPath, 'utf-8')) || projectConfig;
     }
 
     return projectConfig;
@@ -161,7 +161,7 @@ export class Context {
   set projectConfig(value: ProjectConfig) {
     const projectConfigPath = this.getProjectConfigPath();
 
-    fs.writeFileSync(projectConfigPath, yaml.stringify(value));
+    fs.writeFileSync(projectConfigPath, yaml.dump(value));
   }
 
   getProjectConfigPath(customPath?: string): string {

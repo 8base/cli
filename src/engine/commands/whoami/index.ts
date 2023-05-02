@@ -1,5 +1,5 @@
 import * as yargs from 'yargs';
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import chalk from 'chalk';
 
 import { Context } from '../../../common/context';
@@ -19,7 +19,7 @@ export default {
     try {
       const idToken = context.storage.getValue(StorageParameters.idToken);
 
-      ({ email, name } = jwtDecode(idToken));
+      ({ email, name } = jwtDecode<{ email: string; name: string }>(idToken));
     } catch (e) {}
 
     if (!email && context.isProjectDir()) {

@@ -1,18 +1,17 @@
-import * as execa from "execa";
-import { stopScaffoldProject } from "./stopScaffoldProject";
+import { execa } from 'execa';
+import { stopScaffoldProject } from './stopScaffoldProject';
 
 export const startScaffoldProject = async () => {
   try {
     await stopScaffoldProject();
 
-    const npmStart = execa("npm", ["run", "start", "--prefix=./temp/app-example"], { detached: true, stdio: "ignore" });
+    const npmStart = execa('npm', ['run', 'start', '--prefix=./temp/app-example'], { detached: true, stdio: 'ignore' });
     npmStart.unref();
 
-    await new Promise((resolve) => {
+    await new Promise<void>(resolve => {
       setTimeout(() => resolve(), 20000);
     });
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 };
-

@@ -1,16 +1,16 @@
 import * as path from 'path';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import { execSync } from 'child_process';
-import cuid = require('cuid');
+import * as cuid from '@paralleldrive/cuid2';
 import * as yaml from 'js-yaml';
 import stripAnsi from 'strip-ansi';
 import { CLI_BIN } from './consts';
 
 export const prepareTestEnvironment = async (
-  repName: string = cuid(),
+  repName: string = cuid.createId(),
 ): Promise<{ onComplete: () => void; repPath: string }> => {
-  const dir = cuid();
-  const fullPath = path.join(__dirname, dir);
+  const dir = cuid.createId();
+  const fullPath = path.join(process.cwd(), dir);
 
   execSync(`mkdir ${fullPath}`);
 
@@ -24,7 +24,7 @@ export const prepareTestEnvironment = async (
   };
 };
 
-export const addResolverToProject = (
+export const addResolverToProject = async (
   funcName: string,
   code: string,
   graphQLData: string,
@@ -33,10 +33,10 @@ export const addResolverToProject = (
 ) => {
   const subDir = 'src';
 
-  fs.writeFileSync(path.join(projectPath, subDir, funcName).concat(ext), code);
-  fs.writeFileSync(path.join(projectPath, subDir, funcName).concat('.graphql'), graphQLData);
+  await fs.writeFile(path.join(projectPath, subDir, funcName).concat(ext), code);
+  await fs.writeFile(path.join(projectPath, subDir, funcName).concat('.graphql'), graphQLData);
   const yamlFilePath = path.join(projectPath, '8base.yml');
-  const yamlData: { functions: { [key: string]: any } } = <any>yaml.safeLoad(fs.readFileSync(yamlFilePath, 'utf8'));
+  const yamlData: { functions: { [key: string]: any } } = <any>yaml.load(fs.readFileSync(yamlFilePath, 'utf8'));
 
   yamlData.functions[funcName] = {
     handler: {
@@ -46,7 +46,7 @@ export const addResolverToProject = (
     schema: path.join(subDir, funcName).concat('.graphql'),
   };
 
-  fs.writeFileSync(yamlFilePath, yaml.safeDump(yamlData));
+  await fs.writeFile(yamlFilePath, yaml.dump(yamlData));
 };
 
 export const addFileToProject = (

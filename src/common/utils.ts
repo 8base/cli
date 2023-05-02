@@ -1,18 +1,15 @@
 import * as path from 'path';
 import 'isomorphic-fetch';
-import * as request from 'request';
 import * as fs from 'fs';
-import * as archiver from 'archiver';
 import { Interactive } from './interactive';
 import * as _ from 'lodash';
 import { Context } from './context';
 import { Readable } from 'stream';
 import { CommandController } from '../engine/controllers/commandController';
-import { StaticConfig } from '../config';
-import { translations, Translations } from './translations';
+import { translations } from './translations';
+import archiver from 'archiver';
 
 const MemoryStream = require('memorystream');
-const streamToBuffer = require('stream-to-buffer');
 
 type workspace = { name: string; id: string };
 
@@ -58,30 +55,20 @@ export namespace Utils {
     context.logger.debug('start upload file');
     context.logger.debug('url: ' + url);
 
-    return new Promise<void>((resolve, reject) => {
-      streamToBuffer(fileStream, (err: Error, data: any) => {
-        request(
-          {
-            method: 'PUT',
-            url: url,
-            body: data,
-            headers: {
-              'Content-Length': data.length,
-            },
-          },
-          (err: any, res: any, body: any) => {
-            if (err) {
-              return reject(err);
-            }
-            if (res && res.statusCode !== 200) {
-              return reject(new Error(res.body));
-            }
-            context.logger.debug('upload file success');
-            resolve();
-          },
-        );
-      });
+    const body = fileStream.read();
+    const res = await fetch(url, {
+      method: 'PUT',
+      body,
+      headers: {
+        'Content-Length': body.length,
+      },
     });
+
+    if (res && res.status !== 200) {
+      throw new Error(await res.text());
+    }
+
+    context.logger.debug('upload file success');
   };
 
   export const archiveToMemory = async (
@@ -106,7 +93,9 @@ export namespace Utils {
             source.isFile(),
         );
 
-        source.isFile() ? zip.file(sourcePath.source, {}) : zip.directory(sourcePath.source, sourcePath.dist || false);
+        source.isFile()
+          ? zip.file(sourcePath.source, { name: sourcePath.source })
+          : zip.directory(sourcePath.source, sourcePath.dist || false);
       });
 
       zip.on('error', (err: any) => {
@@ -170,18 +159,17 @@ export namespace Utils {
     return url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
   };
 
-  export const commandDirMiddleware = (commandsDirPath: string) => (
-    commandObject: { [key: string]: any },
-    pathName: string,
-  ): Object => {
-    const cmd = commandObject.default || commandObject;
-    const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
+  export const commandDirMiddleware =
+    (commandsDirPath: string) =>
+    (commandObject: { [key: string]: any }, pathName: string): Object => {
+      const cmd = commandObject.default || commandObject;
+      const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
 
-    if (fileDepth <= 2 && !!cmd.command) {
-      return {
-        ...cmd,
-        handler: CommandController.wrapHandler(cmd.handler, translations),
-      };
-    }
-  };
+      if (fileDepth <= 2 && !!cmd.command) {
+        return {
+          ...cmd,
+          handler: CommandController.wrapHandler(cmd.handler, translations),
+        };
+      }
+    };
 }

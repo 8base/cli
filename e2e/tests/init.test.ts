@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as execa from 'execa';
 import stripAnsi from 'strip-ansi';
 
@@ -13,7 +12,7 @@ it('As a user, I can init example project.', async () => {
 
   expect(stdout.replace(/Time: [\d,]+ sec\./, 'Time: 100 sec.')).toMatchSnapshot();
 
-  const { stdout: ls } = await execa.shell(`ls -1 ${TEST_DIR}/** | sort`);
+  const { stdout: ls } = await execa.execaCommand(`ls -1 ${TEST_DIR}/** | sort`, { shell: true });
 
   expect(ls.split('\n').sort()).toMatchSnapshot();
 });
@@ -25,11 +24,11 @@ it('As a user, I can init empty project.', async () => {
 
   expect(stdout.replace(/Time: [\d,]+ sec\./, 'Time: 100 sec.')).toMatchSnapshot();
 
-  const { stdout: ls } = await execa.shell(`ls -1 ${TEST_DIR}/** | sort`);
+  const { stdout: ls } = await execa.execaCommand(`ls -1 ${TEST_DIR}/** | sort`, { shell: true });
 
   expect(ls.split('\n').sort()).toMatchSnapshot();
 });
 
 afterEach(async () => {
-  await execa.shell(`rm -rf ${TEST_DIR}`);
+  await execa.execaCommand(`rm -rf ${TEST_DIR}`, { shell: true });
 });

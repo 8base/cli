@@ -109,7 +109,7 @@ export const executeDeploy = async (context: Context, deployOptions: any, option
     );
   } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
 
-  BuildController.clearBuild(context);
+  await BuildController.clearBuild(context);
   context.spinner.stop();
 
   if (result.status === AsyncStatus.completeError) {

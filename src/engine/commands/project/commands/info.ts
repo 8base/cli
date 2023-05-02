@@ -11,7 +11,7 @@ export default {
   command: 'info',
 
   handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
 
     const { workspaceId, environmentName } = context.workspaceConfig;
 

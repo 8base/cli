@@ -1,8 +1,7 @@
 import * as yargs from 'yargs';
 import chalk from 'chalk';
 import * as _ from 'lodash';
-import { request as gqlRequest } from 'graphql-request';
-import gql from 'graphql-tag';
+import gqlRequest from 'graphql-request';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';

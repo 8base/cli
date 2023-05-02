@@ -1,11 +1,8 @@
 import * as yargs from 'yargs';
-import * as request from 'request';
 import * as path from 'path';
 import * as _ from 'lodash';
-import * as AdmZip from 'adm-zip';
-import { request as gqlRequest } from 'graphql-request';
-import gql from 'graphql-tag';
-import * as changeCase from 'change-case';
+import AdmZip from 'adm-zip';
+import gqlRequest from 'graphql-request';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
@@ -52,64 +49,54 @@ export default {
       );
     }
 
-    await new Promise((resolve, reject) => {
-      request(
-        {
-          url: `${plugin.gitHubUrl}/archive/master.zip`,
-          method: 'GET',
-          encoding: null,
-        },
-        (err, response, body) => {
-          if (err) {
-            throw new Error(
-              context.i18n.t('plugin_install_cant_download', {
-                name,
-              }),
-            );
-          }
-
-          try {
-            const zip = new AdmZip(body);
-
-            const zipEntries = zip.getEntries();
-
-            zipEntries.forEach((zipEntry: any) => {
-              if (!zipEntry.isDirectory) {
-                let targetPath = zipEntry.entryName.replace(/^[^\/]+\//, '');
-
-                const filePath = `plugins/${name}/${targetPath}`;
-
-                targetPath = targetPath.replace(/\/?[^\/]+$/, '');
-
-                targetPath = path.resolve(`./plugins/${name}/${targetPath}`);
-
-                zip.extractEntryTo(zipEntry.entryName, targetPath, false, true);
-
-                context.logger.info(
-                  context.i18n.t('project_created_file', {
-                    path: filePath,
-                  }),
-                );
-              }
-            });
-
-            ProjectController.addPluginDeclaration(
-              context,
-              changeCase.camelCase(name),
-              {
-                name,
-                path: `plugins/${name}/8base.yml`,
-              },
-              '.',
-            );
-          } catch (e) {
-            reject(e);
-          }
-
-          resolve();
-        },
+    let data: Buffer;
+    try {
+      const res = await fetch(`${plugin.gitHubUrl}/archive/master.zip`, { method: 'GET' });
+      if (res.status !== 200) {
+        throw new Error('');
+      }
+      data = Buffer.from(new Uint8Array(await res.arrayBuffer()));
+    } catch (e) {
+      throw new Error(
+        context.i18n.t('plugin_install_cant_download', {
+          name,
+        }),
       );
+    }
+
+    const zip = new AdmZip(data);
+
+    const zipEntries = zip.getEntries();
+
+    zipEntries.forEach((zipEntry: any) => {
+      if (!zipEntry.isDirectory) {
+        let targetPath = zipEntry.entryName.replace(/^[^\/]+\//, '');
+
+        const filePath = `plugins/${name}/${targetPath}`;
+
+        targetPath = targetPath.replace(/\/?[^\/]+$/, '');
+
+        targetPath = path.resolve(`./plugins/${name}/${targetPath}`);
+
+        zip.extractEntryTo(zipEntry.entryName, targetPath, false, true);
+
+        context.logger.info(
+          context.i18n.t('project_created_file', {
+            path: filePath,
+          }),
+        );
+      }
     });
+
+    await ProjectController.addPluginDeclaration(
+      context,
+      _.camelCase(name),
+      {
+        name,
+        path: `plugins/${name}/8base.yml`,
+      },
+      '.',
+    );
 
     context.logger.info(
       context.i18n.t('plugin_successfully_install', {

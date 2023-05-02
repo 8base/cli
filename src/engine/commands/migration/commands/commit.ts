@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as yargs from 'yargs';
 import { Context } from '../../../../common/context';
@@ -15,7 +15,7 @@ import { StaticConfig } from '../../../../config';
 export default {
   command: 'commit',
   handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectHasProject(context);
+    await ProjectConfigurationState.expectHasProject(context);
     context.initializeProject();
 
     const environment = params.environment ? params.environment : context.workspaceConfig.environmentName;
@@ -40,11 +40,13 @@ export default {
     const migrationNames: string[] | undefined = params.target;
 
     if (migrationNames) {
-      migrationNames.forEach(name => {
-        if (!fs.existsSync(path.join(StaticConfig.rootExecutionDir, 'migrations', name))) {
-          throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
-        }
-      });
+      await Promise.all(
+        migrationNames.map(async name => {
+          if (!(await fs.exists(path.join(StaticConfig.rootExecutionDir, 'migrations', name)))) {
+            throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
+          }
+        }),
+      );
     }
 
     const options: RequestOptions = { customEnvironment: environment };

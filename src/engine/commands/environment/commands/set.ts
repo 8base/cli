@@ -9,7 +9,7 @@ export default {
 
   handler: async (params: any, context: Context) => {
     let { environmentName } = params;
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
 
     if (!environmentName) {
       const environments = await context.getEnvironments();

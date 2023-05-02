@@ -1,5 +1,5 @@
 import * as yargs from 'yargs';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
@@ -33,9 +33,7 @@ const getLocalFunction = async (functionName: string, context: Context) => {
     throw new InvokeLocalError(error.message, functionInfo.name, functionPath);
   }
 
-  const functionToCall = Utils.undefault(result);
-
-  return functionToCall;
+  return Utils.undefault(result);
 };
 
 export default {
@@ -52,9 +50,9 @@ export default {
     let args = null;
 
     if (params.m) {
-      args = ProjectController.getMock(context, params.name, params.m);
+      args = await ProjectController.getMock(context, params.name, params.m);
     } else if (params.p) {
-      args = fs.readFileSync(params.p);
+      args = await fs.readFile(params.p);
     } else if (params.j) {
       args = params.j;
     }
@@ -96,7 +94,7 @@ export default {
       resultError = e;
     }
 
-    BuildController.clearBuild(context);
+    await BuildController.clearBuild(context);
 
     context.spinner.stop();
 

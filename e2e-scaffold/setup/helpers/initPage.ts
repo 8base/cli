@@ -1,4 +1,4 @@
-import { BrowserContext } from "puppeteer";
+import { BrowserContext } from 'puppeteer';
 
 export const initPage = async (context: BrowserContext, auth: { [key: string]: string }) => {
   const page = await context.newPage();

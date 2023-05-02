@@ -2,11 +2,10 @@ import * as yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
-import * as download from 'download';
+import download from 'download';
+import * as path from 'path';
 import { StaticConfig } from '../../../../config';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
-const path = require('path');
-const fs = require('fs-extra');
 
 const DEFAULT_MIGRATIONS_PATH = './migrations';
 
@@ -14,7 +13,7 @@ export default {
   command: 'generate',
 
   handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectHasProject(context);
+    await ProjectConfigurationState.expectHasProject(context);
     context.spinner.start(context.i18n.t('migration_generate_in_progress'));
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
     const { system } = await context.request(

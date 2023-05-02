@@ -21,8 +21,8 @@ export class GraphqlController {
 
   /**
    *
-   * @param project
    * @return { functionName: "Query/Mutation" }
+   * @param gqlSchema
    */
   static defineGqlFunctionsType(gqlSchema: string): { [functionName: string]: GraphQLFunctionType } {
     // bad solution, I think
@@ -67,7 +67,7 @@ export class GraphqlController {
    * private functions
    */
 
-  private static processFields(fields: FieldDefinitionNode[]): string[] {
+  private static processFields(fields: ReadonlyArray<FieldDefinitionNode>): string[] {
     return _.transform(
       fields,
       (res: any[], f: any) => {

@@ -1,8 +1,7 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { exportTables } from '@8base/api-client';
 
 export default {
@@ -27,7 +26,7 @@ export default {
       version: context.version,
     };
 
-    fs.writeFileSync(params.file, JSON.stringify(exportResult, null, 2));
+    await fs.writeFile(params.file, JSON.stringify(exportResult, null, 2));
 
     context.spinner.stop();
   },

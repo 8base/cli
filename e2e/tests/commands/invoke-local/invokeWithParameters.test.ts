@@ -5,12 +5,12 @@ import {
   expectInString,
   prepareTestEnvironment,
 } from '../../../utils';
+import {jest} from "@jest/globals";
 
-let project: any = null;
+let project: any;
 const repositoryName = 'test_rep';
 
 it('As a user, I can invoke resolver locally.', async () => {
-  // @ts-ignore
   jest.setTimeout(12000);
 
   expect.assertions(1);
@@ -31,7 +31,7 @@ it('As a user, I can invoke resolver locally.', async () => {
     ${funcName}: String
   }`;
 
-  addResolverToProject(funcName, funcCode, gqlData, project.repPath);
+  await addResolverToProject(funcName, funcCode, gqlData, project.repPath);
 
   const fileData = JSON.stringify({ data: { value: 'kokoko' } });
   const { relativePathToFile } = addFileToProject('someData.json', fileData, project.repPath, 'data');

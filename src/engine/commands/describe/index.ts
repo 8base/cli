@@ -1,8 +1,6 @@
 import * as yargs from 'yargs';
-import * as url from 'url';
 import chalk from 'chalk';
 import { table } from 'table';
-import * as changeCase from 'change-case';
 import * as _ from 'lodash';
 
 import { Context } from '../../../common/context';
@@ -32,7 +30,7 @@ export default {
       if (fn) {
         Object.keys(fn).forEach(name => {
           // @ts-ignore
-          context.logger.info(`${chalk.hex(Colors.yellow)(`${changeCase.title(name)}:`)} ${fn[name]}`);
+          context.logger.info(`${chalk.hex(Colors.yellow)(`${_.startCase(name)}:`)} ${fn[name]}`);
         });
       } else {
         throw new Error(translations.i18n.t('describe_function_not_found', { name: params.name }));

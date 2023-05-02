@@ -19,7 +19,7 @@ export default {
   handler: async (params: TaskParams, context: Context) => {
     let { name, schedule, mocks, syntax, silent } = params;
 
-    ProjectController.generateFunction(
+    await ProjectController.generateFunction(
       context,
       {
         type: ExtensionType.task,

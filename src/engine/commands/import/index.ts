@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
@@ -10,9 +10,9 @@ export default {
   handler: async (params: any, context: Context) => {
     let schema;
 
-    if (fs.existsSync(params.file)) {
+    if (await fs.exists(params.file)) {
       try {
-        schema = JSON.parse(fs.readFileSync(params.file, 'utf8'));
+        schema = JSON.parse(await fs.readFile(params.file, 'utf8'));
       } catch (e) {
         throw new Error(translations.i18n.t('import_cant_parse_schema'));
       }

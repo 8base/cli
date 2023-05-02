@@ -18,7 +18,7 @@ export default {
   handler: async (params: ResolverParams, context: Context) => {
     let { name, mocks, syntax, silent } = params;
 
-    ProjectController.generateFunction(context, {
+    await ProjectController.generateFunction(context, {
       type: ExtensionType.resolver,
       name,
       mocks,

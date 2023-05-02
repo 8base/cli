@@ -8,7 +8,7 @@ import { executeAsync } from '../../../../common/execute';
 export default {
   command: 'create',
   handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
     context.spinner.start(context.i18n.t('backup_create_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.backupCreate, { name: context.workspaceConfig.environmentName });
     context.spinner.stop();

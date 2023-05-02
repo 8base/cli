@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 import * as yargs from 'yargs';
 import * as path from 'path';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import * as tree from 'tree-node-cli';
-import * as validatePackageName from 'validate-npm-package-name';
+import validatePackageName from 'validate-npm-package-name';
 
 import { getFileProvider } from './providers';
 import { install } from './installer';
@@ -25,11 +25,11 @@ const CREATE_WORKSPACE_MUTATION = `
   }
 `;
 
-const isEmptyDir = (path: string): boolean => {
+const isEmptyDir = async (path: string): Promise<boolean> => {
   let files = [];
 
   try {
-    files = fs.readdirSync(path);
+    files = await fs.readdir(path);
   } catch (e) {}
 
   return files.length === 0;
@@ -65,7 +65,7 @@ export default {
           name: path.basename(context.config.rootExecutionDir),
         };
 
-    if (!isEmptyDir(project.fullPath)) {
+    if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
         name: 'confirm',
         type: 'confirm',
@@ -171,21 +171,23 @@ export default {
 
     /* Generate project files before printing tree */
     if (!empty && Array.isArray(params.functions)) {
-      params.functions.forEach((declaration: string) => {
-        const [type, name] = declaration.split(':');
+      await Promise.all(
+        params.functions.map(async (declaration: string) => {
+          const [type, name] = declaration.split(':');
 
-        ProjectController.generateFunction(context, {
-          type: <ExtensionType>type,
-          name,
-          mocks,
-          syntax,
-          projectPath: projectName,
-          silent: true,
-        });
-      });
+          await ProjectController.generateFunction(context, {
+            type: <ExtensionType>type,
+            name,
+            mocks,
+            syntax,
+            projectPath: projectName,
+            silent: true,
+          });
+        }),
+      );
     }
 
-    context.createWorkspaceConfig(
+    await context.createWorkspaceConfig(
       {
         workspaceId,
         environmentName: DEFAULT_ENVIRONMENT_NAME,

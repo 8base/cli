@@ -9,7 +9,7 @@ export default {
   command: 'show',
 
   handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
     const { environmentName } = context.workspaceConfig;
     context.logger.info(
       translations.i18n.t('environment_show_text', {

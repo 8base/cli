@@ -1,6 +1,5 @@
 import * as yargs from 'yargs';
-import * as _ from 'lodash';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
@@ -17,9 +16,9 @@ export default {
     let args = null;
 
     if (params.m) {
-      args = ProjectController.getMock(context, params.name, params.m);
+      args = await ProjectController.getMock(context, params.name, params.m);
     } else if (params.p) {
-      args = fs.readFileSync(params.p).toString();
+      args = (await fs.readFile(params.p)).toString();
     } else if (params.j) {
       args = params.j;
     }
@@ -58,7 +57,7 @@ export default {
       context.logger.info(
         JSON.stringify(
           {
-            data: JSON.parse(resultResponse.invoke.responseData),
+            data: JSON.parse(resultResponse?.invoke.responseData),
           },
           null,
           2,

@@ -6,8 +6,8 @@
 # https://docs.8base.com/8base-console/custom-functions/resolvers
 #
 <%
-  const resultType = changeCase.pascalCase(functionName + ' result'); 
--%> 
+  const resultType = _.upperFirst(_.camelCase(functionName + ' result'));
+-%>
 type <%= resultType %> {
   result: String!
 }

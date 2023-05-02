@@ -61,9 +61,7 @@ const getColumnsNames = (params: { withMeta: boolean } & ViewCommandConfig, tabl
 
   const columns = createQueryColumnsList(tables, table.id, { deep: params.depth, withMeta: params.withMeta });
 
-  const columnsNames = columns.map(({ name }) => name);
-
-  return columnsNames;
+  return columns.map(({ name }) => name);
 };
 
 const createTemplateFs = async (tables: TableSchema[], screen: Screen, config: { depth: number }, context: Context) => {
@@ -79,7 +77,7 @@ const createTemplateFs = async (tables: TableSchema[], screen: Screen, config: {
   );
 
   try {
-    if (fs.existsSync(Object.keys(fsObject)[0])) {
+    if (await fs.exists(Object.keys(fsObject)[0])) {
       throw new Error(translations.i18n.t('generate_scaffold_crud_exist_error'));
     }
 
@@ -105,7 +103,7 @@ export default {
 
     let eightBaseConfig: EightBaseConfig;
     try {
-      eightBaseConfig = <any>yaml.safeLoad(await fs.readFile('.8base.yml', 'utf8'));
+      eightBaseConfig = <any>yaml.load(await fs.readFile('.8base.yml', 'utf8'));
     } catch (err) {
       if (err.code === 'ENOENT') {
         throw new Error(translations.i18n.t('generate_scaffold_project_file_error', { projectFileName: '.8base.yml' }));

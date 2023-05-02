@@ -6,13 +6,13 @@ import { Utils } from '../../../common/utils';
 export default {
   command: ['backup <command>'],
   describe: translations.i18n.t('backup_describe'),
-  builder: function(yargs: yargs.Argv) {
+  builder: function (yargs: yargs.Argv) {
     return yargs.commandDir('commands', {
       extensions: ['js'],
       visit: Utils.commandDirMiddleware(path.join(__dirname, 'commands')),
     });
   },
-  handler: function() {
+  handler: function () {
     // This is parent handler. It is not used.
   },
 };

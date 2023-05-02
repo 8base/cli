@@ -9,7 +9,7 @@ import { MigrateMode } from '../../../../interfaces/Common';
 export default {
   command: 'branch',
   handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
     let { name, mode } = params;
     context.spinner.start(context.i18n.t('environment_branch_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.environmentBranch, { environmentName: name, mode });

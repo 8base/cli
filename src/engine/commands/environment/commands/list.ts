@@ -9,7 +9,7 @@ const ENVIRONMENT_TABLE_HEADER = ['Name'];
 export default {
   command: 'list',
   handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
     const environments = await context.getEnvironments();
     context.logger.info(table([ENVIRONMENT_TABLE_HEADER, ...environments.map(e => [e.name])]));
   },
