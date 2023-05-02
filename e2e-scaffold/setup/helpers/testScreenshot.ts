@@ -4,9 +4,9 @@ export const testScreenshot = async (page: Page, options = {}) => {
   // Rid of unnecessary hover
   await page.mouse.move(0, 0);
 
-  await page.waitFor(1000);
+  setTimeout(()=>{},1000);
 
-  const screenshot = await page.screenshot({
+  return page.screenshot({
     clip: {
       x: 0,
       y: 0,
@@ -15,6 +15,4 @@ export const testScreenshot = async (page: Page, options = {}) => {
     },
     ...options,
   });
-
-  return screenshot;
 };

@@ -1,25 +1,28 @@
 {
-  "globals": {
-    "ts-jest": {
-      "tsConfig": "<rootDir>/tsconfig.json"
-    }
-  },
   "setupFiles": [
     "./setup/setup.ts"
   ],
-  "setupFilesAfterEnv": ["./setup/setupTestFramework.ts"],
+  "setupFilesAfterEnv": [
+    "./setup/setupTestFramework.ts"
+  ],
   "globalSetup": "./setup/globalSetup.ts",
   "globalTeardown": "./setup/globalTeardown.ts",
   "testEnvironment": "./setup/testEnvironment.js",
   "moduleFileExtensions": [
-    "ts",
     "js",
-    "json"
+    "json",
+    "ts"
   ],
   "transform": {
-    "^.+\\.(ts|tsx)$": "ts-jest"
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        "tsconfig": "<rootDir>/tsconfig.json"
+      }
+    ]
   },
   "testMatch": [
-    "/**/*.test.(ts|js)"
-  ]
+    "/**/*.test.(t|j)s"
+  ],
+  "preset": "ts-jest"
 }
