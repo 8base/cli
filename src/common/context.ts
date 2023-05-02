@@ -118,7 +118,7 @@ export class Context {
     this.workspaceConfig = _.merge(currentWorkspaceConfig, { environmentName });
   }
 
-  async createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
+  async createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): Promise<void> {
     const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
 
     await fs.writeFile(workspaceConfigPath, JSON.stringify(value, null, 2));
