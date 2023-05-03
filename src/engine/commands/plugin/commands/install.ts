@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as path from 'path';
 import * as _ from 'lodash';
 import AdmZip from 'adm-zip';
@@ -26,7 +26,7 @@ const PLUGINS_LIST_QUERY = `
 type ProjectType = { name: string; gitHubUrl: string };
 
 export default {
-  command: 'install [name]',
+  command: 'install <name>',
 
   handler: async (params: PluginInstallParams, context: Context) => {
     const { name } = params;
@@ -108,11 +108,8 @@ export default {
   describe: translations.i18n.t('plugin_install_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv =>
-    args
-      .usage(translations.i18n.t('plugin_install_usage'))
-      .positional('name', {
-        describe: translations.i18n.t('plugin_install_name_describe'),
-        type: 'string',
-      })
-      .demandOption('name'),
+    args.usage(translations.i18n.t('plugin_install_usage')).positional('name', {
+      describe: translations.i18n.t('plugin_install_name_describe'),
+      type: 'string',
+    }),
 };

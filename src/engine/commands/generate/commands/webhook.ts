@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
@@ -41,6 +41,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_webhook_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('generate_webhook_name'),
+        type: 'string',
+      })
       .option('path', {
         alias: 'p',
         describe: translations.i18n.t('generate_webhook_path_describe'),

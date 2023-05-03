@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as _ from 'lodash';
 import { GraphqlController } from '../../controllers/graphqlController';
 import { Context } from '../../../common/context';

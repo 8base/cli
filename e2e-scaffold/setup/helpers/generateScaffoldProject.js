@@ -20,7 +20,7 @@ const generateScaffoldProject = async () => {
 
     fs.writeFileSync(configPath, mockConfig);
 
-    const { stdout: loginStdout } = await execa('node', [
+    await execa('node', [
       './dist',
       'login',
       `--email=${E2E_SCAFFOLD_EMAIL}`,

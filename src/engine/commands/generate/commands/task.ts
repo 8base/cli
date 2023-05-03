@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
@@ -39,6 +39,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_task_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('generate_task_name'),
+        type: 'string',
+      })
       .option('schedule', {
         alias: 'sch',
         describe: translations.i18n.t('generate_task_schedule_describe'),

@@ -1,5 +1,5 @@
 import { BuildController } from '../../controllers/buildController';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { Context } from '../../../common/context';

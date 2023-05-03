@@ -27,7 +27,7 @@ type FunctionDeclarationOptions = {
   schedule?: string;
 };
 
-type FunctionGeneratationOptions = {
+type FunctionGenerationOptions = {
   type: ExtensionType;
   name: string;
   mocks: boolean;
@@ -37,7 +37,7 @@ type FunctionGeneratationOptions = {
   extendType?: string;
 };
 
-type MockGeneratationOptions = {
+type MockGenerationOptions = {
   name: string;
   functionName: string;
   projectPath?: string;
@@ -52,7 +52,7 @@ type PluginGenerationOptions = {
 };
 
 const generateFunctionDeclaration = (
-  { type, name, mocks, syntax }: FunctionGeneratationOptions,
+  { type, name, mocks, syntax }: FunctionGenerationOptions,
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
@@ -360,7 +360,7 @@ export class ProjectController {
 
   static async generateFunction(
     context: Context,
-    { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGeneratationOptions,
+    { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGenerationOptions,
     options: FunctionDeclarationOptions = {},
   ) {
     const dirPath = `src/${type}s/${name}`;
@@ -468,7 +468,7 @@ export class ProjectController {
 
   static async generateMock(
     context: Context,
-    { name, functionName, projectPath = '.', silent }: MockGeneratationOptions,
+    { name, functionName, projectPath = '.', silent }: MockGenerationOptions,
   ) {
     let config = ProjectController.loadConfigFile(context, projectPath) || {
       functions: {},

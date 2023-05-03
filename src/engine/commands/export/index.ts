@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { exportTables } from '@8base/api-client';

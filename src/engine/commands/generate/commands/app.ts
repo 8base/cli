@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { simpleGit } from 'simple-git';
@@ -10,19 +10,23 @@ import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
 
 type AppParams = {
   _: string[];
-  appName: string;
+  name: string;
 };
 
 export default {
-  command: 'app <appName>',
+  command: 'app <name>',
   describe: translations.i18n.t('generate_app_describe'),
-  builder: (yargs: yargs.Argv): yargs.Argv => yargs.usage(translations.i18n.t('generate_app_usage')),
+  builder: (yargs: yargs.Argv): yargs.Argv =>
+    yargs.usage(translations.i18n.t('generate_app_usage')).positional('name', {
+      describe: translations.i18n.t('generate_app_name'),
+      type: 'string',
+    }),
   handler: async (params: AppParams, context: Context) => {
     if (!context.user.isAuthorized()) {
       throw new Error(context.i18n.t('logout_error'));
     }
 
-    const { appName } = params;
+    const { name: appName } = params;
     const git = simpleGit('.');
 
     const workspaceId = context.workspaceId;

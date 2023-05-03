@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import chalk from 'chalk';
 import * as _ from 'lodash';
 import gqlRequest from 'graphql-request';

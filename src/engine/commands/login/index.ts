@@ -1,6 +1,6 @@
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import logout from '../logout';
 import 'isomorphic-fetch';
 import { StaticConfig } from '../../../config';

@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as yaml from 'js-yaml';
 import { Context } from '../../../../common/context';
@@ -142,6 +142,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t('generate_scaffold_usage'))
+      .positional('tableName', {
+        describe: translations.i18n.t('generate_scaffold_name'),
+        type: 'string',
+      })
       .option('depth', {
         describe: translations.i18n.t('generate_scaffold_depth_describe'),
         type: 'number',

@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
@@ -45,6 +45,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_trigger_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('generate_trigger_name'),
+        type: 'string',
+      })
       .option('type', {
         alias: 't',
         describe: translations.i18n.t('generate_trigger_type_describe'),

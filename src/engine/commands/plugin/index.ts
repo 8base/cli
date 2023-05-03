@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Utils } from '../../../common/utils';
 
 export default {

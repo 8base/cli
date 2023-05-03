@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import chalk from 'chalk';
 import { table } from 'table';
 import * as _ from 'lodash';
@@ -29,7 +29,6 @@ export default {
 
       if (fn) {
         Object.keys(fn).forEach(name => {
-          // @ts-ignore
           context.logger.info(`${chalk.hex(Colors.yellow)(`${_.startCase(name)}:`)} ${fn[name]}`);
         });
       } else {

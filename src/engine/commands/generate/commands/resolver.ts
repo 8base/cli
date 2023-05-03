@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
@@ -33,6 +33,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_resolver_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('generate_resolver_name'),
+        type: 'string',
+      })
       .option('mocks', {
         alias: 'x',
         describe: translations.i18n.t('generate_mocks_describe'),

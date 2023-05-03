@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
@@ -149,7 +149,7 @@ export default {
 
     context.logger.debug(`initialize success: initialize repository: ${project.name}`);
 
-    let files = await getFileProvider().provide(context);
+    let files = getFileProvider().provide(context);
     context.logger.debug('files provided count = ' + files.size);
 
     files.set(
@@ -214,6 +214,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t('init_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('init_name_describe'),
+        type: 'string',
+      })
       .option('functions', {
         alias: 'f',
         describe: translations.i18n.t('init_functions_describe'),

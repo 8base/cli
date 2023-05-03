@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as fs from 'fs-extra';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { importTables, importData } from '@8base/api-client';

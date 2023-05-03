@@ -49,7 +49,7 @@ it('As a user, I can create new property', async () => {
 
   await page.$eval('*', () => (document.activeElement as any).blur());
 
-  expect(((await await page.waitForXPath('//form/..')) as ElementHandle).screenshot()).toMatchImageSnapshot();
+  expect(await ((await page.waitForXPath('//form/..')) as ElementHandle).screenshot()).toMatchImageSnapshot();
 
   await (
     (await page.waitForXPath(`//form//button/span[contains(text(), "Create Property")]`)) as ElementHandle
@@ -71,7 +71,7 @@ it('As a user, I can edit property', async () => {
 
   await (await page.waitForXPath(`//input[@name="title"]`)).type(' Other');
 
-  expect(((await await page.waitForXPath('//form/..')) as ElementHandle).screenshot()).toMatchImageSnapshot();
+  expect(await (await page.waitForXPath('//form/..') as ElementHandle).screenshot()).toMatchImageSnapshot();
 
   await (
     (await page.waitForXPath(`//form//button/span[contains(text(), "Update Property")]`)) as ElementHandle
@@ -93,7 +93,7 @@ it('As a user, I can delete property', async () => {
     (await page.waitForXPath(`//*[contains(text(), "Beladle")]/../..//*[contains(text(), "Delete")]`)) as ElementHandle
   ).click();
 
-  expect(((await await page.waitForXPath('//form/..')) as ElementHandle).screenshot()).toMatchImageSnapshot();
+  expect(await (await page.waitForXPath('//form/..') as ElementHandle).screenshot()).toMatchImageSnapshot();
 
   await (
     (await page.waitForXPath(`//form//button/span[contains(text(), "Delete Property")]`)) as ElementHandle

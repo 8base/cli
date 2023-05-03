@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { executeAsync, executeDeploy, uploadProject } from '../../../../common/execute';

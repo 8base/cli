@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as _ from 'lodash';
 import chalk from 'chalk';
 
@@ -187,7 +187,7 @@ const readLogs = async (functionName: string, context: Context) => {
 };
 
 export default {
-  command: 'logs [name]',
+  command: 'logs <name>',
   handler: async (params: any, context: Context) => {
     if (params.n > 100) {
       params.n = 100;
@@ -215,7 +215,6 @@ export default {
         describe: translations.i18n.t('logs_name_describe'),
         type: 'string',
       })
-      .demandOption('name')
       .option('num', {
         alias: 'n',
         default: 10,

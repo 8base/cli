@@ -19,7 +19,7 @@ export const prepareTestEnvironment = async (
   return {
     repPath: path.join(fullPath, repName),
     onComplete: () => {
-      execSync(`rm -r ${fullPath}`);
+      execSync(`rm -rf ${fullPath}`);
     },
   };
 };
@@ -84,7 +84,6 @@ export namespace RunCommand {
 }
 
 const execCmd = (repPath: string, command: string) => {
-  const data = `cd ${repPath} && node ${CLI_BIN} ${command}`;
   return execSync(`cd ${repPath} && node ${CLI_BIN} ${command}`).toString();
 };
 

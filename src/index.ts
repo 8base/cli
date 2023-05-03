@@ -29,6 +29,7 @@ const start = async (translations: Translations) => {
       type: 'boolean',
     })
     .recommendCommands()
+    .strict()
     .fail((msg, err) => {
       // certain yargs validations throw strings :P
       const actual = err || new Error(msg);

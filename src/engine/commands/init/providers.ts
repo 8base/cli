@@ -5,11 +5,11 @@ import * as fs from 'fs';
 import { Context } from '../../../common/context';
 
 interface IFileProvider {
-  provide(context: Context): Promise<Map<string, string>>;
+  provide(context: Context): Map<string, string>;
 }
 
 class StaticFileProvider implements IFileProvider {
-  async provide(context: Context): Promise<Map<string, string>> {
+  provide(context: Context): Map<string, string> {
     return _.reduce<string, Map<string, string>>(
       readdir.readSync(context.config.projectTemplatePath),
       (result, file) => {

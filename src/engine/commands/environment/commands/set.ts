@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { Interactive } from '../../../../common/interactive';
 import { translations } from '../../../../common/translations';
