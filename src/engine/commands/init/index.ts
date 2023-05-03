@@ -29,14 +29,6 @@ type InitParams = {
   host: string;
 };
 
-const CREATE_WORKSPACE_MUTATION = `
-  mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
-    workspaceCreate(data: $data) {
-      id
-    }
-  }
-`;
-
 const isEmptyDir = async (path: string): Promise<boolean> => {
   let files = [];
 
@@ -115,26 +107,6 @@ export default {
           })),
         ],
       }));
-
-      if (workspaceId === 'NEW_WORKSPACE') {
-        const { workspaceName } = await Interactive.ask({
-          name: 'workspaceName',
-          type: 'text',
-          message: translations.i18n.t('init_workspace_name_label'),
-        });
-
-        if (!workspaceName) {
-          throw new Error(translations.i18n.t('init_prevent_new_workspace'));
-        } else {
-          const { workspaceCreate } = await context.request(CREATE_WORKSPACE_MUTATION, {
-            data: {
-              name: workspaceName,
-            },
-          });
-
-          workspaceId = workspaceCreate.id;
-        }
-      }
 
       if (!workspaceId) {
         throw new Error(translations.i18n.t('init_prevent_select_workspace'));
