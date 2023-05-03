@@ -84,6 +84,7 @@
     "@types/jest-image-snapshot": "^6.1.0",
     "@types/js-yaml": "^4.0.5",
     "@types/lodash": "^4.14.194",
+    "@types/memorystream": "^0.3.1",
     "@types/node": "^18.16.3",
     "@types/prompts": "^2.4.4",
     "@types/ramda": "^0.26.13",

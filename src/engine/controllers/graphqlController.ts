@@ -1,11 +1,11 @@
 import * as _ from 'lodash';
 import * as fs from 'fs';
-import { parse, FieldDefinitionNode } from 'graphql';
+import { FieldDefinitionNode, parse } from 'graphql';
 import { ObjectTypeExtensionNode } from 'graphql/language/ast';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLFunctionType } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { rootGraphqlSchema } from '../../consts/RootSchema';
-import { makeExecutableSchema } from '@graphql-tools/schema';
 
 export class GraphqlController {
   static loadSchema(schemaPaths: string[], predefineSchema: string = ''): string {

@@ -8,8 +8,7 @@ import { Readable } from 'stream';
 import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
 import archiver from 'archiver';
-
-const MemoryStream = require('memorystream');
+import MemoryStream from 'memorystream';
 
 type workspace = { name: string; id: string };
 

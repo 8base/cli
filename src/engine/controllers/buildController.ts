@@ -106,8 +106,8 @@ export class BuildController {
   private static async prepare(context: Context) {
     await fs.remove(context.config.buildRootDirPath);
 
-    await fs.mkdirp(context.config.buildDistPath);
-    await fs.mkdirp(context.config.metaDir);
-    await fs.mkdirp(context.config.packageDir);
+    await fs.ensureDir(context.config.buildDistPath);
+    await fs.ensureDir(context.config.metaDir);
+    await fs.ensureDir(context.config.packageDir);
   }
 }
