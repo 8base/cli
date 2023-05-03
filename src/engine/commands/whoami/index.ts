@@ -9,7 +9,7 @@ import { StorageParameters } from '../../../consts/StorageParameters';
 export default {
   command: 'whoami',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: {}, context: Context) => {
     if (!context.user.isAuthorized()) {
       throw new Error(context.i18n.t('logout_error'));
     }

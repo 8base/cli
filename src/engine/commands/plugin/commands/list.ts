@@ -5,6 +5,7 @@ import gqlRequest from 'graphql-request';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
+import { StaticConfig } from '../../../../config';
 
 type PluginListParams = {
   q: string;
@@ -28,7 +29,7 @@ export default {
   handler: async (params: PluginListParams, context: Context) => {
     const { q } = params;
 
-    let plugins = await gqlRequest('https://api.8base.com/ck16gpwki001f01jgh4kvd54j', PLUGINS_LIST_QUERY, { q });
+    let plugins = await gqlRequest(`${StaticConfig.apiAddress}/ck16gpwki001f01jgh4kvd54j`, PLUGINS_LIST_QUERY, { q });
 
     plugins = _.get(plugins, ['pluginsList', 'items']);
 

@@ -7,7 +7,7 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 export default {
   command: 'set',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { environmentName?: string }, context: Context) => {
     let { environmentName } = params;
     await ProjectConfigurationState.expectConfigured(context);
 

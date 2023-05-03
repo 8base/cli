@@ -14,8 +14,20 @@ import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { Workspace } from '../../../interfaces/Common';
+import { StaticConfig } from '../../../config';
+
+type InitParams = {
+  name: string;
+  functions: string[];
+  empty: boolean;
+  mocks: boolean;
+  syntax: SyntaxType;
+  silent: boolean;
+  workspaceId?: string;
+  host: string;
+};
 
 const CREATE_WORKSPACE_MUTATION = `
   mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
@@ -38,7 +50,7 @@ const isEmptyDir = async (path: string): Promise<boolean> => {
 export default {
   command: 'init [name]',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: InitParams, context: Context) => {
     const { name, functions, empty, syntax, mocks, silent } = params;
 
     let { workspaceId, host } = params;
@@ -184,7 +196,7 @@ export default {
       {
         workspaceId,
         environmentName: DEFAULT_ENVIRONMENT_NAME,
-        apiHost: host || DEFAULT_REMOTE_ADDRESS,
+        apiHost: host || StaticConfig.apiAddress,
       },
       project.fullPath,
     );
@@ -249,7 +261,7 @@ export default {
       .option('host', {
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
-        default: DEFAULT_REMOTE_ADDRESS,
+        default: StaticConfig.apiAddress,
       })
       .example(translations.i18n.t('init_no_dir_example_command'), translations.i18n.t('init_example_no_dir'))
       .example(translations.i18n.t('init_with_dir_example_command'), translations.i18n.t('init_example_with_dir'));

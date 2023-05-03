@@ -9,7 +9,7 @@ import { Workspace } from '../../../interfaces/Common';
 export default {
   command: 'configure',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { workspaceId: string; host: string }, context: Context) => {
     let { workspaceId, host = context.resolveMainServerAddress() } = params;
 
     if (!workspaceId) {

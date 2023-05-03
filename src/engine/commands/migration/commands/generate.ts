@@ -12,7 +12,7 @@ const DEFAULT_MIGRATIONS_PATH = './migrations';
 export default {
   command: 'generate',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { dist: string; tables?: string[]; environment?: string }, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
     context.spinner.start(context.i18n.t('migration_generate_in_progress'));
     const dist = params.dist || DEFAULT_MIGRATIONS_PATH;

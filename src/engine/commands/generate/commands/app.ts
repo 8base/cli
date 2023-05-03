@@ -7,11 +7,7 @@ import { Context } from '../../../../common/context';
 import { StorageParameters } from '../../../../consts/StorageParameters';
 import { readFs, writeFs } from '../../../../common/memfs';
 import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
-
-type AppParams = {
-  _: string[];
-  name: string;
-};
+import { StaticConfig } from '../../../../config';
 
 export default {
   command: 'app <name>',
@@ -21,7 +17,7 @@ export default {
       describe: translations.i18n.t('generate_app_name'),
       type: 'string',
     }),
-  handler: async (params: AppParams, context: Context) => {
+  handler: async (params: { name: string }, context: Context) => {
     if (!context.user.isAuthorized()) {
       throw new Error(context.i18n.t('logout_error'));
     }
@@ -48,7 +44,7 @@ export default {
     const replacedFsObject = replaceInitialApp(
       fsObject,
       {
-        endpoint: `https://api.8base.com/${workspaceId}`,
+        endpoint: `${StaticConfig.apiAddress}/${workspaceId}`,
         authClientId: context.storage.getValue(StorageParameters.authClientId),
         authDomain: context.storage.getValue(StorageParameters.authDomain),
         appName,

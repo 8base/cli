@@ -8,9 +8,9 @@ import { executeAsync } from '../../../../common/execute';
 
 export default {
   command: 'delete',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { name: string }, context: Context) => {
     await ProjectConfigurationState.expectConfigured(context);
-    let { name } = params;
+    const { name } = params;
     context.spinner.start(context.i18n.t('environment_delete_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.environmentDelete, { environmentName: name });
     context.spinner.stop();

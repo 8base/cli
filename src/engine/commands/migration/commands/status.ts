@@ -13,7 +13,7 @@ import { DeployModeType } from '../../../../interfaces/Extensions';
 export default {
   command: 'status',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { environment?: string }, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
     await executeDeploy(context, { mode: DeployModeType.migrations }, { customEnvironment: params.environment });
     context.spinner.start(context.i18n.t('migration_status_in_progress'));

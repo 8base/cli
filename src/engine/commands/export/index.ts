@@ -6,7 +6,7 @@ import { exportTables } from '@8base/api-client';
 
 export default {
   command: 'export',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { file: string; workspace?: string }, context: Context) => {
     context.spinner.start(context.i18n.t('export_in_progress'));
 
     if (!params.file) {

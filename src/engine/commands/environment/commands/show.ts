@@ -8,7 +8,7 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 export default {
   command: 'show',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: {}, context: Context) => {
     await ProjectConfigurationState.expectConfigured(context);
     const { environmentName } = context.workspaceConfig;
     context.logger.info(

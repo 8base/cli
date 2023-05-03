@@ -8,7 +8,7 @@ import { MigrateMode } from '../../../../interfaces/Common';
 
 export default {
   command: 'branch',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { name: string; mode: MigrateMode }, context: Context) => {
     await ProjectConfigurationState.expectConfigured(context);
     let { name, mode } = params;
     context.spinner.start(context.i18n.t('environment_branch_in_progress'));

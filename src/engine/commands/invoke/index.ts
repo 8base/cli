@@ -6,21 +6,27 @@ import { translations } from '../../../common/translations';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { ProjectController } from '../../controllers/projectController';
 
+type InvokeParams = {
+  name: string;
+  'data-json'?: string;
+  'data-path'?: string;
+  mock?: string;
+};
 export default {
   command: 'invoke <name>',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: InvokeParams, context: Context) => {
     context.initializeProject();
 
     context.spinner.start(context.i18n.t('invoke_in_progress'));
 
     let args = null;
 
-    if (params.m) {
-      args = await ProjectController.getMock(context, params.name, params.m);
-    } else if (params.p) {
-      args = (await fs.readFile(params.p)).toString();
-    } else if (params.j) {
-      args = params.j;
+    if (params.mock) {
+      args = await ProjectController.getMock(context, params.name, params.mock);
+    } else if (params['data-path']) {
+      args = (await fs.readFile(params['data-path'])).toString();
+    } else if (params['data-json']) {
+      args = params['data-json'];
     }
 
     let resultResponse = null;

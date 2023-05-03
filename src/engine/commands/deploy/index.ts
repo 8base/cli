@@ -1,6 +1,5 @@
 import yargs from 'yargs';
 import * as _ from 'lodash';
-import { GraphqlController } from '../../controllers/graphqlController';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
@@ -8,12 +7,8 @@ import { executeDeploy } from '../../../common/execute';
 
 export default {
   command: 'deploy',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: { plugins?: string[]; functions?: string[]; mode: DeployModeType }, context: Context) => {
     context.initializeProject();
-
-    if (params['validate_schema']) {
-      GraphqlController.validateSchema(context.project);
-    }
 
     let deployOptions = { mode: params.mode };
 

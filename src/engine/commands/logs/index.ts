@@ -188,12 +188,12 @@ const readLogs = async (functionName: string, context: Context) => {
 
 export default {
   command: 'logs <name>',
-  handler: async (params: any, context: Context) => {
-    if (params.n > 100) {
-      params.n = 100;
+  handler: async (params: { name: string; num: number; tail?: boolean }, context: Context) => {
+    if (params.num > 100) {
+      params.num = 100;
     }
 
-    if (params['t']) {
+    if (params.tail) {
       return await readLogs(params.name, context);
     }
 
@@ -201,7 +201,7 @@ export default {
 
     const result = await context.request(GraphqlActions.logs, {
       functionName: params.name,
-      limit: params.n,
+      limit: params.num,
     });
     context.spinner.stop();
 

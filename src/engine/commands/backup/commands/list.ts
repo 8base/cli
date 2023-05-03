@@ -9,7 +9,7 @@ const BACKUP_HEADER = ['Name', 'Size (Mb)'];
 
 export default {
   command: 'list',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: {}, context: Context) => {
     await ProjectConfigurationState.expectConfigured(context);
     const res = await context.request(GraphqlActions.backupList);
     context.logger.info(table([BACKUP_HEADER, ...res.system.backups.items.map((i: any) => [i.name, i.size])]));

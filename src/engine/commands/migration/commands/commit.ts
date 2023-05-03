@@ -14,7 +14,10 @@ import { StaticConfig } from '../../../../config';
 
 export default {
   command: 'commit',
-  handler: async (params: any, context: Context) => {
+  handler: async (
+    params: { mode: CommitMode; force?: boolean; environment?: string; target?: string[] },
+    context: Context,
+  ) => {
     await ProjectConfigurationState.expectHasProject(context);
     context.initializeProject();
 

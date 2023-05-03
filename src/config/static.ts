@@ -48,6 +48,10 @@ export class StaticConfig {
     return this.staticData.webClientAddress;
   }
 
+  static get apiAddress(): string {
+    return this.staticData.apiAddress;
+  }
+
   static get serviceConfigFileName(): string {
     return path.join(this.staticData.executionDir, '8base.yml');
   }

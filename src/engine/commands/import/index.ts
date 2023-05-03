@@ -3,11 +3,14 @@ import * as fs from 'fs-extra';
 import yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import { importTables, importData } from '@8base/api-client';
+import { importData, importTables } from '@8base/api-client';
 
 export default {
   command: 'import',
-  handler: async (params: any, context: Context) => {
+  handler: async (
+    params: { file: string; schema: boolean; data: boolean; workspace: string; d?: boolean },
+    context: Context,
+  ) => {
     let schema;
 
     if (await fs.exists(params.file)) {
