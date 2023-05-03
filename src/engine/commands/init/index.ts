@@ -15,7 +15,6 @@ import { ProjectController } from '../../controllers/projectController';
 import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
-import { Workspace } from '../../../interfaces/Common';
 import { StaticConfig } from '../../../config';
 
 type InitParams = {
@@ -96,23 +95,17 @@ export default {
         name: 'workspaceId',
         type: 'select',
         message: translations.i18n.t('init_select_workspace'),
-        choices: [
-          {
-            title: '<New Workspace>',
-            value: 'NEW_WORKSPACE',
-          },
-          ...workspaces.map((workspace: any) => ({
-            title: workspace.name,
-            value: workspace.id,
-          })),
-        ],
+        choices: workspaces.map(workspace => ({
+          title: workspace.name,
+          value: workspace.id,
+        })),
       }));
 
       if (!workspaceId) {
         throw new Error(translations.i18n.t('init_prevent_select_workspace'));
       }
 
-      const workspace = _.find<Workspace>(await context.getWorkspaces(), { id: workspaceId });
+      const workspace = _.find(await context.getWorkspaces(), { id: workspaceId });
       if (!workspace) {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
       }
