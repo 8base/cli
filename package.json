@@ -10,6 +10,10 @@
   "bin": {
     "8base": "dist/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/8base/cli.git"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "npm run build -- --watch",
