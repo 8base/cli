@@ -24,9 +24,6 @@ export default {
       });
     } catch (e) {
       const message = isEnvironmentLimitReached(e);
-      if (!message) {
-        throw e;
-      }
 
       context.spinner.stop();
       const { confirm } = await Interactive.ask({
@@ -81,8 +78,8 @@ const isEnvironmentLimitReached = (e: any): string => {
   const err =
     !_.isEmpty(e.response?.errors) &&
     e.response.errors.find((err: any) => err.code === errorCodes.BillingPlanLimitWarningCode);
-  if (!err) {
-    return null;
+  if (!err || !err.message) {
+    throw e;
   }
 
   return err.message;
