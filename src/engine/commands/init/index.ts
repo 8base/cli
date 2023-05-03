@@ -36,14 +36,15 @@ const isEmptyDir = async (path: string): Promise<boolean> => {
 };
 
 export default {
-  command: 'init',
+  command: 'init [name]',
 
   handler: async (params: any, context: Context) => {
-    const { functions, empty, syntax, mocks, silent } = params;
+    const { name, functions, empty, syntax, mocks, silent } = params;
 
     let { workspaceId, host } = params;
 
-    const [, projectName] = _.castArray(params._);
+    const projectName = name || path.basename(context.config.rootExecutionDir);
+    const fullPath = name ? path.join(context.config.rootExecutionDir, projectName) : context.config.rootExecutionDir;
 
     const { errors = [] } = validatePackageName(projectName);
 
@@ -55,15 +56,7 @@ export default {
       );
     }
 
-    const project = projectName
-      ? {
-          fullPath: path.join(context.config.rootExecutionDir, projectName),
-          name: projectName,
-        }
-      : {
-          fullPath: context.config.rootExecutionDir,
-          name: path.basename(context.config.rootExecutionDir),
-        };
+    const project = { fullPath, name: projectName };
 
     if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
@@ -173,14 +166,14 @@ export default {
     if (!empty && Array.isArray(params.functions)) {
       await Promise.all(
         params.functions.map(async (declaration: string) => {
-          const [type, name] = declaration.split(':');
+          const [type, functionName] = declaration.split(':');
 
           await ProjectController.generateFunction(context, {
             type: <ExtensionType>type,
-            name,
+            name: functionName,
             mocks,
             syntax,
-            projectPath: projectName,
+            projectPath: name,
             silent: true,
           });
         }),
