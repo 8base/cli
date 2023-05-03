@@ -339,6 +339,8 @@ export default {
     environment_branch_describe: 'Creates branch of the environment.',
     environment_branch_name_describe: 'Name of new environment',
     environment_branch_mode_describe: 'Branching mode',
+    environment_branch_force_describe: 'You can specify force flag to branch without prompt.',
+    environment_branch_canceled: 'Branch environment canceled',
 
     /**
      * Environment delete related messages
