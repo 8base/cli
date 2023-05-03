@@ -149,7 +149,8 @@ OPTIONS
   -d, --debug  Turn on debug logs  [boolean]
   -h, --help   Show help  [boolean]
   -n, --name   Name of new environment  [string] [required]
-  -m, --mode   Branching mode  [string] [choices: "FULL", "SYSTEM"] [default: "FULL"]"
+  -m, --mode   Branching mode  [string] [choices: "FULL", "SYSTEM"] [default: "FULL"]
+  -f, --force  You can specify force flag to branch without prompt."
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'environment', 'list' ]\`. 1`] = `
