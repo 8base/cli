@@ -389,7 +389,7 @@ export class ProjectController {
       context.logger.info('');
 
       context.logger.info(
-        context.i18n.t('generate_function_grettings', {
+        context.i18n.t('generate_function_success', {
           name,
         }),
       );
@@ -439,7 +439,7 @@ export class ProjectController {
       context.logger.info('');
 
       context.logger.info(
-        context.i18n.t('generate_plugin_grettings', {
+        context.i18n.t('generate_plugin_success', {
           name,
         }),
       );
@@ -509,7 +509,7 @@ export class ProjectController {
       context.logger.info('');
 
       context.logger.info(
-        context.i18n.t('generate_mock_grettings', {
+        context.i18n.t('generate_mock_success', {
           name,
         }),
       );

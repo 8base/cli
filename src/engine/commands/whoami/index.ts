@@ -32,12 +32,12 @@ export default {
       } catch (e) {}
     }
 
-    context.logger.info(translations.i18n.t('whoami_text', { email: chalk.green(email), name }));
+    context.logger.info(translations.i18n.t('who_am_i_text', { email: chalk.green(email), name }));
   },
 
-  describe: translations.i18n.t('whoami_describe'),
+  describe: translations.i18n.t('who_am_i_describe'),
 
   builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage(translations.i18n.t('whoami_usage'));
+    return args.usage(translations.i18n.t('who_am_i_usage'));
   },
 };

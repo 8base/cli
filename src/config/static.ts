@@ -71,7 +71,5 @@ export class StaticConfig {
   static metaDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.metaFolder);
   static packageDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.packageFolder);
 
-  static FunctionHandlerExt = '.js';
-
   static supportedCompileExtension = new Set<string>(['.ts', '.js']);
 }

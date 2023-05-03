@@ -48,7 +48,7 @@ export const executeAsync = async (
   if (result.status === AsyncStatus.completeError) {
     let gqlError;
     try {
-      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be threw as is
+      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be thrown as is
     } catch (e) {
       throw new Error(result.message);
     }
@@ -115,7 +115,7 @@ export const executeDeploy = async (context: Context, deployOptions: any, option
   if (result.status === AsyncStatus.completeError) {
     let gqlError;
     try {
-      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be threw as is
+      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be thrown as is
     } catch (e) {
       throw new Error(result.message);
     }

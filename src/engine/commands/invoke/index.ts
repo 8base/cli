@@ -70,7 +70,7 @@ export default {
     return args
       .usage(translations.i18n.t('invoke_usage'))
       .positional('name', {
-        describe: translations.i18n.t('invokelocal_name_describe'),
+        describe: translations.i18n.t('invoke_function_name_describe'),
         type: 'string',
       })
       .option('data-json', {

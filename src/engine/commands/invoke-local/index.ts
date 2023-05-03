@@ -43,7 +43,7 @@ export default {
 
     dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-    context.spinner.start(context.i18n.t('invokelocal_in_progress'));
+    context.spinner.start(context.i18n.t('invoke_local_in_progress'));
 
     const functionToCall = await getLocalFunction(params.name, context);
 
@@ -127,32 +127,32 @@ export default {
         ),
       );
 
-      throw new Error(translations.i18n.t('invokelocal_returns_error', { name: params.name }));
+      throw new Error(translations.i18n.t('invoke_local_returns_error', { name: params.name }));
     } else {
       context.logger.info(JSON.stringify(resultResponse, null, 2));
     }
   },
-  describe: translations.i18n.t('invokelocal_describe'),
+  describe: translations.i18n.t('invoke_local_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage(translations.i18n.t('invokelocal_usage'))
+      .usage(translations.i18n.t('invoke_local_usage'))
       .positional('name', {
-        describe: translations.i18n.t('invokelocal_name_describe'),
+        describe: translations.i18n.t('invoke_local_function_name_describe'),
         type: 'string',
       })
       .option('data-json', {
         alias: 'j',
-        describe: translations.i18n.t('invokelocal_data_json_describe'),
+        describe: translations.i18n.t('invoke_local_data_json_describe'),
         type: 'string',
       })
       .option('data-path', {
         alias: 'p',
-        describe: translations.i18n.t('invokelocal_data_path_describe'),
+        describe: translations.i18n.t('invoke_local_data_path_describe'),
         type: 'string',
       })
       .option('mock', {
         alias: 'm',
-        describe: translations.i18n.t('invokelocal_mock_describe'),
+        describe: translations.i18n.t('invoke_local_mock_describe'),
         type: 'string',
       });
   },

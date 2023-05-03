@@ -108,7 +108,7 @@ export default {
         const { workspaceName } = await Interactive.ask({
           name: 'workspaceName',
           type: 'text',
-          message: translations.i18n.t('init_workspace_name_labal'),
+          message: translations.i18n.t('init_workspace_name_label'),
         });
 
         if (!workspaceName) {
