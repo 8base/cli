@@ -55,7 +55,7 @@ export default {
       if (res.status !== 200) {
         throw new Error('');
       }
-      data = Buffer.from(new Uint8Array(await res.arrayBuffer()));
+      data = Buffer.from(await res.arrayBuffer());
     } catch (e) {
       throw new Error(
         context.i18n.t('plugin_install_cant_download', {

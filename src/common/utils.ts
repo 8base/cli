@@ -1,7 +1,6 @@
 import * as path from 'path';
 import 'isomorphic-fetch';
 import * as fs from 'fs';
-import { Interactive } from './interactive';
 import * as _ from 'lodash';
 import { Context } from './context';
 import { Readable } from 'stream';
@@ -9,8 +8,6 @@ import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
 import archiver from 'archiver';
 import MemoryStream from 'memorystream';
-
-type workspace = { name: string; id: string };
 
 export namespace Utils {
   export const undefault = (m: any) => {
@@ -118,32 +115,6 @@ export namespace Utils {
 
       zip.finalize();
     });
-  };
-
-  export const promptWorkspace = async (workspaces: workspace[], context: Context): Promise<{ id: string }> => {
-    if (_.isEmpty(workspaces)) {
-      throw new Error(context.i18n.t('logout_error'));
-    }
-
-    if (workspaces.length === 1) {
-      return workspaces[0];
-    }
-
-    const result = await Interactive.ask({
-      name: 'workspace',
-      type: 'select',
-      message: 'choose workspace',
-      choices: workspaces.map(workspace => {
-        return {
-          title: workspace.name,
-          value: workspace.id,
-        };
-      }),
-    });
-
-    return {
-      id: result.workspace,
-    };
   };
 
   export const sleep = (ms: number): Promise<void> => {
