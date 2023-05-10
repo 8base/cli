@@ -135,7 +135,7 @@ const filterMessage = (messages: string[]): string[] => {
   return _.slice(messages, index + 1);
 };
 
-const readLogs = async (functionName: string, context: Context) => {
+const readLogs = async (resource: string, context: Context) => {
   let attempt = 0;
   let error = null;
 
@@ -152,8 +152,8 @@ const readLogs = async (functionName: string, context: Context) => {
 
     try {
       result = await context.request(GraphqlActions.logs, {
-        functionName,
         startTime: start.toISOString(),
+        resource,
       });
     } catch (e) {
       error = e;
@@ -170,7 +170,7 @@ const readLogs = async (functionName: string, context: Context) => {
       }
     }
 
-    const logs = filterMessage(result.logs);
+    const logs = filterMessage(result.system.logs.items);
 
     if (logs.length > 0) {
       printLogs(logs);
@@ -187,34 +187,39 @@ const readLogs = async (functionName: string, context: Context) => {
 };
 
 export default {
-  command: 'logs <name>',
-  handler: async (params: { name: string; num: number; tail?: boolean }, context: Context) => {
+  command: 'logs [name]',
+  handler: async (params: { name?: string; num: number; tail?: boolean; resource: string }, context: Context) => {
+    if (params.name) {
+      context.logger.warn(context.i18n.t('logs_name_deprecation'));
+    }
+
     if (params.num > 100) {
       params.num = 100;
     }
 
     if (params.tail) {
-      return await readLogs(params.name, context);
+      return readLogs(params.resource, context);
     }
 
     context.spinner.start(context.i18n.t('logs_in_progress'));
 
     const result = await context.request(GraphqlActions.logs, {
-      functionName: params.name,
       limit: params.num,
+      resource: params.resource,
     });
     context.spinner.stop();
 
-    printLogs(result.logs);
+    printLogs(result.system.logs.items);
   },
   describe: translations.i18n.t('logs_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t('logs_usage'))
       .positional('name', {
-        describe: translations.i18n.t('logs_name_describe'),
+        describe: translations.i18n.t('logs_name_deprecation'),
         type: 'string',
       })
+      .deprecateOption('name')
       .option('num', {
         alias: 'n',
         default: 10,
@@ -225,6 +230,13 @@ export default {
         alias: 't',
         describe: translations.i18n.t('logs_tail_describe'),
         type: 'boolean',
+      })
+      .option('resource', {
+        alias: 'r',
+        describe: translations.i18n.t('logs_resource_describe'),
+        type: 'string',
+        choices: ['environment:extensions', 'system:ci:commit'],
+        default: 'environment:extensions',
       });
   },
 };
