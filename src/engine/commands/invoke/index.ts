@@ -1,5 +1,4 @@
 import * as yargs from 'yargs';
-import * as _ from 'lodash';
 import * as fs from 'fs';
 
 import { Context } from '../../../common/context';

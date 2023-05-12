@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { Context } from '../../../common/context';
 
 interface IFileProvider {
-  /*async*/ provide(context: Context): Promise<Map<string, string>>;
+  provide(context: Context): Promise<Map<string, string>>;
 }
 
 class StaticFileProvider implements IFileProvider {

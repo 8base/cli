@@ -1,5 +1,4 @@
 import * as yargs from 'yargs';
-import * as url from 'url';
 import chalk from 'chalk';
 import { table } from 'table';
 import * as changeCase from 'change-case';

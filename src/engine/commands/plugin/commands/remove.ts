@@ -1,17 +1,11 @@
 import * as yargs from 'yargs';
-import * as request from 'request';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as rimraf from 'rimraf';
 import * as R from 'ramda';
 
-import { request as gqlRequest } from 'graphql-request';
-import gql from 'graphql-tag';
-import * as changeCase from 'change-case';
-
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { ProjectController } from '../../../controllers/projectController';
 
 type PluginRemoveParams = {
   name: string;

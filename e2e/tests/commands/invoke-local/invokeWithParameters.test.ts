@@ -1,9 +1,9 @@
 import {
   addFileToProject,
   addResolverToProject,
-  RunCommand,
   expectInString,
   prepareTestEnvironment,
+  RunCommand,
 } from '../../../utils';
 
 let project: any = null;

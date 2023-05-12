@@ -5,7 +5,7 @@ import * as simplegit from 'simple-git/promise';
 import { translations } from '../../../../common/translations';
 import { Context } from '../../../../common/context';
 import { StorageParameters } from '../../../../consts/StorageParameters';
-import { writeFs, readFs } from '../../../../common/memfs';
+import { readFs, writeFs } from '../../../../common/memfs';
 import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
 
 type AppParams = {

@@ -1,10 +1,10 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
-import cuid = require('cuid');
 import * as yaml from 'js-yaml';
 import stripAnsi from 'strip-ansi';
 import { CLI_BIN } from './consts';
+import cuid = require('cuid');
 
 export const prepareTestEnvironment = async (
   repName: string = cuid(),

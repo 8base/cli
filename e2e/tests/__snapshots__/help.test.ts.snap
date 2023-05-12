@@ -7,7 +7,7 @@ exports[`As a user, I can use help flag for see help information about \`\`. 1`]
 USAGE
   8base <command> [OPTIONS]
 
-  Use 8base command \`--help\` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.
+  Use 8base command \`--help\` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows its parameters and their usage. Optional options are shown in square brackets.
 
 COMMANDS
   8base backup <command>       Backup commands.
@@ -474,7 +474,7 @@ Migration commands.
 COMMANDS
   8base migration commit    Commits migrations and/or Custom Logic from your local project to 8base
   8base migration generate  Generates local migration files based on changes in your environment
-  8base migration status    Displays migrations which can be commited to target environment
+  8base migration status    Displays migrations which can be committed to target environment
 
 OPTIONS
   --debug, -d  Turn on debug logs  [boolean]
