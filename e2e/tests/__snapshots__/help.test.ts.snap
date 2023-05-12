@@ -441,7 +441,7 @@ DESCRIPTION
   Shows logs for the functions
 
 POSITIONALS
-name  Name parameter is now deprecated  [deprecated] [string]
+  name  Name parameter is now deprecated  [deprecated] [string]
 
 OPTIONS
   -d, --debug     Turn on debug logs  [boolean]
