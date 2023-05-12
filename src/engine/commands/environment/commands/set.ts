@@ -41,5 +41,6 @@ export default {
       alias: 'n',
       describe: translations.i18n.t('environment_set_environment_name_describe'),
       type: 'string',
+      requiresArg: true,
     }),
 };

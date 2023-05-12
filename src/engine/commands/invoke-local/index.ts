@@ -151,16 +151,24 @@ export default {
         alias: 'j',
         describe: translations.i18n.t('invoke_local_data_json_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('data-path', {
         alias: 'p',
         describe: translations.i18n.t('invoke_local_data_path_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('mock', {
         alias: 'm',
         describe: translations.i18n.t('invoke_local_mock_describe'),
         type: 'string',
+        requiresArg: true,
+      })
+      .conflicts({
+        mock: ['data-path', 'data-json'],
+        'data-path': ['mock', 'data-json'],
+        'data-json': ['mock', 'data-path'],
       });
   },
 };

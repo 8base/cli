@@ -44,5 +44,6 @@ export default {
         default: DeployModeType.project,
         type: 'string',
         choices: Object.values(DeployModeType),
+        requiresArg: true,
       }),
 };

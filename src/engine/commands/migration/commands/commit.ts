@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import yargs from 'yargs';
+import * as _ from 'lodash';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { executeAsync, executeDeploy, uploadProject } from '../../../../common/execute';
@@ -40,9 +41,9 @@ export default {
       throw new Error(context.i18n.t('migration_commit_in_project_mode'));
     }
 
-    const migrationNames: string[] | undefined = params.target;
+    const migrationNames: string[] = params.target;
 
-    if (migrationNames) {
+    if (!_.isEmpty(migrationNames)) {
       await Promise.all(
         migrationNames.map(async name => {
           if (!(await fs.exists(path.join(StaticConfig.rootExecutionDir, 'migrations', name)))) {
@@ -81,15 +82,18 @@ export default {
         default: CommitMode.FULL,
         type: 'string',
         choices: Object.values(CommitMode),
+        requiresArg: true,
       })
       .option('force', {
         alias: 'f',
         describe: translations.i18n.t('migration_force_describe'),
+        type: 'boolean',
       })
       .option('environment', {
         alias: 'e',
         describe: translations.i18n.t('migration_environment_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('target', {
         alias: 't',

@@ -111,10 +111,13 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`[ 'describe' ]\`. 1`] = `
 "COMMAND
-  8base describe [OPTIONS]
+  8base describe [name] [OPTIONS]
 
 DESCRIPTION
   Describes your 8base project’s functions and their types through 8base.yml file.
+
+POSITIONALS
+  name  The function name to describe  [string]
 
 OPTIONS
   -d, --debug  Turn on debug logs  [boolean]
@@ -227,7 +230,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'app' ]\`. 1`] = `
 "8base generate app <name>
 
-Positionals:
+POSITIONALS
   name  The name of the app  [string] [required]
 
 OPTIONS
@@ -238,7 +241,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'mock' ]\`. 1`] = `
 "Generator for a mock for the function.
 
-Positionals:
+POSITIONALS
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -251,7 +254,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'resolver' ]\`. 1`] = `
 "8base generate resolver <name> [OPTIONS]
 
-Positionals:
+POSITIONALS
   name  The name of the resolver  [string] [required]
 
 OPTIONS
@@ -265,7 +268,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'scaffold' ]\`. 1`] = `
 "8base generate scaffold <tableName> [OPTIONS]
 
-Positionals:
+POSITIONALS
   tableName  The name of the table  [string] [required]
 
 OPTIONS
@@ -277,7 +280,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'task' ]\`. 1`] = `
 "8base generate task <name> [OPTIONS]
 
-Positionals:
+POSITIONALS
   name  The name of the task  [string] [required]
 
 OPTIONS
@@ -292,7 +295,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'trigger' ]\`. 1`] = `
 "8base generate trigger <name> [OPTIONS]
 
-Positionals:
+POSITIONALS
   name  The name of the trigger  [string] [required]
 
 OPTIONS
@@ -308,7 +311,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'webhook' ]\`. 1`] = `
 "8base generate webhook <name> [OPTIONS]
 
-Positionals:
+POSITIONALS
   name  The name of the webhook  [string] [required]
 
 OPTIONS
@@ -344,7 +347,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'init
 DESCRIPTION
   Initializes a new project with example directory structure and custom functions.
 
-Positionals:
+POSITIONALS
   name  The name of the project  [string]
 
 OPTIONS
@@ -370,7 +373,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'invo
 DESCRIPTION
   Invokes a custom function in the production workspace.
 
-Positionals:
+POSITIONALS
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -388,7 +391,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'invo
 DESCRIPTION
   Invokes a custom function in the production workspace.
 
-Positionals:
+POSITIONALS
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -437,8 +440,8 @@ exports[`As a user, I can use help flag for see help information about \`[ 'logs
 DESCRIPTION
   Shows logs for the functions
 
-Positionals:
-  name  Name parameter is now deprecated  [deprecated] [string]
+POSITIONALS
+name  Name parameter is now deprecated  [deprecated] [string]
 
 OPTIONS
   -d, --debug     Turn on debug logs  [boolean]
@@ -475,7 +478,7 @@ OPTIONS
   -d, --debug        Turn on debug logs  [boolean]
   -h, --help         Show help  [boolean]
   -m, --mode         Commit mode.  [string] [choices: "FULL", "ONLY_MIGRATIONS", "ONLY_PROJECT"] [default: "FULL"]
-  -f, --force        You can specify force flag to commit to master without prompt.
+  -f, --force        You can specify force flag to commit to master without prompt.  [boolean]
   -e, --environment  Specify the environment you want to commit.  [string]
   -t, --target       You can specify the necessary migration files.  [array]"
 `;

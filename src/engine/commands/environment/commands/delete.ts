@@ -26,5 +26,6 @@ export default {
       describe: translations.i18n.t('environment_delete_name_describe'),
       type: 'string',
       demandOption: true,
+      requiresArg: true,
     }),
 };

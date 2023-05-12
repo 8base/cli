@@ -42,5 +42,6 @@ export default {
         describe: translations.i18n.t('generate_mock_name_describe'),
         default: 'request',
         type: 'string',
+        requiresArg: true,
       }),
 };

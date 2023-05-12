@@ -66,6 +66,7 @@ export default {
         demandOption: true,
         describe: translations.i18n.t('import_file_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('schema', {
         describe: translations.i18n.t('import_schema_describe'),
@@ -81,6 +82,7 @@ export default {
         alias: 'w',
         describe: translations.i18n.t('import_workspace_describe'),
         type: 'string',
+        requiresArg: true,
       });
   },
 };

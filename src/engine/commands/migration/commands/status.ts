@@ -36,5 +36,6 @@ export default {
       alias: 'e',
       describe: translations.i18n.t('migration_status_environment_describe'),
       type: 'string',
+      requiresArg: true,
     }),
 };

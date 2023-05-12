@@ -212,6 +212,7 @@ export default {
         default: 'ts',
         type: 'string',
         choices: Object.values(SyntaxType),
+        requiresArg: true,
       })
       .option('silent', {
         describe: translations.i18n.t('silent_describe'),
@@ -222,11 +223,13 @@ export default {
         alias: 'w',
         describe: translations.i18n.t('init_workspace_id_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('host', {
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
         default: StaticConfig.apiAddress,
+        requiresArg: true,
       })
       .example(translations.i18n.t('init_no_dir_example_command'), translations.i18n.t('init_example_no_dir'))
       .example(translations.i18n.t('init_with_dir_example_command'), translations.i18n.t('init_example_with_dir'));

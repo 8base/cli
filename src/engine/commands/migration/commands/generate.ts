@@ -15,7 +15,7 @@ export default {
   handler: async (params: { dist: string; tables?: string[]; environment?: string }, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
     context.spinner.start(context.i18n.t('migration_generate_in_progress'));
-    const dist = params.dist || DEFAULT_MIGRATIONS_PATH;
+    const dist = params.dist;
     const { system } = await context.request(
       GraphqlActions.migrationGenerate,
       { tables: params.tables },
@@ -33,7 +33,8 @@ export default {
       .option('dist', {
         describe: translations.i18n.t('migration_generate_dist_describe'),
         type: 'string',
-        default: String(DEFAULT_MIGRATIONS_PATH),
+        default: DEFAULT_MIGRATIONS_PATH,
+        requiresArg: true,
       })
       .option('tables', {
         alias: 't',
@@ -44,5 +45,6 @@ export default {
         alias: 'e',
         describe: translations.i18n.t('migration_generate_environment_describe'),
         type: 'string',
+        requiresArg: true,
       }),
 };

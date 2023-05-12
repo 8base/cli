@@ -47,6 +47,7 @@ export default {
         alias: 'sch',
         describe: translations.i18n.t('generate_task_schedule_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('mocks', {
         alias: 'x',
@@ -60,6 +61,7 @@ export default {
         default: 'ts',
         type: 'string',
         choices: Object.values(SyntaxType),
+        requiresArg: true,
       })
       .option('silent', {
         describe: translations.i18n.t('silent_describe'),

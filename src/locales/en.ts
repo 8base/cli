@@ -64,8 +64,9 @@ export default {
      * Describe related messages
      */
     describe_usage:
-      'COMMAND\n  8base describe [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.',
+      'COMMAND\n  8base describe [name] [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.',
     describe_describe: 'Describes your 8base project’s functions and their types through 8base.yml file.',
+    describe_name_describe: 'The function name to describe',
     describe_progress: 'describing...',
     describe_empty_resolvers: "You don't have resolvers",
     describe_empty_triggers: "You don't have triggers",

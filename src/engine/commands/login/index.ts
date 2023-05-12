@@ -50,21 +50,30 @@ export default {
         alias: 'e',
         describe: translations.i18n.t('login_email_describe'),
         type: 'string',
+        requiresArg: true,
+        implies: 'password',
+        conflicts: 'token',
       })
       .option('password', {
         alias: 'p',
         describe: translations.i18n.t('login_password_describe'),
         type: 'string',
+        requiresArg: true,
+        implies: 'email',
+        conflicts: 'token',
       })
       .option('token', {
         alias: 't',
         describe: translations.i18n.t('login_token_describe'),
         type: 'string',
+        requiresArg: true,
+        conflicts: ['email', 'password'],
       })
       .option('w', {
         type: 'string',
         default: StaticConfig.webClientAddress,
         hidden: true,
+        requiresArg: true,
       })
       .example(translations.i18n.t('login_browser_example_command'), translations.i18n.t('login_browser_example'))
       .example(translations.i18n.t('login_cli_example_command'), translations.i18n.t('login_cli_example'));
