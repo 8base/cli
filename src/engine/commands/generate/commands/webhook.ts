@@ -2,13 +2,13 @@ import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { ExtensionType, SyntaxType } from '../../../../interfaces/Extensions';
+import { ExtensionType, SyntaxType, WebhookMethod } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
 type TaskParams = {
   name: string;
-  path?: string;
-  method?: string;
+  path: string;
+  method: WebhookMethod;
   mocks: boolean;
   syntax: SyntaxType;
   silent: boolean;
@@ -18,7 +18,7 @@ export default {
   command: 'webhook <name>',
 
   handler: async (params: TaskParams, context: Context) => {
-    let { name, path, method, mocks, syntax, silent } = params;
+    const { name, path, method, mocks, syntax, silent } = params;
 
     await ProjectController.generateFunction(
       context,
@@ -55,7 +55,8 @@ export default {
         alias: 'm',
         describe: translations.i18n.t('generate_webhook_method_describe'),
         type: 'string',
-        choices: ['POST', 'GET', 'DELETE', 'PUT'],
+        choices: Object.values(WebhookMethod),
+        default: WebhookMethod.post,
         requiresArg: true,
       })
       .option('mocks', {

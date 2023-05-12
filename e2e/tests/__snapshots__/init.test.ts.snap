@@ -40,10 +40,11 @@ testdir_init
     │       └── mocks
     │           └── request.json
     ├── triggers
-    │   └── trigger
-    │       ├── handler.ts
-    │       └── mocks
-    │           └── request.json
+    │   └── Users
+    │       └── create
+    │           ├── before.ts
+    │           └── mocks
+    │               └── request.json
     └── webhooks
         └── webhook
             ├── handler.ts

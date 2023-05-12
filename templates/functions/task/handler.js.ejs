@@ -1,9 +1,9 @@
 /**
  * This file was generated using 8base CLI.
- * 
+ *
  * To learn more about writing custom task functions, visit
  * the 8base documentation at:
- * 
+ *
  * https://docs.8base.com/docs/8base-console/custom-functions/tasks/
  *
  * To update this functions invocation settings, update its configuration block
@@ -11,12 +11,12 @@
  *  functions:
  *    <%= functionName %>:
  *      ...
- * 
+ *
  * Data that is sent to the function can be accessed on the event argument at:
  *  event.data[KEY_NAME]
  *
  * There are two ways to invoke this function locally:
- *  
+ *
  *  (1) Explicit file mock file path using '-p' flag:
  *    8base invoke-local <%= functionName %> -p src/resolvers/<%= functionName %>/mocks/request.json
  *
@@ -31,7 +31,7 @@
 module.exports = async (event, ctx) => {
   return {
     data: {
-      result: `Task received: ${event.data.foo}`
+      result: `Task received: ${event.data.foo}`,
     },
   };
 };

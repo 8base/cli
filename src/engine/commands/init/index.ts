@@ -12,7 +12,7 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
-import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
+import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { StaticConfig } from '../../../config';
@@ -76,7 +76,7 @@ export default {
 
     if (!empty && Array.isArray(functions)) {
       functions.forEach(declaration => {
-        const [type, name] = declaration.split(':');
+        const [type, name, triggerOperation, triggerType] = declaration.split(':');
 
         if (!(type in ExtensionType)) {
           throw new Error(translations.i18n.t('init_invalid_function_type', { type }));
@@ -84,6 +84,10 @@ export default {
 
         if (!name) {
           throw new Error(translations.i18n.t('init_undefined_function_name'));
+        }
+
+        if (type === ExtensionType.trigger && !(triggerOperation in TriggerOperation && triggerType in TriggerType)) {
+          throw new Error(translations.i18n.t('init_incorrect_trigger'));
         }
       });
     }
@@ -140,19 +144,23 @@ export default {
     }
 
     /* Generate project files before printing tree */
-    if (!empty && Array.isArray(params.functions)) {
+    if (!empty && Array.isArray(functions)) {
       await Promise.all(
-        params.functions.map(async (declaration: string) => {
-          const [type, functionName] = declaration.split(':');
+        functions.map(async (declaration: string) => {
+          const [type, functionName, triggerOperation, triggerType] = declaration.split(':');
 
-          await ProjectController.generateFunction(context, {
-            type: <ExtensionType>type,
-            name: functionName,
-            mocks,
-            syntax,
-            projectPath: name,
-            silent: true,
-          });
+          await ProjectController.generateFunction(
+            context,
+            {
+              type: <ExtensionType>type,
+              name: functionName,
+              mocks,
+              syntax,
+              projectPath: name,
+              silent: true,
+            },
+            { type: <TriggerType>triggerType, operation: <TriggerOperation>triggerOperation },
+          );
         }),
       );
     }
@@ -192,7 +200,7 @@ export default {
         alias: 'f',
         describe: translations.i18n.t('init_functions_describe'),
         type: 'array',
-        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:trigger'],
+        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:Users:create:before'],
       })
       .option('empty', {
         alias: 'e',

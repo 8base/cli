@@ -5,6 +5,7 @@ import * as cuid from '@paralleldrive/cuid2';
 import * as yaml from 'js-yaml';
 import stripAnsi from 'strip-ansi';
 import { CLI_BIN } from './consts';
+import { ProjectConfig } from '../src/common/context';
 
 export const prepareTestEnvironment = async (
   repName: string = cuid.createId(),
@@ -36,7 +37,7 @@ export const addResolverToProject = async (
   await fs.writeFile(path.join(projectPath, subDir, funcName).concat(ext), code);
   await fs.writeFile(path.join(projectPath, subDir, funcName).concat('.graphql'), graphQLData);
   const yamlFilePath = path.join(projectPath, '8base.yml');
-  const yamlData: { functions: { [key: string]: any } } = <any>yaml.load(await fs.readFile(yamlFilePath, 'utf8'));
+  const yamlData = <ProjectConfig>yaml.load(await fs.readFile(yamlFilePath, 'utf8'));
 
   yamlData.functions[funcName] = {
     handler: {

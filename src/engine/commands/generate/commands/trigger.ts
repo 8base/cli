@@ -2,33 +2,29 @@ import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { ExtensionType, SyntaxType, TriggerType } from '../../../../interfaces/Extensions';
+import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
 type TriggerParams = {
-  name: string;
-  type?: string;
-  operation?: string;
+  tableName: string;
+  type: TriggerType;
+  operation: TriggerOperation;
   mocks: boolean;
   syntax: SyntaxType;
   silent: boolean;
 };
 
 export default {
-  command: 'trigger <name>',
+  command: 'trigger <tableName>',
 
   handler: async (params: TriggerParams, context: Context) => {
-    let { name, type, operation, mocks, syntax, silent } = params;
-
-    if (operation && !/[\w\d]+\.(create|update|delete)/.test(operation)) {
-      throw new Error(translations.i18n.t('generate_trigger_invalid_operation'));
-    }
+    const { tableName, type, operation, mocks, syntax, silent } = params;
 
     await ProjectController.generateFunction(
       context,
       {
         type: ExtensionType.trigger,
-        name,
+        name: tableName,
         mocks,
         syntax,
         silent,
@@ -45,8 +41,8 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_trigger_usage'))
-      .positional('name', {
-        describe: translations.i18n.t('generate_trigger_name'),
+      .positional('tableName', {
+        describe: translations.i18n.t('generate_trigger_table_name'),
         type: 'string',
       })
       .option('type', {
@@ -55,11 +51,14 @@ export default {
         type: 'string',
         choices: Object.values(TriggerType),
         requiresArg: true,
+        default: TriggerType.before,
       })
       .option('operation', {
         alias: 'o',
         describe: translations.i18n.t('generate_trigger_operation_describe'),
         type: 'string',
+        choices: Object.values(TriggerOperation),
+        default: TriggerOperation.create,
         requiresArg: true,
       })
       .option('mocks', {

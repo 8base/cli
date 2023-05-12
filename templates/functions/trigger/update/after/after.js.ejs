@@ -28,37 +28,10 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, FunctionEvent, FunctionResult } from '8base-cli-types';
-
-
-type TriggerResult = FunctionResult<{
-    firstName: string,
-  },
-  {},
-  {},
-  Array<object>
->;
-
-export default async (
-  event: FunctionEvent,
-  ctx: FunctionContext,
-): TriggerResult => {
-  return {
-    data: {
-      ...event.data,
-      firstName: 'Override firstName',
-    },
-    /**
-     * Triggers allow for errors to be specified in the response
-     * as an array of user defined objects.
-     *
-     * Example:
-     *
-     * [{
-     *  message: "Error message",
-     *  code: "error_code"
-     * }, ...]
-     */
-    errors: [],
-  };
+module.exports = async (event, ctx) => {
+  const { data, originalData, originalObject } = event;
+  console.log(data, originalData, originalObject);
+  /**
+   * Any actions that should be executed after object update: cache invalidation, notification, etc...
+   */
 };
