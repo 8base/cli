@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { translations } from '../../../common/translations';
+import { Utils } from '../../../common/utils';
 
 export enum LogTagType {
   ERROR = 'ERROR',
@@ -113,10 +114,6 @@ const printLogs = (logs: string[]) => {
     });
 };
 
-const sleep = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
-
 let lastMessage: string = '';
 
 const filterMessage = (messages: string[]): string[] => {
@@ -180,7 +177,7 @@ const readLogs = async (functionName: string, context: Context) => {
       context.spinner.start(translations.i18n.t('logs_tail_wait'));
     }
 
-    await sleep(1000);
+    await Utils.sleep(1000);
 
     attempt = attempt + 1;
   }
