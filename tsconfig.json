@@ -10,7 +10,12 @@
     "resolveJsonModule": true,
     "target": "ES2016",
     "noImplicitAny": true,
-    "lib": ["es2017", "esnext.asynciterable", "es2016.array.include", "dom"],
+    "lib": [
+      "es2017",
+      "esnext.asynciterable",
+      "es2016.array.include",
+      "dom"
+    ],
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -19,5 +24,7 @@
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"],
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }

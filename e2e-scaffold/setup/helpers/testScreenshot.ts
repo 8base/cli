@@ -1,4 +1,4 @@
-import { Page } from "puppeteer";
+import { Page } from 'puppeteer';
 
 export const testScreenshot = async (page: Page, options = {}) => {
   // Rid of unnecessary hover

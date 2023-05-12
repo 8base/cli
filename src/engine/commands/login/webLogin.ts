@@ -5,6 +5,7 @@ import 'isomorphic-fetch';
 import { SessionInfo } from '../../../interfaces/Common';
 import { Utils } from '../../../common/utils';
 
+
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
   context.spinner.start(context.i18n.t('login_in_progress'));
   const session = cuid.createId();

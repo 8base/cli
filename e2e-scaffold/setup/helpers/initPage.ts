@@ -6,7 +6,7 @@ export const initPage = async (context: BrowserContext, auth: { [key: string]: s
   if (!!auth) {
     await page.evaluateOnNewDocument((auth: any) => {
       localStorage.clear();
-      localStorage.setItem("auth", JSON.stringify(auth));
+      localStorage.setItem('auth', JSON.stringify(auth));
     }, auth);
   }
 
