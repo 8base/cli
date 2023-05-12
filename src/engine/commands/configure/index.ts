@@ -53,9 +53,11 @@ export default {
         alias: 'w',
         describe: translations.i18n.t('configure_workspace_id_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('host', {
         describe: translations.i18n.t('configure_workspace_host_describe'),
         type: 'string',
+        requiresArg: true,
       }),
 };

@@ -54,11 +54,13 @@ export default {
         describe: translations.i18n.t('generate_trigger_type_describe'),
         type: 'string',
         choices: Object.values(TriggerType),
+        requiresArg: true,
       })
       .option('operation', {
         alias: 'o',
         describe: translations.i18n.t('generate_trigger_operation_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('mocks', {
         alias: 'x',
@@ -72,6 +74,7 @@ export default {
         default: 'ts',
         type: 'string',
         choices: Object.values(SyntaxType),
+        requiresArg: true,
       })
       .option('silent', {
         describe: translations.i18n.t('silent_describe'),

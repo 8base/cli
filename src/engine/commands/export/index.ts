@@ -9,10 +9,6 @@ export default {
   handler: async (params: { file: string; workspace?: string }, context: Context) => {
     context.spinner.start(context.i18n.t('export_in_progress'));
 
-    if (!params.file) {
-      throw new Error(translations.i18n.t('export_file_required_option_error'));
-    }
-
     if (params.workspace) {
       await context.checkWorkspace(params.workspace);
     }
@@ -41,11 +37,13 @@ export default {
         describe: translations.i18n.t('export_file_describe'),
         type: 'string',
         demandOption: translations.i18n.t('export_file_required_option_error'),
+        requiresArg: true,
       })
       .option('workspace', {
         alias: 'w',
         describe: translations.i18n.t('export_workspace_describe'),
         type: 'string',
+        requiresArg: true,
       });
   },
 };

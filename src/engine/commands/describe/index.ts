@@ -110,7 +110,9 @@ export default {
     }
   },
   describe: translations.i18n.t('describe_describe'),
-  builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage(translations.i18n.t('describe_usage'));
-  },
+  builder: (args: yargs.Argv): yargs.Argv =>
+    args.usage(translations.i18n.t('describe_usage')).positional('name', {
+      describe: translations.i18n.t('describe_name_describe'),
+      type: 'string',
+    }),
 };

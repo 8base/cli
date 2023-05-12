@@ -217,11 +217,14 @@ export default {
         default: 10,
         describe: translations.i18n.t('logs_num_describe'),
         type: 'number',
+        requiresArg: true,
+        conflicts: 'tail',
       })
       .option('tail', {
         alias: 't',
         describe: translations.i18n.t('logs_tail_describe'),
         type: 'boolean',
+        conflicts: 'num',
       });
   },
 };

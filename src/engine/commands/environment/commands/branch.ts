@@ -60,6 +60,7 @@ export default {
         describe: translations.i18n.t('environment_branch_name_describe'),
         type: 'string',
         demandOption: true,
+        requiresArg: true,
       })
       .option('mode', {
         alias: 'm',
@@ -67,6 +68,7 @@ export default {
         default: MigrateMode.FULL,
         type: 'string',
         choices: Object.values(MigrateMode),
+        requiresArg: true,
       })
       .option('force', {
         alias: 'f',

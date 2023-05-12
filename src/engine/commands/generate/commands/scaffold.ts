@@ -150,6 +150,7 @@ export default {
         describe: translations.i18n.t('generate_scaffold_depth_describe'),
         type: 'number',
         default: 1,
+        requiresArg: true,
       })
       .option('all', {
         type: 'boolean',
