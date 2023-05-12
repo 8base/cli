@@ -28,12 +28,12 @@ export class BuildController {
   }
 
   /*
-    Function workflow
-      1. Clean up directory
-      2. Create Metadata file
-      3. Create Schema file and save it
-      4. Archive build and summary
-  */
+      Function workflow
+        1. Clean up directory
+        2. Create Metadata file
+        3. Create Schema file and save it
+        4. Archive build and summary
+    */
 
   static async package(context: Context): Promise<{ build: Readable; meta: Readable }> {
     await BuildController.prepare(context);

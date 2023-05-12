@@ -66,6 +66,7 @@ const baseCompilerOptions = {
   lib: ['lib.es2017.d.ts'],
   allowJs: true,
   listEmittedFiles: true,
+
   skipLibCheck: true,
   allowSyntheticDefaultImports: true,
 };

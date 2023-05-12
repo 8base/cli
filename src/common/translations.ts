@@ -13,6 +13,7 @@ const initTranslations = async (i18n: i18next.i18n): Promise<void> => {
 
 export class Translations {
   i18n: i18next.i18n;
+
   async init(): Promise<Translations> {
     this.i18n = i18next.createInstance();
     await initTranslations(this.i18n);

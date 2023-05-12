@@ -20,7 +20,7 @@ import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
-import { REQUEST_HEADER_NOT_SET, REQUEST_HEADER_IGNORED } from '../consts/request';
+import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
 
 const pkg = require('../../package.json');
 
@@ -262,9 +262,9 @@ export class Context {
 
     if (!address) {
       /*
-        address has to be passed as parameter (workspace list query) or resolved from workspace info
-        another way it's invalid behaviour
-       */
+              address has to be passed as parameter (workspace list query) or resolved from workspace info
+              another way it's invalid behaviour
+             */
       throw new Error(this.i18n.t('configure_error'));
     }
 

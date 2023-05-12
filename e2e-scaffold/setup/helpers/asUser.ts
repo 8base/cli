@@ -1,11 +1,6 @@
-import { Client } from "@8base/api-client";
+import { Client } from '@8base/api-client';
 
-const {
-  ID_TOKEN,
-  E2E_SCAFFOLD_WORKSPACE_ID,
-  E2E_SCAFFOLD_SERVER_URL,
-} = process.env;
-
+const { ID_TOKEN, E2E_SCAFFOLD_WORKSPACE_ID, E2E_SCAFFOLD_SERVER_URL } = process.env;
 
 export const asUser = async () => {
   const client = new Client(E2E_SCAFFOLD_SERVER_URL);
