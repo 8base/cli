@@ -8,8 +8,7 @@ import * as _ from 'lodash';
 import { Context } from './context';
 import { Readable } from 'stream';
 import { CommandController } from '../engine/controllers/commandController';
-import { StaticConfig } from '../config';
-import { translations, Translations } from './translations';
+import { translations } from './translations';
 
 const MemoryStream = require('memorystream');
 const streamToBuffer = require('stream-to-buffer');

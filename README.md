@@ -7,7 +7,7 @@ The 8base Command Line Interface (CLI) makes it easy to generate custom function
 We recommend that all developers regularly checkout the [8base Community](https://community.8base.com) forum for regular updates and changes being made to the 8base-cli package.
 
 ## Installation
-The easiest way to install 8abse-cli is to use NPM and install the package globally:
+The easiest way to install 8base-cli is to use NPM and install the package globally:
 
 ```shell
 $ npm install -g 8base-cli
@@ -34,7 +34,7 @@ or, through the CLI using:
 $ 8base login --email="my@email.com" --password="myP@ssw0rd"
 ```
 
-Once successfully authenticated, an file will be updated at `~/.8baserc` with a JSON payload for the authenticated session.
+Once successfully authenticated, a file will be updated at `~/.8baserc` with a JSON payload for the authenticated session.
 
 ## Further Information
 For more information about commands and configuration options, please refer the [8base CLI documentation](https://docs.8base.com/development-tools/cli). You can also learn about the different commands from the CLI by running `--help` with the package itself, or a given command.

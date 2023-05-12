@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as _ from 'lodash';
 import * as AdmZip from 'adm-zip';
 import { request as gqlRequest } from 'graphql-request';
-import gql from 'graphql-tag';
 import * as changeCase from 'change-case';
 
 import { Context } from '../../../../common/context';

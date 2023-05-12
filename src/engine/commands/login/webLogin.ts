@@ -1,9 +1,10 @@
 import { Context } from '../../../common/context';
 import * as cuid from 'cuid';
-const opn = require('opn');
 import 'isomorphic-fetch';
 import { SessionInfo } from '../../../interfaces/Common';
 import { Utils } from '../../../common/utils';
+
+const opn = require('opn');
 
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
   context.spinner.start(context.i18n.t('login_in_progress'));

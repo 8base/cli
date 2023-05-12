@@ -7,7 +7,9 @@
   "setupFiles": [
     "./setup/setup.ts"
   ],
-  "setupFilesAfterEnv": ["./setup/setupTestFramework.ts"],
+  "setupFilesAfterEnv": [
+    "./setup/setupTestFramework.ts"
+  ],
   "globalSetup": "./setup/globalSetup.ts",
   "globalTeardown": "./setup/globalTeardown.ts",
   "testEnvironment": "./setup/testEnvironment.js",

@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as execa from 'execa';
 import stripAnsi from 'strip-ansi';
 

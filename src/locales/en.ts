@@ -14,7 +14,7 @@ export default {
     invalid_syntax: "Invalid syntax, available ['js', 'ts']",
     error_command_end: '{{command}} failed. Error: {{error}}.',
     '8base_usage':
-      'DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows it’s parameters and their usage. Optional options are shown in square brackets.',
+      'DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows its parameters and their usage. Optional options are shown in square brackets.',
     inexistent_workspace: 'Inexistent workspace',
     '8base_config_is_missing':
       "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
@@ -128,7 +128,7 @@ export default {
     init_workspace_host_describe: 'The workspace host of the project',
     init_select_workspace: 'What workspace does this project belong to?',
     init_prevent_select_workspace: 'Workspace selection canceled',
-    init_workspace_name_labal: 'Please enter name for the new workspace',
+    init_workspace_name_label: 'Please enter name for the new workspace',
     init_prevent_new_workspace: 'Workspace creation canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
     init_canceled: 'Project init canceled',
@@ -423,7 +423,7 @@ export default {
     /**
      * Migration status related messages
      */
-    migration_status_describe: 'Displays migrations which can be commited to target environment',
+    migration_status_describe: 'Displays migrations which can be committed to target environment',
     migration_status_usage:
       'COMMAND\n  8base migration status\n\nDESCRIPTION\n Shows the difference between your local migration files and any migrations which have been already committed to target environment.',
     migration_status_in_progress: 'Resolve status...',

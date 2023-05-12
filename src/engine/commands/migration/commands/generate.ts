@@ -5,8 +5,8 @@ import { GraphqlActions } from '../../../../consts/GraphqlActions';
 import * as download from 'download';
 import { StaticConfig } from '../../../../config';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
+
 const path = require('path');
-const fs = require('fs-extra');
 
 const DEFAULT_MIGRATIONS_PATH = './migrations';
 

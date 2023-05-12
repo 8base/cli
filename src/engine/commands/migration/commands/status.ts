@@ -6,9 +6,9 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 import chalk from 'chalk';
 import { Colors } from '../../../../consts/Colors';
 import { table } from 'table';
-import _ = require('lodash');
 import { executeDeploy } from '../../../../common/execute';
 import { DeployModeType } from '../../../../interfaces/Extensions';
+import _ = require('lodash');
 
 export default {
   command: 'status',

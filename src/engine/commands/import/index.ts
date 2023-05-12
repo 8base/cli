@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import { importTables, importData } from '@8base/api-client';
+import { importData, importTables } from '@8base/api-client';
 
 export default {
   command: 'import',
