@@ -15,7 +15,7 @@ export default {
 
     if (await fs.exists(params.file)) {
       try {
-        schema = JSON.parse(await fs.readFile(params.file, 'utf8'));
+        schema = await fs.readJSON(params.file, { encoding: 'utf8', throws: true });
       } catch (e) {
         throw new Error(translations.i18n.t('import_cant_parse_schema'));
       }

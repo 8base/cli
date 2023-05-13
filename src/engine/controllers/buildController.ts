@@ -28,12 +28,12 @@ export class BuildController {
   }
 
   /*
-      Function workflow
-        1. Clean up directory
-        2. Create Metadata file
-        3. Create Schema file and save it
-        4. Archive build and summary
-    */
+        Function workflow
+          1. Clean up directory
+          2. Create Metadata file
+          3. Create Schema file and save it
+          4. Archive build and summary
+      */
 
   static async package(context: Context): Promise<{ build: Readable; meta: Readable }> {
     await BuildController.prepare(context);
@@ -80,7 +80,7 @@ export class BuildController {
     const ignoreFilter = ignore().add(excludedRoots.map(item => '/' + item));
 
     if (await fs.exists(IGNORE_FILE_PATH)) {
-      ignoreFilter.add((await fs.readFile(IGNORE_FILE_PATH)).toString());
+      ignoreFilter.add(await fs.readFile(IGNORE_FILE_PATH, { encoding: 'utf8' }));
     }
 
     const files = await readdir.read(context.config.rootExecutionDir, undefined, readdir.INCLUDE_HIDDEN);
