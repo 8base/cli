@@ -22,7 +22,7 @@ export default {
       version: context.version,
     };
 
-    await fs.writeFile(params.file, JSON.stringify(exportResult, null, 2));
+    await fs.writeJSON(params.file, exportResult, { spaces: 2 });
 
     context.spinner.stop();
   },

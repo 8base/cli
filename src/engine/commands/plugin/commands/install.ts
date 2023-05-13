@@ -7,6 +7,7 @@ import gqlRequest from 'graphql-request';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { ProjectController } from '../../../controllers/projectController';
+import { Utils } from '../../../../common/utils';
 
 type PluginInstallParams = {
   name: string;
@@ -51,11 +52,13 @@ export default {
 
     let data: Buffer;
     try {
-      const res = await fetch(`${plugin.gitHubUrl}/archive/master.zip`, { method: 'GET' });
-      if (res.status !== 200) {
-        throw new Error('');
+      const { response, error } = await Utils.checkHttpResponse(
+        fetch(`${plugin.gitHubUrl}/archive/master.zip`, { method: 'GET' }),
+      );
+      if (error) {
+        throw error;
       }
-      data = Buffer.from(await res.arrayBuffer());
+      data = Buffer.from(await response.arrayBuffer());
     } catch (e) {
       throw new Error(
         context.i18n.t('plugin_install_cant_download', {

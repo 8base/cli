@@ -70,7 +70,6 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@jest/globals": "^29.5.0",
     "@types/adm-zip": "^0.5.0",
     "@types/archiver": "^5.3.2",
     "@types/download": "^8.0.2",

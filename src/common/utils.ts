@@ -52,16 +52,18 @@ export namespace Utils {
     context.logger.debug('url: ' + url);
 
     const body = fileStream.read();
-    const res = await fetch(url, {
-      method: 'PUT',
-      body,
-      headers: {
-        'Content-Length': body.length,
-      },
-    });
+    const { response, error } = await Utils.checkHttpResponse(
+      fetch(url, {
+        method: 'PUT',
+        body,
+        headers: {
+          'Content-Length': body.length,
+        },
+      }),
+    );
 
-    if (res && res.status !== 200) {
-      throw new Error(await res.text());
+    if (error) {
+      throw new Error(await response.text());
     }
 
     context.logger.debug('upload file success');
@@ -142,4 +144,15 @@ export namespace Utils {
         };
       }
     };
+
+  export const checkHttpResponse = async (
+    httpResponse: Promise<Response>,
+  ): Promise<{ response: Response; error: Error }> => {
+    const response = await httpResponse;
+    if (!response.ok) {
+      return { response, error: new Error(await response.text()) };
+    }
+
+    return { response, error: null };
+  };
 }

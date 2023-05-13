@@ -24,7 +24,7 @@ export default {
     if (params.mock) {
       args = await ProjectController.getMock(context, params.name, params.mock);
     } else if (params['data-path']) {
-      args = (await fs.readFile(params['data-path'])).toString();
+      args = await fs.readFile(params['data-path'], { encoding: 'utf8' });
     } else if (params['data-json']) {
       args = params['data-json'];
     }
