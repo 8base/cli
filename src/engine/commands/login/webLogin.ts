@@ -17,20 +17,20 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   let res = null;
   while (--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
-    const fetchResult = await fetch(
-      `${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`,
+    const { response, error } = await Utils.checkHttpResponse(
+      fetch(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`),
     );
 
-    if (fetchResult.status === 404) {
+    if (response.status === 404) {
       context.logger.debug(`session not present`);
       await Utils.sleep(timeoutMs);
       continue;
     }
-    if (fetchResult.status !== 200) {
-      throw new Error(await fetchResult.text());
+    if (error) {
+      throw error;
     }
 
-    res = await fetchResult.json();
+    res = await response.json();
     retryCount = 0;
   }
 

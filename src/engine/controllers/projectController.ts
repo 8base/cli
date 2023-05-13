@@ -11,10 +11,10 @@ import {
   ExtensionsContainer,
   ExtensionType,
   GraphQLFunctionType,
-  TriggerType,
-  TriggerOperation,
   ResolverDefinition,
   SyntaxType,
+  TriggerOperation,
+  TriggerType,
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context } from '../../common/context';
@@ -151,34 +151,31 @@ export class ProjectController {
     };
 
     const projectFilePath = path.join(outDir, 'project.json');
-    await fs.writeFile(projectFilePath, JSON.stringify(projectObject, null, 2));
+    await fs.writeJSON(projectFilePath, projectObject, { spaces: 2 });
   }
 
   static async saveMetaDataFile(project: ProjectDefinition, outDir: string) {
     const summaryFile = path.join(outDir, '__summary__functions.json');
-    await fs.writeFile(
+    await fs.writeJSON(
       summaryFile,
-      JSON.stringify(
-        {
-          functions: project.extensions.functions.map(f => {
-            return {
-              name: f.name,
-              handler: f.handler,
-            };
-          }),
-          resolvers: project.extensions.resolvers.map(r => {
-            return {
-              name: r.name,
-              functionName: r.functionName,
-              gqlType: r.gqlType,
-            };
-          }),
-          triggers: project.extensions.triggers,
-          webhooks: project.extensions.webhooks,
-        },
-        null,
-        2,
-      ),
+      {
+        functions: project.extensions.functions.map(f => {
+          return {
+            name: f.name,
+            handler: f.handler,
+          };
+        }),
+        resolvers: project.extensions.resolvers.map(r => {
+          return {
+            name: r.name,
+            functionName: r.functionName,
+            gqlType: r.gqlType,
+          };
+        }),
+        triggers: project.extensions.triggers,
+        webhooks: project.extensions.webhooks,
+      },
+      { spaces: 2 },
     );
   }
 
@@ -463,7 +460,7 @@ export class ProjectController {
       throw new Error(context.i18n.t('mock_with_name_not_defined', { functionName, mockName }));
     }
 
-    return (await fs.readFile(mockPath)).toString();
+    return fs.readFile(mockPath, { encoding: 'utf8' });
   }
 
   static async generateMock(
@@ -556,9 +553,9 @@ const processTemplate = (
       return;
     }
 
-    const data = fs.readFileSync(path.resolve(templatePath, file));
+    const data = fs.readFileSync(path.resolve(templatePath, file), { encoding: 'utf8' });
 
-    const content = ejs.compile(data.toString())({
+    const content = ejs.compile(data)({
       ...options,
       _,
     });

@@ -5,7 +5,6 @@ import {
   prepareTestEnvironment,
   RunCommand,
 } from '../../../utils';
-import { jest } from '@jest/globals';
 
 let project: any;
 const repositoryName = 'test_rep';

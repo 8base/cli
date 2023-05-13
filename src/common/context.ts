@@ -79,7 +79,7 @@ export class Context {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
 
     if (this.hasWorkspaceConfig()) {
-      return JSON.parse(String(fs.readFileSync(workspaceConfigPath)));
+      return fs.readJSONSync(workspaceConfigPath, { throws: true });
     }
 
     return null;
@@ -100,7 +100,7 @@ export class Context {
 
   set workspaceConfig(value: WorkspaceConfig) {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
-    fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
+    fs.writeJSONSync(workspaceConfigPath, value, { spaces: 2 });
   }
 
   getWorkspaceConfigPath(customPath?: string): string {
@@ -121,7 +121,7 @@ export class Context {
   async createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): Promise<void> {
     const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
 
-    await fs.writeFile(workspaceConfigPath, JSON.stringify(value, null, 2));
+    await fs.writeJSON(workspaceConfigPath, value, { spaces: 2 });
   }
 
   get workspaceId(): string | null {
@@ -262,9 +262,9 @@ export class Context {
 
     if (!address) {
       /*
-              address has to be passed as parameter (workspace list query) or resolved from workspace info
-              another way it's invalid behaviour
-             */
+        address has to be passed as parameter (workspace list query) or resolved from workspace info
+        another way it's invalid behaviour
+     */
       throw new Error(this.i18n.t('configure_error'));
     }
 

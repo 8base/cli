@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as readdir from 'readdir';
 import * as _ from 'lodash';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import { Context } from '../../../common/context';
 
 interface IFileProvider {
@@ -13,7 +13,10 @@ class StaticFileProvider implements IFileProvider {
     return _.reduce<string, Map<string, string>>(
       readdir.readSync(context.config.projectTemplatePath),
       (result, file) => {
-        return result.set(file, fs.readFileSync(path.join(context.config.projectTemplatePath, file)).toString());
+        return result.set(
+          file,
+          fs.readFileSync(path.join(context.config.projectTemplatePath, file), { encoding: 'utf8' }),
+        );
       },
       new Map<string, string>(),
     );
