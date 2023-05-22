@@ -7,6 +7,8 @@ import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { translations } from '../../../common/translations';
 import { Utils } from '../../../common/utils';
 
+type LogsParams = { name: string; num: number; tail?: boolean };
+
 export enum LogTagType {
   ERROR = 'ERROR',
   INFO = 'INFO',
@@ -185,7 +187,7 @@ const readLogs = async (functionName: string, context: Context) => {
 
 export default {
   command: 'logs <name>',
-  handler: async (params: { name: string; num: number; tail?: boolean }, context: Context) => {
+  handler: async (params: LogsParams, context: Context) => {
     if (params.num > 100) {
       params.num = 100;
     }

@@ -9,7 +9,7 @@ import { createQueryColumnsList, TableSchema } from '@8base/utils';
 import { generateScreen } from '@8base/generators';
 import { exportTables } from '@8base/api-client';
 
-type ViewCommandConfig = {
+type ScaffoldGenerateParams = {
   tableName: string;
   depth: number;
   all: boolean;
@@ -55,7 +55,7 @@ const getTable = (tables: TableSchema[], tableName: string): TableSchema => {
   return table;
 };
 
-const getColumnsNames = (params: { withMeta: boolean } & ViewCommandConfig, tables: TableSchema[]): string[] => {
+const getColumnsNames = (params: { withMeta: boolean } & ScaffoldGenerateParams, tables: TableSchema[]): string[] => {
   const { name } = getTable(tables, params.tableName);
   const table = getTable(tables, name);
 
@@ -94,7 +94,7 @@ const createTemplateFs = async (tables: TableSchema[], screen: Screen, config: {
 export default {
   command: 'scaffold <tableName>',
   describe: translations.i18n.t('generate_scaffold_describe'),
-  handler: async (params: ViewCommandConfig, context: Context) => {
+  handler: async (params: ScaffoldGenerateParams, context: Context) => {
     context.spinner.start('Fetching table data');
     const tables: TableSchema[] = await exportTables(context.request.bind(context), { withSystemTables: true });
     const { name, id } = getTable(tables, params.tableName);

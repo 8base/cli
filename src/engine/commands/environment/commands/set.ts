@@ -4,10 +4,12 @@ import { Interactive } from '../../../../common/interactive';
 import { translations } from '../../../../common/translations';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 
+type SetParams = { environmentName?: string };
+
 export default {
   command: 'set',
 
-  handler: async (params: { environmentName?: string }, context: Context) => {
+  handler: async (params: SetParams, context: Context) => {
     let { environmentName } = params;
     await ProjectConfigurationState.expectConfigured(context);
 

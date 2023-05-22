@@ -6,9 +6,11 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 import { executeAsync } from '../../../../common/execute';
 
+type DeleteParams = { name: string };
+
 export default {
   command: 'delete',
-  handler: async (params: { name: string }, context: Context) => {
+  handler: async (params: DeleteParams, context: Context) => {
     await ProjectConfigurationState.expectConfigured(context);
     const { name } = params;
     context.spinner.start(context.i18n.t('environment_delete_in_progress'));

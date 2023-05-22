@@ -7,12 +7,14 @@ import * as path from 'path';
 import { StaticConfig } from '../../../../config';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 
+type MigrationGenerateParams = { dist: string; tables?: string[]; environment?: string };
+
 const DEFAULT_MIGRATIONS_PATH = './migrations';
 
 export default {
   command: 'generate',
 
-  handler: async (params: { dist: string; tables?: string[]; environment?: string }, context: Context) => {
+  handler: async (params: MigrationGenerateParams, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
     context.spinner.start(context.i18n.t('migration_generate_in_progress'));
     const dist = params.dist;

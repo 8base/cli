@@ -5,10 +5,12 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { executeAsync } from '../../../../common/execute';
 import { GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 
+type RestoreParams = { environment: string; backup: string };
+
 export default {
   command: 'restore',
 
-  handler: async (params: { environment: string; backup: string }, context: Context) => {
+  handler: async (params: RestoreParams, context: Context) => {
     let { environment, backup } = params;
     await ProjectConfigurationState.expectConfigured(context);
     context.spinner.start(context.i18n.t('backup_restore_in_progress'));

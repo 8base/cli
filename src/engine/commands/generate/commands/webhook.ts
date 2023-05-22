@@ -5,7 +5,7 @@ import { translations } from '../../../../common/translations';
 import { ExtensionType, SyntaxType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type TaskParams = {
+type WebhookGenerateParams = {
   name: string;
   path?: string;
   method?: string;
@@ -17,7 +17,7 @@ type TaskParams = {
 export default {
   command: 'webhook <name>',
 
-  handler: async (params: TaskParams, context: Context) => {
+  handler: async (params: WebhookGenerateParams, context: Context) => {
     let { name, path, method, mocks, syntax, silent } = params;
 
     await ProjectController.generateFunction(

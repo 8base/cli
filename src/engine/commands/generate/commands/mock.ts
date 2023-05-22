@@ -4,7 +4,7 @@ import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { ProjectController } from '../../../controllers/projectController';
 
-type ResolverParams = {
+type MockGenerateParams = {
   name: string;
   mockName: string;
   silent: boolean;
@@ -13,7 +13,7 @@ type ResolverParams = {
 export default {
   command: 'mock <name>',
 
-  handler: async (params: ResolverParams, context: Context) => {
+  handler: async (params: MockGenerateParams, context: Context) => {
     let { name, mockName, silent } = params;
 
     await ProjectController.generateMock(context, {
