@@ -27,7 +27,7 @@ export default {
 
       const environment = environments.find(env => env.name === environmentName);
       if (!environment) {
-        throw new Error(translations.i18n.t('environment_set_doesnt_exit'));
+        throw new Error(translations.i18n.t('environment_set_doesnt_exit', { name: environmentName }));
       }
     }
 

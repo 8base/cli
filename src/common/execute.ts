@@ -38,7 +38,7 @@ export const executeAsync = async (
     context.spinner.start(
       context.i18n.t('async_in_progress', {
         status: result.status,
-        message: result.message,
+        message: result.message || '',
       }),
     );
   } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
@@ -72,7 +72,7 @@ export const uploadProject = async (context: Context, options?: RequestOptions):
 };
 
 export const executeDeploy = async (context: Context, deployOptions: any, options?: RequestOptions) => {
-  context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload' }));
+  context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload', message: '' }));
 
   const buildDir = await BuildController.package(context);
   context.logger.debug(`build dir: ${buildDir}`);
@@ -104,7 +104,7 @@ export const executeDeploy = async (context: Context, deployOptions: any, option
     context.spinner.start(
       context.i18n.t('deploy_in_progress', {
         status: result.status,
-        message: result.message,
+        message: result.message || '',
       }),
     );
   } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
