@@ -5,7 +5,7 @@ import { translations } from '../../../../common/translations';
 import { SyntaxType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type ResolverParams = {
+type PluginGenerateParams = {
   name: string;
   mocks: boolean;
   syntax: SyntaxType;
@@ -15,7 +15,7 @@ type ResolverParams = {
 export default {
   command: 'plugin <name>',
 
-  handler: async (params: ResolverParams, context: Context) => {
+  handler: async (params: PluginGenerateParams, context: Context) => {
     let { name, syntax } = params;
 
     await ProjectController.generatePlugin(context, {

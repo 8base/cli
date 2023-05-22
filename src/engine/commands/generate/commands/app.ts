@@ -9,6 +9,8 @@ import { readFs, writeFs } from '../../../../common/memfs';
 import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
 import { StaticConfig } from '../../../../config';
 
+type AppGenerateParams = { name: string };
+
 export default {
   command: 'app <name>',
   describe: translations.i18n.t('generate_app_describe'),
@@ -17,7 +19,7 @@ export default {
       describe: translations.i18n.t('generate_app_name'),
       type: 'string',
     }),
-  handler: async (params: { name: string }, context: Context) => {
+  handler: async (params: AppGenerateParams, context: Context) => {
     if (!context.user.isAuthorized()) {
       throw new Error(context.i18n.t('logout_error'));
     }

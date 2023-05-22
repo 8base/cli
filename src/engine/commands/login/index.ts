@@ -7,7 +7,7 @@ import { StaticConfig } from '../../../config';
 import { passwordLogin } from './passwordLogin';
 import { webLogin } from './webLogin';
 
-type LoginCommandParams = {
+type LoginParams = {
   email?: string;
   password?: string;
   token?: string;
@@ -16,7 +16,7 @@ type LoginCommandParams = {
 
 export default {
   command: 'login',
-  handler: async (params: LoginCommandParams, context: Context) => {
+  handler: async (params: LoginParams, context: Context) => {
     if (params.token) {
       context.setSessionInfo({ idToken: params.token });
       context.spinner.stop();

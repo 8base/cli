@@ -5,7 +5,7 @@ import { translations } from '../../../../common/translations';
 import { ExtensionType, SyntaxType, TriggerType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type TriggerParams = {
+type TriggerGenerateParams = {
   name: string;
   type?: string;
   operation?: string;
@@ -17,7 +17,7 @@ type TriggerParams = {
 export default {
   command: 'trigger <name>',
 
-  handler: async (params: TriggerParams, context: Context) => {
+  handler: async (params: TriggerGenerateParams, context: Context) => {
     let { name, type, operation, mocks, syntax, silent } = params;
 
     if (operation && !/[\w\d]+\.(create|update|delete)/.test(operation)) {

@@ -5,9 +5,11 @@ import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
 import { executeDeploy } from '../../../common/execute';
 
+type DeployParams = { plugins?: string[]; functions?: string[]; mode: DeployModeType };
+
 export default {
   command: 'deploy',
-  handler: async (params: { plugins?: string[]; functions?: string[]; mode: DeployModeType }, context: Context) => {
+  handler: async (params: DeployParams, context: Context) => {
     context.initializeProject();
 
     let deployOptions = { mode: params.mode };

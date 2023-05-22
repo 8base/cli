@@ -5,7 +5,7 @@ import { translations } from '../../../../common/translations';
 import { ExtensionType, SyntaxType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type TaskParams = {
+type TaskGenerateParams = {
   name: string;
   schedule?: string;
   mocks: boolean;
@@ -16,7 +16,7 @@ type TaskParams = {
 export default {
   command: 'task <name>',
 
-  handler: async (params: TaskParams, context: Context) => {
+  handler: async (params: TaskGenerateParams, context: Context) => {
     let { name, schedule, mocks, syntax, silent } = params;
 
     await ProjectController.generateFunction(

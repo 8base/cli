@@ -4,9 +4,11 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { exportTables } from '@8base/api-client';
 
+type ExportParams = { file: string; workspace?: string };
+
 export default {
   command: 'export',
-  handler: async (params: { file: string; workspace?: string }, context: Context) => {
+  handler: async (params: ExportParams, context: Context) => {
     context.spinner.start(context.i18n.t('export_in_progress'));
 
     if (params.workspace) {

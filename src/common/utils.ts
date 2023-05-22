@@ -8,6 +8,7 @@ import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
 import archiver from 'archiver';
 import MemoryStream from 'memorystream';
+import { HttpError } from '../errors';
 
 export namespace Utils {
   export const undefault = (m: any) => {
@@ -52,7 +53,7 @@ export namespace Utils {
     context.logger.debug('url: ' + url);
 
     const body = fileStream.read();
-    const { response, error } = await Utils.checkHttpResponse(
+    await Utils.checkHttpResponse(
       fetch(url, {
         method: 'PUT',
         body,
@@ -61,10 +62,6 @@ export namespace Utils {
         },
       }),
     );
-
-    if (error) {
-      throw new Error(await response.text());
-    }
 
     context.logger.debug('upload file success');
   };
@@ -145,14 +142,12 @@ export namespace Utils {
       }
     };
 
-  export const checkHttpResponse = async (
-    httpResponse: Promise<Response>,
-  ): Promise<{ response: Response; error: Error }> => {
+  export const checkHttpResponse = async (httpResponse: Promise<Response>): Promise<Response> => {
     const response = await httpResponse;
     if (!response.ok) {
-      return { response, error: new Error(await response.text()) };
+      throw new HttpError(await response.text(), response.status, response);
     }
 
-    return { response, error: null };
+    return response;
   };
 }

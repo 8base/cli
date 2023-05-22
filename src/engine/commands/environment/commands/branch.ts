@@ -9,9 +9,11 @@ import * as _ from 'lodash';
 import errorCodes from '@8base/error-codes';
 import { Interactive } from '../../../../common/interactive';
 
+type BranchParams = { name: string; mode: MigrateMode; force: boolean };
+
 export default {
   command: 'branch',
-  handler: async (params: { name: string; mode: MigrateMode; force: boolean }, context: Context) => {
+  handler: async (params: BranchParams, context: Context) => {
     await ProjectConfigurationState.expectConfigured(context);
     const { name, mode, force } = params;
     context.spinner.start(context.i18n.t('environment_branch_in_progress'));

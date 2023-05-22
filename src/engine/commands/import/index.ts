@@ -5,12 +5,11 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { importData, importTables } from '@8base/api-client';
 
+type ImportParams = { file: string; schema: boolean; data: boolean; workspace: string; d?: boolean };
+
 export default {
   command: 'import',
-  handler: async (
-    params: { file: string; schema: boolean; data: boolean; workspace: string; d?: boolean },
-    context: Context,
-  ) => {
+  handler: async (params: ImportParams, context: Context) => {
     let schema;
 
     if (await fs.exists(params.file)) {
