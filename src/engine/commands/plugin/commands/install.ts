@@ -52,12 +52,9 @@ export default {
 
     let data: Buffer;
     try {
-      const { response, error } = await Utils.checkHttpResponse(
+      const response = await Utils.checkHttpResponse(
         fetch(`${plugin.gitHubUrl}/archive/master.zip`, { method: 'GET' }),
       );
-      if (error) {
-        throw error;
-      }
       data = Buffer.from(await response.arrayBuffer());
     } catch (e) {
       throw new Error(

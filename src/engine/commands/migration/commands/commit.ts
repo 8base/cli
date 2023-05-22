@@ -13,12 +13,11 @@ import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 import { Interactive } from '../../../../common/interactive';
 import { StaticConfig } from '../../../../config';
 
+type MigrationCommitParams = { mode: CommitMode; force?: boolean; environment?: string; target?: string[] };
+
 export default {
   command: 'commit',
-  handler: async (
-    params: { mode: CommitMode; force?: boolean; environment?: string; target?: string[] },
-    context: Context,
-  ) => {
+  handler: async (params: MigrationCommitParams, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
     context.initializeProject();
 

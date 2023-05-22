@@ -1,6 +1,7 @@
 import yargs from 'yargs';
 import jwtDecode from 'jwt-decode';
 import chalk from 'chalk';
+import * as _ from 'lodash';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
@@ -28,7 +29,7 @@ export default {
 
         email = user.email;
 
-        name = `${user.firstName} ${user.lastName}`;
+        name = _.compact([user.firstName, user.lastName]).join(' ');
       } catch (e) {}
     }
 

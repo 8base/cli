@@ -5,7 +5,7 @@ import { translations } from '../../../../common/translations';
 import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type TriggerParams = {
+type TriggerGenerateParams = {
   tableName: string;
   type: TriggerType;
   operation: TriggerOperation;
@@ -17,7 +17,7 @@ type TriggerParams = {
 export default {
   command: 'trigger <tableName>',
 
-  handler: async (params: TriggerParams, context: Context) => {
+  handler: async (params: TriggerGenerateParams, context: Context) => {
     const { tableName, type, operation, mocks, syntax, silent } = params;
 
     await ProjectController.generateFunction(

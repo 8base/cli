@@ -6,10 +6,12 @@ import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import * as _ from 'lodash';
 import { Workspace } from '../../../interfaces/Common';
 
+type ConfigureParams = { workspaceId: string; host: string };
+
 export default {
   command: 'configure',
 
-  handler: async (params: { workspaceId: string; host: string }, context: Context) => {
+  handler: async (params: ConfigureParams, context: Context) => {
     let { workspaceId, host = context.resolveMainServerAddress() } = params;
 
     if (!workspaceId) {

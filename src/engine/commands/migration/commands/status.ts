@@ -10,10 +10,12 @@ import * as _ from 'lodash';
 import { executeDeploy } from '../../../../common/execute';
 import { DeployModeType } from '../../../../interfaces/Extensions';
 
+type MigrationStatusParams = { environment?: string };
+
 export default {
   command: 'status',
 
-  handler: async (params: { environment?: string }, context: Context) => {
+  handler: async (params: MigrationStatusParams, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
     await executeDeploy(context, { mode: DeployModeType.migrations }, { customEnvironment: params.environment });
     context.spinner.start(context.i18n.t('migration_status_in_progress'));
