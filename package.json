@@ -49,7 +49,7 @@
     "graphql": "^16.6.0",
     "graphql-request": "^4.3.0",
     "graphql-tag": "^2.12.6",
-    "i18next": "^22.5.0",
+    "i18next": "^22.5.1",
     "ignore": "^5.2.4",
     "isomorphic-fetch": "^3.0.0",
     "js-yaml": "^4.1.0",
