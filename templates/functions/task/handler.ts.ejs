@@ -4,7 +4,7 @@
  * To learn more about writing custom task functions, visit
  * the 8base documentation at:
  *
- * https://docs.8base.com/docs/8base-console/custom-functions/tasks/
+ * https://docs.8base.com/projects/backend/custom-functions/tasks
  *
  * To update this functions invocation settings, update its configuration block
  * in the projects 8base.yml file:
@@ -13,7 +13,7 @@
  *      ...
  *
  * Data that is sent to the function can be accessed on the event argument at:
- *  event.data[KEY_NAME]
+ *  event[KEY_NAME]
  *
  * There are two ways to invoke this function locally:
  *
@@ -28,16 +28,15 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, FunctionEvent, FunctionResponse } from '@8base/functions-types';
+import { FunctionContext, TaskEvent, TaskResponse, TaskFunction } from "@8base/functions-types";
 
-type TaskResult = FunctionResponse<{
-  result: string;
-}>;
+type TaskInput = TaskEvent<{ foo: string }>;
+type TaskOutput = TaskResponse<{ result: string }>;
 
-export default async (event: FunctionEvent<{ foo: string }>, ctx: FunctionContext): TaskResult => {
+const task: TaskFunction = async (event: TaskInput, ctx: FunctionContext): TaskOutput => {
   return {
-    data: {
-      result: `Task received: ${event.data.foo}`,
-    },
+    result: `Task received: ${event.foo}`,
   };
 };
+
+export default task;

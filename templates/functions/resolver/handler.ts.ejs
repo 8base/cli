@@ -4,7 +4,7 @@
  * To learn more about writing custom GraphQL resolver functions, visit
  * the 8base documentation at:
  *
- * https://docs.8base.com/docs/8base-console/custom-functions/resolvers/
+ * https://docs.8base.com/projects/backend/custom-functions/resolvers
  *
  * To update this functions invocation settings, update its configuration block
  * in the projects 8base.yml file:
@@ -28,16 +28,18 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, FunctionEvent, FunctionResponse } from '@8base/functions-types';
+import { FunctionContext, ResolverEvent, ResolverResponse, ResolverFunction } from '@8base/functions-types';
 
-type ResolverResult = FunctionResponse<{
-  result: string;
-}>;
+type ResolverInput = ResolverEvent<{ foo: string }>;
+type ResolverOutput = ResolverResponse<{ result: string }>;
 
-export default async (event: FunctionEvent<{ foo: string }>, ctx: FunctionContext): ResolverResult => {
+const resolver: ResolverFunction = async (event: ResolverInput, ctx: FunctionContext): ResolverOutput => {
   return {
     data: {
       result: `Resolver received: ${event.data.foo}`,
     },
   };
 };
+
+export default resolver;
+
