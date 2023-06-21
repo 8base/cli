@@ -33,5 +33,4 @@ module.exports = async (event, ctx) => {
   if (event.destroyDeleted) {
     return { errors: [{ message: 'Destroying is forbidden' }] };
   }
-  return event;
 };

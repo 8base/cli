@@ -28,12 +28,22 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, AfterUpdateTriggerFunctionEvent } from '@8base/functions-types';
+import {
+ AfterUpdateTriggerFunction,
+ AfterUpdateTriggerFunctionEvent,
+ AfterUpdateTriggerResponse,
+ FunctionContext,
+} from '@8base/functions-types';
 
-export default async (event: AfterUpdateTriggerFunctionEvent, ctx: FunctionContext) => {
-  const { data, originalData, originalObject } = event;
-  console.log(data, originalData, originalObject);
-  /**
-   * Any actions that should be executed after object update: cache invalidation, notification, etc...
-   */
+const afterUpdateTrigger: AfterUpdateTriggerFunction = async (
+  event: AfterUpdateTriggerFunctionEvent,
+  ctx: FunctionContext,
+): AfterUpdateTriggerResponse => {
+ const { data, originalData, originalObject } = event;
+ console.log(data, originalData, originalObject);
+ /**
+  * Any actions that should be executed after object update: cache invalidation, notification, etc...
+  */
 };
+
+export default afterUpdateTrigger;

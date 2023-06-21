@@ -28,12 +28,22 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { AfterDeleteTriggerFunctionEvent, FunctionContext } from '@8base/functions-types';
+import {
+  AfterDeleteTriggerFunction,
+  AfterDeleteTriggerFunctionEvent,
+  AfterDeleteTriggerResponse,
+  FunctionContext
+} from '@8base/functions-types';
 
-export default async (event: AfterDeleteTriggerFunctionEvent, ctx: FunctionContext): Promise<void> => {
-  const { data, originalData, originalObject } = event;
-  console.log(data, originalData, originalObject);
+const afterDestroyTrigger: AfterDeleteTriggerFunction = async (
+  event: AfterDeleteTriggerFunctionEvent,
+  ctx: FunctionContext,
+): AfterDeleteTriggerResponse => {
+  const { data, originalObject } = event;
+  console.log(data, originalObject);
   /**
    * Any actions that should be executed after object deletion: cache invalidation, notification, etc...
    */
 };
+
+export default afterDestroyTrigger;

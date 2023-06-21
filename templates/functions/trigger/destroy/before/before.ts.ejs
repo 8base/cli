@@ -28,12 +28,18 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, BeforeDeleteTriggerFunctionEvent, FunctionResponse } from '@8base/functions-types';
+import {
+  BeforeDeleteTriggerFunction,
+  BeforeDeleteTriggerFunctionEvent,
+  BeforeDeleteTriggerResponse,
+  FunctionContext,
+} from '@8base/functions-types';
 
-export default async (event: BeforeDeleteTriggerFunctionEvent, ctx: FunctionContext): FunctionResponse => {
-  // validation
-  if (event.destroyDeleted) {
-    return { errors: [{ message: 'Destroying is forbidden' }] };
-  }
-  return event;
+const beforeDeleteTrigger: BeforeDeleteTriggerFunction = async (
+  event: BeforeDeleteTriggerFunctionEvent,
+  ctx: FunctionContext,
+): BeforeDeleteTriggerResponse => {
+  return { errors: [{ message: 'Destroying is forbidden' }] };
 };
+
+export default beforeDeleteTrigger;

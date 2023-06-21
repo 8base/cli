@@ -29,9 +29,5 @@
  */
 
 module.exports = async (event, ctx) => {
-  // validation
-  if (event.destroyDeleted) {
     return { errors: [{ message: 'Destroying is forbidden' }] };
-  }
-  return event;
 };

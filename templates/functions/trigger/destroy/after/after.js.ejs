@@ -29,8 +29,8 @@
  */
 
 module.exports = async (event, ctx) => {
-  const { data, originalData, originalObject } = event;
-  console.log(data, originalData, originalObject);
+  const { data, originalObject } = event;
+  console.log(data, originalObject);
   /**
    * Any actions that should be executed after object deletion: cache invalidation, notification, etc...
    */

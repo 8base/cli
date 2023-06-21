@@ -28,17 +28,21 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, BeforeCreateTriggerFunctionEvent, FunctionResponse } from '@8base/functions-types';
+import {
+  FunctionContext,
+  BeforeCreateTriggerFunctionEvent,
+  BeforeCreateTriggerFunction, BeforeCreateTriggerResponse
+} from '@8base/functions-types';
 
 type User = {
   firstName: string;
   email: string;
 };
 
-export default async (
+const beforeCreateTrigger: BeforeCreateTriggerFunction = async (
   event: BeforeCreateTriggerFunctionEvent<User>,
   ctx: FunctionContext,
-): FunctionResponse<User, {}> => {
+): BeforeCreateTriggerResponse<User> => {
   // validation
   if (event.data.email.endsWith('@gmail.com')) {
     return { errors: [{ message: 'not allowed' }] };
@@ -46,3 +50,5 @@ export default async (
   // override data
   return { data: { ...event.data, firstName: 'overridden' } };
 };
+
+export default beforeCreateTrigger;

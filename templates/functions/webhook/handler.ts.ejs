@@ -33,7 +33,7 @@
 
 import { FunctionContext, WebhookFunction, WebhookFunctionEvent, WebhookResponse } from '@8base/functions-types';
 
-const webhook: WebhookFunction = async (event: WebhookFunctionEvent, ctx: FunctionContext): Promise<WebhookResponse> => {
+const webhook: WebhookFunction = async (event: WebhookFunctionEvent, ctx: FunctionContext): WebhookResponse => {
   const { foo } = JSON.parse(event.body);
 
   return {
