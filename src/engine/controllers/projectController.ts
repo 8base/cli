@@ -53,7 +53,7 @@ type PluginGenerationOptions = {
 };
 
 const generateFunctionDeclaration = (
-  { type, name, mocks, syntax }: FunctionGenerationOptions,
+  { type, name, syntax }: FunctionGenerationOptions,
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
@@ -500,9 +500,8 @@ export class ProjectController {
 
     const fn = _.get(config, ['functions', functionName]);
 
-    const type = fn.type.match(/^\w+/)[0];
-
-    const mockPath = `src/${type}s/${functionName}/mocks/${name}.json`;
+    const mockDir = path.join(path.dirname(fn.handler.code), 'mocks');
+    const mockPath = path.join(mockDir, `${name}.json`);
 
     if (await fs.exists(mockPath)) {
       throw new Error(
@@ -513,12 +512,10 @@ export class ProjectController {
       );
     }
 
-    const dirPath = `src/${type}s/${functionName}/mocks`;
-
     processTemplate(
       context,
       {
-        dirPath: path.join(projectPath, dirPath),
+        dirPath: path.join(projectPath, mockDir),
         templatePath: context.config.mockTemplatePath,
       },
       { silent },
