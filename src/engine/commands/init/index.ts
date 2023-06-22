@@ -120,7 +120,7 @@ export default {
     context.logger.debug(`initialize success: initialize repository: ${project.name}`);
 
     let files = getFileProvider().provide(context);
-    context.logger.debug('files provided count = ' + files.size);
+    context.logger.debug(`files provided count = ${files.size}`);
 
     files.set(
       context.config.packageFileName,
