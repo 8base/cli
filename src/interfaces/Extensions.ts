@@ -27,7 +27,6 @@ export enum TriggerOperation {
   create = 'create',
   update = 'update',
   delete = 'delete',
-  destroy = 'destroy',
 }
 
 export enum TriggerType {

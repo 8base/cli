@@ -34,5 +34,5 @@ module.exports = async (event, ctx) => {
     return { errors: [{ message: 'not allowed' }] };
   }
   // override data
-  return { data: { ...event.data, firstName: 'overridden' } };
+  return { data: { ...event.data, firstName: 'overridden by trigger' } };
 };

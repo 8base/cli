@@ -31,14 +31,14 @@
 import {
   AfterCreateTriggerFunction,
   AfterCreateTriggerFunctionEvent,
-  AfterUpdateTriggerResponse,
+  AfterCreateTriggerResponse,
   FunctionContext
 } from '@8base/functions-types';
 
 const afterCreateTrigger: AfterCreateTriggerFunction = async (
   event: AfterCreateTriggerFunctionEvent,
   ctx: FunctionContext,
-): AfterUpdateTriggerResponse => {
+): AfterCreateTriggerResponse => {
   const { data, originalData } = event;
   console.log(data, originalData);
   /**

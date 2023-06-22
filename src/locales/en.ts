@@ -113,8 +113,7 @@ export default {
     init_invalid_function_type: 'Invalid function type',
     init_invalid_project_name: 'Invalid project name: {{validationMessages}}.',
     init_undefined_function_name: 'Undefined function name',
-    init_incorrect_trigger:
-      'Incorrect trigger name. Use trigger:<TableName>:<before|after>:<create|update|delete|destroy>',
+    init_incorrect_trigger: 'Incorrect trigger name. Use trigger:<TableName>:<before|after>:<create|update|delete>',
     init_functions_describe: 'List of functions',
     init_empty_describe: 'Skip examples',
     init_workspace_id_describe: 'The workspace ID of the project',

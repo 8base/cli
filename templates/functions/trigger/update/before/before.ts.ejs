@@ -49,7 +49,7 @@ const beforeUpdateTrigger: BeforeUpdateTriggerFunction = async (
     return { errors: [{ message: 'not allowed' }] };
   }
   // override data
-  return { data: { ...event.data, firstName: 'overridden' } };
+  return { data: { ...event.data, firstName: 'overridden by trigger' } };
 };
 
 export default beforeUpdateTrigger;
