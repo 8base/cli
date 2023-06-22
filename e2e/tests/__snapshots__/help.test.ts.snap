@@ -458,7 +458,7 @@ Migration commands.
 COMMANDS
   8base migration commit    Commits migrations and/or Custom Logic from your local project to 8base
   8base migration generate  Generates local migration files based on changes in your environment
-  8base migration status    Displays migrations which can be committed to target environment
+  8base migration status    Displays migrations which would be committed to target environment
 
 OPTIONS
   -d, --debug  Turn on debug logs  [boolean]

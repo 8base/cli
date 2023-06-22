@@ -392,7 +392,7 @@ export default {
     /**
      * Migration status related messages
      */
-    migration_status_describe: 'Displays migrations which can be committed to target environment',
+    migration_status_describe: 'Displays migrations which would be committed to target environment',
     migration_status_usage:
       'COMMAND\n  8base migration status\n\nDESCRIPTION\n Shows the difference between your local migration files and any migrations which have been already committed to target environment.',
     migration_status_in_progress: 'Resolve status...',
