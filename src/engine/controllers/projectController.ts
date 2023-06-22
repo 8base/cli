@@ -402,7 +402,7 @@ export class ProjectController {
         templatePath: functionTemplatePath,
       },
       { syntax, mocks, silent },
-      { functionName, type, extendType },
+      { functionName, type, extendType, mockName: 'request' },
     );
 
     if (!silent) {
