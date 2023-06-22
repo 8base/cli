@@ -83,7 +83,6 @@ export default {
     deploy_describe:
       'Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.',
     deploy_plugins_describe: 'The list of plugins to deploy',
-    deploy_functions_describe: 'The list of functions to deploy',
     deploy_mode_describe: 'Deploy mode',
 
     /**

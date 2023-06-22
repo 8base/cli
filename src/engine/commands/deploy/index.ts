@@ -5,7 +5,7 @@ import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
 import { executeDeploy } from '../../../common/execute';
 
-type DeployParams = { plugins?: string[]; functions?: string[]; mode: DeployModeType };
+type DeployParams = { plugins?: string[]; mode: DeployModeType };
 
 export default {
   command: 'deploy',
@@ -16,10 +16,6 @@ export default {
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
-    }
-
-    if (Array.isArray(params.functions) && params.functions.length > 0) {
-      deployOptions = _.set(deployOptions, 'extensionNames', params.functions);
     }
 
     await executeDeploy(context, deployOptions);
@@ -33,11 +29,6 @@ export default {
       .option('plugins', {
         alias: 'p',
         describe: translations.i18n.t('deploy_plugins_describe'),
-        type: 'array',
-      })
-      .option('functions', {
-        alias: 'f',
-        describe: translations.i18n.t('deploy_functions_describe'),
         type: 'array',
       })
       .option('mode', {
