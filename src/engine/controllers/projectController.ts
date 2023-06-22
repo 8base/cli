@@ -93,7 +93,7 @@ export class ProjectController {
 
   static initialize(context: Context): ProjectDefinition {
     const name = path.basename(context.config.rootExecutionDir);
-    context.logger.debug('start initialize project "' + name + '"');
+    context.logger.debug(`start initialize project "${name}"`);
 
     const projectData = ProjectController.getProjectData(context);
     const { extensions, gqlSchema } = projectData;
@@ -107,7 +107,7 @@ export class ProjectController {
         ProjectController.getProjectData(context, pluginDir);
       });
     }
-    context.logger.debug('load functions count = ' + extensions.functions.length);
+    context.logger.debug(`load functions count = ${extensions.functions.length}`);
 
     context.logger.debug('resolve function graphql types');
     const functionGqlTypes = GraphqlController.defineGqlFunctionsType(gqlSchema);
@@ -184,7 +184,7 @@ export class ProjectController {
     return _.map(extensions.resolvers, f => {
       const p = path.join(pathToWorkDir, f.gqlSchemaPath);
       if (!fs.existsSync(p)) {
-        throw new Error('schema path "' + p + '" not present');
+        throw new Error(`schema path "${p}" is not present`);
       }
       return p;
     });
@@ -197,7 +197,7 @@ export class ProjectController {
   private static loadConfigFile(context: Context, projectPath?: string): any {
     const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
 
-    context.logger.debug('check exist yaml file = ' + pathToYmlConfig);
+    context.logger.debug(`check exist yaml file = ${pathToYmlConfig}`);
 
     if (!fs.existsSync(pathToYmlConfig)) {
       throw new Error(context.i18n.t('8base_config_is_missing'));
@@ -234,7 +234,7 @@ export class ProjectController {
         extensions.functions.push({
           name: functionName,
           // TODO: create class FunctionDefinition
-          handler: functionName + '.handler', // this handler generate in compile step
+          handler: `${functionName}.handler`, // this handler generate in compile step
           pathToFunction: FunctionUtils.resolveHandler(functionName, data.handler),
         });
 
@@ -259,7 +259,7 @@ export class ProjectController {
             if (_.isNil(data.operation)) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
-                'operation field not present in trigger ' + functionName,
+                `operation field not present in trigger ${functionName}`,
               );
             }
 
@@ -278,7 +278,7 @@ export class ProjectController {
             if (!data.method) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
-                "Parameter 'method' is missing in webhook '" + functionName + "'",
+                `Parameter "method" is missing in webhook "${functionName}"`,
               );
             }
 
@@ -589,7 +589,7 @@ namespace ResolverUtils {
     resolvers.forEach(func => {
       const type = types[func.name];
       if (_.isNil(type)) {
-        throw new Error('Cannot define graphql type for function "' + func.name + '"');
+        throw new Error(`Cannot define graphql type for function "${func.name}"`);
       }
       func.gqlType = type;
     });
@@ -602,33 +602,27 @@ namespace FunctionUtils {
     if (_.isString(handler.code)) {
       return handler.code;
     }
-    throw new InvalidConfiguration(
-      StaticConfig.serviceConfigFileName,
-      'handler is invalid for function "' + name + '"',
-    );
+    throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, `handler is invalid for function "${name}"`);
   }
 
   export function validateFunctionDefinition(func: any, name: string, projectPath?: string) {
     const pathToWorkDir = projectPath || StaticConfig.rootExecutionDir;
 
     if (_.isNil(func.handler)) {
-      throw new InvalidConfiguration(
-        StaticConfig.serviceConfigFileName,
-        'handler is absent for function "' + name + '"',
-      );
+      throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, `handler is absent for function "${name}"`);
     }
 
     if (func.handler.code && !fs.existsSync(path.join(pathToWorkDir, func.handler.code))) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
-        'unable to determine function "' + name + '" source code',
+        `unable to determine function "${name}" source code`,
       );
     }
 
     if (!StaticConfig.supportedCompileExtension.has(path.extname(func.handler.code))) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
-        'function "' + name + '" have unsupported file extension',
+        `function "${name}" has unsupported file extension`,
       );
     }
   }
@@ -645,7 +639,7 @@ namespace FunctionUtils {
     if (_.isNil(resolvedType)) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
-        'Invalid function type ' + type + ' in function ' + functionName,
+        `Invalid function type ${type} in function ${functionName}`,
       );
     }
 
@@ -659,7 +653,7 @@ namespace TriggerUtils {
     if (_.isNil(resolvedOperation)) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
-        'Invalid trigger operation ' + operation + ' in function ' + funcName,
+        `Invalid trigger operation ${operation} in function ${funcName}`,
       );
     }
 
@@ -678,7 +672,7 @@ namespace TriggerUtils {
     if (_.isNil(resolvedType)) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
-        'Invalid trigger type ' + type + ' in function ' + functionName,
+        `Invalid trigger type ${type} in function ${functionName}`,
       );
     }
 

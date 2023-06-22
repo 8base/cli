@@ -39,27 +39,26 @@ const beautifyLogLine = (line: string) => {
   if (/^START RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/.test(line)) {
     line = line.replace(
       /^START RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/,
-      (substr: string, id: string, text: string) => {
-        return printRequestId(id) + ` ${printTag(LogTagType.START)} ` + chalk.dim(text);
-      },
+      (substr: string, id: string, text: string) =>
+        `${printRequestId(id)} ${printTag(LogTagType.START)} ${chalk.dim(text)}`,
     );
   }
 
   if (/^REPORT RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/.test(line)) {
     line = line.replace(
       /^REPORT RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/,
-      (substr: string, id: string, text: string) => {
-        return printRequestId(id) + ` ${printTag(LogTagType.REPORT)} ` + chalk.green(text);
-      },
+      (substr: string, id: string, text: string) =>
+        `${printRequestId(id)} ${printTag(LogTagType.REPORT)} ${chalk.green(text)}`,
     );
 
     line += '\n';
   }
 
   if (/^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/.test(line)) {
-    line = line.replace(/^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/, (substr: string, id: string) => {
-      return printRequestId(id) + ` ${printTag(LogTagType.END)}`;
-    });
+    line = line.replace(
+      /^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/,
+      (substr: string, id: string) => `${printRequestId(id)} ${printTag(LogTagType.END)}`,
+    );
   }
 
   if (
@@ -74,13 +73,9 @@ const beautifyLogLine = (line: string) => {
           text = JSON.stringify(JSON.parse(text), null, 2);
         } catch (e) {}
 
-        return (
-          printRequestId(id) +
-          ' ' +
-          printTag(LogTagType.ERROR) +
-          chalk.red(` Datetime: ${new Date(dt).toLocaleString()}\n`) +
-          text
-        );
+        return `${printRequestId(id)} ${printTag(LogTagType.ERROR)}${chalk.red(
+          ` Datetime: ${new Date(dt).toLocaleString()}\n`,
+        )}${text}`;
       },
     );
   }
@@ -93,13 +88,9 @@ const beautifyLogLine = (line: string) => {
           text = JSON.stringify(JSON.parse(text), null, 2);
         } catch (e) {}
 
-        return (
-          printRequestId(id) +
-          ' ' +
-          printTag(LogTagType.INFO) +
-          chalk.cyan(` Datetime: ${new Date(dt).toLocaleString()} \n`) +
-          text
-        );
+        return `${printRequestId(id)} ${printTag(LogTagType.INFO)}${chalk.cyan(
+          ` Datetime: ${new Date(dt).toLocaleString()} \n`,
+        )}${text}`;
       },
     );
   }

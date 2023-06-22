@@ -54,7 +54,7 @@ export class BuildController {
     const compiler = getCompiler(files, context);
 
     const compiledFiles = await compiler.compile(context.config.buildDistPath);
-    context.logger.debug('compiled files = ' + compiledFiles);
+    context.logger.debug(`compiled files = ${compiledFiles}`);
 
     return {
       compiledFiles,
@@ -77,7 +77,7 @@ export class BuildController {
     ];
 
     // have to add '/' at the beginning to ignore only root folder. avoid recursive
-    const ignoreFilter = ignore().add(excludedRoots.map(item => '/' + item));
+    const ignoreFilter = ignore().add(excludedRoots.map(item => `/${item}`));
 
     if (await fs.exists(IGNORE_FILE_PATH)) {
       ignoreFilter.add(await fs.readFile(IGNORE_FILE_PATH, { encoding: 'utf8' }));

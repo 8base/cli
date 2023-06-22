@@ -43,14 +43,14 @@ export namespace Utils {
       }
 
       fs.writeFileSync(fullName, data);
-      context.logger.debug('install file = ' + fullName);
+      context.logger.debug(`install file = ${fullName}`);
     });
     return targetDirectory;
   };
 
   export const upload = async (url: string, fileStream: Readable, context: Context): Promise<void> => {
     context.logger.debug('start upload file');
-    context.logger.debug('url: ' + url);
+    context.logger.debug(`url: ${url}`);
 
     const body = fileStream.read();
     await Utils.checkHttpResponse(
@@ -80,12 +80,7 @@ export namespace Utils {
       directories.forEach(sourcePath => {
         const source = fs.statSync(sourcePath.source);
         context.logger.debug(
-          'archive files from directory = ' +
-            sourcePath.source +
-            ' dist = ' +
-            sourcePath.dist +
-            ' is file = ' +
-            source.isFile(),
+          `archive files from directory = ${sourcePath.source} dist = ${sourcePath.dist} is file = ${source.isFile()}`,
         );
 
         source.isFile()
@@ -94,7 +89,7 @@ export namespace Utils {
       });
 
       zip.on('error', (err: any) => {
-        context.logger.debug('Error while zipping build: ' + err);
+        context.logger.debug(`Error while zipping build: ${err}`);
         reject(new Error(err));
       });
 
