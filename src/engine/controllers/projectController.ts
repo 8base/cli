@@ -475,9 +475,9 @@ export class ProjectController {
       throw new Error(context.i18n.t('function_with_name_not_defined', { name: functionName }));
     }
 
-    const type = _.get(config, ['functions', functionName]).type.match(/^\w+/)[0];
-
-    const mockPath = `src/${type}s/${functionName}/mocks/${mockName}.json`;
+    const fn = _.get(config, ['functions', functionName]);
+    const mockDir = path.join(path.dirname(fn.handler.code), 'mocks');
+    const mockPath = path.join(mockDir, `${mockName}.json`);
 
     if (!(await fs.exists(mockPath))) {
       throw new Error(context.i18n.t('mock_with_name_not_defined', { functionName, mockName }));
@@ -499,7 +499,6 @@ export class ProjectController {
     }
 
     const fn = _.get(config, ['functions', functionName]);
-
     const mockDir = path.join(path.dirname(fn.handler.code), 'mocks');
     const mockPath = path.join(mockDir, `${name}.json`);
 
