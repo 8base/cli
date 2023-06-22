@@ -186,8 +186,8 @@ export default {
     /**
      * Logs related messages
      */
-    logs_usage: 'COMMAND\n  8base logs [OPTIONS]\n\nDESCRIPTION\n  Shows logs for the functions',
-    logs_describe: 'Shows logs for the functions.',
+    logs_usage: 'COMMAND\n  8base logs [OPTIONS]\n\nDESCRIPTION\n  Shows logs for the functions or migrations',
+    logs_describe: 'Shows logs for the functions or migrations.',
     logs_num_describe: 'Number of lines to display',
     logs_name_deprecation: 'Name parameter is now deprecated',
     logs_tail_describe: 'Continually stream logs',

@@ -46,7 +46,7 @@ DESCRIPTION
 USAGE
   8base <command> [OPTIONS]
 
-  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows its parameters and their usage. Optional options are shown in square brackets.
+  Use 8base command \`--help\` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows its parameters and their usage. Optional options are shown in square brackets.
 
 COMMANDS
   8base backup <command>       Backup commands.
@@ -62,7 +62,7 @@ COMMANDS
   8base invoke-local <name>    Invokes the custom function in the local development workspace.
   8base login                  Authenticates the command line user by letting them log into an 8base account.
   8base logout                 Clears local login credentials and invalidates API session.
-  8base logs [name]            Shows logs for the functions.
+  8base logs [name]            Shows logs for the functions or migrations.
   8base migration <command>    Migration commands.
   8base package                Package 8base application without deploying it.
   8base project <command>      Project-related commands.

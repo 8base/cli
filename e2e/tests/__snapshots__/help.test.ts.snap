@@ -23,7 +23,7 @@ COMMANDS
   8base invoke-local <name>    Invokes the custom function in the local development workspace.
   8base login                  Authenticates the command line user by letting them log into an 8base account.
   8base logout                 Clears local login credentials and invalidates API session.
-  8base logs [name]            Shows logs for the functions.
+  8base logs [name]            Shows logs for the functions or migrations.
   8base migration <command>    Migration commands.
   8base package                Package 8base application without deploying it.
   8base project <command>      Project-related commands.
@@ -438,7 +438,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'logs
   8base logs [OPTIONS]
 
 DESCRIPTION
-  Shows logs for the functions
+  Shows logs for the functions or migrations
 
 POSITIONALS
   name  Name parameter is now deprecated  [deprecated] [string]
