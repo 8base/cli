@@ -6,7 +6,7 @@
     "graphql-request": "^6.1.0"
   },
   "devDependencies": {
-    "@8base/functions-types": "^2.0.0",
+    "@8base/functions-types": "^2.0.1",
     "@types/node": "^14.18.46"
   }
 }
