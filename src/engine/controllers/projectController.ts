@@ -393,7 +393,7 @@ export class ProjectController {
       silent,
     );
 
-    const functionTemplatePath = FunctionUtils.resolveTemplatePath(context, type, name, options);
+    const functionTemplatePath = FunctionUtils.resolveTemplatePath(context, type, options);
 
     processTemplate(
       context,
@@ -511,11 +511,18 @@ export class ProjectController {
       );
     }
 
+    const type: ExtensionType = fn.type?.split('.')[0];
+    const triggerType: TriggerType = fn.type?.split('.')[1];
+    const triggerOperation: TriggerOperation = fn.operation?.split('.')[1];
+
     processTemplate(
       context,
       {
         dirPath: path.join(projectPath, mockDir),
-        templatePath: context.config.mockTemplatePath,
+        templatePath: path.join(
+          FunctionUtils.resolveTemplatePath(context, type, { operation: triggerOperation, type: triggerType }),
+          'mocks',
+        ),
       },
       { silent },
       { mockName: name },
@@ -581,7 +588,7 @@ const processTemplate = (
 
     let fileName = file.replace(/\.ejs$/, '');
 
-    fileName = fileName.replace('mockName', _.get(options, 'mockName'));
+    fileName = fileName.replace('request', _.get(options, 'mockName'));
 
     fs.writeFileSync(path.resolve(dirPath, fileName), content);
 
@@ -654,7 +661,7 @@ namespace FunctionUtils {
 
   /**
    *
-   * @param type "resolve", "trigger.before", "trigger.after", "subscription", "webhook"
+   * @param type "resolver", "trigger.before", "trigger.after", "task", "webhook"
    * @param functionName
    * @return FunctionType
    */
@@ -675,12 +682,7 @@ namespace FunctionUtils {
     return type === ExtensionType.trigger ? _.camelCase(`${options.type}_${name}_${options.operation}`) : name;
   };
 
-  export const resolveTemplatePath = (
-    context: Context,
-    type: string,
-    name: string,
-    options: FunctionDeclarationOptions,
-  ) => {
+  export const resolveTemplatePath = (context: Context, type: string, options: FunctionDeclarationOptions) => {
     const pathParts = [type];
 
     if (type === ExtensionType.trigger) {
