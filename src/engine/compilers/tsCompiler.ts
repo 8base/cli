@@ -14,7 +14,7 @@ export class TypescriptCompiler implements ICompiler {
   }
 
   async compile(buildDir: string): Promise<string[]> {
-    this.context.logger.debug('compile files count = ' + this.files.length);
+    this.context.logger.debug(`compile files count = ${this.files.length}`);
     const program = ts.createProgram(this.files, this.config(buildDir));
 
     const emitResult = program.emit();

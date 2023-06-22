@@ -6,7 +6,7 @@
 # https://docs.8base.com/projects/backend/custom-functions/resolvers
 #
 <%
-  const resultType = _.upperFirst(_.camelCase(functionName + ' result'));
+  const resultType = _.upperFirst(_.camelCase(`${functionName} result`));
 -%>
 type <%= resultType %> {
   result: String!
