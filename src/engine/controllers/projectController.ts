@@ -476,7 +476,7 @@ export class ProjectController {
     }
 
     const fn = _.get(config, ['functions', functionName]);
-    const mockDir = path.join(path.dirname(fn.handler.code), 'mocks');
+    const mockDir = path.join(path.dirname(FunctionUtils.resolveHandler(functionName, fn.handler)), 'mocks');
     const mockPath = path.join(mockDir, `${mockName}.json`);
 
     if (!(await fs.exists(mockPath))) {
@@ -499,7 +499,7 @@ export class ProjectController {
     }
 
     const fn = _.get(config, ['functions', functionName]);
-    const mockDir = path.join(path.dirname(fn.handler.code), 'mocks');
+    const mockDir = path.join(path.dirname(FunctionUtils.resolveHandler(functionName, fn.handler)), 'mocks');
     const mockPath = path.join(mockDir, `${name}.json`);
 
     if (await fs.exists(mockPath)) {
@@ -618,7 +618,7 @@ namespace ResolverUtils {
 
 namespace FunctionUtils {
   export function resolveHandler(name: string, handler: any): string {
-    if (_.isString(handler.code)) {
+    if (_.isString(handler?.code)) {
       return handler.code;
     }
     throw new InvalidConfiguration(
@@ -659,7 +659,7 @@ namespace FunctionUtils {
    * @return FunctionType
    */
   export function resolveFunctionType(type: string, functionName: string): ExtensionType {
-    const funcType = type.split('.')[0];
+    const funcType = type?.split('.')[0];
     const resolvedType = (<any>ExtensionType)[funcType];
     if (_.isNil(resolvedType)) {
       throw new InvalidConfiguration(
