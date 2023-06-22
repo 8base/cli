@@ -28,9 +28,9 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, ResolverEvent, ResolverResponse, ResolverFunction } from '@8base/functions-types';
+import { FunctionContext, ResolverFunctionEvent, ResolverResponse, ResolverFunction } from '@8base/functions-types';
 
-type ResolverInput = ResolverEvent<{ foo: string }>;
+type ResolverInput = ResolverFunctionEvent<{ foo: string }>;
 type ResolverOutput = ResolverResponse<{ result: string }>;
 
 const resolver: ResolverFunction = async (event: ResolverInput, ctx: FunctionContext): ResolverOutput => {
