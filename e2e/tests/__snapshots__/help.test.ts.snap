@@ -102,11 +102,10 @@ DESCRIPTION
   Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.
 
 OPTIONS
-  -d, --debug      Turn on debug logs  [boolean]
-  -h, --help       Show help  [boolean]
-  -p, --plugins    The list of plugins to deploy  [array]
-  -f, --functions  The list of functions to deploy  [array]
-  -m, --mode       Deploy mode  [string] [choices: "FULL", "ONLY_PLUGINS", "ONLY_PROJECT", "FUNCTIONS", "MIGRATIONS"] [default: "ONLY_PROJECT"]"
+  -d, --debug    Turn on debug logs  [boolean]
+  -h, --help     Show help  [boolean]
+  -p, --plugins  The list of plugins to deploy  [array]
+  -m, --mode     Deploy mode  [string] [choices: "FULL", "ONLY_PLUGINS", "ONLY_PROJECT", "MIGRATIONS"] [default: "ONLY_PROJECT"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'describe' ]\`. 1`] = `
@@ -458,7 +457,7 @@ Migration commands.
 COMMANDS
   8base migration commit    Commits migrations and/or Custom Logic from your local project to 8base
   8base migration generate  Generates local migration files based on changes in your environment
-  8base migration status    Displays migrations which can be committed to target environment
+  8base migration status    Displays migrations which would be committed to target environment
 
 OPTIONS
   -d, --debug  Turn on debug logs  [boolean]
