@@ -83,7 +83,6 @@ export default {
     deploy_describe:
       'Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.',
     deploy_plugins_describe: 'The list of plugins to deploy',
-    deploy_functions_describe: 'The list of functions to deploy',
     deploy_mode_describe: 'Deploy mode',
 
     /**
@@ -393,7 +392,7 @@ export default {
     /**
      * Migration status related messages
      */
-    migration_status_describe: 'Displays migrations which can be committed to target environment',
+    migration_status_describe: 'Displays migrations which would be committed to target environment',
     migration_status_usage:
       'COMMAND\n  8base migration status\n\nDESCRIPTION\n Shows the difference between your local migration files and any migrations which have been already committed to target environment.',
     migration_status_in_progress: 'Resolve status...',
