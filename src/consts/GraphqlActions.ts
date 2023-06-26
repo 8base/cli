@@ -114,8 +114,8 @@ export const GraphqlActions = {
 
 export const GraphqlAsyncActions = {
   environmentBranch: `
-    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode) {
-      system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
+    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode, $force: Boolean) {
+      system { async: environmentBranch(name: $environmentName mode: $mode force: $force) { sessionId } }
     }`,
   environmentDelete: `
     mutation delete($environmentName: String!) {

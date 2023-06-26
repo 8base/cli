@@ -1,5 +1,5 @@
 import { BuildController } from '../../controllers/buildController';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { Context } from '../../../common/context';
@@ -7,7 +7,7 @@ import { translations } from '../../../common/translations';
 
 export default {
   command: 'package',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: {}, context: Context) => {
     context.spinner.start(context.i18n.t('package_progress'));
 
     context.initializeProject();

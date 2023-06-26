@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
@@ -7,8 +7,8 @@ import { executeAsync } from '../../../../common/execute';
 
 export default {
   command: 'create',
-  handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+  handler: async (params: {}, context: Context) => {
+    await ProjectConfigurationState.expectConfigured(context);
     context.spinner.start(context.i18n.t('backup_create_in_progress'));
     await executeAsync(context, GraphqlAsyncActions.backupCreate, { name: context.workspaceConfig.environmentName });
     context.spinner.stop();

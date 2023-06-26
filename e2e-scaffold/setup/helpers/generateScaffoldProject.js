@@ -20,12 +20,7 @@ const generateScaffoldProject = async () => {
 
     fs.writeFileSync(configPath, mockConfig);
 
-    const { stdout: loginStdout } = await execa('node', [
-      './dist',
-      'login',
-      `--email=${E2E_SCAFFOLD_EMAIL}`,
-      `--password=${E2E_SCAFFOLD_PASSWORD}`,
-    ]);
+    await execa('node', ['./dist', 'login', `--email=${E2E_SCAFFOLD_EMAIL}`, `--password=${E2E_SCAFFOLD_PASSWORD}`]);
 
     await execa('rm', ['-rf', 'temp']);
     await execa('mkdir', ['temp']);

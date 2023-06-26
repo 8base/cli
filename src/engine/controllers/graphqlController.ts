@@ -3,9 +3,6 @@ import * as fs from 'fs';
 import { FieldDefinitionNode, parse } from 'graphql';
 import { ObjectTypeExtensionNode } from 'graphql/language/ast';
 import { GraphQLFunctionType } from '../../interfaces/Extensions';
-import { ProjectDefinition } from '../../interfaces/Project';
-import { makeExecutableSchema } from 'graphql-tools';
-import { rootGraphqlSchema } from '../../consts/RootSchema';
 
 export class GraphqlController {
   static loadSchema(schemaPaths: string[], predefineSchema: string = ''): string {
@@ -21,8 +18,8 @@ export class GraphqlController {
 
   /**
    *
-   * @param project
    * @return { functionName: "Query/Mutation" }
+   * @param gqlSchema
    */
   static defineGqlFunctionsType(gqlSchema: string): { [functionName: string]: GraphQLFunctionType } {
     // bad solution, I think
@@ -48,26 +45,10 @@ export class GraphqlController {
   }
 
   /**
-   *
-   * @param project
-   */
-
-  static validateSchema(project: ProjectDefinition) {
-    // TODO: add mutations and queries
-    makeExecutableSchema({
-      typeDefs: project.gqlSchema + rootGraphqlSchema(),
-      resolvers: {
-        Mutation: {},
-        Query: {},
-      },
-    });
-  }
-
-  /**
    * private functions
    */
 
-  private static processFields(fields: FieldDefinitionNode[]): string[] {
+  private static processFields(fields: ReadonlyArray<FieldDefinitionNode>): string[] {
     return _.transform(
       fields,
       (res: any[], f: any) => {

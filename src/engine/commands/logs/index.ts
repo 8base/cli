@@ -1,11 +1,13 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as _ from 'lodash';
 import chalk from 'chalk';
-import { DateTime } from 'luxon';
 
 import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { translations } from '../../../common/translations';
+import { Utils } from '../../../common/utils';
+
+type LogsParams = { name: string; num: number; tail?: boolean };
 
 export enum LogTagType {
   ERROR = 'ERROR',
@@ -37,27 +39,26 @@ const beautifyLogLine = (line: string) => {
   if (/^START RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/.test(line)) {
     line = line.replace(
       /^START RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/,
-      (substr: string, id: string, text: string) => {
-        return printRequestId(id) + ` ${printTag(LogTagType.START)} ` + chalk.dim(text);
-      },
+      (substr: string, id: string, text: string) =>
+        `${printRequestId(id)} ${printTag(LogTagType.START)} ${chalk.dim(text)}`,
     );
   }
 
   if (/^REPORT RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/.test(line)) {
     line = line.replace(
       /^REPORT RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/,
-      (substr: string, id: string, text: string) => {
-        return printRequestId(id) + ` ${printTag(LogTagType.REPORT)} ` + chalk.green(text);
-      },
+      (substr: string, id: string, text: string) =>
+        `${printRequestId(id)} ${printTag(LogTagType.REPORT)} ${chalk.green(text)}`,
     );
 
     line += '\n';
   }
 
   if (/^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/.test(line)) {
-    line = line.replace(/^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/, (substr: string, id: string) => {
-      return printRequestId(id) + ` ${printTag(LogTagType.END)}`;
-    });
+    line = line.replace(
+      /^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/,
+      (substr: string, id: string) => `${printRequestId(id)} ${printTag(LogTagType.END)}`,
+    );
   }
 
   if (
@@ -72,13 +73,9 @@ const beautifyLogLine = (line: string) => {
           text = JSON.stringify(JSON.parse(text), null, 2);
         } catch (e) {}
 
-        return (
-          printRequestId(id) +
-          ' ' +
-          printTag(LogTagType.ERROR) +
-          chalk.red(` Datetime: ${DateTime.fromISO(dt).toFormat('F')}\n`) +
-          text
-        );
+        return `${printRequestId(id)} ${printTag(LogTagType.ERROR)}${chalk.red(
+          ` Datetime: ${new Date(dt).toLocaleString()}\n`,
+        )}${text}`;
       },
     );
   }
@@ -91,13 +88,9 @@ const beautifyLogLine = (line: string) => {
           text = JSON.stringify(JSON.parse(text), null, 2);
         } catch (e) {}
 
-        return (
-          printRequestId(id) +
-          ' ' +
-          printTag(LogTagType.INFO) +
-          chalk.cyan(` Datetime: ${DateTime.fromISO(dt).toFormat('F')} \n`) +
-          text
-        );
+        return `${printRequestId(id)} ${printTag(LogTagType.INFO)}${chalk.cyan(
+          ` Datetime: ${new Date(dt).toLocaleString()} \n`,
+        )}${text}`;
       },
     );
   }
@@ -112,10 +105,6 @@ const printLogs = (logs: string[]) => {
       // eslint-disable-next-line no-console
       console.log(line);
     });
-};
-
-const sleep = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 let lastMessage: string = '';
@@ -181,20 +170,20 @@ const readLogs = async (functionName: string, context: Context) => {
       context.spinner.start(translations.i18n.t('logs_tail_wait'));
     }
 
-    await sleep(1000);
+    await Utils.sleep(1000);
 
     attempt = attempt + 1;
   }
 };
 
 export default {
-  command: 'logs [name]',
-  handler: async (params: any, context: Context) => {
-    if (params.n > 100) {
-      params.n = 100;
+  command: 'logs <name>',
+  handler: async (params: LogsParams, context: Context) => {
+    if (params.num > 100) {
+      params.num = 100;
     }
 
-    if (params['t']) {
+    if (params.tail) {
       return await readLogs(params.name, context);
     }
 
@@ -202,7 +191,7 @@ export default {
 
     const result = await context.request(GraphqlActions.logs, {
       functionName: params.name,
-      limit: params.n,
+      limit: params.num,
     });
     context.spinner.stop();
 
@@ -216,17 +205,19 @@ export default {
         describe: translations.i18n.t('logs_name_describe'),
         type: 'string',
       })
-      .demandOption('name')
       .option('num', {
         alias: 'n',
         default: 10,
         describe: translations.i18n.t('logs_num_describe'),
         type: 'number',
+        requiresArg: true,
+        conflicts: 'tail',
       })
       .option('tail', {
         alias: 't',
         describe: translations.i18n.t('logs_tail_describe'),
         type: 'boolean',
+        conflicts: 'num',
       });
   },
 };

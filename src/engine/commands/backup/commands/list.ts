@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
@@ -9,8 +9,8 @@ const BACKUP_HEADER = ['Name', 'Size (Mb)'];
 
 export default {
   command: 'list',
-  handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+  handler: async (params: {}, context: Context) => {
+    await ProjectConfigurationState.expectConfigured(context);
     const res = await context.request(GraphqlActions.backupList);
     context.logger.info(table([BACKUP_HEADER, ...res.system.backups.items.map((i: any) => [i.name, i.size])]));
   },

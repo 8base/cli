@@ -1,15 +1,17 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { Interactive } from '../../../../common/interactive';
 import { translations } from '../../../../common/translations';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 
+type SetParams = { environmentName?: string };
+
 export default {
   command: 'set',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: SetParams, context: Context) => {
     let { environmentName } = params;
-    ProjectConfigurationState.expectConfigured(context);
+    await ProjectConfigurationState.expectConfigured(context);
 
     if (!environmentName) {
       const environments = await context.getEnvironments();
@@ -27,7 +29,7 @@ export default {
 
       const environment = environments.find(env => env.name === environmentName);
       if (!environment) {
-        throw new Error(translations.i18n.t('environment_set_doesnt_exit'));
+        throw new Error(translations.i18n.t('environment_set_doesnt_exit', { name: environmentName }));
       }
     }
 
@@ -41,5 +43,6 @@ export default {
       alias: 'n',
       describe: translations.i18n.t('environment_set_environment_name_describe'),
       type: 'string',
+      requiresArg: true,
     }),
 };

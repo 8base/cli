@@ -1,11 +1,11 @@
-declare namespace NodeJS {
-  export interface Global {
-    asUser: Function;
-    testScreenshot: any;
-    initPage: Function;
-    __BROWSER__: { [key: string]: any };
-    __BROWSER_CONTEXT__: { [key: string]: any };
-  }
+export {};
+
+declare global {
+  var asUser: Function;
+  var testScreenshot: any;
+  var initPage: Function;
+  var __BROWSER__: { [key: string]: any };
+  var __BROWSER_CONTEXT__: { [key: string]: any };
 }
 
 declare namespace jest {

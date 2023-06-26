@@ -2,11 +2,6 @@ import * as _ from 'lodash';
 import { UserDataStorage } from './userDataStorage';
 import { StorageParameters } from '../consts/StorageParameters';
 
-type Workspace = {
-  name: string;
-  id: string;
-};
-
 export class User {
   private static storage = UserDataStorage;
 

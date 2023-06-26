@@ -1,5 +1,6 @@
-import * as execa from 'execa';
+import execa from 'execa';
 import { stopScaffoldProject } from './stopScaffoldProject';
+import { Utils } from '../../../src/common/utils';
 
 export const startScaffoldProject = async () => {
   try {
@@ -11,9 +12,7 @@ export const startScaffoldProject = async () => {
     });
     npmStart.unref();
 
-    await new Promise(resolve => {
-      setTimeout(() => resolve(), 20000);
-    });
+    await Utils.sleep(20000);
   } catch (err) {
     console.log(err);
   }

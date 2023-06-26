@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as i18next from 'i18next';
-import * as Ora from 'ora';
+import Ora from 'ora';
 import * as path from 'path';
 import * as winston from 'winston';
-import * as yaml from 'yaml';
+import * as yaml from 'js-yaml';
 import chalk from 'chalk';
 import { Client } from '@8base/api-client';
 import { TransformableInfo } from 'logform';
@@ -19,7 +19,7 @@ import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
-import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
 
 const pkg = require('../../package.json');
@@ -79,7 +79,7 @@ export class Context {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
 
     if (this.hasWorkspaceConfig()) {
-      return JSON.parse(String(fs.readFileSync(workspaceConfigPath)));
+      return fs.readJSONSync(workspaceConfigPath, { throws: true });
     }
 
     return null;
@@ -100,7 +100,7 @@ export class Context {
 
   set workspaceConfig(value: WorkspaceConfig) {
     const workspaceConfigPath = this.getWorkspaceConfigPath();
-    fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
+    fs.writeJSONSync(workspaceConfigPath, value, { spaces: 2 });
   }
 
   getWorkspaceConfigPath(customPath?: string): string {
@@ -118,10 +118,10 @@ export class Context {
     this.workspaceConfig = _.merge(currentWorkspaceConfig, { environmentName });
   }
 
-  createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): void {
+  async createWorkspaceConfig(value: WorkspaceConfig, customPath?: string): Promise<void> {
     const workspaceConfigPath = this.getWorkspaceConfigPath(customPath);
 
-    fs.writeFileSync(workspaceConfigPath, JSON.stringify(value, null, 2));
+    await fs.writeJSON(workspaceConfigPath, value, { spaces: 2 });
   }
 
   get workspaceId(): string | null {
@@ -152,7 +152,7 @@ export class Context {
     let projectConfig = { functions: {} };
 
     if (this.hasProjectConfig()) {
-      projectConfig = yaml.parse(String(fs.readFileSync(projectConfigPath))) || projectConfig;
+      projectConfig = <ProjectConfig>yaml.load(fs.readFileSync(projectConfigPath, 'utf-8')) || projectConfig;
     }
 
     return projectConfig;
@@ -161,7 +161,7 @@ export class Context {
   set projectConfig(value: ProjectConfig) {
     const projectConfigPath = this.getProjectConfigPath();
 
-    fs.writeFileSync(projectConfigPath, yaml.stringify(value));
+    fs.writeFileSync(projectConfigPath, yaml.dump(value));
   }
 
   getProjectConfigPath(customPath?: string): string {
@@ -175,7 +175,7 @@ export class Context {
   }
 
   resolveMainServerAddress(): string {
-    return this.storage.getValue(StorageParameters.serverAddress) || DEFAULT_REMOTE_ADDRESS;
+    return this.storage.getValue(StorageParameters.serverAddress) || StaticConfig.apiAddress;
   }
 
   get storage(): typeof UserDataStorage {
@@ -262,9 +262,9 @@ export class Context {
 
     if (!address) {
       /*
-              address has to be passed as parameter (workspace list query) or resolved from workspace info
-              another way it's invalid behaviour
-             */
+        address has to be passed as parameter (workspace list query) or resolved from workspace info
+        another way it's invalid behaviour
+     */
       throw new Error(this.i18n.t('configure_error'));
     }
 

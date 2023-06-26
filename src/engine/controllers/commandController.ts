@@ -17,7 +17,13 @@ const NON_PROJECT_COMMANDS = [
   'environment list',
 ];
 
-const ERROR_CODES_TO_PRINT_MESSAGES = [errorCodes.BillingFeatureAccessErrorCode];
+const ERROR_CODES_TO_PRINT_MESSAGES = [
+  errorCodes.BillingFeatureAccessErrorCode,
+  errorCodes.BillingPlanLimitErrorCode,
+  errorCodes.BillingPlanLimitErrorNoEnoughRightsCode,
+  errorCodes.BillingPlanLimitWarningCode,
+  errorCodes.BillingPlanLimitWarningNoEnoughRightsCode,
+];
 
 const hasWorkspaceNotFoundError = (response: any) => {
   const errors = _.get(response, 'errors', []);

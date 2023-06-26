@@ -11,11 +11,8 @@ export default {
      */
     project_created_file: 'Created file {{- path }}',
     project_updated_file: 'Updated file {{- path }}',
-    invalid_syntax: "Invalid syntax, available ['js', 'ts']",
-    error_command_end: '{{command}} failed. Error: {{error}}.',
     '8base_usage':
       'DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows its parameters and their usage. Optional options are shown in square brackets.',
-    inexistent_workspace: 'Inexistent workspace',
     '8base_config_is_missing':
       "We're unable to locate any 8base.yml file! \nMake sure you’re in the root directory of your project and the 8base.yml config file is present.",
     silent_describe: 'Disable printing extra info to the console',
@@ -24,7 +21,7 @@ export default {
     mock_with_name_already_defined:
       'Mock with name {{- mockName }} for the function with name {{- functionName }} already defined',
     non_8base_project_dir:
-      "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry re-runing this command from the root of an existing 8base project or use '8base init' to create a new project.",
+      "The current folder isn't an 8base project, so there is nothing to configure!\n\nTry to rerun this command from the root of an existing 8base project or use '8base init' to create a new project.",
     workspace_not_found:
       'Workspace not found. Try to run `8base configure` to select existing workspace for this project.',
     empty_workspaces: 'No workspaces found. Try to create a new workspace first',
@@ -37,15 +34,13 @@ export default {
     project_info_describe: 'Displays the info about current project.',
     project_info_text:
       'Workspace Id: {{-workspaceId}}\nWorkspace Name: {{-workspaceName}}\nEnvironment: {{-environment}}\nAPI Endpoint: {{-endpoint}}',
-    project_info_cant_find_workspace:
-      "Can't find workspace with {{-workspaceId}} identifier. Looks like you are using different account or project workspace was deleted.",
 
     /**
      * Whoami related messages
      */
-    whoami_usage: 'COMMAND\n  8base whoami\n\nDESCRIPTION\n Displays the current authenticated user.',
-    whoami_describe: 'Displays the current authenticated user.',
-    whoami_text: 'You authenticated as {{-email}} ({{-name}}).',
+    who_am_i_usage: 'COMMAND\n  8base whoami\n\nDESCRIPTION\n Displays the current authenticated user.',
+    who_am_i_describe: 'Displays the current authenticated user.',
+    who_am_i_text: 'You authenticated as {{-email}} ({{-name}}).',
 
     /**
      * Login related messages
@@ -59,10 +54,6 @@ export default {
     login_cli_example: '',
     login_timeout_error: 'Login time out.',
     login_in_progress: 'waiting for authentication...',
-    login_already_note: "Looks like you've already authenticated as {{email}}!",
-    login_choice_title: 'Are you trying to?',
-    login_choice_change_workspace: 'Change your current workspace',
-    login_choice_relogin: 'Login to a different 8base account',
     login_password_warning:
       'Email & password login is only available if you registered using email and password authentication method. You can enable password by signing up again with the same email.',
     login_email_describe: 'User email',
@@ -73,8 +64,9 @@ export default {
      * Describe related messages
      */
     describe_usage:
-      'COMMAND\n  8base describe [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.',
+      'COMMAND\n  8base describe [name] [OPTIONS]\n\nDESCRIPTION\n  Describes your 8base project’s functions and their types through 8base.yml file.',
     describe_describe: 'Describes your 8base project’s functions and their types through 8base.yml file.',
+    describe_name_describe: 'The function name to describe',
     describe_progress: 'describing...',
     describe_empty_resolvers: "You don't have resolvers",
     describe_empty_triggers: "You don't have triggers",
@@ -91,7 +83,6 @@ export default {
     deploy_describe:
       'Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.',
     deploy_plugins_describe: 'The list of plugins to deploy',
-    deploy_functions_describe: 'The list of functions to deploy',
     deploy_mode_describe: 'Deploy mode',
 
     /**
@@ -101,7 +92,6 @@ export default {
       'COMMAND\n  8base configure [OPTIONS]\n\nDESCRIPTION\n  Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_describe: 'Allows you to select a default workspace and retrieve the API endpoint URL.',
     configure_workspace_id_describe: 'The workspace ID of the project',
-    configure_workspace_region_describe: 'The workspace region of the project',
     configure_workspace_host_describe: 'The workspace host of the project',
     configure_select_workspace: 'Select workspace for current project',
     configure_prevent_select_workspace: 'Workspace selection canceled',
@@ -112,7 +102,8 @@ export default {
      * Init related messages
      */
     init_usage:
-      'COMMAND\n  8base init [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.',
+      'COMMAND\n  8base init [name] [OPTIONS]\n\nDESCRIPTION\n  Initializes a new project with example directory structure and custom functions.',
+    init_name_describe: 'The name of the project',
     init_no_dir_example_command: '8base init',
     init_with_dir_example_command: '8base init my-project',
     init_example_no_dir: 'Initializes project in current folder',
@@ -124,12 +115,9 @@ export default {
     init_functions_describe: 'List of functions',
     init_empty_describe: 'Skip examples',
     init_workspace_id_describe: 'The workspace ID of the project',
-    init_workspace_region_describe: 'The workspace region of the project',
     init_workspace_host_describe: 'The workspace host of the project',
     init_select_workspace: 'What workspace does this project belong to?',
     init_prevent_select_workspace: 'Workspace selection canceled',
-    init_workspace_name_label: 'Please enter name for the new workspace',
-    init_prevent_new_workspace: 'Workspace creation canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
     init_canceled: 'Project init canceled',
 
@@ -137,27 +125,27 @@ export default {
      * Invoke related messages
      */
     invoke_usage:
-      'COMMAND\n  8base invoke [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.',
+      'COMMAND\n  8base invoke <name> [OPTIONS]\n\nDESCRIPTION\n  Invokes a custom function in the production workspace.',
     invoke_describe: 'Invokes a custom function in the production workspace.',
     invoke_data_json_describe: 'Input JSON',
     invoke_data_path_describe: 'Path to input JSON',
     invoke_mock_describe: 'Name of the mock request',
-    invoke_name_describe: 'The name of the function',
+    invoke_function_name_describe: 'The name of the function',
     invoke_in_progress: 'invoking...',
     invoke_returns_error: '"{{- name }}" returns an error.',
 
     /**
      * Invoke-local related messages
      */
-    invokelocal_usage:
-      'COMMAND\n  8base invoke-local [name] [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.',
-    invokelocal_describe: 'Invokes the custom function in the local development workspace.',
-    invokelocal_data_json_describe: 'Input JSON',
-    invokelocal_data_path_describe: 'Path to input JSON',
-    invokelocal_mock_describe: 'Name of the mock request',
-    invokelocal_name_describe: 'The name of the function',
-    invokelocal_in_progress: 'invoking...',
-    invokelocal_returns_error: '"{{- name }}" returns an error.',
+    invoke_local_usage:
+      'COMMAND\n  8base invoke-local <name> [OPTIONS]\n\nDESCRIPTION\n  Invokes the custom function in the local development workspace.',
+    invoke_local_describe: 'Invokes the custom function in the local development workspace.',
+    invoke_local_data_json_describe: 'Input JSON',
+    invoke_local_data_path_describe: 'Path to input JSON',
+    invoke_local_mock_describe: 'Name of the mock request',
+    invoke_local_function_name_describe: 'The name of the function',
+    invoke_local_in_progress: 'invoking...',
+    invoke_local_returns_error: '"{{- name }}" returns an error.',
 
     /**
      * Export related messages
@@ -185,7 +173,6 @@ export default {
     import_workspace_describe: 'Custom workspace id',
     import_cant_parse_schema: "Can't parse the schema file.",
     import_file_not_exist: 'Schema file does not exist.',
-    import_schema_different_version: 'Schema file has a different version.',
 
     /**
      * Logout related messages
@@ -199,7 +186,7 @@ export default {
      * Logs related messages
      */
     logs_usage:
-      'COMMAND\n  8base logs [name] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.',
+      'COMMAND\n  8base logs <name> [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.',
     logs_describe: 'Show logs for the function(s).',
     logs_num_describe: 'Number of lines to display',
     logs_name_describe: 'The name of the function',
@@ -221,25 +208,24 @@ export default {
      */
     function_with_name_already_defined: 'Function with name {{- name}} already defined',
     function_with_name_not_defined: 'Function with name {{- name}} not defined',
-    generate_function_grettings:
+    generate_function_success:
       'Boom! Your new {{- name }} function has been successfully generated. To add any required settings, check out its configuration block in your projects 8base.yml file.',
 
     /**
      * Generate app related messages
      */
     generate_app_describe: 'Generates an app skeleton for a specific framework (framework availability: react)',
-    generate_app_usage: '8base generate app [PROJECT_NAME]',
+    generate_app_usage: '8base generate app <name>',
+    generate_app_name: 'The name of the app',
 
     /**
      * Generate scaffold related messages
      */
-    generate_scaffold_usage: '8base generate scaffold [TABLE_NAME] [OPTIONS]',
+    generate_scaffold_usage: '8base generate scaffold <tableName> [OPTIONS]',
+    generate_scaffold_name: 'The name of the table',
     generate_scaffold_describe:
       'Generates CRUD screens for a table in a specific framework (framework availability: react)',
-    generate_scaffold_table_describe: 'Table name',
-    generate_scaffold_template_describe: 'Type of template (crud, create, edit, delete, table, index) ',
     generate_scaffold_depth_describe: 'Depth of the generated query',
-    generate_scaffold_withMeta_describe: 'Include meta fields (createdAt, createdBy, updatedAt)',
     generate_scaffold_table_error: "Can't find a '{{- tableName }}' table",
     generate_scaffold_crud_exist_error: 'CRUD for this table already exist.',
     generate_scaffold_project_file_error:
@@ -252,51 +238,53 @@ export default {
     /**
      * Generate resolver related messages
      */
-    generate_resolver_usage: '8base generate resolver [FUNCTION_NAME] [OPTIONS]',
+    generate_resolver_usage: '8base generate resolver <name> [OPTIONS]',
+    generate_resolver_name: 'The name of the resolver',
     generate_resolver_describe: 'Generator for a custom resolver function.',
 
     /**
      * Generate tasks related messages
      */
-    generate_task_usage: '8base generate task [FUNCTION_NAME] [OPTIONS]',
+    generate_task_usage: '8base generate task <name> [OPTIONS]',
+    generate_task_name: 'The name of the task',
     generate_task_describe: 'Generator for a custom task function.',
     generate_task_schedule_describe: 'Schedule on which the task runs',
-    generate_task_invalid_schedule: 'Invalid schedule option',
 
     /**
      * Generate trigger related messages
      */
-    generate_trigger_usage: '8base generate trigger [FUNCTION_NAME] [OPTIONS]',
+    generate_trigger_usage: '8base generate trigger <name> [OPTIONS]',
+    generate_trigger_name: 'The name of the trigger',
     generate_trigger_describe: 'Generator for a custom trigger function.',
     generate_trigger_type_describe: 'The trigger type',
     generate_trigger_operation_describe: 'Operation that invokes the trigger',
-    generate_trigger_table_name_describe: 'Trigger table name',
-    generate_trigger_invalid_type: 'Invalid trigger type, available types: `before` and `after`',
     generate_trigger_invalid_operation: 'Invalid trigger operation, valid example: `Users.create`',
 
     /**
      * Generate webhook related messages
      */
-    generate_webhook_usage: '8base generate webhook [FUNCTION_NAME] [OPTIONS]',
+    generate_webhook_usage: '8base generate webhook <name> [OPTIONS]',
+    generate_webhook_name: 'The name of the webhook',
     generate_webhook_describe: 'Generator for a custom webhook function.',
     generate_webhook_path_describe: 'Path for the url (https:<endpoint>/<path>)',
     generate_webhook_method_describe: 'HTTP verb to invoke the function ',
-    generate_webhook_invalid_method: 'Invalid HTTP verb',
 
     /**
      * Generate webhook related messages
      */
-    generate_mock_describe: '8base generate mock [FUNCTION_NAME] [OPTIONS]',
+    generate_mock_describe: '8base generate mock <name> [OPTIONS]',
     generate_mock_usage: 'Generator for a mock for the function.',
+    generate_mock_function_name: 'The name of the function',
     generate_mock_name_describe: 'Name of the mock request',
-    generate_mock_grettings: 'Boom! Your new {{- name }} request mock has been successfully generated.',
+    generate_mock_success: '',
 
     /**
      * Generate plugin related messages
      */
-    generate_plugin_usage: '8base generate plugin [PLUGIN_NAME] [OPTIONS]',
+    generate_plugin_usage: '8base generate plugin <name> [OPTIONS]',
+    generate_plugin_name: 'The name of the plugin',
     generate_plugin_describe: 'Generator for a plugin.',
-    generate_plugin_grettings: 'Boom! Your new {{- name }} plugin has been successfully generated.',
+    generate_plugin_success: '',
 
     /**
      * Package related messages
@@ -315,23 +303,6 @@ export default {
       'COMMAND\n  8base backup create [OPTIONS]\n\nDESCRIPTION\n  Creates backup (snapshot) of the currently selected environment.',
     backup_create_describe: 'Creates backup of the environment.',
     backup_create_in_progress: 'Backup in progress...',
-
-    /**
-     * Backup export related messages
-     */
-    environment_backup_export_describe: 'Generate export url for backup.',
-    environment_backup_export_usage: '8base backup export',
-    environment_backup_export_env_name_describe: 'Target environment',
-    environment_backup_export_name_describe: 'Target backup name',
-
-    /**
-     * Backup import related messages
-     */
-    backup_import_in_progress: 'Backup import in progress...',
-    backup_import_describe: 'Enroll external backup to environment.',
-    backup_import_usage: '8base backup import',
-    backup_import_env_name_describe: 'Target environment name.',
-    backup_import_url_describe: 'External backup url.',
 
     /**
      * Backup list related messages
@@ -366,6 +337,8 @@ export default {
     environment_branch_describe: 'Creates branch of the environment.',
     environment_branch_name_describe: 'Name of new environment',
     environment_branch_mode_describe: 'Branching mode',
+    environment_branch_force_describe: 'You can specify force flag to branch without prompt.',
+    environment_branch_canceled: 'Branch environment canceled',
 
     /**
      * Environment delete related messages
@@ -405,11 +378,6 @@ export default {
     migration_force_describe: 'You can specify force flag to commit to master without prompt.',
 
     /**
-     * Migration deploy related messages
-     */
-    migration_deploy_describe: 'Migration deploy',
-
-    /**
      * Migration plan related messages
      */
     migration_generate_dist_describe: 'The folder of migrations',
@@ -423,7 +391,7 @@ export default {
     /**
      * Migration status related messages
      */
-    migration_status_describe: 'Displays migrations which can be committed to target environment',
+    migration_status_describe: 'Displays migrations which would be committed to target environment',
     migration_status_usage:
       'COMMAND\n  8base migration status\n\nDESCRIPTION\n Shows the difference between your local migration files and any migrations which have been already committed to target environment.',
     migration_status_in_progress: 'Resolve status...',
@@ -437,18 +405,10 @@ export default {
     environment_show_text: 'Environment: {{-environment}}',
 
     /**
-     * Migration apply related messages
-     */
-    migration_apply_in_progress: 'Migration apply in progress',
-    migration_apply_describe: 'Migration apply',
-
-    /**
      * Plugin related messages
      */
-    plugin_describe: 'Plugins management commands.',
-
     plugin_install_describe: 'Install plugin to the project.',
-    plugin_install_usage: 'COMMAND\n  8base plugin install [name]\n\nDESCRIPTION\n  Install plugin to the project.',
+    plugin_install_usage: 'COMMAND\n  8base plugin install <name>\n\nDESCRIPTION\n  Install plugin to the project.',
     plugin_install_name_describe: 'The name of the plugin',
     plugin_install_cant_find: "Can't find plugin with name {{- name }}",
     plugin_install_cant_download: "Can't download plugin with name {{- name }}",
@@ -457,7 +417,7 @@ export default {
     plugins_with_name_already_defined: 'Plugin with name {{- name }} already defined',
 
     plugin_remove_describe: 'Remove plugin from the project.',
-    plugin_remove_usage: 'COMMAND\n  8base plugin remove [name]\n\nDESCRIPTION\n  Remove plugin from the project.',
+    plugin_remove_usage: 'COMMAND\n  8base plugin remove <name>\n\nDESCRIPTION\n  Remove plugin from the project.',
     plugin_remove_name_describe: 'The name of the plugin',
     plugin_successfully_remove: 'Plugin {{- name }} successfully removed from your project.',
     plugin_remove_plugin_not_found: 'Plugin {{- name }} not found in your project.',

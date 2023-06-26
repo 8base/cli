@@ -1,13 +1,13 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import chalk from 'chalk';
 import { table } from 'table';
-import * as changeCase from 'change-case';
 import * as _ from 'lodash';
-
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { Colors } from '../../../consts/Colors';
+
+type DescribeParams = { name?: string };
 
 const RESOLVERS_HEADER = ['Name', 'Description', 'Type'];
 const TRIGGERS_HEADER = ['Name', 'Description', 'Type', 'Operation', 'Table'];
@@ -16,7 +16,7 @@ const TASKS_HEADER = ['Name', 'Description', 'Schedule'];
 
 export default {
   command: 'describe [name]',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: DescribeParams, context: Context) => {
     context.initializeProject();
 
     context.spinner.start(context.i18n.t('describe_progress'));
@@ -30,8 +30,7 @@ export default {
 
       if (fn) {
         Object.keys(fn).forEach(name => {
-          // @ts-ignore
-          context.logger.info(`${chalk.hex(Colors.yellow)(`${changeCase.title(name)}:`)} ${fn[name]}`);
+          context.logger.info(`${chalk.hex(Colors.yellow)(`${_.startCase(name)}:`)} ${fn[name]}`);
         });
       } else {
         throw new Error(translations.i18n.t('describe_function_not_found', { name: params.name }));
@@ -112,7 +111,9 @@ export default {
     }
   },
   describe: translations.i18n.t('describe_describe'),
-  builder: (args: yargs.Argv): yargs.Argv => {
-    return args.usage(translations.i18n.t('describe_usage'));
-  },
+  builder: (args: yargs.Argv): yargs.Argv =>
+    args.usage(translations.i18n.t('describe_usage')).positional('name', {
+      describe: translations.i18n.t('describe_name_describe'),
+      type: 'string',
+    }),
 };

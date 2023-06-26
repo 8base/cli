@@ -1,4 +1,5 @@
-import { Page } from 'puppeteer';
+import { ElementHandle, Page } from 'puppeteer';
+import { Utils } from '../../src/common/utils';
 
 let page: Page;
 
@@ -12,7 +13,7 @@ it('As a user, I can login to the app', async () => {
   await page.goto(E2E_SCAFFOLD_APP_URL, { waitUntil: 'networkidle2' });
 
   await page.waitForXPath(`//*[@id="auth0-lock-container-1"]`);
-  await page.waitFor(5000);
+  await Utils.sleep(5000);
 
   const emailInput = await page.waitForXPath(`//input[@name="email"]`);
   await emailInput.type(E2E_SCAFFOLD_EMAIL);
@@ -21,7 +22,7 @@ it('As a user, I can login to the app', async () => {
   await passwordInput.type(E2E_SCAFFOLD_PASSWORD);
 
   const buttonSubmit = await page.waitForXPath(`//button[@name="submit"]`);
-  await buttonSubmit.click();
+  await (buttonSubmit as ElementHandle).click();
 
   await page.waitForXPath(`//div[@id="root"]//span[contains(text(), "example")]`);
 });
