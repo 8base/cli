@@ -46,14 +46,12 @@ DESCRIPTION
 USAGE
   8base <command> [OPTIONS]
 
-  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each
-  command shows its parameters and their usage. Optional options are shown in square brackets.
+  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows its parameters and their usage. Optional options are shown in square brackets.
 
 COMMANDS
   8base backup <command>       Backup commands.
   8base configure              Allows you to select a default workspace and retrieve the API endpoint URL.
-  8base deploy                 Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory
-                               of your local 8base project to use this command.
+  8base deploy                 Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.
   8base describe [name]        Describes your 8base project’s functions and their types through 8base.yml file.
   8base environment <command>  Environment commands.
   8base export                 Exports current workspace data schema
@@ -64,7 +62,7 @@ COMMANDS
   8base invoke-local <name>    Invokes the custom function in the local development workspace.
   8base login                  Authenticates the command line user by letting them log into an 8base account.
   8base logout                 Clears local login credentials and invalidates API session.
-  8base logs <name>            Show logs for the function(s).
+  8base logs [name]            Shows logs for the functions or migrations.
   8base migration <command>    Migration commands.
   8base package                Package 8base application without deploying it.
   8base project <command>      Project-related commands.
