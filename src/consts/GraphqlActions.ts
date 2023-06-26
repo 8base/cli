@@ -45,18 +45,15 @@ export const GraphqlActions = {
       responseData
     }
   }`,
-  logs: `query Logs(
-    $functionName: String!,
-    $limit: Int,
-    $startTime: DateTime,
-    $endTime: DateTime){
-
-      logs (
-        functionName:$functionName
-        limit: $limit
-        startTime: $startTime
-        endTime: $endTime
-      )
+  logs: `query Logs($limit: Int, $startTime: DateTime, $resource: String) {
+    system {
+      logs: logsListFiltered(limit: $limit, startTime: $startTime, resource: $resource) {
+        items {
+          message
+          timestamp
+        }
+      }
+    }
   }`,
   asyncSessionStatus: `
     query status($sessionId: String!)  {
