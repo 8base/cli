@@ -1,30 +1,31 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-// @ts-ignore
-import * as simplegit from 'simple-git/promise';
+import { simpleGit } from 'simple-git';
 import { translations } from '../../../../common/translations';
 import { Context } from '../../../../common/context';
 import { StorageParameters } from '../../../../consts/StorageParameters';
 import { readFs, writeFs } from '../../../../common/memfs';
 import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
+import { StaticConfig } from '../../../../config';
 
-type AppParams = {
-  _: string[];
-  appName: string;
-};
+type AppGenerateParams = { name: string };
 
 export default {
-  command: 'app <appName>',
+  command: 'app <name>',
   describe: translations.i18n.t('generate_app_describe'),
-  builder: (yargs: yargs.Argv): yargs.Argv => yargs.usage(translations.i18n.t('generate_app_usage')),
-  handler: async (params: AppParams, context: Context) => {
+  builder: (yargs: yargs.Argv): yargs.Argv =>
+    yargs.usage(translations.i18n.t('generate_app_usage')).positional('name', {
+      describe: translations.i18n.t('generate_app_name'),
+      type: 'string',
+    }),
+  handler: async (params: AppGenerateParams, context: Context) => {
     if (!context.user.isAuthorized()) {
       throw new Error(context.i18n.t('logout_error'));
     }
 
-    const { appName } = params;
-    const git = simplegit('.');
+    const { name: appName } = params;
+    const git = simpleGit('.');
 
     const workspaceId = context.workspaceId;
 
@@ -45,7 +46,7 @@ export default {
     const replacedFsObject = replaceInitialApp(
       fsObject,
       {
-        endpoint: `https://api.8base.com/${workspaceId}`,
+        endpoint: `${StaticConfig.apiAddress}/${workspaceId}`,
         authClientId: context.storage.getValue(StorageParameters.authClientId),
         authDomain: context.storage.getValue(StorageParameters.authDomain),
         appName,

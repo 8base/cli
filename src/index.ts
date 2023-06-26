@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import latestVersion from 'latest-version';
 import chalk from 'chalk';
 
@@ -10,8 +10,8 @@ import { translations, Translations } from './common/translations';
 
 const pkg = require('../package.json');
 
-const start = (translations: Translations) => {
-  const argv = yargs
+const start = async (translations: Translations) => {
+  const argv = await yargs
     .scriptName('8base')
     .usage(translations.i18n.t('8base_usage'))
     .commandDir(StaticConfig.commandsDir, {
@@ -52,6 +52,7 @@ const start = (translations: Translations) => {
       'Examples:': 'EXAMPLES',
       'Commands:': 'COMMANDS',
       'Options:': 'OPTIONS',
+      'Positionals:': 'POSITIONALS',
     })
     .wrap(yargs.terminalWidth()).argv;
 
@@ -72,6 +73,6 @@ translations
       }
     } catch (e) {}
 
-    start(translations);
+    await start(translations);
   })
   .catch(err => console.error(err.message));

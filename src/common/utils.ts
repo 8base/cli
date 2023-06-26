@@ -1,19 +1,14 @@
 import * as path from 'path';
 import 'isomorphic-fetch';
-import * as request from 'request';
 import * as fs from 'fs';
-import * as archiver from 'archiver';
-import { Interactive } from './interactive';
 import * as _ from 'lodash';
 import { Context } from './context';
 import { Readable } from 'stream';
 import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
-
-const MemoryStream = require('memorystream');
-const streamToBuffer = require('stream-to-buffer');
-
-type workspace = { name: string; id: string };
+import archiver from 'archiver';
+import MemoryStream from 'memorystream';
+import { HttpError } from '../errors';
 
 export namespace Utils {
   export const undefault = (m: any) => {
@@ -48,39 +43,27 @@ export namespace Utils {
       }
 
       fs.writeFileSync(fullName, data);
-      context.logger.debug('install file = ' + fullName);
+      context.logger.debug(`install file = ${fullName}`);
     });
     return targetDirectory;
   };
 
   export const upload = async (url: string, fileStream: Readable, context: Context): Promise<void> => {
     context.logger.debug('start upload file');
-    context.logger.debug('url: ' + url);
+    context.logger.debug(`url: ${url}`);
 
-    return new Promise<void>((resolve, reject) => {
-      streamToBuffer(fileStream, (err: Error, data: any) => {
-        request(
-          {
-            method: 'PUT',
-            url: url,
-            body: data,
-            headers: {
-              'Content-Length': data.length,
-            },
-          },
-          (err: any, res: any, body: any) => {
-            if (err) {
-              return reject(err);
-            }
-            if (res && res.statusCode !== 200) {
-              return reject(new Error(res.body));
-            }
-            context.logger.debug('upload file success');
-            resolve();
-          },
-        );
-      });
-    });
+    const body = fileStream.read();
+    await Utils.checkHttpResponse(
+      fetch(url, {
+        method: 'PUT',
+        body,
+        headers: {
+          'Content-Length': body.length,
+        },
+      }),
+    );
+
+    context.logger.debug('upload file success');
   };
 
   export const archiveToMemory = async (
@@ -97,19 +80,16 @@ export namespace Utils {
       directories.forEach(sourcePath => {
         const source = fs.statSync(sourcePath.source);
         context.logger.debug(
-          'archive files from directory = ' +
-            sourcePath.source +
-            ' dist = ' +
-            sourcePath.dist +
-            ' is file = ' +
-            source.isFile(),
+          `archive files from directory = ${sourcePath.source} dist = ${sourcePath.dist} is file = ${source.isFile()}`,
         );
 
-        source.isFile() ? zip.file(sourcePath.source, {}) : zip.directory(sourcePath.source, sourcePath.dist || false);
+        source.isFile()
+          ? zip.file(sourcePath.source, { name: sourcePath.source })
+          : zip.directory(sourcePath.source, sourcePath.dist || false);
       });
 
       zip.on('error', (err: any) => {
-        context.logger.debug('Error while zipping build: ' + err);
+        context.logger.debug(`Error while zipping build: ${err}`);
         reject(new Error(err));
       });
 
@@ -131,32 +111,6 @@ export namespace Utils {
     });
   };
 
-  export const promptWorkspace = async (workspaces: workspace[], context: Context): Promise<{ id: string }> => {
-    if (_.isEmpty(workspaces)) {
-      throw new Error(context.i18n.t('logout_error'));
-    }
-
-    if (workspaces.length === 1) {
-      return workspaces[0];
-    }
-
-    const result = await Interactive.ask({
-      name: 'workspace',
-      type: 'select',
-      message: 'choose workspace',
-      choices: workspaces.map(workspace => {
-        return {
-          title: workspace.name,
-          value: workspace.id,
-        };
-      }),
-    });
-
-    return {
-      id: result.workspace,
-    };
-  };
-
   export const sleep = (ms: number): Promise<void> => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
@@ -169,18 +123,26 @@ export namespace Utils {
     return url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
   };
 
-  export const commandDirMiddleware = (commandsDirPath: string) => (
-    commandObject: { [key: string]: any },
-    pathName: string,
-  ): Object => {
-    const cmd = commandObject.default || commandObject;
-    const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
+  export const commandDirMiddleware =
+    (commandsDirPath: string) =>
+    (commandObject: { [key: string]: any }, pathName: string): Object => {
+      const cmd = commandObject.default || commandObject;
+      const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
 
-    if (fileDepth <= 2 && !!cmd.command) {
-      return {
-        ...cmd,
-        handler: CommandController.wrapHandler(cmd.handler, translations),
-      };
+      if (fileDepth <= 2 && !!cmd.command) {
+        return {
+          ...cmd,
+          handler: CommandController.wrapHandler(cmd.handler, translations),
+        };
+      }
+    };
+
+  export const checkHttpResponse = async (httpResponse: Promise<Response>): Promise<Response> => {
+    const response = await httpResponse;
+    if (!response.ok) {
+      throw new HttpError(await response.text(), response.status, response);
     }
+
+    return response;
   };
 }

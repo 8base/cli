@@ -1,26 +1,32 @@
-import * as yargs from 'yargs';
-import * as fs from 'fs';
+import yargs from 'yargs';
+import * as fs from 'fs-extra';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { ProjectController } from '../../controllers/projectController';
 
+type InvokeParams = {
+  name: string;
+  'data-json'?: string;
+  'data-path'?: string;
+  mock?: string;
+};
 export default {
-  command: 'invoke [name]',
-  handler: async (params: any, context: Context) => {
+  command: 'invoke <name>',
+  handler: async (params: InvokeParams, context: Context) => {
     context.initializeProject();
 
     context.spinner.start(context.i18n.t('invoke_in_progress'));
 
     let args = null;
 
-    if (params.m) {
-      args = ProjectController.getMock(context, params.name, params.m);
-    } else if (params.p) {
-      args = fs.readFileSync(params.p).toString();
-    } else if (params.j) {
-      args = params.j;
+    if (params.mock) {
+      args = await ProjectController.getMock(context, params.name, params.mock);
+    } else if (params['data-path']) {
+      args = await fs.readFile(params['data-path'], { encoding: 'utf8' });
+    } else if (params['data-json']) {
+      args = params['data-json'];
     }
 
     let resultResponse = null;
@@ -57,7 +63,7 @@ export default {
       context.logger.info(
         JSON.stringify(
           {
-            data: JSON.parse(resultResponse.invoke.responseData),
+            data: JSON.parse(resultResponse?.invoke.responseData),
           },
           null,
           2,
@@ -70,24 +76,31 @@ export default {
     return args
       .usage(translations.i18n.t('invoke_usage'))
       .positional('name', {
-        describe: translations.i18n.t('invokelocal_name_describe'),
+        describe: translations.i18n.t('invoke_function_name_describe'),
         type: 'string',
       })
-      .demandOption('name')
       .option('data-json', {
         alias: 'j',
         describe: translations.i18n.t('invoke_data_json_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('data-path', {
         alias: 'p',
         describe: translations.i18n.t('invoke_data_path_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('mock', {
         alias: 'm',
         describe: translations.i18n.t('invoke_mock_describe'),
         type: 'string',
+        requiresArg: true,
+      })
+      .conflicts({
+        mock: ['data-path', 'data-json'],
+        'data-path': ['mock', 'data-json'],
+        'data-json': ['mock', 'data-path'],
       });
   },
 };

@@ -1,6 +1,7 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
+import * as _ from 'lodash';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { executeAsync, executeDeploy, uploadProject } from '../../../../common/execute';
@@ -12,10 +13,12 @@ import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 import { Interactive } from '../../../../common/interactive';
 import { StaticConfig } from '../../../../config';
 
+type MigrationCommitParams = { mode: CommitMode; force?: boolean; environment?: string; target?: string[] };
+
 export default {
   command: 'commit',
-  handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectHasProject(context);
+  handler: async (params: MigrationCommitParams, context: Context) => {
+    await ProjectConfigurationState.expectHasProject(context);
     context.initializeProject();
 
     const environment = params.environment ? params.environment : context.workspaceConfig.environmentName;
@@ -37,14 +40,16 @@ export default {
       throw new Error(context.i18n.t('migration_commit_in_project_mode'));
     }
 
-    const migrationNames: string[] | undefined = params.target;
+    const migrationNames: string[] = params.target;
 
-    if (migrationNames) {
-      migrationNames.forEach(name => {
-        if (!fs.existsSync(path.join(StaticConfig.rootExecutionDir, 'migrations', name))) {
-          throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
-        }
-      });
+    if (!_.isEmpty(migrationNames)) {
+      await Promise.all(
+        migrationNames.map(async name => {
+          if (!(await fs.exists(path.join(StaticConfig.rootExecutionDir, 'migrations', name)))) {
+            throw new Error(context.i18n.t('migration_commit_file_does_not_exist', { name }));
+          }
+        }),
+      );
     }
 
     const options: RequestOptions = { customEnvironment: environment };
@@ -76,15 +81,18 @@ export default {
         default: CommitMode.FULL,
         type: 'string',
         choices: Object.values(CommitMode),
+        requiresArg: true,
       })
       .option('force', {
         alias: 'f',
         describe: translations.i18n.t('migration_force_describe'),
+        type: 'boolean',
       })
       .option('environment', {
         alias: 'e',
         describe: translations.i18n.t('migration_environment_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('target', {
         alias: 't',

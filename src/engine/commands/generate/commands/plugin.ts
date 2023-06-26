@@ -1,11 +1,11 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { SyntaxType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type ResolverParams = {
+type PluginGenerateParams = {
   name: string;
   mocks: boolean;
   syntax: SyntaxType;
@@ -15,10 +15,10 @@ type ResolverParams = {
 export default {
   command: 'plugin <name>',
 
-  handler: async (params: ResolverParams, context: Context) => {
-    let { name, syntax, silent } = params;
+  handler: async (params: PluginGenerateParams, context: Context) => {
+    let { name, syntax } = params;
 
-    ProjectController.generatePlugin(context, {
+    await ProjectController.generatePlugin(context, {
       name,
       syntax,
     });
@@ -29,12 +29,17 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_plugin_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('generate_plugin_name'),
+        type: 'string',
+      })
       .option('syntax', {
         alias: 's',
         describe: translations.i18n.t('generate_syntax_describe'),
         default: 'ts',
         type: 'string',
         choices: Object.values(SyntaxType),
+        requiresArg: true,
       })
       .option('silent', {
         describe: translations.i18n.t('silent_describe'),

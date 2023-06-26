@@ -13,7 +13,7 @@ init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init empty project. 2`] = `
-Array [
+[
   "testdir_init/8base.yml",
   "testdir_init/package.json",
 ]
@@ -54,7 +54,7 @@ init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init example project. 2`] = `
-Array [
+[
   "",
   "resolvers",
   "tasks",

@@ -1,11 +1,11 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { ExtensionType, SyntaxType } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type ResolverParams = {
+type ResolverGenerateParams = {
   name: string;
   mocks: boolean;
   syntax: SyntaxType;
@@ -15,10 +15,10 @@ type ResolverParams = {
 export default {
   command: 'resolver <name>',
 
-  handler: async (params: ResolverParams, context: Context) => {
+  handler: async (params: ResolverGenerateParams, context: Context) => {
     let { name, mocks, syntax, silent } = params;
 
-    ProjectController.generateFunction(context, {
+    await ProjectController.generateFunction(context, {
       type: ExtensionType.resolver,
       name,
       mocks,
@@ -33,6 +33,10 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_resolver_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('generate_resolver_name'),
+        type: 'string',
+      })
       .option('mocks', {
         alias: 'x',
         describe: translations.i18n.t('generate_mocks_describe'),
@@ -45,6 +49,7 @@ export default {
         default: 'ts',
         type: 'string',
         choices: Object.values(SyntaxType),
+        requiresArg: true,
       })
       .option('silent', {
         describe: translations.i18n.t('silent_describe'),

@@ -14,7 +14,6 @@ export enum DeployModeType {
   full = 'FULL',
   plugins = 'ONLY_PLUGINS',
   project = 'ONLY_PROJECT',
-  functions = 'FUNCTIONS',
   migrations = 'MIGRATIONS',
 }
 

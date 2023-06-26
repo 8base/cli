@@ -1,16 +1,15 @@
 import { Context } from '../../../common/context';
-import * as cuid from 'cuid';
+import * as cuid from '@paralleldrive/cuid2';
+import open from 'open';
 import 'isomorphic-fetch';
 import { SessionInfo } from '../../../interfaces/Common';
 import { Utils } from '../../../common/utils';
 
-const opn = require('opn');
-
 export const webLogin = async (params: any, context: Context): Promise<SessionInfo> => {
   context.spinner.start(context.i18n.t('login_in_progress'));
-  const session = cuid();
+  const session = cuid.createId();
 
-  await opn(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
+  await open(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
 
   const timeoutMs = 2000;
   let retryCount = 150; // 150 * 2s = 300s = 5 min
@@ -18,20 +17,19 @@ export const webLogin = async (params: any, context: Context): Promise<SessionIn
   let res = null;
   while (--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
-    const fetchResult = await fetch(
-      `${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`,
-    );
-
-    if (fetchResult.status === 404) {
-      context.logger.debug(`session not present`);
-      await Utils.sleep(timeoutMs);
-      continue;
+    try {
+      const response = await Utils.checkHttpResponse(
+        fetch(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`),
+      );
+      res = await response.json();
+    } catch (e) {
+      if (e.statusCode === 404) {
+        context.logger.debug(`session not present`);
+        await Utils.sleep(timeoutMs);
+        continue;
+      }
     }
-    if (fetchResult.status !== 200) {
-      throw new Error(await fetchResult.text());
-    }
 
-    res = await fetchResult.json();
     retryCount = 0;
   }
 
