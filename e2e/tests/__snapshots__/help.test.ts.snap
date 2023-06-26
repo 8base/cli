@@ -123,24 +123,7 @@ OPTIONS
   -h, --help   Show help  [boolean]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`[ 'environment' ]\`. 1`] = `
-"8base environment <command>
-
-Environment commands.
-
-COMMANDS
-  8base environment branch  Creates branch of the environment.
-  8base environment delete  Deletes the environment.
-  8base environment list    Lists all the environments of current workspace.
-  8base environment set     Allows you to set the environment of your current project
-  8base environment show    Displays currently selected environment
-
-OPTIONS
-  -d, --debug  Turn on debug logs  [boolean]
-  -h, --help   Show help  [boolean]"
-`;
-
-exports[`As a user, I can use help flag for see help information about \`[ 'environment', 'branch' ]\`. 1`] = `
+exports[`As a user, I can use help flag for see help information about \`environment,branch\`. 1`] = `
 "COMMAND
   8base environment branch
 
