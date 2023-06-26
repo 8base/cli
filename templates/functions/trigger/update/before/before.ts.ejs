@@ -1,10 +1,10 @@
 /**
  * This file was generated using 8base CLI.
  *
- * To learn more about writing custom task functions, visit
+ * To learn more about writing custom trigger functions, visit
  * the 8base documentation at:
  *
- * https://docs.8base.com/projects/backend/custom-functions/tasks
+ * https://docs.8base.com/projects/backend/custom-functions/triggers
  *
  * To update this functions invocation settings, update its configuration block
  * in the projects 8base.yml file:
@@ -13,7 +13,7 @@
  *      ...
  *
  * Data that is sent to the function can be accessed on the event argument at:
- *  event[KEY_NAME]
+ *  event.data[KEY_NAME]
  *
  * There are two ways to invoke this function locally:
  *
@@ -28,8 +28,28 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-module.exports = async (event, ctx) => {
-  return {
-    result: `Task received: ${event.foo}`,
-  };
+import {
+  BeforeUpdateTriggerFunction,
+  BeforeUpdateTriggerFunctionEvent,
+  BeforeUpdateTriggerResponse,
+  FunctionContext,
+} from '@8base/functions-types';
+
+type User = {
+  firstName: string;
+  email: string;
 };
+
+const beforeUpdateTrigger: BeforeUpdateTriggerFunction = async (
+  event: BeforeUpdateTriggerFunctionEvent<User, User>,
+  ctx: FunctionContext,
+): BeforeUpdateTriggerResponse<User> => {
+  // validation
+  if (event.originalObject.email.endsWith('@gmail.com')) {
+    return { errors: [{ message: 'not allowed' }] };
+  }
+  // override data
+  return { data: { ...event.data, firstName: 'overridden by trigger' } };
+};
+
+export default beforeUpdateTrigger;

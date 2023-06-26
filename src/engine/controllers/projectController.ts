@@ -15,15 +15,16 @@ import {
   SyntaxType,
   TriggerOperation,
   TriggerType,
+  WebhookMethod,
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
-import { Context } from '../../common/context';
+import { Context, Plugin, ProjectConfig } from '../../common/context';
 
 type FunctionDeclarationOptions = {
-  operation?: string;
-  method?: string;
+  operation?: TriggerOperation;
+  method?: WebhookMethod;
   path?: string;
-  type?: string;
+  type?: TriggerType;
   schedule?: string;
 };
 
@@ -52,38 +53,54 @@ type PluginGenerationOptions = {
 };
 
 const generateFunctionDeclaration = (
-  { type, name, mocks, syntax }: FunctionGenerationOptions,
+  { type, name, syntax }: FunctionGenerationOptions,
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
-  let declaration = {
-    type,
-    handler: {
-      code: `${dirPath}/handler.${syntax}`,
-    },
-  };
+  switch (type) {
+    case ExtensionType.resolver:
+      return {
+        type,
+        handler: {
+          code: `${dirPath}/handler.${syntax}`,
+        },
+        schema: `${dirPath}/schema.graphql`,
+      };
 
-  if (type === ExtensionType.resolver) {
-    declaration = _.merge(declaration, {
-      schema: `${dirPath}/schema.graphql`,
-    });
-  } else if (type === ExtensionType.task && options.schedule) {
-    declaration = _.merge(declaration, {
-      schedule: options.schedule,
-    });
-  } else if (type === ExtensionType.trigger) {
-    declaration = _.merge(declaration, {
-      type: `trigger.${options.type || 'before'}`,
-      operation: options.operation || 'Users.create',
-    });
-  } else if (type === ExtensionType.webhook) {
-    declaration = _.merge(declaration, {
-      path: options.path || '/webhook',
-      method: options.method || 'POST',
-    });
+    case ExtensionType.task: {
+      const declaration = {
+        type,
+        handler: {
+          code: `${dirPath}/handler.${syntax}`,
+        },
+      };
+      if (options.schedule) {
+        _.assign(declaration, {
+          schedule: options.schedule,
+        });
+      }
+      return declaration;
+    }
+
+    case ExtensionType.trigger:
+      return {
+        handler: {
+          code: `${dirPath}/${options.type}.${syntax}`,
+        },
+        type: `trigger.${options.type}`,
+        operation: `${name}.${options.operation}`,
+      };
+
+    case ExtensionType.webhook:
+      return {
+        type,
+        handler: {
+          code: `${dirPath}/handler.${syntax}`,
+        },
+        path: options.path || '/webhook',
+        method: options.method || 'POST',
+      };
   }
-
-  return declaration;
 };
 
 export class ProjectController {
@@ -95,8 +112,7 @@ export class ProjectController {
     const name = path.basename(context.config.rootExecutionDir);
     context.logger.debug(`start initialize project "${name}"`);
 
-    const projectData = ProjectController.getProjectData(context);
-    const { extensions, gqlSchema } = projectData;
+    const { extensions, gqlSchema } = ProjectController.getProjectData(context);
 
     context.logger.debug('initialize plugins structure');
     const pluginPaths = this.loadConfigFile(context).plugins;
@@ -121,7 +137,13 @@ export class ProjectController {
     };
   }
 
-  static getProjectData(context: Context, projectPath?: string): any {
+  static getProjectData(
+    context: Context,
+    projectPath?: string,
+  ): {
+    gqlSchema: string;
+    extensions: ExtensionsContainer;
+  } {
     context.logger.debug('load main yml file');
     const config = ProjectController.loadConfigFile(context, projectPath);
 
@@ -194,7 +216,7 @@ export class ProjectController {
    * private functions
    */
 
-  private static loadConfigFile(context: Context, projectPath?: string): any {
+  private static loadConfigFile(context: Context, projectPath?: string): ProjectConfig {
     const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
 
     context.logger.debug(`check exist yaml file = ${pathToYmlConfig}`);
@@ -204,7 +226,7 @@ export class ProjectController {
     }
 
     try {
-      return yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'));
+      return <ProjectConfig>yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'));
     } catch (ex) {
       throw new InvalidConfiguration(pathToYmlConfig, ex.message);
     }
@@ -225,8 +247,8 @@ export class ProjectController {
     }
   }
 
-  private static loadExtensions(config: any, projectPath?: string): ExtensionsContainer {
-    return _.reduce<any, ExtensionsContainer>(
+  private static loadExtensions(config: ProjectConfig, projectPath?: string): ExtensionsContainer {
+    return _.reduce(
       config.functions,
       (extensions, data, functionName) => {
         FunctionUtils.validateFunctionDefinition(data, functionName, projectPath);
@@ -263,12 +285,12 @@ export class ProjectController {
               );
             }
 
-            const operation = data.operation.split('.'); // TableName.TriggerType
+            const [tableName, operation] = data.operation.split('.');
 
             extensions.triggers.push({
               name: functionName,
-              operation: TriggerUtils.resolveTriggerOperation(operation[1], functionName),
-              tableName: operation[0],
+              operation: TriggerUtils.resolveTriggerOperation(operation, functionName),
+              tableName,
               functionName,
               type: TriggerUtils.resolveTriggerType(data.type, functionName),
             });
@@ -318,7 +340,7 @@ export class ProjectController {
   static addPluginDeclaration(
     context: Context,
     name: string,
-    declaration: Object,
+    declaration: Plugin,
     projectPath?: string,
     silent?: boolean,
   ) {
@@ -330,7 +352,7 @@ export class ProjectController {
       throw new Error(context.i18n.t('plugins_with_name_already_defined', { name }));
     }
 
-    config.plugins = [...plugins, declaration];
+    config.plugins.push(declaration);
 
     ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
@@ -360,17 +382,18 @@ export class ProjectController {
     { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGenerationOptions,
     options: FunctionDeclarationOptions = {},
   ) {
-    const dirPath = `src/${type}s/${name}`;
+    const dirPath = FunctionUtils.resolveFunctionDir(type, name, options);
+    const functionName = FunctionUtils.resolveFunctionName(type, name, options);
 
     await ProjectController.addFunctionDeclaration(
       context,
-      name,
+      functionName,
       generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
       projectPath,
       silent,
     );
 
-    const functionTemplatePath = path.resolve(context.config.functionTemplatesPath, type);
+    const functionTemplatePath = FunctionUtils.resolveTemplatePath(context, type, options);
 
     processTemplate(
       context,
@@ -379,7 +402,7 @@ export class ProjectController {
         templatePath: functionTemplatePath,
       },
       { syntax, mocks, silent },
-      { functionName: name, type, extendType },
+      { functionName, type, extendType, mockName: 'request' },
     );
 
     if (!silent) {
@@ -452,9 +475,9 @@ export class ProjectController {
       throw new Error(context.i18n.t('function_with_name_not_defined', { name: functionName }));
     }
 
-    const type = _.get(config, ['functions', functionName]).type.match(/^\w+/)[0];
-
-    const mockPath = `src/${type}s/${functionName}/mocks/${mockName}.json`;
+    const fn = _.get(config, ['functions', functionName]);
+    const mockDir = path.join(path.dirname(FunctionUtils.resolveHandler(functionName, fn.handler)), 'mocks');
+    const mockPath = path.join(mockDir, `${mockName}.json`);
 
     if (!(await fs.exists(mockPath))) {
       throw new Error(context.i18n.t('mock_with_name_not_defined', { functionName, mockName }));
@@ -476,10 +499,8 @@ export class ProjectController {
     }
 
     const fn = _.get(config, ['functions', functionName]);
-
-    const type = fn.type.match(/^\w+/)[0];
-
-    const mockPath = `src/${type}s/${functionName}/mocks/${name}.json`;
+    const mockDir = path.join(path.dirname(FunctionUtils.resolveHandler(functionName, fn.handler)), 'mocks');
+    const mockPath = path.join(mockDir, `${name}.json`);
 
     if (await fs.exists(mockPath)) {
       throw new Error(
@@ -490,13 +511,18 @@ export class ProjectController {
       );
     }
 
-    const dirPath = `src/${type}s/${functionName}/mocks`;
+    const type: ExtensionType = fn.type?.split('.')[0];
+    const triggerType: TriggerType = fn.type?.split('.')[1];
+    const triggerOperation: TriggerOperation = fn.operation?.split('.')[1];
 
     processTemplate(
       context,
       {
-        dirPath: path.join(projectPath, dirPath),
-        templatePath: context.config.mockTemplatePath,
+        dirPath: path.join(projectPath, mockDir),
+        templatePath: path.join(
+          FunctionUtils.resolveTemplatePath(context, type, { operation: triggerOperation, type: triggerType }),
+          'mocks',
+        ),
       },
       { silent },
       { mockName: name },
@@ -562,7 +588,7 @@ const processTemplate = (
 
     let fileName = file.replace(/\.ejs$/, '');
 
-    fileName = fileName.replace('mockName', _.get(options, 'mockName'));
+    fileName = fileName.replace('request', _.get(options, 'mockName'));
 
     fs.writeFileSync(path.resolve(dirPath, fileName), content);
 
@@ -599,7 +625,7 @@ namespace ResolverUtils {
 
 namespace FunctionUtils {
   export function resolveHandler(name: string, handler: any): string {
-    if (_.isString(handler.code)) {
+    if (_.isString(handler?.code)) {
       return handler.code;
     }
     throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, `handler is invalid for function "${name}"`);
@@ -629,12 +655,12 @@ namespace FunctionUtils {
 
   /**
    *
-   * @param type "resolve", "trigger.before", "trigger.after", "subscription", "webhook"
+   * @param type "resolver", "trigger.before", "trigger.after", "task", "webhook"
    * @param functionName
    * @return FunctionType
    */
   export function resolveFunctionType(type: string, functionName: string): ExtensionType {
-    const funcType = type.split('.')[0];
+    const funcType = type?.split('.')[0];
     const resolvedType = (<any>ExtensionType)[funcType];
     if (_.isNil(resolvedType)) {
       throw new InvalidConfiguration(
@@ -645,19 +671,36 @@ namespace FunctionUtils {
 
     return <ExtensionType>resolvedType;
   }
+
+  export const resolveFunctionName = (type: ExtensionType, name: string, options: FunctionDeclarationOptions) => {
+    return type === ExtensionType.trigger ? _.camelCase(`${options.type}_${name}_${options.operation}`) : name;
+  };
+
+  export const resolveTemplatePath = (context: Context, type: string, options: FunctionDeclarationOptions) => {
+    const pathParts = [type];
+
+    if (type === ExtensionType.trigger) {
+      pathParts.push(options.operation, options.type);
+    }
+
+    return path.resolve(context.config.functionTemplatesPath, ...pathParts);
+  };
+
+  export const resolveFunctionDir = (type: ExtensionType, name: string, options: FunctionDeclarationOptions) => {
+    return type === ExtensionType.trigger ? `src/${type}s/${name}/${options.operation}` : `src/${type}s/${name}`;
+  };
 }
 
 namespace TriggerUtils {
   export function resolveTriggerOperation(operation: string, funcName: string): TriggerOperation {
-    const resolvedOperation = (<any>TriggerOperation)[operation];
-    if (_.isNil(resolvedOperation)) {
+    if (!_.values<string>(TriggerOperation).includes(operation)) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
         `Invalid trigger operation ${operation} in function ${funcName}`,
       );
     }
 
-    return <TriggerOperation>resolvedOperation;
+    return <TriggerOperation>operation;
   }
 
   /**
@@ -668,14 +711,13 @@ namespace TriggerUtils {
    */
   export function resolveTriggerType(type: string, functionName: string): TriggerType {
     const triggerType = type.split('.')[1];
-    const resolvedType = (<any>TriggerType)[triggerType];
-    if (_.isNil(resolvedType)) {
+    if (!_.values<string>(TriggerType).includes(triggerType)) {
       throw new InvalidConfiguration(
         StaticConfig.serviceConfigFileName,
         `Invalid trigger type ${type} in function ${functionName}`,
       );
     }
 
-    return <TriggerType>resolvedType;
+    return <TriggerType>triggerType;
   }
 }

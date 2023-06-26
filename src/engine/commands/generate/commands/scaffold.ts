@@ -101,9 +101,9 @@ export default {
 
     context.spinner.stop();
 
-    let eightBaseConfig: EightBaseConfig;
+    let eightBaseConfig;
     try {
-      eightBaseConfig = <any>yaml.load(await fs.readFile('.8base.yml', 'utf8'));
+      eightBaseConfig = <EightBaseConfig>yaml.load(await fs.readFile('.8base.yml', 'utf8'));
     } catch (err) {
       if (err.code === 'ENOENT') {
         throw new Error(translations.i18n.t('generate_scaffold_project_file_error', { projectFileName: '.8base.yml' }));

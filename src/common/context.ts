@@ -30,10 +30,10 @@ export type WorkspaceConfig = {
   readonly apiHost: string;
 };
 
-type Plugin = { name: string; path: string };
+export type Plugin = { name: string; path: string };
 
 export type ProjectConfig = {
-  functions: Object;
+  functions: Record<string, any>;
   plugins?: Plugin[];
 };
 

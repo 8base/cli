@@ -112,6 +112,7 @@ export default {
     init_invalid_function_type: 'Invalid function type',
     init_invalid_project_name: 'Invalid project name: {{validationMessages}}.',
     init_undefined_function_name: 'Undefined function name',
+    init_incorrect_trigger: 'Incorrect trigger name. Use trigger:<TableName>:<before|after>:<create|update|delete>',
     init_functions_describe: 'List of functions',
     init_empty_describe: 'Skip examples',
     init_workspace_id_describe: 'The workspace ID of the project',
@@ -254,12 +255,11 @@ export default {
     /**
      * Generate trigger related messages
      */
-    generate_trigger_usage: '8base generate trigger <name> [OPTIONS]',
-    generate_trigger_name: 'The name of the trigger',
+    generate_trigger_usage: '8base generate trigger <tableName> [OPTIONS]',
+    generate_trigger_table_name: 'The name of table to make trigger for',
     generate_trigger_describe: 'Generator for a custom trigger function.',
     generate_trigger_type_describe: 'The trigger type',
     generate_trigger_operation_describe: 'Operation that invokes the trigger',
-    generate_trigger_invalid_operation: 'Invalid trigger operation, valid example: `Users.create`',
 
     /**
      * Generate webhook related messages
