@@ -1,10 +1,10 @@
 /**
  * This file was generated using 8base CLI.
  *
- * To learn more about writing custom GraphQL resolver functions, visit
+ * To learn more about writing custom trigger functions, visit
  * the 8base documentation at:
  *
- * https://docs.8base.com/projects/backend/custom-functions/resolvers
+ * https://docs.8base.com/projects/backend/custom-functions/triggers
  *
  * To update this functions invocation settings, update its configuration block
  * in the projects 8base.yml file:
@@ -12,7 +12,7 @@
  *    <%= functionName %>:
  *      ...
  *
- * Data that is sent to this function can be accessed on the event argument at:
+ * Data that is sent to the function can be accessed on the event argument at:
  *  event.data[KEY_NAME]
  *
  * There are two ways to invoke this function locally:
@@ -29,9 +29,10 @@
  */
 
 module.exports = async (event, ctx) => {
-  return {
-    data: {
-      result: `Resolver received: ${event.data.foo}`,
-    },
-  };
+  // validation
+  if (event.originalObject.email.endsWith('@gmail.com')) {
+    return { errors: [{ message: 'not allowed' }] };
+  }
+  // override data
+  return { data: { ...event.data, firstName: 'overridden by trigger' } };
 };
