@@ -50,12 +50,9 @@ export default {
       );
     }
 
-    let data: Buffer;
+    let zip: AdmZip;
     try {
-      const response = await Utils.checkHttpResponse(
-        fetch(`${plugin.gitHubUrl}/archive/master.zip`, { method: 'GET' }),
-      );
-      data = Buffer.from(await response.arrayBuffer());
+      zip = await Utils.downloadArchive(`${plugin.gitHubUrl}/archive/master.zip`);
     } catch (e) {
       throw new Error(
         context.i18n.t('plugin_install_cant_download', {
@@ -64,11 +61,9 @@ export default {
       );
     }
 
-    const zip = new AdmZip(data);
-
     const zipEntries = zip.getEntries();
 
-    zipEntries.forEach((zipEntry: any) => {
+    zipEntries.forEach(zipEntry => {
       if (!zipEntry.isDirectory) {
         let targetPath = zipEntry.entryName.replace(/^[^\/]+\//, '');
 

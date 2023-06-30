@@ -1,11 +1,12 @@
+import * as path from 'path';
 import yargs from 'yargs';
+
+import { StaticConfig } from '../../../../config';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
-import download from 'download';
-import * as path from 'path';
-import { StaticConfig } from '../../../../config';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
+import { Utils } from '../../../../common/utils';
 
 type MigrationGenerateParams = { dist: string; tables?: string[]; environment?: string };
 
@@ -16,14 +17,19 @@ export default {
 
   handler: async (params: MigrationGenerateParams, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
+
     context.spinner.start(context.i18n.t('migration_generate_in_progress'));
+
     const dist = params.dist;
     const { system } = await context.request(
       GraphqlActions.migrationGenerate,
       { tables: params.tables },
       { customEnvironment: params.environment },
     );
-    await download(system.ciGenerate.url, path.join(StaticConfig.rootExecutionDir, dist), { extract: true });
+
+    const archive = await Utils.downloadArchive(system.ciGenerate.url);
+    archive.extractAllTo(path.join(StaticConfig.rootExecutionDir, dist), true);
+
     context.spinner.stop();
   },
 

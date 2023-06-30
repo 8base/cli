@@ -42,7 +42,7 @@ export class Context {
 
   i18n: i18next.i18n;
 
-  spinner: any;
+  spinner: ReturnType<typeof Ora>;
 
   constructor(params: any, translations: Translations) {
     this.logger = winston.createLogger({

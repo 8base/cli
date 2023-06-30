@@ -1,13 +1,15 @@
 import * as path from 'path';
+import { Readable } from 'stream';
 import 'isomorphic-fetch';
 import * as fs from 'fs';
 import * as _ from 'lodash';
-import { Context } from './context';
-import { Readable } from 'stream';
-import { CommandController } from '../engine/controllers/commandController';
-import { translations } from './translations';
+import AdmZip from 'adm-zip';
 import archiver from 'archiver';
 import MemoryStream from 'memorystream';
+
+import { Context } from './context';
+import { CommandController } from '../engine/controllers/commandController';
+import { translations } from './translations';
 import { HttpError } from '../errors';
 
 export namespace Utils {
@@ -144,5 +146,12 @@ export namespace Utils {
     }
 
     return response;
+  };
+
+  export const downloadArchive = async (url: string): Promise<AdmZip> => {
+    const dataRequest = await checkHttpResponse(fetch(url, { method: 'GET' }));
+    const dataBuffer = Buffer.from(await dataRequest.arrayBuffer());
+    const archive = new AdmZip(dataBuffer);
+    return archive;
   };
 }
