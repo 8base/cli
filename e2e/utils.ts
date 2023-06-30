@@ -1,9 +1,11 @@
-import * as path from 'path';
+import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util'
 import * as fs from 'fs-extra';
-import { execSync } from 'child_process';
 import * as cuid from '@paralleldrive/cuid2';
 import * as yaml from 'js-yaml';
 import stripAnsi from 'strip-ansi';
+
 import { CLI_BIN } from './consts';
 import { ProjectConfig } from '../src/common/context';
 
@@ -13,14 +15,14 @@ export const prepareTestEnvironment = async (
   const dir = cuid.createId();
   const fullPath = path.join(__dirname, dir);
 
-  execSync(`mkdir ${fullPath}`);
+  createDir(fullPath)
 
-  RunCommand.init(fullPath, repName);
+  await RunCommand.init(fullPath, repName);
 
   return {
     repPath: path.join(fullPath, repName),
     onComplete: () => {
-      execSync(`rm -rf ${fullPath}`);
+      fs.rmSync(fullPath, { recursive: true, force: true });
     },
   };
 };
@@ -58,7 +60,7 @@ export const addFileToProject = async (
 ): Promise<{ relativePathToFile: string; fullPathToFile: string }> => {
   const pathToDir = path.join(projectPath, pathPrefix);
   const pathToFile: string = path.join(pathToDir, fileName);
-  execSync(`mkdir ${pathToDir}`);
+  createDir(pathToDir)
   await fs.writeFile(pathToFile, fileData);
   return {
     relativePathToFile: path.join(pathPrefix, fileName),
@@ -76,17 +78,23 @@ export namespace RunCommand {
       command += `-p ${input.path}`;
     }
 
-    return execCmd(repPath, command);
+    return await execCmd(repPath, command);
   };
 
-  export const init = (repPath: string, repName: string) => {
-    return execCmd(repPath, `init ${repName} -w=workspaceId`);
+  export const init = async (repPath: string, repName: string) => {
+    return await execCmd(repPath, `init ${repName} -w=workspaceId`);
   };
 }
 
-const execCmd = (repPath: string, command: string) => {
-  return execSync(`cd ${repPath} && node ${CLI_BIN} ${command}`).toString();
+const execCmd = async (repPath: string, command: string) => {
+  const execPromise = promisify(exec)
+  const result = await execPromise(`cd ${repPath} && node ${CLI_BIN} ${command}`);
+  return result.stdout
 };
+
+const createDir = (path: string) => {
+  if (!fs.existsSync(path)) fs.mkdirSync(path);
+}
 
 export const expectInString = (template: string, expectedValue: string) => {
   const cleanString = (str: string): string => {

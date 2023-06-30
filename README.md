@@ -10,7 +10,7 @@ We recommend that all developers regularly checkout the [8base Community](https:
 The easiest way to install 8base-cli-continued is to use NPM and install the package globally:
 
 ```shell
-$ npm install 8base-cli-continued
+$ npm install 8base-cli-continued --location=global
 ```
 
 or, if you are using Yarn:

@@ -17,7 +17,7 @@ it('As a user, I can invoke resolver locally.', async () => {
   const funcName = 'invokeFuncTest';
 
   const funcCode = `
-    import * as path from "path";
+    import * as path from 'path';
     export default async (event: any) => {
       return {
         data: event.data.value
