@@ -1,22 +1,22 @@
-# 8base CLI  [![Build Status](https://travis-ci.org/8base/cli.svg?branch=master)](https://travis-ci.org/8base/cli)
+# 8base CLI
 
 [**Sign Up for 8Base**](https://app.8base.com)	🤘	[**Documentation Home**](https://docs.8base.com)	📑	[**Getting Started**](https://docs.8base.com/projects/backend/getting-started)	🚀	[**8base Plans**](https://www.8base.com/pricing)
 
 The 8base Command Line Interface (CLI) makes it easy to generate custom functions and manage workspaces straight from the terminal.
 
-We recommend that all developers regularly checkout the [8base Community](https://community.8base.com) forum for regular updates and changes being made to the 8base-cli package.
+We recommend that all developers regularly checkout the [8base Community](https://community.8base.com) forum for regular updates and changes being made to the 8base-cli-continued package.
 
 ## Installation
-The easiest way to install 8base-cli is to use NPM and install the package globally:
+The easiest way to install 8base-cli-continued is to use NPM and install the package globally:
 
 ```shell
-$ npm install -g 8base-cli
+$ npm install 8base-cli-continued
 ```
 
 or, if you are using Yarn:
 
 ```shell
-$ yarn global add 8base-cli
+$ yarn global add 8base-cli-continued
 ```
 
 ## Getting Started
