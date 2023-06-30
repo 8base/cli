@@ -154,4 +154,17 @@ export namespace Utils {
     const archive = new AdmZip(dataBuffer);
     return archive;
   };
+
+  export const getNpmLatestPackageVersion = async (packageName: string): Promise<string> => {
+    const registryUrl = `https://registry.npmjs.org/${packageName}`;
+    const dataRequest = await checkHttpResponse(fetch(registryUrl, { method: 'GET' }));
+    const data = await dataRequest.json();
+
+    const version = data?.['dist-tags']?.latest;
+    if (!version) {
+      throw new Error('Failed to receive the latest package version');
+    }
+
+    return version;
+  };
 }

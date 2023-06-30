@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import yargs from 'yargs';
-import latestVersion from 'latest-version';
 import chalk from 'chalk';
 
 import { StaticConfig } from './config';
@@ -63,11 +62,11 @@ translations
   .init()
   .then(async (translations: Translations) => {
     try {
-      const last = await latestVersion(StaticConfig.packageName);
+      const latestVersion = await Utils.getNpmLatestPackageVersion(StaticConfig.packageName);
 
-      if (StaticConfig.packageVersion !== last && process.env.SKIP_VERSION_CHECK !== 'true') {
+      if (StaticConfig.packageVersion !== latestVersion && process.env.SKIP_VERSION_CHECK !== 'true') {
         // eslint-disable-next-line no-console
-        console.log(chalk.yellow(translations.i18n.t('8base_new_version', { last })));
+        console.log(chalk.yellow(translations.i18n.t('8base_new_version', { latestVersion })) + '\n');
       }
     } catch (e) {}
 
