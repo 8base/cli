@@ -4,6 +4,10 @@
     "declaration": true,
     "declarationMap": true,
     "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     "target": "ES2016",
     "noImplicitAny": true,
     "lib": [
@@ -18,14 +22,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "sourceMap": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "paths": {
-      "*": [
-        "types/*"
-      ]
-    }
+    "typeRoots": ["node_modules/@types"],
   },
   "include": [
     "src/**/*"

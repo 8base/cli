@@ -1,15 +1,16 @@
 import * as path from 'path';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import { execSync } from 'child_process';
+import * as cuid from '@paralleldrive/cuid2';
 import * as yaml from 'js-yaml';
 import stripAnsi from 'strip-ansi';
 import { CLI_BIN } from './consts';
-import cuid = require('cuid');
+import { ProjectConfig } from '../src/common/context';
 
 export const prepareTestEnvironment = async (
-  repName: string = cuid(),
+  repName: string = cuid.createId(),
 ): Promise<{ onComplete: () => void; repPath: string }> => {
-  const dir = cuid();
+  const dir = cuid.createId();
   const fullPath = path.join(__dirname, dir);
 
   execSync(`mkdir ${fullPath}`);
@@ -19,12 +20,12 @@ export const prepareTestEnvironment = async (
   return {
     repPath: path.join(fullPath, repName),
     onComplete: () => {
-      execSync(`rm -r ${fullPath}`);
+      execSync(`rm -rf ${fullPath}`);
     },
   };
 };
 
-export const addResolverToProject = (
+export const addResolverToProject = async (
   funcName: string,
   code: string,
   graphQLData: string,
@@ -33,10 +34,10 @@ export const addResolverToProject = (
 ) => {
   const subDir = 'src';
 
-  fs.writeFileSync(path.join(projectPath, subDir, funcName).concat(ext), code);
-  fs.writeFileSync(path.join(projectPath, subDir, funcName).concat('.graphql'), graphQLData);
+  await fs.writeFile(path.join(projectPath, subDir, funcName).concat(ext), code);
+  await fs.writeFile(path.join(projectPath, subDir, funcName).concat('.graphql'), graphQLData);
   const yamlFilePath = path.join(projectPath, '8base.yml');
-  const yamlData: { functions: { [key: string]: any } } = <any>yaml.safeLoad(fs.readFileSync(yamlFilePath, 'utf8'));
+  const yamlData = <ProjectConfig>yaml.load(await fs.readFile(yamlFilePath, 'utf8'));
 
   yamlData.functions[funcName] = {
     handler: {
@@ -46,19 +47,19 @@ export const addResolverToProject = (
     schema: path.join(subDir, funcName).concat('.graphql'),
   };
 
-  fs.writeFileSync(yamlFilePath, yaml.safeDump(yamlData));
+  await fs.writeFile(yamlFilePath, yaml.dump(yamlData));
 };
 
-export const addFileToProject = (
+export const addFileToProject = async (
   fileName: string,
   fileData: string,
   projectPath: string,
   pathPrefix: string = '',
-): { relativePathToFile: string; fullPathToFile: string } => {
-  const pathTodir = path.join(projectPath, pathPrefix);
-  const pathToFile: string = path.join(pathTodir, fileName);
-  execSync(`mkdir ${pathTodir}`);
-  fs.writeFileSync(pathToFile, fileData);
+): Promise<{ relativePathToFile: string; fullPathToFile: string }> => {
+  const pathToDir = path.join(projectPath, pathPrefix);
+  const pathToFile: string = path.join(pathToDir, fileName);
+  execSync(`mkdir ${pathToDir}`);
+  await fs.writeFile(pathToFile, fileData);
   return {
     relativePathToFile: path.join(pathPrefix, fileName),
     fullPathToFile: pathToFile,

@@ -1,22 +1,22 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import chalk from 'chalk';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { Workspace } from '../../../../interfaces/Common';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
-import { DEFAULT_REMOTE_ADDRESS } from '../../../../consts/Environment';
+import { StaticConfig } from '../../../../config';
 
 export default {
   command: 'info',
 
-  handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectConfigured(context);
+  handler: async (params: {}, context: Context) => {
+    await ProjectConfigurationState.expectConfigured(context);
 
     const { workspaceId, environmentName } = context.workspaceConfig;
 
     const workspace = (await resolveWorkspace(context, workspaceId)) || {
-      apiHost: DEFAULT_REMOTE_ADDRESS,
+      apiHost: StaticConfig.apiAddress,
       id: workspaceId,
       name: '',
     };

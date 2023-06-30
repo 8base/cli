@@ -45,18 +45,15 @@ export const GraphqlActions = {
       responseData
     }
   }`,
-  logs: `query Logs(
-    $functionName: String!,
-    $limit: Int,
-    $startTime: DateTime,
-    $endTime: DateTime){
-
-      logs (
-        functionName:$functionName
-        limit: $limit
-        startTime: $startTime
-        endTime: $endTime
-      )
+  logs: `query Logs($limit: Int, $startTime: DateTime, $resource: String) {
+    system {
+      logs: logsListFiltered(limit: $limit, startTime: $startTime, resource: $resource) {
+        items {
+          message
+          timestamp
+        }
+      }
+    }
   }`,
   asyncSessionStatus: `
     query status($sessionId: String!)  {
@@ -114,8 +111,8 @@ export const GraphqlActions = {
 
 export const GraphqlAsyncActions = {
   environmentBranch: `
-    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode) {
-      system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
+    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode, $force: Boolean) {
+      system { async: environmentBranch(name: $environmentName mode: $mode force: $force) { sessionId } }
     }`,
   environmentDelete: `
     mutation delete($environmentName: String!) {

@@ -13,7 +13,7 @@ init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init empty project. 2`] = `
-Array [
+[
   "testdir_init/8base.yml",
   "testdir_init/package.json",
 ]
@@ -40,10 +40,11 @@ testdir_init
     │       └── mocks
     │           └── request.json
     ├── triggers
-    │   └── trigger
-    │       ├── handler.ts
-    │       └── mocks
-    │           └── request.json
+    │   └── Users
+    │       └── create
+    │           ├── before.ts
+    │           └── mocks
+    │               └── request.json
     └── webhooks
         └── webhook
             ├── handler.ts
@@ -54,7 +55,7 @@ init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init example project. 2`] = `
-Array [
+[
   "",
   "resolvers",
   "tasks",

@@ -16,10 +16,6 @@ export class StaticConfig {
     return this.staticData.pluginTemplatePath;
   }
 
-  static get mockTemplatePath(): string {
-    return this.staticData.mockTemplatePath;
-  }
-
   static get rootProjectDir(): string {
     return this.staticData.projectDir;
   }
@@ -48,6 +44,10 @@ export class StaticConfig {
     return this.staticData.webClientAddress;
   }
 
+  static get apiAddress(): string {
+    return this.staticData.apiAddress;
+  }
+
   static get serviceConfigFileName(): string {
     return path.join(this.staticData.executionDir, '8base.yml');
   }
@@ -70,8 +70,6 @@ export class StaticConfig {
   static buildDistPath = path.join(StaticConfig.buildRootDirPath, StaticConfig.buildDistFolder);
   static metaDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.metaFolder);
   static packageDir = path.join(StaticConfig.buildRootDirPath, StaticConfig.packageFolder);
-
-  static FunctionHandlerExt = '.js';
 
   static supportedCompileExtension = new Set<string>(['.ts', '.js']);
 }

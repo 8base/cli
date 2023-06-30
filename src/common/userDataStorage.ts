@@ -1,7 +1,7 @@
 import { StaticConfig } from '../config';
 import { StorageParameters, StorageParametersType } from '../consts/StorageParameters';
 import * as path from 'path';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 
 const defaultStorageData = {
   [StorageParameters.authDomain]: StaticConfig.authDomain,
@@ -31,7 +31,7 @@ class Storage {
   }
 
   private static parseStorageData(): any {
-    return JSON.parse(fs.readFileSync(this.pathToStorage).toString());
+    return fs.readJSONSync(this.pathToStorage, { throws: true });
   }
 
   static getStorage() {
@@ -51,7 +51,7 @@ class Storage {
 export class UserDataStorage {
   /**
    * Function is not thread safe !
-   * @param token - user token
+   * @param data
    */
   static setValues(data: { name: string; value: any }[]) {
     const storage = Storage.getStorage();

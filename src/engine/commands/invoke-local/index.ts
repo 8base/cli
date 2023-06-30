@@ -1,5 +1,5 @@
-import * as yargs from 'yargs';
-import * as fs from 'fs';
+import yargs from 'yargs';
+import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
@@ -11,6 +11,13 @@ import { BuildController } from '../../controllers/buildController';
 import { Colors } from '../../../consts/Colors';
 import { InvokeLocalError } from '../../../errors/invokeLocal';
 import { ProjectController } from '../../controllers/projectController';
+
+type InvokeLocalParams = {
+  name: string;
+  'data-json'?: string;
+  'data-path'?: string;
+  mock?: string;
+};
 
 const getLocalFunction = async (functionName: string, context: Context) => {
   const { compiledFiles } = await BuildController.compile(context);
@@ -33,30 +40,28 @@ const getLocalFunction = async (functionName: string, context: Context) => {
     throw new InvokeLocalError(error.message, functionInfo.name, functionPath);
   }
 
-  const functionToCall = Utils.undefault(result);
-
-  return functionToCall;
+  return Utils.undefault(result);
 };
 
 export default {
-  command: 'invoke-local [name]',
-  handler: async (params: any, context: Context) => {
+  command: 'invoke-local <name>',
+  handler: async (params: InvokeLocalParams, context: Context) => {
     context.initializeProject();
 
     dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-    context.spinner.start(context.i18n.t('invokelocal_in_progress'));
+    context.spinner.start(context.i18n.t('invoke_local_in_progress'));
 
     const functionToCall = await getLocalFunction(params.name, context);
 
     let args = null;
 
-    if (params.m) {
-      args = ProjectController.getMock(context, params.name, params.m);
-    } else if (params.p) {
-      args = fs.readFileSync(params.p);
-    } else if (params.j) {
-      args = params.j;
+    if (params.mock) {
+      args = await ProjectController.getMock(context, params.name, params.mock);
+    } else if (params['data-path']) {
+      args = await fs.readFile(params['data-path'], { encoding: 'utf8' });
+    } else if (params['data-json']) {
+      args = params['data-json'];
     }
 
     let resultResponse = null;
@@ -96,7 +101,7 @@ export default {
       resultError = e;
     }
 
-    BuildController.clearBuild(context);
+    await BuildController.clearBuild(context);
 
     context.spinner.stop();
 
@@ -129,34 +134,41 @@ export default {
         ),
       );
 
-      throw new Error(translations.i18n.t('invokelocal_returns_error', { name: params.name }));
+      throw new Error(translations.i18n.t('invoke_local_returns_error', { name: params.name }));
     } else {
       context.logger.info(JSON.stringify(resultResponse, null, 2));
     }
   },
-  describe: translations.i18n.t('invokelocal_describe'),
+  describe: translations.i18n.t('invoke_local_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
-      .usage(translations.i18n.t('invokelocal_usage'))
+      .usage(translations.i18n.t('invoke_local_usage'))
       .positional('name', {
-        describe: translations.i18n.t('invokelocal_name_describe'),
+        describe: translations.i18n.t('invoke_local_function_name_describe'),
         type: 'string',
       })
-      .demandOption('name')
       .option('data-json', {
         alias: 'j',
-        describe: translations.i18n.t('invokelocal_data_json_describe'),
+        describe: translations.i18n.t('invoke_local_data_json_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('data-path', {
         alias: 'p',
-        describe: translations.i18n.t('invokelocal_data_path_describe'),
+        describe: translations.i18n.t('invoke_local_data_path_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('mock', {
         alias: 'm',
-        describe: translations.i18n.t('invokelocal_mock_describe'),
+        describe: translations.i18n.t('invoke_local_mock_describe'),
         type: 'string',
+        requiresArg: true,
+      })
+      .conflicts({
+        mock: ['data-path', 'data-json'],
+        'data-path': ['mock', 'data-json'],
+        'data-json': ['mock', 'data-path'],
       });
   },
 };

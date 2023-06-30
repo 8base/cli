@@ -1,18 +1,19 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import chalk from 'chalk';
 import * as _ from 'lodash';
-import { request as gqlRequest } from 'graphql-request';
+import gqlRequest from 'graphql-request';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
+import { StaticConfig } from '../../../../config';
 
 type PluginListParams = {
-  q: string;
+  query: string;
 };
 
 const PLUGINS_LIST_QUERY = `
-  query PluginsList($q: String) {
-    pluginsList(filter: { OR: { name: { contains: $q }, description: { contains: $q }, _fullText: $q } }) {
+  query PluginsList($query: String) {
+    pluginsList(filter: { OR: { name: { contains: $query }, description: { contains: $query }, _fullText: $query } }) {
       items {
         name
         description
@@ -26,9 +27,11 @@ export default {
   command: 'list',
 
   handler: async (params: PluginListParams, context: Context) => {
-    const { q } = params;
+    const { query } = params;
 
-    let plugins = await gqlRequest('https://api.8base.com/ck16gpwki001f01jgh4kvd54j', PLUGINS_LIST_QUERY, { q });
+    let plugins = await gqlRequest(`${StaticConfig.apiAddress}/ck16gpwki001f01jgh4kvd54j`, PLUGINS_LIST_QUERY, {
+      query,
+    });
 
     plugins = _.get(plugins, ['pluginsList', 'items']);
 
@@ -49,5 +52,6 @@ export default {
     args.usage(translations.i18n.t('plugin_list_usage')).option('query', {
       alias: 'q',
       type: 'string',
+      requiresArg: true,
     }),
 };

@@ -1,18 +1,20 @@
 import * as _ from 'lodash';
-import * as fs from 'fs';
-import * as yargs from 'yargs';
+import * as fs from 'fs-extra';
+import yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { importData, importTables } from '@8base/api-client';
 
+type ImportParams = { file: string; schema: boolean; data: boolean; workspace: string; d?: boolean };
+
 export default {
   command: 'import',
-  handler: async (params: any, context: Context) => {
+  handler: async (params: ImportParams, context: Context) => {
     let schema;
 
-    if (fs.existsSync(params.file)) {
+    if (await fs.exists(params.file)) {
       try {
-        schema = JSON.parse(fs.readFileSync(params.file, 'utf8'));
+        schema = await fs.readJSON(params.file, { encoding: 'utf8', throws: true });
       } catch (e) {
         throw new Error(translations.i18n.t('import_cant_parse_schema'));
       }
@@ -63,6 +65,7 @@ export default {
         demandOption: true,
         describe: translations.i18n.t('import_file_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('schema', {
         describe: translations.i18n.t('import_schema_describe'),
@@ -78,6 +81,7 @@ export default {
         alias: 'w',
         describe: translations.i18n.t('import_workspace_describe'),
         type: 'string',
+        requiresArg: true,
       });
   },
 };

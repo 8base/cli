@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as path from 'path';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import chalk from 'chalk';
-import * as tree from 'tree-node-cli';
-import * as validatePackageName from 'validate-npm-package-name';
+import tree from 'tree-node-cli';
+import validatePackageName from 'validate-npm-package-name';
 
 import { getFileProvider } from './providers';
 import { install } from './installer';
@@ -12,38 +12,42 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Colors } from '../../../consts/Colors';
 import { ProjectController } from '../../controllers/projectController';
-import { ExtensionType, SyntaxType } from '../../../interfaces/Extensions';
+import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../../interfaces/Extensions';
 import { Interactive } from '../../../common/interactive';
-import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../../../consts/Environment';
-import { Workspace } from '../../../interfaces/Common';
+import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import { StaticConfig } from '../../../config';
 
-const CREATE_WORKSPACE_MUTATION = `
-  mutation WorkspaceCreate($data: WorkspaceCreateMutationInput!) {
-    workspaceCreate(data: $data) {
-      id
-    }
-  }
-`;
+type InitParams = {
+  name: string;
+  functions: string[];
+  empty: boolean;
+  mocks: boolean;
+  syntax: SyntaxType;
+  silent: boolean;
+  workspaceId?: string;
+  host: string;
+};
 
-const isEmptyDir = (path: string): boolean => {
+const isEmptyDir = async (path: string): Promise<boolean> => {
   let files = [];
 
   try {
-    files = fs.readdirSync(path);
+    files = await fs.readdir(path);
   } catch (e) {}
 
   return files.length === 0;
 };
 
 export default {
-  command: 'init',
+  command: 'init [name]',
 
-  handler: async (params: any, context: Context) => {
-    const { functions, empty, syntax, mocks, silent } = params;
+  handler: async (params: InitParams, context: Context) => {
+    const { name, functions, empty, syntax, mocks, silent } = params;
 
     let { workspaceId, host } = params;
 
-    const [, projectName] = _.castArray(params._);
+    const projectName = name || path.basename(context.config.rootExecutionDir);
+    const fullPath = name ? path.join(context.config.rootExecutionDir, projectName) : context.config.rootExecutionDir;
 
     const { errors = [] } = validatePackageName(projectName);
 
@@ -55,17 +59,9 @@ export default {
       );
     }
 
-    const project = projectName
-      ? {
-          fullPath: path.join(context.config.rootExecutionDir, projectName),
-          name: projectName,
-        }
-      : {
-          fullPath: context.config.rootExecutionDir,
-          name: path.basename(context.config.rootExecutionDir),
-        };
+    const project = { fullPath, name: projectName };
 
-    if (!isEmptyDir(project.fullPath)) {
+    if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
         name: 'confirm',
         type: 'confirm',
@@ -80,7 +76,7 @@ export default {
 
     if (!empty && Array.isArray(functions)) {
       functions.forEach(declaration => {
-        const [type, name] = declaration.split(':');
+        const [type, name, triggerOperation, triggerType] = declaration.split(':');
 
         if (!(type in ExtensionType)) {
           throw new Error(translations.i18n.t('init_invalid_function_type', { type }));
@@ -88,6 +84,10 @@ export default {
 
         if (!name) {
           throw new Error(translations.i18n.t('init_undefined_function_name'));
+        }
+
+        if (type === ExtensionType.trigger && !(triggerOperation in TriggerOperation && triggerType in TriggerType)) {
+          throw new Error(translations.i18n.t('init_incorrect_trigger'));
         }
       });
     }
@@ -99,43 +99,17 @@ export default {
         name: 'workspaceId',
         type: 'select',
         message: translations.i18n.t('init_select_workspace'),
-        choices: [
-          {
-            title: '<New Workspace>',
-            value: 'NEW_WORKSPACE',
-          },
-          ...workspaces.map((workspace: any) => ({
-            title: workspace.name,
-            value: workspace.id,
-          })),
-        ],
+        choices: workspaces.map(workspace => ({
+          title: workspace.name,
+          value: workspace.id,
+        })),
       }));
-
-      if (workspaceId === 'NEW_WORKSPACE') {
-        const { workspaceName } = await Interactive.ask({
-          name: 'workspaceName',
-          type: 'text',
-          message: translations.i18n.t('init_workspace_name_labal'),
-        });
-
-        if (!workspaceName) {
-          throw new Error(translations.i18n.t('init_prevent_new_workspace'));
-        } else {
-          const { workspaceCreate } = await context.request(CREATE_WORKSPACE_MUTATION, {
-            data: {
-              name: workspaceName,
-            },
-          });
-
-          workspaceId = workspaceCreate.id;
-        }
-      }
 
       if (!workspaceId) {
         throw new Error(translations.i18n.t('init_prevent_select_workspace'));
       }
 
-      const workspace = _.find<Workspace>(await context.getWorkspaces(), { id: workspaceId });
+      const workspace = _.find(await context.getWorkspaces(), { id: workspaceId });
       if (!workspace) {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
       }
@@ -149,8 +123,8 @@ export default {
 
     context.logger.debug(`initialize success: initialize repository: ${project.name}`);
 
-    let files = await getFileProvider().provide(context);
-    context.logger.debug('files provided count = ' + files.size);
+    let files = getFileProvider().provide(context);
+    context.logger.debug(`files provided count = ${files.size}`);
 
     files.set(
       context.config.packageFileName,
@@ -170,33 +144,38 @@ export default {
     }
 
     /* Generate project files before printing tree */
-    if (!empty && Array.isArray(params.functions)) {
-      params.functions.forEach((declaration: string) => {
-        const [type, name] = declaration.split(':');
+    if (!empty && Array.isArray(functions)) {
+      await Promise.all(
+        functions.map(async (declaration: string) => {
+          const [type, functionName, triggerOperation, triggerType] = declaration.split(':');
 
-        ProjectController.generateFunction(context, {
-          type: <ExtensionType>type,
-          name,
-          mocks,
-          syntax,
-          projectPath: projectName,
-          silent: true,
-        });
-      });
+          await ProjectController.generateFunction(
+            context,
+            {
+              type: <ExtensionType>type,
+              name: functionName,
+              mocks,
+              syntax,
+              projectPath: name,
+              silent: true,
+            },
+            { type: <TriggerType>triggerType, operation: <TriggerOperation>triggerOperation },
+          );
+        }),
+      );
     }
 
-    context.createWorkspaceConfig(
+    await context.createWorkspaceConfig(
       {
         workspaceId,
         environmentName: DEFAULT_ENVIRONMENT_NAME,
-        apiHost: host || DEFAULT_REMOTE_ADDRESS,
+        apiHost: host || StaticConfig.apiAddress,
       },
       project.fullPath,
     );
 
     if (!silent) {
-      // @ts-ignore
-      const fileTree: string = tree(project.fullPath, {
+      const fileTree = tree(project.fullPath, {
         allFiles: true,
         exclude: [/node_modules/, /\.build/],
       });
@@ -213,11 +192,15 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t('init_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('init_name_describe'),
+        type: 'string',
+      })
       .option('functions', {
         alias: 'f',
         describe: translations.i18n.t('init_functions_describe'),
         type: 'array',
-        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:trigger'],
+        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:Users:create:before'],
       })
       .option('empty', {
         alias: 'e',
@@ -237,6 +220,7 @@ export default {
         default: 'ts',
         type: 'string',
         choices: Object.values(SyntaxType),
+        requiresArg: true,
       })
       .option('silent', {
         describe: translations.i18n.t('silent_describe'),
@@ -247,11 +231,13 @@ export default {
         alias: 'w',
         describe: translations.i18n.t('init_workspace_id_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('host', {
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
-        default: DEFAULT_REMOTE_ADDRESS,
+        default: StaticConfig.apiAddress,
+        requiresArg: true,
       })
       .example(translations.i18n.t('init_no_dir_example_command'), translations.i18n.t('init_example_no_dir'))
       .example(translations.i18n.t('init_with_dir_example_command'), translations.i18n.t('init_example_with_dir'));

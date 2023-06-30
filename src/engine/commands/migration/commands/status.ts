@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlActions } from '../../../../consts/GraphqlActions';
@@ -6,15 +6,17 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 import chalk from 'chalk';
 import { Colors } from '../../../../consts/Colors';
 import { table } from 'table';
+import * as _ from 'lodash';
 import { executeDeploy } from '../../../../common/execute';
 import { DeployModeType } from '../../../../interfaces/Extensions';
-import _ = require('lodash');
+
+type MigrationStatusParams = { environment?: string };
 
 export default {
   command: 'status',
 
-  handler: async (params: any, context: Context) => {
-    ProjectConfigurationState.expectHasProject(context);
+  handler: async (params: MigrationStatusParams, context: Context) => {
+    await ProjectConfigurationState.expectHasProject(context);
     await executeDeploy(context, { mode: DeployModeType.migrations }, { customEnvironment: params.environment });
     context.spinner.start(context.i18n.t('migration_status_in_progress'));
     const { system } = await context.request(
@@ -36,5 +38,6 @@ export default {
       alias: 'e',
       describe: translations.i18n.t('migration_status_environment_describe'),
       type: 'string',
+      requiresArg: true,
     }),
 };

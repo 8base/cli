@@ -11,4 +11,5 @@ const HERO = `
 ==================================================================================
 `;
 
+// eslint-disable-next-line no-console
 console.log(HERO);
