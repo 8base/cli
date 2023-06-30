@@ -12,6 +12,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
