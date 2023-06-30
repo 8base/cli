@@ -1,8 +1,17 @@
 import * as path from 'path';
 import { PredefineData } from './predefineData';
 
+const packageFile = require('../../package.json');
+
 export class StaticConfig {
   private static staticData = new PredefineData();
+
+  static packageName = packageFile.name;
+  static packageVersion = packageFile.version;
+
+  static workspaceConfigFilename = '.workspace.json';
+  static projectConfigFilename = '8base.yml';
+  static ignoreFileName = '.8baseignore';
 
   static get projectTemplatePath(): string {
     return this.staticData.projectTemplatePath;
@@ -49,7 +58,7 @@ export class StaticConfig {
   }
 
   static get serviceConfigFileName(): string {
-    return path.join(this.staticData.executionDir, '8base.yml');
+    return path.join(this.staticData.executionDir, this.projectConfigFilename);
   }
 
   static get packageFileName(): string {

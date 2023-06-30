@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import yargs from 'yargs';
+import { StaticConfig } from '../../../config';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { exportTables } from '@8base/api-client';
@@ -21,7 +22,7 @@ export default {
 
     const exportResult = {
       tables,
-      version: context.version,
+      version: StaticConfig.packageName,
     };
 
     await fs.writeJSON(params.file, exportResult, { spaces: 2 });

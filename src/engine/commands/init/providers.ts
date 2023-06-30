@@ -1,7 +1,6 @@
 import * as path from 'path';
-import * as readdir from 'readdir';
-import * as _ from 'lodash';
 import * as fs from 'fs-extra';
+import * as _ from 'lodash';
 import { Context } from '../../../common/context';
 
 interface IFileProvider {
@@ -11,7 +10,7 @@ interface IFileProvider {
 class StaticFileProvider implements IFileProvider {
   provide(context: Context): Map<string, string> {
     return _.reduce<string, Map<string, string>>(
-      readdir.readSync(context.config.projectTemplatePath),
+      fs.readdirSync(context.config.projectTemplatePath),
       (result, file) => {
         return result.set(
           file,

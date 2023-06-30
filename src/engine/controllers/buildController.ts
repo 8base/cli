@@ -2,7 +2,6 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import ignore from 'ignore';
 import { Readable } from 'stream';
-import * as readdir from 'readdir';
 
 import { ProjectController } from './projectController';
 import { getCompiler } from '../compilers';
@@ -83,7 +82,7 @@ export class BuildController {
       ignoreFilter.add(await fs.readFile(IGNORE_FILE_PATH, { encoding: 'utf8' }));
     }
 
-    const files = await readdir.read(context.config.rootExecutionDir, undefined, readdir.INCLUDE_HIDDEN);
+    const files = await fs.readdir(context.config.rootExecutionDir);
 
     const sourceToArchive = files
       .map(file => path.relative(process.cwd(), file))

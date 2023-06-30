@@ -5,7 +5,8 @@ import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { Interactive } from '../../../../common/interactive';
 import { writeFs } from '../../../../common/memfs';
-import { createQueryColumnsList, TableSchema } from '@8base/utils';
+import { createQueryColumnsList } from '@8base/utils';
+import type { TableSchema } from '@8base/utils';
 import { generateScreen } from '@8base/generators';
 import { exportTables } from '@8base/api-client';
 

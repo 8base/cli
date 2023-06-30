@@ -22,8 +22,6 @@ import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
 
-const pkg = require('../../package.json');
-
 export type WorkspaceConfig = {
   readonly workspaceId: string;
   readonly environmentName: string;
@@ -37,13 +35,8 @@ export type ProjectConfig = {
   plugins?: Plugin[];
 };
 
-const WORKSPACE_CONFIG_FILENAME = '.workspace.json';
-const PROJECT_CONFIG_FILENAME = '8base.yml';
-
 export class Context {
   private _project: ProjectDefinition = null;
-
-  version: string;
 
   logger: winston.Logger;
 
@@ -67,7 +60,6 @@ export class Context {
     });
 
     this.i18n = translations.i18n;
-    this.version = pkg.version;
 
     this.spinner = Ora({
       color: 'white',
@@ -104,7 +96,7 @@ export class Context {
   }
 
   getWorkspaceConfigPath(customPath?: string): string {
-    return path.join(customPath || process.cwd(), WORKSPACE_CONFIG_FILENAME);
+    return path.join(customPath || process.cwd(), StaticConfig.workspaceConfigFilename);
   }
 
   updateWorkspace(value: WorkspaceConfig): void {
@@ -165,7 +157,7 @@ export class Context {
   }
 
   getProjectConfigPath(customPath?: string): string {
-    return path.join(customPath || process.cwd(), PROJECT_CONFIG_FILENAME);
+    return path.join(customPath || process.cwd(), StaticConfig.projectConfigFilename);
   }
 
   hasProjectConfig(customPath?: string): boolean {

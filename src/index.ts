@@ -8,8 +8,6 @@ import { StaticConfig } from './config';
 import { Utils } from './common/utils';
 import { translations, Translations } from './common/translations';
 
-const pkg = require('../package.json');
-
 const start = async (translations: Translations) => {
   const argv = await yargs
     .scriptName('8base')
@@ -65,9 +63,9 @@ translations
   .init()
   .then(async (translations: Translations) => {
     try {
-      const last = await latestVersion(pkg.name);
+      const last = await latestVersion(StaticConfig.packageName);
 
-      if (pkg.version !== last && process.env.SKIP_VERSION_CHECK !== 'true') {
+      if (StaticConfig.packageVersion !== last && process.env.SKIP_VERSION_CHECK !== 'true') {
         // eslint-disable-next-line no-console
         console.log(chalk.yellow(translations.i18n.t('8base_new_version', { last })));
       }

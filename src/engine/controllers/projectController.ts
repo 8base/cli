@@ -217,7 +217,9 @@ export class ProjectController {
    */
 
   private static loadConfigFile(context: Context, projectPath?: string): ProjectConfig {
-    const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
+    const pathToYmlConfig = projectPath
+      ? path.join(projectPath, StaticConfig.projectConfigFilename)
+      : StaticConfig.serviceConfigFileName;
 
     context.logger.debug(`check exist yaml file = ${pathToYmlConfig}`);
 
@@ -233,7 +235,9 @@ export class ProjectController {
   }
 
   private static saveConfigFile(context: Context, config: Object, projectPath?: string, silent?: boolean): void {
-    const pathToYmlConfig = projectPath ? path.join(projectPath, '8base.yml') : StaticConfig.serviceConfigFileName;
+    const pathToYmlConfig = projectPath
+      ? path.join(projectPath, StaticConfig.projectConfigFilename)
+      : StaticConfig.serviceConfigFileName;
 
     const dump = yaml.dump(config);
     fs.writeFileSync(pathToYmlConfig, dump);
