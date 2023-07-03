@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import AdmZip from 'adm-zip';
 import gqlRequest from 'graphql-request';
 
+import { StaticConfig } from '../../../../config';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { ProjectController } from '../../../controllers/projectController';
@@ -88,7 +89,7 @@ export default {
       _.camelCase(name),
       {
         name,
-        path: `plugins/${name}/8base.yml`,
+        path: `plugins/${name}/${StaticConfig.projectConfigFilename}`,
       },
       '.',
     );

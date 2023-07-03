@@ -5,10 +5,9 @@ import { Readable } from 'stream';
 
 import { ProjectController } from './projectController';
 import { getCompiler } from '../compilers';
+import { StaticConfig } from '../../config';
 import { Context } from '../../common/context';
 import { Utils } from '../../common/utils';
-
-const IGNORE_FILE_PATH = './.8baseignore';
 
 /*
   paths:
@@ -78,8 +77,8 @@ export class BuildController {
     // have to add '/' at the beginning to ignore only root folder. avoid recursive
     const ignoreFilter = ignore().add(excludedRoots.map(item => `/${item}`));
 
-    if (await fs.exists(IGNORE_FILE_PATH)) {
-      ignoreFilter.add(await fs.readFile(IGNORE_FILE_PATH, { encoding: 'utf8' }));
+    if (await fs.exists(StaticConfig.ignoreFileName)) {
+      ignoreFilter.add(await fs.readFile(StaticConfig.ignoreFileName, { encoding: 'utf8' }));
     }
 
     const files = await fs.readdir(context.config.rootExecutionDir);

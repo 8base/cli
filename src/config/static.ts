@@ -9,9 +9,9 @@ export class StaticConfig {
   static packageName = packageFile.name;
   static packageVersion = packageFile.version;
 
-  static workspaceConfigFilename = '.workspace.json';
-  static projectConfigFilename = '8base.yml';
-  static ignoreFileName = '.8baseignore';
+  static workspaceConfigFilename = '.workspace.json' as const;
+  static projectConfigFilename = '8base.yml' as const;
+  static ignoreFileName = '.8baseignore' as const;
 
   static get projectTemplatePath(): string {
     return this.staticData.projectTemplatePath;

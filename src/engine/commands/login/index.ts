@@ -1,8 +1,8 @@
+import yargs from 'yargs';
+
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
-import yargs from 'yargs';
 import logout from '../logout';
-import 'isomorphic-fetch';
 import { StaticConfig } from '../../../config';
 import { passwordLogin } from './passwordLogin';
 import { webLogin } from './webLogin';

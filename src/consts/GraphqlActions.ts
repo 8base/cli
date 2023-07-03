@@ -45,6 +45,13 @@ export const GraphqlActions = {
       responseData
     }
   }`,
+  introspection: `query Introspection {
+    system {
+      introspection {
+        url
+      }
+    }
+  }`,
   logs: `query Logs($limit: Int, $startTime: DateTime, $resource: String) {
     system {
       logs: logsListFiltered(limit: $limit, startTime: $startTime, resource: $resource) {

@@ -123,6 +123,19 @@ export default {
     init_canceled: 'Project init canceled',
 
     /**
+     * Introspection related messages
+     */
+
+    introspection_describe: 'Getting introspection of the current enviroment',
+    introspection_usage:
+      'COMMAND\n  8base introspection [OPTIONS]\n\nDESCRIPTION\n  Getting introspection of the current enviroment',
+    introspection_file_describe: 'Destination file',
+    introspection_file_required_option_error:
+      'Please specify a relative path and filename.\n\nExample: \n`8base introspection -f <EXPORT_FILE_PATH>`',
+    introspection_in_progress: 'Fetching enviroment introspection...',
+    introspection_fetch_failed: 'Failed to fetch introspection',
+
+    /**
      * Invoke related messages
      */
     invoke_usage:

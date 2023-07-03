@@ -19,6 +19,7 @@ COMMANDS
   8base generate <command>     Generator for server and client side resources  [aliases: g]
   8base import                 Imports 8base schema file and data to the current - or specified - workspace.
   8base init [name]            Initializes a new project with example directory structure and custom functions.
+  8base introspection          Getting introspection of the current enviroment
   8base invoke <name>          Invokes a custom function in the production workspace.
   8base invoke-local <name>    Invokes the custom function in the local development workspace.
   8base login                  Authenticates the command line user by letting them log into an 8base account.
