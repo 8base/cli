@@ -1,10 +1,6 @@
 # 8base CLI
 
-[**Sign Up for 8Base**](https://app.8base.com)	🤘	[**Documentation Home**](https://docs.8base.com)	📑	[**Getting Started**](https://docs.8base.com/projects/backend/getting-started)	🚀	[**8base Plans**](https://www.8base.com/pricing)
-
 The 8base Command Line Interface (CLI) makes it easy to generate custom functions and manage workspaces straight from the terminal.
-
-We recommend that all developers regularly checkout the [8base Community](https://community.8base.com) forum for regular updates and changes being made to the 8base-cli-continued package.
 
 ## Installation
 The easiest way to install 8base-cli-continued is to use NPM and install the package globally:
@@ -37,7 +33,7 @@ $ 8base login --email="my@email.com" --password="myP@ssw0rd"
 Once successfully authenticated, a file will be updated at `~/.8baserc` with a JSON payload for the authenticated session.
 
 ## Further Information
-For more information about commands and configuration options, please refer the [8base CLI documentation](https://docs.8base.com/projects/backend/development-tools/cli). You can also learn about the different commands from the CLI by running `--help` with the package itself, or a given command.
+For more information about commands and configuration options, please refer the [8base CLI documentation](https://docs.8base.com/projects/backend/development-tools/cli/). You can also learn about the different commands from the CLI by running `--help` with the package itself, or a given command.
 
 ```
 DESCRIPTION
@@ -85,7 +81,7 @@ OPTIONS
 Like most great things, the 8base CLI is a work in progress. As a consequence of that, the CLI is constantly improving. Our CLI is public and open-sourced right here on GitHub. So whenever you want to, you could:
 
 1. Reporting an Issue
-8base uses GitHub Issue Tracking to track issues (primarily bugs and contributions of new code). If you've found a bug, this is the place to start.
+This project uses GitHub Issue Tracking to track issues (primarily bugs and contributions of new code). If you've found a bug, this is the place to start.
 
 2. Fix an Issue
 If you've not only found a problem in the CLI but also worked out the solution, please submit a pull request!
@@ -94,3 +90,7 @@ If you've not only found a problem in the CLI but also worked out the solution, 
 You can help improve the 8base CLI by adding awesome features. It's honestly an open-book. If you think something is useful, others probably will too.
 
 We'll do our best to review, respond, and merge all contributions in a timely manner!
+
+## License information
+
+This project is a fork of the [original 8base CLI](https://github.com/8base/cli), released under the [Apache License 2](./LICENSE). "8base" are registered trademark of 8base Inc., in the United States and/or other countries.

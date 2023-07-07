@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as yaml from 'js-yaml';
+import yaml from 'yaml';
 import * as ejs from 'ejs';
 import * as _ from 'lodash';
 
@@ -228,7 +228,7 @@ export class ProjectController {
     }
 
     try {
-      return <ProjectConfig>yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'));
+      return <ProjectConfig>yaml.parse(fs.readFileSync(pathToYmlConfig, 'utf8'));
     } catch (ex) {
       throw new InvalidConfiguration(pathToYmlConfig, ex.message);
     }
@@ -239,8 +239,8 @@ export class ProjectController {
       ? path.join(projectPath, StaticConfig.projectConfigFilename)
       : StaticConfig.serviceConfigFileName;
 
-    const dump = yaml.dump(config);
-    fs.writeFileSync(pathToYmlConfig, dump);
+    const configData = yaml.stringify(config);
+    fs.writeFileSync(pathToYmlConfig, configData);
 
     if (!silent) {
       context.logger.info(

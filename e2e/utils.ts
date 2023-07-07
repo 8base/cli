@@ -2,8 +2,8 @@ import path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util'
 import * as fs from 'fs-extra';
-import * as cuid from '@paralleldrive/cuid2';
-import * as yaml from 'js-yaml';
+import cuid from '@paralleldrive/cuid2';
+import yaml from 'yaml';
 import stripAnsi from 'strip-ansi';
 
 import { CLI_BIN } from './consts';
@@ -39,7 +39,7 @@ export const addResolverToProject = async (
   await fs.writeFile(path.join(projectPath, subDir, funcName).concat(ext), code);
   await fs.writeFile(path.join(projectPath, subDir, funcName).concat('.graphql'), graphQLData);
   const yamlFilePath = path.join(projectPath, '8base.yml');
-  const yamlData = <ProjectConfig>yaml.load(await fs.readFile(yamlFilePath, 'utf8'));
+  const yamlData = <ProjectConfig>yaml.parse(await fs.readFile(yamlFilePath, 'utf8'));
 
   yamlData.functions[funcName] = {
     handler: {
@@ -49,7 +49,7 @@ export const addResolverToProject = async (
     schema: path.join(subDir, funcName).concat('.graphql'),
   };
 
-  await fs.writeFile(yamlFilePath, yaml.dump(yamlData));
+  await fs.writeFile(yamlFilePath, yaml.stringify(yamlData));
 };
 
 export const addFileToProject = async (

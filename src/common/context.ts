@@ -4,7 +4,7 @@ import * as i18next from 'i18next';
 import Ora from 'ora';
 import * as path from 'path';
 import * as winston from 'winston';
-import * as yaml from 'js-yaml';
+import yaml from 'yaml';
 import chalk from 'chalk';
 import { Client } from '@8base/api-client';
 import { TransformableInfo } from 'logform';
@@ -144,7 +144,7 @@ export class Context {
     let projectConfig = { functions: {} };
 
     if (this.hasProjectConfig()) {
-      projectConfig = <ProjectConfig>yaml.load(fs.readFileSync(projectConfigPath, 'utf-8')) || projectConfig;
+      projectConfig = <ProjectConfig>yaml.parse(fs.readFileSync(projectConfigPath, 'utf-8')) || projectConfig;
     }
 
     return projectConfig;
@@ -153,7 +153,7 @@ export class Context {
   set projectConfig(value: ProjectConfig) {
     const projectConfigPath = this.getProjectConfigPath();
 
-    fs.writeFileSync(projectConfigPath, yaml.dump(value));
+    fs.writeFileSync(projectConfigPath, yaml.stringify(value));
   }
 
   getProjectConfigPath(customPath?: string): string {
