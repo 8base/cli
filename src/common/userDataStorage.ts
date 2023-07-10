@@ -1,6 +1,6 @@
 import { StaticConfig } from '../config';
 import { StorageParameters, StorageParametersType } from '../consts/StorageParameters';
-import * as path from 'path';
+import * as path from 'node:path';
 import * as fs from 'fs-extra';
 
 const defaultStorageData = {

@@ -2,7 +2,7 @@ import yargs from 'yargs';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
-import * as path from 'path';
+import * as path from 'node:path';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';

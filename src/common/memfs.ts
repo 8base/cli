@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as path from 'node:path';
 
 const asyncForEach = async <T extends Object>(array: T[], callback: (arg0: T, arg1: number, arg2: T[]) => void) => {
   for (let index = 0; index < array.length; index++) {

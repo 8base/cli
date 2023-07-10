@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import errorCodes from '@8base/error-codes';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 import { Translations } from '../../common/translations';
 import { Context } from '../../common/context';

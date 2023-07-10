@@ -1,11 +1,11 @@
 import yargs from 'yargs';
 import chalk from 'chalk';
-import * as _ from 'lodash';
-import gqlRequest from 'graphql-request';
+import _ from 'lodash';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { StaticConfig } from '../../../../config';
+import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 
 type PluginListParams = {
   query: string;
@@ -13,7 +13,21 @@ type PluginListParams = {
 
 const PLUGINS_LIST_QUERY = `
   query PluginsList($query: String) {
-    pluginsList(filter: { OR: { name: { contains: $query }, description: { contains: $query }, _fullText: $query } }) {
+    pluginsList(filter: {
+      OR: [
+        {
+          name: {
+            contains: $query
+          }
+        },
+        {
+          description: {
+            contains: $query
+          }
+        },
+        { _fullText: $query }
+      ]
+    }) {
       items {
         name
         description
@@ -23,20 +37,22 @@ const PLUGINS_LIST_QUERY = `
   }
 `;
 
+type ProjectType = { name: string; description: string; gitHubUrl: string };
+
 export default {
   command: 'list',
 
   handler: async (params: PluginListParams, context: Context) => {
-    const { query } = params;
-
-    let plugins = await gqlRequest(`${StaticConfig.apiAddress}/ck16gpwki001f01jgh4kvd54j`, PLUGINS_LIST_QUERY, {
-      query,
-    });
-
-    plugins = _.get(plugins, ['pluginsList', 'items']);
+    let plugins = _.get(
+      await context.request<PluginListParams, { pluginsList: { items: ProjectType[] } }>(PLUGINS_LIST_QUERY, params, {
+        customWorkspaceId: StaticConfig.pluginsWorkspaceId,
+        customEnvironment: DEFAULT_ENVIRONMENT_NAME,
+      }),
+      ['pluginsList', 'items'],
+    );
 
     if (Array.isArray(plugins) && plugins.length > 0) {
-      plugins.forEach(({ name, description, gitHubUrl }: any) => {
+      plugins.forEach(({ name, description, gitHubUrl }) => {
         context.logger.info(
           context.i18n.t('plugin_list_plugin_info', { name: chalk.green(name), description, gitHubUrl }),
         );

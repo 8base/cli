@@ -1,6 +1,6 @@
-import path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util'
+import path from 'node:path';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
 import * as fs from 'fs-extra';
 import cuid from '@paralleldrive/cuid2';
 import yaml from 'yaml';
@@ -15,7 +15,7 @@ export const prepareTestEnvironment = async (
   const dir = cuid.createId();
   const fullPath = path.join(__dirname, dir);
 
-  createDir(fullPath)
+  createDir(fullPath);
 
   await RunCommand.init(fullPath, repName);
 
@@ -60,7 +60,7 @@ export const addFileToProject = async (
 ): Promise<{ relativePathToFile: string; fullPathToFile: string }> => {
   const pathToDir = path.join(projectPath, pathPrefix);
   const pathToFile: string = path.join(pathToDir, fileName);
-  createDir(pathToDir)
+  createDir(pathToDir);
   await fs.writeFile(pathToFile, fileData);
   return {
     relativePathToFile: path.join(pathPrefix, fileName),
@@ -87,14 +87,14 @@ export namespace RunCommand {
 }
 
 const execCmd = async (repPath: string, command: string) => {
-  const execPromise = promisify(exec)
+  const execPromise = promisify(exec);
   const result = await execPromise(`cd ${repPath} && node ${CLI_BIN} ${command}`);
-  return result.stdout
+  return result.stdout;
 };
 
 const createDir = (path: string) => {
   if (!fs.existsSync(path)) fs.mkdirSync(path);
-}
+};
 
 export const expectInString = (template: string, expectedValue: string) => {
   const cleanString = (str: string): string => {

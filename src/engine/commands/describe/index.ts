@@ -1,7 +1,8 @@
 import yargs from 'yargs';
 import chalk from 'chalk';
+import _ from 'lodash';
 import { table } from 'table';
-import * as _ from 'lodash';
+
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { GraphqlActions } from '../../../consts/GraphqlActions';

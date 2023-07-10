@@ -1,5 +1,6 @@
-import * as path from 'path';
-import * as ts from 'typescript';
+import * as path from 'node:path';
+import ts from 'typescript';
+
 import { ICompiler } from '../../interfaces/ICompiler';
 import { StaticConfig } from '../../config';
 import { Context } from '../../common/context';
@@ -57,7 +58,7 @@ export class TypescriptCompiler implements ICompiler {
   }
 }
 
-const baseCompilerOptions = {
+const baseCompilerOptions: ts.CompilerOptions = {
   preserveConstEnums: true,
   strictNullChecks: true,
   sourceMap: false,

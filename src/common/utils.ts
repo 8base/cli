@@ -1,8 +1,8 @@
-import * as path from 'path';
-import { Readable } from 'stream';
+import * as path from 'node:path';
+import { Readable } from 'node:stream';
 import 'isomorphic-fetch';
-import * as fs from 'fs';
-import * as _ from 'lodash';
+import * as fs from 'node:fs';
+import _ from 'lodash';
 import AdmZip from 'adm-zip';
 import archiver from 'archiver';
 import MemoryStream from 'memorystream';

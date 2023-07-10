@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import yargs from 'yargs';
-import * as path from 'path';
+import * as path from 'node:path';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import tree from 'tree-node-cli';

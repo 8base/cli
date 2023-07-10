@@ -1,4 +1,5 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
+
 import { UserDataStorage } from './userDataStorage';
 import { StorageParameters } from '../consts/StorageParameters';
 

@@ -1,6 +1,7 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import * as fs from 'fs-extra';
-import * as _ from 'lodash';
+import _ from 'lodash';
+
 import { Context } from '../../../common/context';
 
 interface IFileProvider {

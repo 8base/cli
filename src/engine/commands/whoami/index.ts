@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import jwtDecode from 'jwt-decode';
 import chalk from 'chalk';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';

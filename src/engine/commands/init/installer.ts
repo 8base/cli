@@ -1,6 +1,7 @@
-import * as path from 'path';
-import * as _ from 'lodash';
+import * as path from 'node:path';
 import * as fs from 'fs-extra';
+import _ from 'lodash';
+
 import { Utils } from '../../../common/utils';
 import { Context } from '../../../common/context';
 

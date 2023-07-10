@@ -1,13 +1,14 @@
 import yargs from 'yargs';
 import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as path from 'node:path';
 import { simpleGit } from 'simple-git';
+
+import { StaticConfig } from '../../../../config';
 import { translations } from '../../../../common/translations';
 import { Context } from '../../../../common/context';
 import { StorageParameters } from '../../../../consts/StorageParameters';
 import { readFs, writeFs } from '../../../../common/memfs';
-import { replaceInitialApp, REPO_BRANCH_NAME } from '@8base/generators';
-import { StaticConfig } from '../../../../config';
+import { replaceInitialApp } from '../../../../common/replaceInitialApp';
 
 type AppGenerateParams = { name: string };
 
@@ -30,7 +31,8 @@ export default {
     const workspaceId = context.workspaceId;
 
     context.spinner.start('Fetching project skeleton');
-    await git.clone('https://github.com/8base/react-app-starter.git', appName, ['--branch', REPO_BRANCH_NAME]);
+
+    await git.clone(StaticConfig.starterAppRepoUrl, appName, ['--branch', StaticConfig.starterAppRepoDefaultBranch]);
     await fs.remove(path.join(appName, '.git'));
 
     process.chdir(appName);

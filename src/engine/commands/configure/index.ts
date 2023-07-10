@@ -1,9 +1,10 @@
 import yargs from 'yargs';
+import _ from 'lodash';
+
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
-import * as _ from 'lodash';
 import { Workspace } from '../../../interfaces/Common';
 
 type ConfigureParams = { workspaceId: string; host: string };

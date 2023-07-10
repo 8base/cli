@@ -1,8 +1,8 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as path from 'node:path';
 import yaml from 'yaml';
 import * as ejs from 'ejs';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 import { StaticConfig } from '../../config';
 import { InvalidConfiguration } from '../../errors';

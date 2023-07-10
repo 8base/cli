@@ -1,18 +1,20 @@
 import yargs from 'yargs';
-import * as path from 'path';
-import * as _ from 'lodash';
+import * as path from 'node:path';
+import _ from 'lodash';
 import AdmZip from 'adm-zip';
-import gqlRequest from 'graphql-request';
 
 import { StaticConfig } from '../../../../config';
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { ProjectController } from '../../../controllers/projectController';
 import { Utils } from '../../../../common/utils';
+import { DEFAULT_ENVIRONMENT_NAME } from '../../../../consts/Environment';
 
 type PluginInstallParams = {
   name: string;
 };
+
+type ProjectType = { name: string; gitHubUrl: string };
 
 const PLUGINS_LIST_QUERY = `
   query PluginsList {
@@ -25,8 +27,6 @@ const PLUGINS_LIST_QUERY = `
   }
 `;
 
-type ProjectType = { name: string; gitHubUrl: string };
-
 export default {
   command: 'install <name>',
 
@@ -34,10 +34,10 @@ export default {
     const { name } = params;
 
     let plugins = _.get(
-      await gqlRequest<{ pluginsList: { items: ProjectType[] } }>(
-        'https://api.8base.com/ck16gpwki001f01jgh4kvd54j',
-        PLUGINS_LIST_QUERY,
-      ),
+      await context.request<any, { pluginsList: { items: ProjectType[] } }>(PLUGINS_LIST_QUERY, undefined, {
+        customWorkspaceId: StaticConfig.pluginsWorkspaceId,
+        customEnvironment: DEFAULT_ENVIRONMENT_NAME,
+      }),
       ['pluginsList', 'items'],
     );
 

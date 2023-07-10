@@ -1,5 +1,6 @@
 import yargs from 'yargs';
-import * as _ from 'lodash';
+import _ from 'lodash';
+
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';

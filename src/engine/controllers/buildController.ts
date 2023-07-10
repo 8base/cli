@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as path from 'node:path';
 import ignore from 'ignore';
-import { Readable } from 'stream';
+import { Readable } from 'node:stream';
 
 import { ProjectController } from './projectController';
 import { getCompiler } from '../compilers';

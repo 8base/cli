@@ -1,7 +1,7 @@
-import * as _ from 'lodash';
-import * as fs from 'fs';
-import { FieldDefinitionNode, parse } from 'graphql';
-import { ObjectTypeExtensionNode } from 'graphql/language/ast';
+import _ from 'lodash';
+import * as fs from 'node:fs';
+import { ObjectTypeExtensionNode, FieldDefinitionNode, parse } from 'graphql';
+
 import { GraphQLFunctionType } from '../../interfaces/Extensions';
 
 export class GraphqlController {

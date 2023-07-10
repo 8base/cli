@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 
 export class PredefineData {
   projectDir = path.join(__dirname, '../');

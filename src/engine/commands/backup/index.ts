@@ -1,5 +1,6 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import yargs from 'yargs';
+
 import { translations } from '../../../common/translations';
 import { Utils } from '../../../common/utils';
 

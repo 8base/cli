@@ -1,12 +1,13 @@
 import yargs from 'yargs';
+import _ from 'lodash';
+import errorCodes from '@8base/error-codes';
+
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
 import { GraphqlAsyncActions } from '../../../../consts/GraphqlActions';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { executeAsync } from '../../../../common/execute';
 import { MigrateMode } from '../../../../interfaces/Common';
-import * as _ from 'lodash';
-import errorCodes from '@8base/error-codes';
 import { Interactive } from '../../../../common/interactive';
 
 type BranchParams = { name: string; mode: MigrateMode; force: boolean };

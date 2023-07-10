@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import { PredefineData } from './predefineData';
 
 const packageFile = require('../../package.json');
@@ -74,6 +74,11 @@ export class StaticConfig {
   static modulesFolder = 'node_modules';
   static metaFolder = 'meta';
   static packageFolder = 'package';
+
+  static starterAppRepoUrl = 'https://github.com/8base/react-app-starter';
+  static starterAppRepoDefaultBranch = 'v0.5.1';
+
+  static pluginsWorkspaceId = 'ck16gpwki001f01jgh4kvd54j';
 
   static buildRootDirPath = path.join(StaticConfig.rootExecutionDir, StaticConfig.buildRootFolder);
   static buildDistPath = path.join(StaticConfig.buildRootDirPath, StaticConfig.buildDistFolder);

@@ -6,7 +6,7 @@ import { ProjectConfigurationState } from '../../../../common/configuraion';
 import chalk from 'chalk';
 import { Colors } from '../../../../consts/Colors';
 import { table } from 'table';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { executeDeploy } from '../../../../common/execute';
 import { DeployModeType } from '../../../../interfaces/Extensions';
 

@@ -9,8 +9,8 @@ export default {
     /**
      * Shared messages
      */
-    project_created_file: 'Created file {{- path }}',
-    project_updated_file: 'Updated file {{- path }}',
+    project_created_file: 'Created {{- path }} file',
+    project_updated_file: 'Updated {{- path }} file',
     '8base_usage':
       'DESCRIPTION\n  The 8base Command Line Interface is a unified tool to manage your 8base workspaces services.\n\nUSAGE\n  8base <command> [OPTIONS]\n\n  Use 8base command `--help` for information on a specific command. Use 8base help topics to view a list of available help topics. The synopsis for each command shows its parameters and their usage. Optional options are shown in square brackets.',
     '8base_config_is_missing':
@@ -237,18 +237,10 @@ export default {
      * Generate scaffold related messages
      */
     generate_scaffold_usage: '8base generate scaffold <tableName> [OPTIONS]',
-    generate_scaffold_name: 'The name of the table',
     generate_scaffold_describe:
       'Generates CRUD screens for a table in a specific framework (framework availability: react)',
-    generate_scaffold_depth_describe: 'Depth of the generated query',
-    generate_scaffold_table_error: "Can't find a '{{- tableName }}' table",
-    generate_scaffold_crud_exist_error: 'CRUD for this table already exist.',
-    generate_scaffold_project_file_error:
-      "Can't find a '{{- projectFileName }}' file. You should be in the project root directory to exec this command.",
-    generate_scaffold_project_name_error:
-      "Can't find an 'appName' constant. Check you '{{- projectFileName }}' file in the project root directory.",
-    generate_scaffold_successfully_created: '{{- screenName }} was successfully created',
-    generate_scaffold_was_not_created: "{{- screenName }} wasn't created",
+    generate_scaffold_table_name: 'The name of the table',
+    generate_scaffold_deprecated: 'Functionality removed from the project',
 
     /**
      * Generate resolver related messages
