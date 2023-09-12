@@ -133,7 +133,7 @@
     "mkdirp": "^0.5.1",
     "nodemon": "^1.18.5",
     "prettier": "^1.19.1",
-    "puppeteer": "^1.16.0",
+    "puppeteer": "2.0.0",
     "ts-jest": "25.1.0"
   }
 }
