@@ -51,7 +51,7 @@ export default {
       );
     }
 
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject): void => {
       request(
         {
           url: `${plugin.gitHubUrl}/archive/master.zip`,

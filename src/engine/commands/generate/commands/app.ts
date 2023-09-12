@@ -1,6 +1,7 @@
 import * as yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+// @ts-ignore
 import * as simplegit from 'simple-git/promise';
 import { translations } from '../../../../common/translations';
 import { Context } from '../../../../common/context';

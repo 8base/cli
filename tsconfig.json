@@ -6,6 +6,7 @@
     "module": "commonjs",
     "target": "ES2016",
     "noImplicitAny": true,
+    "skipLibCheck": true,
     "lib": [
       "es2017",
       "esnext.asynciterable",
@@ -18,9 +19,6 @@
     "outDir": "dist",
     "baseUrl": ".",
     "sourceMap": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
     "paths": {
       "*": [
         "types/*"
@@ -29,5 +27,8 @@
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "node_modules/@types"
   ]
 }

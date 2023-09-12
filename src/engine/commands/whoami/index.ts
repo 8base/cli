@@ -19,6 +19,7 @@ export default {
     try {
       const idToken = context.storage.getValue(StorageParameters.idToken);
 
+      // @ts-ignore
       ({ email, name } = jwtDecode(idToken));
     } catch (e) {}
 
