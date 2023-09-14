@@ -16,6 +16,7 @@ import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { StaticConfig } from '../../../config';
+import { Workspace } from '../../../../dist/interfaces/Common';
 
 type InitParams = {
   name: string;
@@ -46,10 +47,14 @@ export default {
 
     let { workspaceId, host } = params;
 
+    console.log('🚀 ~ file: handler.ts:22 ~ INIT ~ perform:', params);
+
     const projectName = name || path.basename(context.config.rootExecutionDir);
     const fullPath = name ? path.join(context.config.rootExecutionDir, projectName) : context.config.rootExecutionDir;
 
     const { errors = [] } = validatePackageName(projectName);
+
+    console.log('🚀 ~ file: handler.ts:22 ~ INIT ~ perform:', params);
 
     if (errors.length > 0) {
       throw new Error(
@@ -60,6 +65,8 @@ export default {
     }
 
     const project = { fullPath, name: projectName };
+
+    console.log('🚀 ~ file: handler.ts:22 ~ INIT ~ perform:', project);
 
     if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
@@ -114,6 +121,8 @@ export default {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
       }
 
+      console.log('🚀 ~ file: handler.ts:22 ~ WORKSPACE INFO ~ perform:', workspace);
+
       host = workspace.apiHost;
     }
 
@@ -123,8 +132,14 @@ export default {
 
     context.logger.debug(`initialize success: initialize repository: ${project.name}`);
 
+    console.log('🚀 ~ file: handler.ts:22 ~ WORKSPACE HOST ~ perform:', host);
+    console.log('🚀 ~ file: handler.ts:22 ~ ACTUAL CONTEXT ~ perform:', context);
+
     let files = getFileProvider().provide(context);
+
     context.logger.debug(`files provided count = ${files.size}`);
+
+    console.log('🚀 ~ file: handler.ts:22 ~ files ~ perform:', files);
 
     files.set(
       context.config.packageFileName,
