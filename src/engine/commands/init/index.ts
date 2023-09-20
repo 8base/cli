@@ -16,7 +16,6 @@ import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { StaticConfig } from '../../../config';
-import { Workspace } from '../../../../dist/interfaces/Common';
 
 type InitParams = {
   name: string;
