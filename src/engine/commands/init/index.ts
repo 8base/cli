@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import tree from 'tree-node-cli';
+import exec from 'child_process';
 import validatePackageName from 'validate-npm-package-name';
 
 import { getFileProvider } from './providers';
@@ -16,6 +17,8 @@ import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { StaticConfig } from '../../../config';
+import { GraphqlActions } from '../../../consts/GraphqlActions';
+import { ProjectConfigurationState } from '../../../common/configuraion';
 
 type InitParams = {
   name: string;
@@ -45,6 +48,8 @@ export default {
     const { name, functions, empty, syntax, mocks, silent } = params;
 
     let { workspaceId, host } = params;
+
+    let clonning_question = false;
 
     console.log('🚀 ~ file: handler.ts:22 ~ INIT ~ perform:', params);
 
@@ -131,9 +136,6 @@ export default {
 
     context.logger.debug(`initialize success: initialize repository: ${project.name}`);
 
-    console.log('🚀 ~ file: handler.ts:22 ~ WORKSPACE HOST ~ perform:', host);
-    console.log('🚀 ~ file: handler.ts:22 ~ ACTUAL CONTEXT ~ perform:', context);
-
     let files = getFileProvider().provide(context);
 
     context.logger.debug(`files provided count = ${files.size}`);
@@ -195,12 +197,44 @@ export default {
       });
 
       /* Print out tree of new project */
-      context.logger.info(project.name);
-      context.logger.info(fileTree.replace(/[^\n]+\n/, ''));
+      // context.logger.info(project.name);
+      // context.logger.info(fileTree.replace(/[^\n]+\n/, ''));
 
       /* Print project created message */
       context.logger.info(`🎉 Project ${chalkedName} was successfully created 🎉`);
     }
+
+    process.chdir(project.fullPath);
+
+    console.log(exec.execSync('ls').toString());
+
+    console.log('🚀 ~ file: handler.ts:22 ~ files ~ IS PROJECT DIR:', context.isProjectDir());
+
+    context.initializeProject();
+
+    context.spinner.start(context.i18n.t('describe_progress'));
+
+    let functionsList = (await context.request(GraphqlActions.functionsList)).functionsList;
+
+    context.spinner.stop();
+
+    console.log('🚀 ~ file: handler.ts:22 ~ workspace ~ perform:', functionsList);
+
+    ({ clonning_question } = await Interactive.ask({
+      name: 'clonning_question',
+      type: 'select',
+      message: translations.i18n.t('init_cloning_question'),
+      choices: [
+        {
+          title: 'Yes',
+          value: true,
+        },
+        {
+          title: 'No',
+          value: false,
+        },
+      ],
+    }));
   },
   describe: translations.i18n.t('init_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {

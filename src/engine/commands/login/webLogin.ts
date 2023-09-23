@@ -11,6 +11,9 @@ export const webLogin = async (params: { w: string }, context: Context): Promise
 
   await open(`${Utils.trimLastSlash(params.w)}/cli?guid=${session}`, { wait: false });
 
+  console.log("🚀 ~ file: webLogin.ts:14 ~ webLogin ~ trimLastSlash:", params)
+  console.log("🚀 ~ file: webLogin.ts:14 ~ webLogin ~ trimLastSlash:", Utils.trimLastSlash(params.w))
+
   const timeoutMs = 2000;
   let retryCount = 150; // 150 * 2s = 300s = 5 min
 

@@ -45,7 +45,7 @@ export class StaticConfig {
   }
 
   static get apiAddress(): string {
-    return this.staticData.apiAddress;
+    return process.env.DEVMODE ? process.env.SERVER_URL : this.staticData.apiAddress;
   }
 
   static get serviceConfigFileName(): string {

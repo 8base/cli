@@ -17,6 +17,11 @@ const TASKS_HEADER = ['Name', 'Description', 'Schedule'];
 export default {
   command: 'describe [name]',
   handler: async (params: DescribeParams, context: Context) => {
+
+    console.log('🚀 ~ file: handler.ts:22 ~ DESCRIBE ~ perform:', context);
+
+    console.log('🚀 ~ file: handler.ts:22 ~ DESCRIBE ~ perform:', params);
+
     context.initializeProject();
 
     context.spinner.start(context.i18n.t('describe_progress'));

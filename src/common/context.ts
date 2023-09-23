@@ -175,7 +175,7 @@ export class Context {
   }
 
   resolveMainServerAddress(): string {
-    return this.storage.getValue(StorageParameters.serverAddress) || StaticConfig.apiAddress;
+    return StaticConfig.apiAddress;
   }
 
   get storage(): typeof UserDataStorage {
@@ -225,6 +225,12 @@ export class Context {
     }
 
     return workspaces;
+  }
+
+  async getFunctions(): Promise<any[]> {
+    const { functionsList } = await this.request(GraphqlActions.functionsList);
+
+    return functionsList.items;
   }
 
   async checkWorkspace(workspaceId: string) {
@@ -338,6 +344,7 @@ export class Context {
 
   get project(): ProjectDefinition {
     if (_.isNil(this._project)) {
+      console.log('------------>', this);
       this._project = ProjectController.initialize(this);
     }
     return this._project;

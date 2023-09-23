@@ -118,6 +118,7 @@ export default {
     init_workspace_id_describe: 'The workspace ID of the project',
     init_workspace_host_describe: 'The workspace host of the project',
     init_select_workspace: 'What workspace does this project belong to?',
+    init_cloning_question: 'Do you want to download the project files?',
     init_prevent_select_workspace: 'Workspace selection canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
     init_canceled: 'Project init canceled',
