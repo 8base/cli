@@ -19,6 +19,7 @@ import {
 } from '../../interfaces/Extensions';
 import { ProjectDefinition } from '../../interfaces/Project';
 import { Context, Plugin, ProjectConfig } from '../../common/context';
+import { Utils } from '../../common/utils';
 
 type FunctionDeclarationOptions = {
   operation?: TriggerOperation;
@@ -629,8 +630,9 @@ namespace ResolverUtils {
 
 namespace FunctionUtils {
   export function resolveHandler(name: string, handler: any): string {
-    if (_.isString(handler?.code)) {
-      return handler.code;
+    const handlerPath = handler?.code;
+    if (_.isString(handlerPath)) {
+      return Utils.normalizePath(handlerPath);
     }
     throw new InvalidConfiguration(StaticConfig.serviceConfigFileName, `handler is invalid for function "${name}"`);
   }
