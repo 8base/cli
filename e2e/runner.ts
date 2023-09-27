@@ -1,7 +1,5 @@
 import { CLI_BIN } from './consts';
-import execa from 'execa';
-
-jest.setTimeout(60000);
+import { execa } from 'execa';
 
 const runner = (cwd?: any, env?: any) => {
   const opts = {

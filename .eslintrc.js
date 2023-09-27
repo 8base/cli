@@ -4,6 +4,7 @@ module.exports = {
     es6: true,
     node: true,
   },
+  plugins: ['vitest'],
   extends: ['plugin:prettier/recommended', 'plugin:import/errors', 'plugin:import/warnings'],
   parserOptions: {
     ecmaVersion: 6,

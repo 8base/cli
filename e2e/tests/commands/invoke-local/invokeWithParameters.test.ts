@@ -1,3 +1,5 @@
+import { it, expect, beforeAll, afterAll } from 'vitest';
+
 import {
   addFileToProject,
   addResolverToProject,
@@ -10,8 +12,6 @@ let project: any;
 const repositoryName = 'test_rep';
 
 it('As a user, I can invoke resolver locally.', async () => {
-  jest.setTimeout(12000);
-
   expect.assertions(1);
 
   const funcName = 'invokeFuncTest';
@@ -45,7 +45,7 @@ it('As a user, I can invoke resolver locally.', async () => {
     }
     invoke-local done. Time:`,
   );
-});
+}, { timeout: 12000 });
 
 beforeAll(async () => {
   project = await prepareTestEnvironment(repositoryName);

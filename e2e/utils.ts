@@ -5,15 +5,17 @@ import * as fs from 'fs-extra';
 import cuid from '@paralleldrive/cuid2';
 import yaml from 'yaml';
 import stripAnsi from 'strip-ansi';
+import { expect } from 'vitest';
 
 import { CLI_BIN } from './consts';
 import { ProjectConfig } from '../src/common/context';
+import { Utils } from '../src/common/utils';
 
 export const prepareTestEnvironment = async (
   repName: string = cuid.createId(),
 ): Promise<{ onComplete: () => void; repPath: string }> => {
-  const dir = cuid.createId();
-  const fullPath = path.join(__dirname, dir);
+  const dirName = cuid.createId();
+  const fullPath = path.join(__dirname, `tmp_${dirName}`);
 
   createDir(fullPath);
 
@@ -63,7 +65,7 @@ export const addFileToProject = async (
   createDir(pathToDir);
   await fs.writeFile(pathToFile, fileData);
   return {
-    relativePathToFile: path.join(pathPrefix, fileName),
+    relativePathToFile: Utils.normalizePath(path.join(pathPrefix, fileName)),
     fullPathToFile: pathToFile,
   };
 };
@@ -88,7 +90,7 @@ export namespace RunCommand {
 
 const execCmd = async (repPath: string, command: string) => {
   const execPromise = promisify(exec);
-  const result = await execPromise(`cd ${repPath} && node ${CLI_BIN} ${command}`);
+  const result = await execPromise(`pushd ${repPath} && node ${CLI_BIN} ${command} && popd ${repPath}`);
   return result.stdout;
 };
 

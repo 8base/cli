@@ -1,9 +1,11 @@
-import { command } from 'execa';
+import { it, expect, afterEach } from 'vitest';
+
+import { execaCommand as command } from 'execa';
 import stripAnsi from 'strip-ansi';
 
 import { runner } from '../runner';
 
-const TEST_DIR = 'testdir_init';
+const TEST_DIR = 'e2e_tmp_testdir_init';
 
 it('As a user, I can init example project.', async () => {
   let { stdout } = await runner()('init', TEST_DIR, '-w=workspaceId');

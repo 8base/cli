@@ -1,27 +1,27 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`As a user, I can init empty project. 1`] = `
-"Building a new project called testdir_init 🚀
-testdir_init
+"Building a new project called e2e_tmp_testdir_init 🚀
+e2e_tmp_testdir_init
 ├── .env.local
 ├── .gitignore
 ├── .workspace.json
 ├── 8base.yml
 └── package.json
-🎉 Project testdir_init was successfully created 🎉
+🎉 Project e2e_tmp_testdir_init was successfully created 🎉
 init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init empty project. 2`] = `
 [
-  "testdir_init/8base.yml",
-  "testdir_init/package.json",
+  "e2e_tmp_testdir_init/8base.yml",
+  "e2e_tmp_testdir_init/package.json",
 ]
 `;
 
 exports[`As a user, I can init example project. 1`] = `
-"Building a new project called testdir_init 🚀
-testdir_init
+"Building a new project called e2e_tmp_testdir_init 🚀
+e2e_tmp_testdir_init
 ├── .env.local
 ├── .gitignore
 ├── .workspace.json
@@ -50,18 +50,18 @@ testdir_init
             ├── handler.ts
             └── mocks
                 └── request.json
-🎉 Project testdir_init was successfully created 🎉
+🎉 Project e2e_tmp_testdir_init was successfully created 🎉
 init done. Time: 100 sec."
 `;
 
 exports[`As a user, I can init example project. 2`] = `
 [
   "",
+  "e2e_tmp_testdir_init/8base.yml",
+  "e2e_tmp_testdir_init/package.json",
+  "e2e_tmp_testdir_init/src:",
   "resolvers",
   "tasks",
-  "testdir_init/8base.yml",
-  "testdir_init/package.json",
-  "testdir_init/src:",
   "triggers",
   "webhooks",
 ]

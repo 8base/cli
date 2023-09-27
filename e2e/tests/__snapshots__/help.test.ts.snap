@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`As a user, I can use help flag for see help information about \`[ '' ]\`. 1`] = `
 "DESCRIPTION
@@ -106,7 +106,7 @@ OPTIONS
   -d, --debug    Turn on debug logs  [boolean]
   -h, --help     Show help  [boolean]
   -p, --plugins  The list of plugins to deploy  [array]
-  -m, --mode     Deploy mode  [string] [choices: "FULL", "ONLY_PLUGINS", "ONLY_PROJECT", "MIGRATIONS"] [default: "ONLY_PROJECT"]"
+  -m, --mode     Deploy mode  [string] [choices: \\"FULL\\", \\"ONLY_PLUGINS\\", \\"ONLY_PROJECT\\", \\"MIGRATIONS\\"] [default: \\"ONLY_PROJECT\\"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'describe' ]\`. 1`] = `
@@ -152,7 +152,7 @@ OPTIONS
   -d, --debug  Turn on debug logs  [boolean]
   -h, --help   Show help  [boolean]
   -n, --name   Name of new environment  [string] [required]
-  -m, --mode   Branching mode  [string] [choices: "FULL", "SYSTEM"] [default: "FULL"]
+  -m, --mode   Branching mode  [string] [choices: \\"FULL\\", \\"SYSTEM\\"] [default: \\"FULL\\"]
   -f, --force  You can specify force flag to branch without prompt."
 `;
 
@@ -248,7 +248,7 @@ OPTIONS
   -d, --debug     Turn on debug logs  [boolean]
   -h, --help      Show help  [boolean]
       --silent    Disable printing extra info to the console  [boolean] [default: false]
-  -m, --mockName  Name of the mock request  [string] [default: "request"]"
+  -m, --mockName  Name of the mock request  [string] [default: \\"request\\"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'resolver' ]\`. 1`] = `
@@ -261,7 +261,7 @@ OPTIONS
   -d, --debug   Turn on debug logs  [boolean]
   -h, --help    Show help  [boolean]
   -x, --mocks   Included mocks dir and files  [boolean] [default: true]
-  -s, --syntax  Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
+  -s, --syntax  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
       --silent  Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
@@ -287,7 +287,7 @@ OPTIONS
   -h, --help             Show help  [boolean]
       --schedule, --sch  Schedule on which the task runs  [string]
   -x, --mocks            Included mocks dir and files  [boolean] [default: true]
-  -s, --syntax           Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
+  -s, --syntax           Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
       --silent           Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
@@ -300,10 +300,10 @@ POSITIONALS
 OPTIONS
   -d, --debug      Turn on debug logs  [boolean]
   -h, --help       Show help  [boolean]
-  -t, --type       The trigger type  [string] [choices: "before", "after"] [default: "before"]
-  -o, --operation  Operation that invokes the trigger  [string] [choices: "create", "update", "delete"] [default: "create"]
+  -t, --type       The trigger type  [string] [choices: \\"before\\", \\"after\\"] [default: \\"before\\"]
+  -o, --operation  Operation that invokes the trigger  [string] [choices: \\"create\\", \\"update\\", \\"delete\\"] [default: \\"create\\"]
   -x, --mocks      Included mocks dir and files  [boolean] [default: true]
-  -s, --syntax     Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
+  -s, --syntax     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
       --silent     Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
@@ -317,9 +317,9 @@ OPTIONS
   -d, --debug   Turn on debug logs  [boolean]
   -h, --help    Show help  [boolean]
   -p, --path    Path for the url (https:<endpoint>/<path>)  [string]
-  -m, --method  HTTP verb to invoke the function  [string] [choices: "POST", "GET", "DELETE", "PUT"] [default: "POST"]
+  -m, --method  HTTP verb to invoke the function  [string] [choices: \\"POST\\", \\"GET\\", \\"DELETE\\", \\"PUT\\"] [default: \\"POST\\"]
   -x, --mocks   Included mocks dir and files  [boolean] [default: true]
-  -s, --syntax  Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
+  -s, --syntax  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
       --silent  Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
@@ -352,13 +352,13 @@ POSITIONALS
 OPTIONS
   -d, --debug        Turn on debug logs  [boolean]
   -h, --help         Show help  [boolean]
-  -f, --functions    List of functions  [array] [default: ["resolver:resolver","task:task","webhook:webhook","trigger:Users:create:before"]]
+  -f, --functions    List of functions  [array] [default: [\\"resolver:resolver\\",\\"task:task\\",\\"webhook:webhook\\",\\"trigger:Users:create:before\\"]]
   -e, --empty        Skip examples  [boolean] [default: false]
   -x, --mocks        Included mocks dir and files  [boolean] [default: true]
-  -s, --syntax       Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
+  -s, --syntax       Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
       --silent       Disable printing extra info to the console  [boolean] [default: false]
   -w, --workspaceId  The workspace ID of the project  [string]
-      --host         The workspace host of the project  [string] [default: "https://api.8base.com"]
+      --host         The workspace host of the project  [string] [default: \\"https://api.8base.com\\"]
 
 EXAMPLES
   8base init             Initializes project in current folder
@@ -448,7 +448,7 @@ OPTIONS
   -n, --num       Number of lines to display  [number] [default: 10]
   -t, --tail      Continually stream logs  [boolean]
   -r, --resource  environment:extensions - deployed custom functions logs
-                  system:ci:migration - migration process logs  [string] [choices: "environment:extensions", "system:ci:commit"] [default: "environment:extensions"]"
+                  system:ci:migration - migration process logs  [string] [choices: \\"environment:extensions\\", \\"system:ci:commit\\"] [default: \\"environment:extensions\\"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'migration' ]\`. 1`] = `
@@ -476,7 +476,7 @@ DESCRIPTION
 OPTIONS
   -d, --debug        Turn on debug logs  [boolean]
   -h, --help         Show help  [boolean]
-  -m, --mode         Commit mode.  [string] [choices: "FULL", "ONLY_MIGRATIONS", "ONLY_PROJECT"] [default: "FULL"]
+  -m, --mode         Commit mode.  [string] [choices: \\"FULL\\", \\"ONLY_MIGRATIONS\\", \\"ONLY_PROJECT\\"] [default: \\"FULL\\"]
   -f, --force        You can specify force flag to commit to master without prompt.  [boolean]
   -e, --environment  Specify the environment you want to commit.  [string]
   -t, --target       You can specify the necessary migration files.  [array]"
@@ -492,7 +492,7 @@ DESCRIPTION
 OPTIONS
   -d, --debug        Turn on debug logs  [boolean]
   -h, --help         Show help  [boolean]
-      --dist         The folder of migrations  [string] [default: "./migrations"]
+      --dist         The folder of migrations  [string] [default: \\"./migrations\\"]
   -t, --tables       Specify table names to generate migrations for data.  [array]
   -e, --environment  Target environment  [string]"
 `;

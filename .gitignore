@@ -67,6 +67,10 @@ typings/
 # dotenv environment variables file
 .env
 
+# e2e
+e2e/tmp_*
+e2e_tmp_*
+
 lib/
 
 .DS_Store
