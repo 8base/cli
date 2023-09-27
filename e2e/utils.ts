@@ -90,7 +90,7 @@ export namespace RunCommand {
 
 const execCmd = async (repPath: string, command: string) => {
   const execPromise = promisify(exec);
-  const result = await execPromise(`pushd ${repPath} && node ${CLI_BIN} ${command} && popd ${repPath}`);
+  const result = await execPromise(`cd ${repPath} && node ${CLI_BIN} ${command}`);
   return result.stdout;
 };
 
