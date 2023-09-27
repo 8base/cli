@@ -90,5 +90,10 @@
     "prettier": "^3.0.3",
     "strip-ansi": "^7.1.0",
     "vitest": "^0.34.5"
+  },
+  "overrides": {
+    "@8base/api-client": {
+      "filestack-js": "^3.27.0"
+    }
   }
 }
