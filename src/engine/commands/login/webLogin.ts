@@ -17,12 +17,12 @@ export const webLogin = async (params: { w: string }, context: Context): Promise
   const timeoutMs = 2000;
   let retryCount = 150; // 150 * 2s = 300s = 5 min
 
-  let res = null;
+  let res: any = null;
   while (--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
     try {
       const response = await Utils.checkHttpResponse(
-        fetch(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`),
+        fetch(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`) as any,
       );
       res = await response.json();
     } catch (e) {

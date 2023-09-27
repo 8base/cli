@@ -5,6 +5,8 @@ import { BuildController } from '../engine/controllers/buildController';
 import { Context } from './context';
 import { RequestOptions } from '../interfaces/Common';
 import { REQUEST_HEADER_IGNORED } from '../consts/request';
+import unzipper from 'unzipper';
+import * as fs from 'fs';
 
 export const executeAsync = async (
   context: Context,
@@ -69,6 +71,20 @@ export const uploadProject = async (context: Context, options?: RequestOptions):
   await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
   context.logger.debug('upload source code complete');
   return { buildName: prepareDeploy.buildName };
+};
+
+export const downloadProject = async (context: Context, path: string, options?: RequestOptions): Promise<any> => {
+  const { prepareDownload } = await context.request(GraphqlActions.prepareDownload, {}, options);
+  // Decode the base64 content
+  const decodedContent = Buffer.from(prepareDownload.downloadMetaDataUrl.content, 'base64');
+  context.logger.debug('download succesfully, writing to file and unziping');
+  const unzipPath = `${path}/${prepareDownload.downloadMetaDataUrl.key}`;
+  fs.writeFileSync(unzipPath, decodedContent);
+  fs.createReadStream(`${unzipPath}`)
+    .pipe(unzipper.Extract({ path }))
+    .on('close', () => {
+      fs.unlinkSync(unzipPath);
+    });
 };
 
 export const executeDeploy = async (context: Context, deployOptions: any, options?: RequestOptions) => {

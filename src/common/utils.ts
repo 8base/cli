@@ -8,6 +8,7 @@ import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
 import archiver from 'archiver';
 import MemoryStream from 'memorystream';
+import axios from 'axios';
 import { HttpError } from '../errors';
 
 export namespace Utils {
@@ -64,6 +65,26 @@ export namespace Utils {
     );
 
     context.logger.debug('upload file success');
+  };
+
+  export const download = async (url: string, context: Context): Promise<void> => {
+    context.logger.debug('start download file');
+    context.logger.debug(`url: ${url}`);
+
+    const response = await axios({
+      method: 'GET',
+      url: url,
+      responseType: 'stream',
+    });
+
+    const writer = fs.createWriteStream('./file.zip');
+
+    response.data.pipe(writer);
+
+    return new Promise((resolve, reject) => {
+      writer.on('finish', resolve);
+      writer.on('error', reject);
+    });
   };
 
   export const archiveToMemory = async (
@@ -140,7 +161,7 @@ export namespace Utils {
   export const checkHttpResponse = async (httpResponse: Promise<Response>): Promise<Response> => {
     const response = await httpResponse;
     if (!response.ok) {
-      throw new HttpError(await response.text(), response.status, response);
+      throw new HttpError(await response.text(), response.status, response as any);
     }
 
     return response;
