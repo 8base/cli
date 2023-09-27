@@ -16,8 +16,8 @@
   },
   "files": [
     "dist",
-    "templates",
-    "postinstall.js"
+    "scripts",
+    "templates"
   ],
   "scripts": {
     "build": "rm -rf dist && tsc",
