@@ -169,6 +169,6 @@ export namespace Utils {
   };
 
   export const normalizePath = (rawPath: string): string => {
-    return rawPath.replace('\\', '/');
+    return rawPath.replace(/\\/g, '/');
   };
 }
