@@ -1,12 +1,13 @@
+/* eslint-disable no-console */
 import * as _ from 'lodash';
 import yargs from 'yargs';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import tree from 'tree-node-cli';
-import exec from 'child_process';
 import validatePackageName from 'validate-npm-package-name';
 
+import { cyan, green, red, yellow, bold, blue } from 'picocolors';
 import { getFileProvider } from './providers';
 import { install } from './installer';
 import { Context } from '../../../common/context';
@@ -19,7 +20,6 @@ import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { StaticConfig } from '../../../config';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { downloadProject } from '../../../common/execute';
-import { ProjectConfigurationState } from '../../../common/configuraion';
 
 type InitParams = {
   name: string;
@@ -48,9 +48,10 @@ export default {
   handler: async (params: InitParams, context: Context) => {
     const { name, functions, empty, syntax, mocks, silent } = params;
 
-    let { workspaceId, host } = params;
+    console.log(green('\n' + bold('Starting process!')) + '\n');
+    context.spinner.start(`We are checking your current project files... \n`);
 
-    let clonning_question = false;
+    let { workspaceId, host } = params;
 
     const projectName = name || path.basename(context.config.rootExecutionDir);
     const fullPath = name ? path.join(context.config.rootExecutionDir, projectName) : context.config.rootExecutionDir;
@@ -114,7 +115,7 @@ export default {
       if (!workspaceId) {
         throw new Error(translations.i18n.t('init_prevent_select_workspace'));
       }
-
+      context.spinner.start('Retrieving workspace information.... \n');
       const workspace = _.find(await context.getWorkspaces(), { id: workspaceId });
       if (!workspace) {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
@@ -123,11 +124,17 @@ export default {
       host = workspace.apiHost;
     }
 
-    context.spinner.start(`Initializing new project ${chalk.hex(Colors.yellow)(project.name)}`);
+    context.logger.debug('checking current project files');
 
-    context.logger.debug('start initialize init command');
+    context.spinner.start(`Checking your project files.... \n`);
 
-    context.logger.debug(`initialize success: initialize repository: ${project.name}`);
+    const actualProjectFiles = await context.request(
+      GraphqlActions.functionsList,
+      {},
+      {
+        customWorkspaceId: workspaceId,
+      },
+    );
 
     let files = getFileProvider().provide(context);
 
@@ -142,26 +149,15 @@ export default {
     /* Creating new project message */
     const chalkedName = chalk.hex(Colors.yellow)(project.name);
 
-    if (!silent) {
-      context.logger.info(`Building a new project called ${chalkedName} 🚀`);
-    }
-
-    context.logger.debug('checking current project files');
-
-    const actualProjectFiles = await context.request(
-      GraphqlActions.functionsList,
-      {},
-      {
-        customWorkspaceId: workspaceId,
-      },
-    );
-
+    context.spinner.stop();
     if (actualProjectFiles.functionsList.items.length > 0) {
       context.logger.debug('downloading project files.');
+      context.spinner.start('Downloading project files.... \n');
       await downloadProject(context, project.fullPath, {
         customWorkspaceId: workspaceId,
       });
       context.logger.debug('creating workspace configuration.');
+      context.spinner.start('Creating workspace configuration.... \n');
       await context.createWorkspaceConfig(
         {
           workspaceId,
@@ -192,34 +188,21 @@ export default {
           }),
         );
       }
-
-      await context.createWorkspaceConfig(
-        {
-          workspaceId,
-          environmentName: DEFAULT_ENVIRONMENT_NAME,
-          apiHost: host || StaticConfig.apiAddress,
-        },
-        project.fullPath,
-      );
-
-      context.spinner.stop();
-
-      if (!silent) {
-        const fileTree = tree(project.fullPath, {
-          allFiles: true,
-          exclude: [/node_modules/, /\.build/],
-        });
-
-        /* Print out tree of new project */
-        context.logger.info(project.name);
-        context.logger.info(fileTree.replace(/[^\n]+\n/, ''));
-
-        /* Print project created message */
-        context.logger.info(`🎉 Project ${chalkedName} was successfully created 🎉`);
-      }
     }
-    // console.log('🚀 ~ file: handler.ts:22 ~ INIT ~ perform:', context.workspaceConfig);
-    // console.log('🚀 ~ file: handler.ts:22 ~ INIT ~ perform:', context.workspaceId);
+    context.spinner.stop();
+    if (!silent) {
+      const fileTree = tree(project.fullPath, {
+        allFiles: true,
+        exclude: [/node_modules/, /\.build/],
+      });
+
+      /* Print out tree of new project */
+      context.logger.info(project.name);
+      context.logger.info(fileTree.replace(/[^\n]+\n/, ''));
+
+      /* Print project created message */
+      context.logger.info(`\n🎉 Project ${chalkedName} was successfully created 🎉\n`);
+    }
   },
   describe: translations.i18n.t('init_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {

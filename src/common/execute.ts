@@ -75,16 +75,23 @@ export const uploadProject = async (context: Context, options?: RequestOptions):
 
 export const downloadProject = async (context: Context, path: string, options?: RequestOptions): Promise<any> => {
   const { prepareDownload } = await context.request(GraphqlActions.prepareDownload, {}, options);
-  // Decode the base64 content
+  // Decode the base64 contenthow
   const decodedContent = Buffer.from(prepareDownload.downloadMetaDataUrl.content, 'base64');
+
   context.logger.debug('download succesfully, writing to file and unziping');
   const unzipPath = `${path}/${prepareDownload.downloadMetaDataUrl.key}`;
   fs.writeFileSync(unzipPath, decodedContent);
-  fs.createReadStream(`${unzipPath}`)
-    .pipe(unzipper.Extract({ path }))
-    .on('close', () => {
-      fs.unlinkSync(unzipPath);
+  try {
+    await unzipper.Open.file(unzipPath).then(async d => {
+      await d.extract({ path: path, concurrency: 5 });
     });
+    fs.unlinkSync(unzipPath);
+    fs.rmSync(`${path}/__migration_handler`, { recursive: true });
+    fs.rmSync(`${path}/___source_migrations`, { recursive: true });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('🚀 ~ file: execute.ts:90 ~ downloadProject ~ error:', error);
+  }
 };
 
 export const executeDeploy = async (context: Context, deployOptions: any, options?: RequestOptions) => {

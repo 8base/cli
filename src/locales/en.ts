@@ -408,6 +408,17 @@ export default {
     environment_show_text: 'Environment: {{-environment}}',
 
     /**
+     * Sync status related messages
+     */
+
+    environment_sync_usage:
+      'COMMAND\n  8base environment sync\n\nDESCRIPTION\n Update your local code with the last deployed environment version.',
+    environment_sync_describe: 'Update your local code with the last deployed environment version.',
+    environment_sync_text: 'Environment: {{-environment}}',
+    environment_sync_warning:
+      'Do you really want like to import project files and custom functions from the {{- environment }}? Contents of your local project will be completely overwritten with the new data. Proceed? (Y/N)',
+
+    /**
      * Plugin related messages
      */
     plugin_install_describe: 'Install plugin to the project.',
