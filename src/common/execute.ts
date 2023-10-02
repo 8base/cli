@@ -85,9 +85,18 @@ export const downloadProject = async (context: Context, path: string, options?: 
     await unzipper.Open.file(unzipPath).then(async d => {
       await d.extract({ path: path, concurrency: 5 });
     });
+
     fs.unlinkSync(unzipPath);
-    fs.rmSync(`${path}/__migration_handler`, { recursive: true });
-    fs.rmSync(`${path}/___source_migrations`, { recursive: true });
+
+    if (fs.existsSync(`${path}/__migration_handler`)) {
+      fs.rmSync(`${path}/__migration_handler`, { recursive: true });
+    }
+
+    if (fs.existsSync(`${path}/___source_migrations`)) {
+      fs.rmSync(`${path}/___source_migrations`, { recursive: true });
+    }
+
+
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('🚀 ~ file: execute.ts:90 ~ downloadProject ~ error:', error);

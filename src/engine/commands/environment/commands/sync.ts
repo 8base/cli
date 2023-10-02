@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import yargs from 'yargs';
 import chalk from 'chalk';
 import { rimrafSync } from 'rimraf';
@@ -6,8 +7,10 @@ import { translations } from '../../../../common/translations';
 import { ProjectConfigurationState } from '../../../../common/configuraion';
 import { Interactive } from '../../../../common/interactive';
 import { downloadProject } from '../../../../common/execute';
+import tree from 'tree-node-cli';
+import { green, bold } from 'picocolors';
 
-import { glob, globSync, globStream, globStreamSync, Glob } from 'glob';
+import { globSync } from 'glob';
 
 export default {
   command: 'sync',
@@ -37,17 +40,34 @@ export default {
     }));
 
     if (warningApproval) {
+
+      console.log(green('\n' + bold('Starting process!')) + '\n');
+      context.spinner.start(`We are checking your current project files... \n`);
+
       const files = globSync('*', { ignore: ['*.json', '*.yml'] });
 
       files.map(file => {
         rimrafSync(file);
       });
 
-      context.logger.info('downloading project files.');
+      context.spinner.start(`Downloading project files... \n`);
 
-      await downloadProject(context, '.', {
+      await downloadProject(context, process.cwd(), {
         customEnvironment: environmentName,
       });
+
+      const fileTree = tree(process.cwd(), {
+        allFiles: true,
+        exclude: [/node_modules/, /\.build/],
+      });
+
+      /* Print out tree of new project */
+      context.logger.info(environmentName);
+      context.logger.info(fileTree.replace(/[^\n]+\n/, ''));
+
+      /* Print project created message */
+      context.logger.info(`\n🎉 Environment ${green(environmentName)} was successfully updated 🎉\n`);
+      context.logger.info(`⚠️  We recomend do a 8base deploy before continue working...\n`);
     }
 
     context.logger.info(
