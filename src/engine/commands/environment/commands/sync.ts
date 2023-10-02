@@ -40,7 +40,6 @@ export default {
     }));
 
     if (warningApproval) {
-
       console.log(green('\n' + bold('Starting process!')) + '\n');
       context.spinner.start(`We are checking your current project files... \n`);
 
@@ -67,7 +66,9 @@ export default {
 
       /* Print project created message */
       context.logger.info(`\n🎉 Environment ${green(environmentName)} was successfully updated 🎉\n`);
-      context.logger.info(`⚠️  We recomend do a 8base deploy before continue working...\n`);
+      context.logger.info(
+        `⚠️  Your project files and custom functions have been successfully imported from ${environmentName} environment. To ensure consistency, we recommend redeploying your project using the 8base deploy command.\n`,
+      );
     }
 
     context.logger.info(
