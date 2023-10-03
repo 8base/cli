@@ -136,9 +136,7 @@ export default {
       )
       .catch(e => {
         if (e.response.errors[0].code === 'NotAuthorizedError') {
-          context.logger.info(
-            `\n⚠️  You need 'Deploy' permissions for custom functions in both the parent and current project to execute the import`,
-          );
+          context.logger.info(translations.i18n.t('no_permission_error'));
           process.exit();
         }
       });
@@ -157,7 +155,7 @@ export default {
     const chalkedName = chalk.hex(Colors.yellow)(project.name);
 
     context.spinner.stop();
-    if (actualProjectFiles.functionsList.items.length > 0) {
+    if (actualProjectFiles?.functionsList?.items.length > 0) {
       context.logger.debug('downloading project files.');
       context.spinner.start('Downloading project files.... \n');
       await downloadProject(context, project.fullPath, {
