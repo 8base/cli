@@ -21,6 +21,7 @@ import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../inte
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
+import dotenv from 'dotenv';
 
 const pkg = require('../../package.json');
 
@@ -52,6 +53,7 @@ export class Context {
   spinner: any;
 
   constructor(params: any, translations: Translations) {
+    dotenv.config();
     this.logger = winston.createLogger({
       level: params.d ? 'debug' : 'info',
       format: winston.format.printf((info: TransformableInfo) => {
@@ -175,7 +177,7 @@ export class Context {
   }
 
   resolveMainServerAddress(): string {
-    return StaticConfig.apiAddress;
+    return process.env.HOST || StaticConfig.apiAddress;
   }
 
   get storage(): typeof UserDataStorage {
