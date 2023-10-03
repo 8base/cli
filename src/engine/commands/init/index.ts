@@ -49,7 +49,6 @@ export default {
     const { name, functions, empty, syntax, mocks, silent } = params;
 
     console.log(green('\n' + bold('Starting process!')) + '\n');
-    context.spinner.start(`We are checking your current project files... \n`);
 
     let { workspaceId, host } = params;
 
@@ -98,7 +97,6 @@ export default {
         }
       });
     }
-
     if (!workspaceId) {
       const workspaces = await context.getWorkspaces();
 
