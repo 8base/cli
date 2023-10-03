@@ -95,8 +95,6 @@ export const downloadProject = async (context: Context, path: string, options?: 
     if (fs.existsSync(`${path}/___source_migrations`)) {
       fs.rmSync(`${path}/___source_migrations`, { recursive: true });
     }
-
-
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('🚀 ~ file: execute.ts:90 ~ downloadProject ~ error:', error);

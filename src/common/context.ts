@@ -344,7 +344,6 @@ export class Context {
 
   get project(): ProjectDefinition {
     if (_.isNil(this._project)) {
-      console.log('------------>', this);
       this._project = ProjectController.initialize(this);
     }
     return this._project;
