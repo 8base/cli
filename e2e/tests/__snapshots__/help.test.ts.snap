@@ -134,7 +134,7 @@ COMMANDS
   8base environment list    Lists all the environments of current workspace.
   8base environment set     Allows you to set the environment of your current project
   8base environment show    Displays currently selected environment
-  8base environment sync    Update your local code with the last deployed environment version.
+  8base environment sync    Imports project files and custom functions from the latest deployed version of current active environment.
 
 OPTIONS
   -d, --debug  Turn on debug logs  [boolean]
