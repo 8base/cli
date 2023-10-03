@@ -123,6 +123,8 @@ export default {
     init_prevent_select_workspace: 'Workspace selection canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
     init_canceled: 'Project init canceled',
+    no_permission_error:
+      "n⚠️  You need 'Deploy' permissions for custom functions in both the parent and current project to execute the import",
 
     /**
      * Invoke related messages
@@ -412,11 +414,13 @@ export default {
      */
 
     environment_sync_usage:
-      'COMMAND\n  8base environment sync\n\nDESCRIPTION\n Update your local code with the last deployed environment version.',
-    environment_sync_describe: 'Update your local code with the last deployed environment version.',
+      'COMMAND\n  8base environment sync\n\nDESCRIPTION\n Imports project files and custom functions from the latest deployed version of current active environment.',
+    environment_sync_describe:
+      'Imports project files and custom functions from the latest deployed version of current active environment.',
     environment_sync_text: 'Environment: {{-environment}}',
     environment_sync_warning:
       'Do you really want like to import project files and custom functions from the {{- environment }}? Contents of your local project will be completely overwritten with the new data. Proceed? (Y/N)',
+    environment_sync_no_functions: '⚠️  There are no custom functions deployed in the current environment to sync',
 
     /**
      * Plugin related messages

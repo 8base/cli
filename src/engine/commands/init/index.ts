@@ -126,13 +126,22 @@ export default {
 
     context.spinner.start(`Checking your project files.... \n`);
 
-    const actualProjectFiles = await context.request(
-      GraphqlActions.functionsList,
-      {},
-      {
-        customWorkspaceId: workspaceId,
-      },
-    );
+    const actualProjectFiles = await context
+      .request(
+        GraphqlActions.functionsList,
+        {},
+        {
+          customWorkspaceId: workspaceId,
+        },
+      )
+      .catch(e => {
+        if (e.response.errors[0].code === 'NotAuthorizedError') {
+          context.logger.info(
+            `\n⚠️  You need 'Deploy' permissions for custom functions in both the parent and current project to execute the import`,
+          );
+          process.exit();
+        }
+      });
 
     let files = getFileProvider().provide(context);
 
