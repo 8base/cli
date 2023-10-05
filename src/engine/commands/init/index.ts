@@ -163,14 +163,6 @@ export default {
       });
       context.logger.debug('creating workspace configuration.');
       context.spinner.start('Creating workspace configuration.... \n');
-      await context.createWorkspaceConfig(
-        {
-          workspaceId,
-          environmentName: DEFAULT_ENVIRONMENT_NAME,
-          apiHost: host || StaticConfig.apiAddress,
-        },
-        project.fullPath,
-      );
     } else {
       /* Generate project files before printing tree */
       if (!empty && Array.isArray(functions)) {
@@ -194,6 +186,16 @@ export default {
         );
       }
     }
+
+    await context.createWorkspaceConfig(
+      {
+        workspaceId,
+        environmentName: DEFAULT_ENVIRONMENT_NAME,
+        apiHost: host || StaticConfig.apiAddress,
+      },
+      project.fullPath,
+    );
+
     context.spinner.stop();
     if (!silent) {
       const fileTree = tree(project.fullPath, {

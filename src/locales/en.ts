@@ -419,7 +419,7 @@ export default {
       'Imports project files and custom functions from the latest deployed version of current active environment.',
     environment_sync_text: 'Environment: {{-environment}}',
     environment_sync_warning:
-      'Do you really want like to import project files and custom functions from the {{- environment }}? Contents of your local project will be completely overwritten with the new data. Proceed? (Y/N)',
+      'Do you really want to import project files and custom functions from the {{- environment }} ? Contents of your local project will be completely overwritten with the new data. Proceed? (Y/N)',
     environment_sync_no_functions: '⚠️  There are no custom functions deployed in the current environment to sync',
 
     /**
