@@ -142,6 +142,7 @@ export default {
       });
 
     let files = getFileProvider().provide(context);
+    
 
     files.set(
       context.config.packageFileName,
@@ -155,7 +156,7 @@ export default {
     const chalkedName = chalk.hex(Colors.yellow)(project.name);
 
     context.spinner.stop();
-    if (actualProjectFiles?.functionsList?.items.length > 0) {
+    if (actualProjectFiles && actualProjectFiles?.functionsList?.items.length > 0) {
       context.logger.debug('downloading project files.');
       context.spinner.start('Downloading project files.... \n');
       await downloadProject(context, project.fullPath, {

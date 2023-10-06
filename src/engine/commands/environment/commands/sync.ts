@@ -18,6 +18,7 @@ export default {
 
   handler: async (params: {}, context: Context) => {
     await ProjectConfigurationState.expectConfigured(context);
+
     const { environmentName } = context.workspaceConfig;
 
     let warningApproval: Boolean;
