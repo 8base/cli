@@ -7,6 +7,7 @@ import { RequestOptions } from '../interfaces/Common';
 import { REQUEST_HEADER_IGNORED } from '../consts/request';
 import unzipper from 'unzipper';
 import * as fs from 'fs';
+import { StaticConfig } from '../config';
 
 export const executeAsync = async (
   context: Context,
@@ -78,6 +79,8 @@ export const downloadProject = async (context: Context, path: string, options?: 
   // Decode the base64 contenthow
   const decodedContent = Buffer.from(prepareDownload.downloadMetaDataUrl.content, 'base64');
 
+  const workspaceConfig = context.workspaceConfig;
+
   context.logger.debug('download succesfully, writing to file and unziping');
   const unzipPath = `${path}/${prepareDownload.downloadMetaDataUrl.key}`;
   fs.writeFileSync(unzipPath, decodedContent);
@@ -94,6 +97,19 @@ export const downloadProject = async (context: Context, path: string, options?: 
 
     if (fs.existsSync(`${path}/___source_migrations`)) {
       fs.rmSync(`${path}/___source_migrations`, { recursive: true });
+    }
+
+    if (fs.existsSync(`${path}/.workspace.json`)) {
+      fs.rmSync(`${path}/.workspace.json`, { recursive: true });
+
+      await context.createWorkspaceConfig(
+        {
+          workspaceId: workspaceConfig.workspaceId,
+          environmentName: workspaceConfig.environmentName,
+          apiHost: workspaceConfig.apiHost,
+        },
+        context.config.rootExecutionDir,
+      );
     }
   } catch (error) {
     // eslint-disable-next-line no-console
