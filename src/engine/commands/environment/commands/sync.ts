@@ -80,6 +80,8 @@ export default {
         context.logger.info(
           `⚠️  Your project files and custom functions have been successfully imported from ${environmentName} environment. To ensure consistency, we recommend redeploying your project using the 8base deploy command.\n`,
         );
+      } else {
+        context.logger.info(translations.i18n.t('environment_sync_no_functions'));
       }
 
       context.logger.info(
@@ -87,8 +89,6 @@ export default {
           environment: chalk.green(environmentName),
         }),
       );
-    } else {
-      context.logger.info(translations.i18n.t('environment_sync_no_functions'));
     }
   },
 
