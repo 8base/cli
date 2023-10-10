@@ -23,36 +23,33 @@ export default {
 
     let warningApproval: Boolean;
 
-    ({ warningApproval } = await Interactive.ask({
-      name: 'warningApproval',
-      type: 'select',
-      message: translations.i18n.t('environment_sync_warning', {
-        environment: chalk.green(environmentName),
-      }),
-      choices: [
-        {
-          title: 'Yes',
-          value: true,
-        },
-        {
-          title: 'No',
-          value: false,
-        },
-      ],
-    }));
+    const actualProjectFiles = await context.request(
+      GraphqlActions.functionsList,
+      {},
+      {
+        customWorkspaceId: context.workspaceId,
+      },
+    );
 
-    if (warningApproval) {
-      console.log(green('\n' + bold('Starting process!')) + '\n');
-
-      const actualProjectFiles = await context.request(
-        GraphqlActions.functionsList,
-        {},
-        {
-          customWorkspaceId: context.workspaceId,
-        },
-      );
-
-      if (actualProjectFiles.functionsList.items.length > 0) {
+    if (actualProjectFiles.functionsList.items.length > 0) {
+      ({ warningApproval } = await Interactive.ask({
+        name: 'warningApproval',
+        type: 'select',
+        message: translations.i18n.t('environment_sync_warning', {
+          environment: chalk.green(environmentName),
+        }),
+        choices: [
+          {
+            title: 'Yes',
+            value: true,
+          },
+          {
+            title: 'No',
+            value: false,
+          },
+        ],
+      }));
+      if (warningApproval) {
         context.spinner.start(`We are checking your current project files... \n`);
         const files = globSync('*', { ignore: ['*.json', '*.yml'] });
 
@@ -80,9 +77,9 @@ export default {
         context.logger.info(
           `⚠️  Your project files and custom functions have been successfully imported from ${environmentName} environment. To ensure consistency, we recommend redeploying your project using the 8base deploy command.\n`,
         );
-      } else {
-        context.logger.info(translations.i18n.t('environment_sync_no_functions'));
       }
+    } else {
+      context.logger.info(translations.i18n.t('environment_sync_no_functions'));
     }
   },
 
