@@ -83,12 +83,6 @@ export default {
       } else {
         context.logger.info(translations.i18n.t('environment_sync_no_functions'));
       }
-
-      context.logger.info(
-        translations.i18n.t('environment_sync_text', {
-          environment: chalk.green(environmentName),
-        }),
-      );
     }
   },
 
