@@ -11,6 +11,7 @@ USAGE
 
 COMMANDS
   8base backup <command>       Backup commands.
+  8base check                  Performs 8base inspections.
   8base configure              Allows you to select a default workspace and retrieve the API endpoint URL.
   8base deploy                 Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.
   8base describe [name]        Describes your 8base project’s functions and their types through 8base.yml file.
@@ -79,6 +80,19 @@ OPTIONS
   -h, --help         Show help  [boolean]
   -b, --backup       The name of the target backup  [string] [required]
   -e, --environment  Target environment name  [string] [required]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'check' ]\`. 1`] = `
+"COMMAND
+  8base check [OPTIONS]
+
+DESCRIPTION
+  Performs 8base inspections. If no args specified performs all inspections
+
+OPTIONS
+  -d, --debug  Turn on debug logs  [boolean]
+  -h, --help   Show help  [boolean]
+  -v, --views  Verifies that all views are working correctly  [boolean]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'configure' ]\`. 1`] = `
@@ -228,6 +242,17 @@ OPTIONS
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'app' ]\`. 1`] = `
+"8base generate app <name>
+
+POSITIONALS
+  name  The name of the app  [string] [required]
+
+OPTIONS
+  -d, --debug  Turn on debug logs  [boolean]
+  -h, --help   Show help  [boolean]"
+`;
+
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'app' ]\`. 2`] = `
 "8base generate app <name>
 
 POSITIONALS

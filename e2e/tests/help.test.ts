@@ -8,6 +8,7 @@ it.each([
   [['backup', 'create']],
   [['backup', 'list']],
   [['backup', 'restore']],
+  [['check']],
   [['configure']],
   [['deploy']],
   [['describe']],

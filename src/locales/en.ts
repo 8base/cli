@@ -99,6 +99,15 @@ export default {
     configure_error: "Please configure first by running '8base configure'",
 
     /**
+     * Check related messages
+     */
+    check_usage:
+      'COMMAND\n  8base check [OPTIONS]\n\nDESCRIPTION\n  Performs 8base inspections. If no args specified performs all inspections',
+    check_describe: 'Performs 8base inspections.',
+    check_views_describe: 'Verifies that all views are working correctly',
+    check_invalid_views: 'The following views are broken:\n{{list}}',
+
+    /**
      * Init related messages
      */
     init_usage:

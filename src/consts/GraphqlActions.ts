@@ -114,6 +114,7 @@ export const GraphqlActions = {
     scheduleExpression
   }`,
   environmentDelete: `mutation delete($name:String!) { system { environmentDelete(environmentName:$name) { success } } }`,
+  tablesList: `query Tables { system { tablesList( filter: { onlyUserTables: true } ) { items { name origin { type } } } } }`,
 };
 
 export const GraphqlAsyncActions = {
