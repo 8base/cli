@@ -99,6 +99,10 @@ export const downloadProject = async (context: Context, path: string, options?: 
       fs.rmSync(`${path}/___source_migrations`, { recursive: true });
     }
 
+    if (fs.existsSync(`${path}/handler.js`)) {
+      fs.rmSync(`${path}/handler.js`, { recursive: true });
+    }
+
     if (fs.existsSync(`${path}/.workspace.json`)) {
       fs.rmSync(`${path}/.workspace.json`, { recursive: true });
 
