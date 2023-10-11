@@ -59,6 +59,7 @@
     "latest-version": "^5.1.0",
     "lodash": "^4.17.21",
     "memorystream": "^0.3.1",
+    "node-fetch": "^3.3.2",
     "open": "8.4.2",
     "ora": "^5.4.1",
     "picocolors": "^1.0.0",

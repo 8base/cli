@@ -4,6 +4,7 @@ import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
 import { executeDeploy } from '../../../common/execute';
+import { execSync } from 'child_process';
 
 type DeployParams = { plugins?: string[]; mode: DeployModeType };
 
@@ -18,6 +19,7 @@ export default {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
     }
 
+    execSync('npm install', { stdio: 'inherit' });
     await executeDeploy(context, deployOptions);
   },
 
