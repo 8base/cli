@@ -75,8 +75,13 @@ export default {
     }
 
     if (!empty && Array.isArray(functions)) {
+<<<<<<< Updated upstream
       functions.forEach(declaration => {
         const [type, name, triggerOperation, triggerType] = declaration.split(':');
+=======
+      functions.forEach((declaration) => {
+        const [type, name] = declaration.split(':');
+>>>>>>> Stashed changes
 
         if (!(type in ExtensionType)) {
           throw new Error(translations.i18n.t('init_invalid_function_type', { type }));
