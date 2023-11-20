@@ -1,2 +1,2 @@
 settings:
-  nodeVersion: 18
+  nodeVersion: [NODE_VERSION]

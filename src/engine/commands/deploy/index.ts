@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
+import { Utils } from '../../../common/utils';
 import { executeDeploy } from '../../../common/execute';
 
 type DeployParams = { plugins?: string[]; mode: DeployModeType };
@@ -16,6 +17,10 @@ export default {
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
+    }
+
+    if (!Utils.validateExistNodeVersion(context)) {
+      throw new Error(translations.i18n.t('no_node_version_set'));
     }
 
     await executeDeploy(context, deployOptions);

@@ -46,6 +46,10 @@ const getLocalFunction = async (functionName: string, context: Context) => {
 export default {
   command: 'invoke-local <name>',
   handler: async (params: InvokeLocalParams, context: Context) => {
+    if (!Utils.currentIsVersionValid(context)) {
+      throw new Error(translations.i18n.t('local_node_version_mismatch'));
+    }
+
     context.initializeProject();
 
     dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });

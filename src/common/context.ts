@@ -32,8 +32,13 @@ export type WorkspaceConfig = {
 
 export type Plugin = { name: string; path: string };
 
+export type Settings = {
+  nodeVersion?: string;
+};
+
 export type ProjectConfig = {
   functions: Record<string, any>;
+  settings?: Settings;
   plugins?: Plugin[];
 };
 
@@ -175,7 +180,7 @@ export class Context {
   }
 
   resolveMainServerAddress(): string {
-    return this.storage.getValue(StorageParameters.serverAddress) || StaticConfig.apiAddress;
+    return StaticConfig.apiAddress;
   }
 
   get storage(): typeof UserDataStorage {

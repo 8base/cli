@@ -2,13 +2,14 @@ import * as path from 'path';
 import 'isomorphic-fetch';
 import * as fs from 'fs';
 import * as _ from 'lodash';
-import { Context } from './context';
+import { Context, ProjectConfig } from './context';
 import { Readable } from 'stream';
 import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
 import archiver from 'archiver';
 import MemoryStream from 'memorystream';
 import { HttpError } from '../errors';
+import * as yaml from 'js-yaml';
 
 export namespace Utils {
   export const undefault = (m: any) => {
@@ -121,6 +122,18 @@ export namespace Utils {
     }
 
     return url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
+  };
+
+  export const validateExistNodeVersion = (context: Context) => {
+    return !!context.projectConfig?.settings?.nodeVersion;
+  };
+
+  export const validateNodeVersion = (context: Context) => {
+    return context.projectConfig?.settings?.nodeVersion;
+  };
+
+  export const currentIsVersionValid = (context: Context) => {
+    return validateExistNodeVersion ? process.version.slice(1) > context.projectConfig?.settings?.nodeVersion : false;
   };
 
   export const commandDirMiddleware =

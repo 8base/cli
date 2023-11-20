@@ -117,6 +117,7 @@ export default {
     init_empty_describe: 'Skip examples',
     init_workspace_id_describe: 'The workspace ID of the project',
     init_workspace_host_describe: 'The workspace host of the project',
+    init_node_version_describe: 'The node version for compile your functions default: (18 LTS)',
     init_select_workspace: 'What workspace does this project belong to?',
     init_prevent_select_workspace: 'Workspace selection canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
@@ -435,6 +436,10 @@ export default {
 
     workspace_with_id_doesnt_exist:
       'Something went wrong, cannot get workspace with id: {{- id}}. Please contact support@8base.com if the error persists.',
+
+    no_node_version_set: '⚠️ No node version set',
+    local_node_version_mismatch:
+      "Your local node version doesn't match with the project node version, check your 8base.yml file",
   },
 
   /**
