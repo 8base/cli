@@ -26,6 +26,7 @@ type InitParams = {
   silent: boolean;
   workspaceId?: string;
   host: string;
+  nodeVersion: string;
 };
 
 const isEmptyDir = async (path: string): Promise<boolean> => {
@@ -42,7 +43,7 @@ export default {
   command: 'init [name]',
 
   handler: async (params: InitParams, context: Context) => {
-    const { name, functions, empty, syntax, mocks, silent } = params;
+    const { name, functions, empty, syntax, mocks, silent, nodeVersion } = params;
 
     let { workspaceId, host } = params;
 
@@ -59,7 +60,7 @@ export default {
       );
     }
 
-    const project = { fullPath, name: projectName };
+    const project = { fullPath, name: projectName, nodeVersion };
 
     if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
@@ -75,13 +76,8 @@ export default {
     }
 
     if (!empty && Array.isArray(functions)) {
-<<<<<<< Updated upstream
       functions.forEach(declaration => {
         const [type, name, triggerOperation, triggerType] = declaration.split(':');
-=======
-      functions.forEach((declaration) => {
-        const [type, name] = declaration.split(':');
->>>>>>> Stashed changes
 
         if (!(type in ExtensionType)) {
           throw new Error(translations.i18n.t('init_invalid_function_type', { type }));
@@ -130,11 +126,13 @@ export default {
 
     let files = getFileProvider().provide(context);
     context.logger.debug(`files provided count = ${files.size}`);
-
     files.set(
       context.config.packageFileName,
       replaceServiceName(files.get(context.config.packageFileName), project.name),
     );
+    context.logger.debug(`context.config.serviceConfigFileName = ${context.config.packageFileName}`);
+    context.logger.debug(`context.config.serviceConfigFileName = ${context.config.configFileName}`);
+    files.set(context.config.configFileName, replaceNodeVersion(files.get(context.config.configFileName), nodeVersion));
 
     context.logger.debug('try to install files');
     install(project.fullPath, files, context);
@@ -238,6 +236,13 @@ export default {
         type: 'string',
         requiresArg: true,
       })
+      .option('nodeVersion', {
+        alias: 'n',
+        describe: translations.i18n.t('init_node_version_describe'),
+        type: 'number',
+        default: StaticConfig.defaultNodeVersion,
+        requiresArg: true,
+      })
       .option('host', {
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
@@ -253,4 +258,8 @@ const replaceServiceName = (packageFile: string, repositoryName: string) => {
   let packageData = JSON.parse(packageFile);
   packageData.name = repositoryName;
   return JSON.stringify(packageData, null, 2);
+};
+
+const replaceNodeVersion = (ymlFile: string, nodeVersion: string) => {
+  return ymlFile.replace('[NODE_VERSION]', nodeVersion);
 };

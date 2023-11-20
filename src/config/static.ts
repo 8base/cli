@@ -52,8 +52,16 @@ export class StaticConfig {
     return path.join(this.staticData.executionDir, '8base.yml');
   }
 
+  static get configFileName(): string {
+    return '8base.yml';
+  }
+
   static get packageFileName(): string {
     return 'package.json';
+  }
+
+  static get defaultNodeVersion(): number {
+    return 18;
   }
 
   /**
