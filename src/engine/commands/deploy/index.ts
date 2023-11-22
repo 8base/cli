@@ -13,7 +13,7 @@ export default {
   handler: async (params: DeployParams, context: Context) => {
     context.initializeProject();
 
-    let deployOptions = { mode: params.mode };
+    let deployOptions = { mode: params.mode, nodeVersion: context?.projectConfig?.settings?.nodeVersion || 20 };
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
