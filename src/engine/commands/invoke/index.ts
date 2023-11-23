@@ -37,7 +37,7 @@ export default {
         data: {
           functionName: params.name,
           inputArgs: args,
-          nodeVersion: context?.projectConfig?.settings?.nodeVersion,
+          nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
         },
       });
     } catch (e) {
