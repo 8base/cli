@@ -132,8 +132,13 @@ export namespace Utils {
     return context.projectConfig?.settings?.nodeVersion;
   };
 
-  export const currentIsVersionValid = (context: Context) => {
+  export const currentLocalNodeVersionValid = (context: Context) => {
     return validateExistNodeVersion ? process.version.slice(1) > context.projectConfig?.settings?.nodeVersion : false;
+  };
+
+  export const currentIsVersionValid = (context: Context) => {
+    const yamlNodeVersion = context.projectConfig?.settings?.nodeVersion;
+    return validateExistNodeVersion ? yamlNodeVersion === '18' || yamlNodeVersion === '20' : false;
   };
 
   export const commandDirMiddleware =

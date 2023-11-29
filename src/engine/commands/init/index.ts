@@ -26,7 +26,7 @@ type InitParams = {
   silent: boolean;
   workspaceId?: string;
   host: string;
-  nodeVersion: string;
+  nodeVersion: number;
 };
 
 const isEmptyDir = async (path: string): Promise<boolean> => {
@@ -46,6 +46,7 @@ export default {
     const { name, functions, empty, syntax, mocks, silent, nodeVersion } = params;
 
     let { workspaceId, host } = params;
+    let userNodeVersion;
 
     const projectName = name || path.basename(context.config.rootExecutionDir);
     const fullPath = name ? path.join(context.config.rootExecutionDir, projectName) : context.config.rootExecutionDir;
@@ -60,7 +61,19 @@ export default {
       );
     }
 
-    const project = { fullPath, name: projectName, nodeVersion };
+    if (!nodeVersion || (nodeVersion !== 18 && nodeVersion !== 20)) {
+      ({ userNodeVersion } = await Interactive.ask({
+        name: 'userNodeVersion',
+        type: 'select',
+        message: translations.i18n.t('init_select_nodeVersion'),
+        choices: [
+          { title: 'Node 18x', value: 18 },
+          { title: 'Node 20x', value: 20 },
+        ],
+      }));
+    }
+
+    const project = { fullPath, name: projectName, userNodeVersion };
 
     if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
@@ -132,7 +145,10 @@ export default {
     );
     context.logger.debug(`context.config.serviceConfigFileName = ${context.config.packageFileName}`);
     context.logger.debug(`context.config.serviceConfigFileName = ${context.config.configFileName}`);
-    files.set(context.config.configFileName, replaceNodeVersion(files.get(context.config.configFileName), nodeVersion));
+    files.set(
+      context.config.configFileName,
+      replaceNodeVersion(files.get(context.config.configFileName), userNodeVersion),
+    );
 
     context.logger.debug('try to install files');
     install(project.fullPath, files, context);
@@ -240,7 +256,7 @@ export default {
         alias: 'n',
         describe: translations.i18n.t('init_node_version_describe'),
         type: 'number',
-        default: StaticConfig.defaultNodeVersion,
+        // default: StaticConfig.defaultNodeVersion,
         requiresArg: true,
       })
       .option('host', {

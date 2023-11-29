@@ -15,7 +15,7 @@ export default {
 
     let deployOptions = {
       mode: params.mode,
-      nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString() || '20',
+      nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
     };
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {

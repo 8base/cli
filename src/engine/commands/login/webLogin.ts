@@ -17,6 +17,7 @@ export const webLogin = async (params: { w: string }, context: Context): Promise
   let res = null;
   while (--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
+    context.logger.debug(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`);
     try {
       const response = await Utils.checkHttpResponse(
         fetch(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`),
