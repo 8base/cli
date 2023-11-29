@@ -439,6 +439,7 @@ export default {
       'Something went wrong, cannot get workspace with id: {{- id}}. Please contact support@8base.com if the error persists.',
 
     no_node_version_set: '⚠️ No node version set',
+    deploy_node_version_warning: '⚠️ Node version is not set in 8base.yml file. Default version 20 will be used.',
     local_node_version_mismatch:
       "Your local node version doesn't match with the project node version, check your 8base.yml file",
   },

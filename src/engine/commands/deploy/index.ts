@@ -19,11 +19,14 @@ export default {
     };
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
+      context.logger.debug('upload source code complete');
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
     }
 
     if (!Utils.validateExistNodeVersion(context)) {
-      throw new Error(translations.i18n.t('no_node_version_set'));
+      deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
+      deployOptions = _.set(deployOptions, 'nodeVersion', '20');
+      context.logger.warn(translations.i18n.t('deploy_node_version_warning'));
     }
 
     await executeDeploy(context, deployOptions);
