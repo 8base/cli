@@ -358,7 +358,7 @@ OPTIONS
   -s, --syntax       Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
       --silent       Disable printing extra info to the console  [boolean] [default: false]
   -w, --workspaceId  The workspace ID of the project  [string]
-  -n, --nodeVersion  The node version for compile your functions default: (18 LTS)  [number]
+  -n, --nodeVersion  The node version for compile your functions default: (18 LTS) [number]
       --host         The workspace host of the project  [string] [default: "https://api.8base.com"]
 
 EXAMPLES
