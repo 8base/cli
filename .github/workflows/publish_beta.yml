@@ -1,7 +1,8 @@
 name: publish
 
 on:
-  workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
   publish:
@@ -18,6 +19,6 @@ jobs:
           npm run build
           npm run lint
           npm run e2e
-          npm publish
+          npm publish --tag beta --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
