@@ -10,6 +10,6 @@ export class PredefineData {
   commandsPath = path.join(this.projectDir, './engine/commands');
   authDomain = 'auth.8base.com';
   authClientId = 'qGHZVu5CxY5klivm28OPLjopvsYp0baD';
-  webClientAddress = 'https://qa.8basedev.com';
-  apiAddress = 'https://qa-api.8basedev.com/';
+  webClientAddress = 'https://app.8base.com';
+  apiAddress = 'https://api.8base.com';
 }
