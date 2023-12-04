@@ -19,7 +19,7 @@ import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
-import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
 import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
 
 const pkg = require('../../package.json');
@@ -180,7 +180,7 @@ export class Context {
   }
 
   resolveMainServerAddress(): string {
-    return StaticConfig.apiAddress;
+    return this.storage.getValue(StorageParameters.serverAddress) || DEFAULT_REMOTE_ADDRESS;
   }
 
   get storage(): typeof UserDataStorage {
