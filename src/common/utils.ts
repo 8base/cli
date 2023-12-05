@@ -124,8 +124,14 @@ export namespace Utils {
     return url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
   };
 
+  export const validNodeVersions = ['14', '18', '20'];
+
   export const validateExistNodeVersion = (context: Context) => {
-    return !!context.projectConfig?.settings?.nodeVersion;
+    if (validNodeVersions.includes(context.projectConfig?.settings?.nodeVersion?.toString() as any)) {
+      return !!context.projectConfig?.settings?.nodeVersion;
+    } else {
+      throw new Error(translations.i18n.t(translations.i18n.t('invalid_node_version_set')));
+    }
   };
 
   export const validateNodeVersion = (context: Context) => {
@@ -134,6 +140,10 @@ export namespace Utils {
 
   export const currentLocalNodeVersionValid = (context: Context) => {
     return validateExistNodeVersion ? process.version.slice(1) > context.projectConfig?.settings?.nodeVersion : false;
+  };
+
+  export const currentLocalNodeVersionIsProjectVersion = (context: Context) => {
+    return process.version.slice(1, 4) === context.projectConfig?.settings?.nodeVersion ?? false;
   };
 
   export const currentIsVersionValid = (context: Context) => {

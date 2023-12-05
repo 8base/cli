@@ -26,7 +26,7 @@ export default {
     if (!Utils.validateExistNodeVersion(context)) {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
       deployOptions = _.set(deployOptions, 'nodeVersion', '20');
-      context.logger.warn(translations.i18n.t('deploy_node_version_warning'));
+      throw new Error(translations.i18n.t(translations.i18n.t('deploy_node_version_warning')));
     }
 
     await executeDeploy(context, deployOptions);

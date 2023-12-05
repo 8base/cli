@@ -73,7 +73,7 @@ export default {
       }));
     }
 
-    const project = { fullPath, name: projectName, userNodeVersion };
+    const project = { fullPath, name: projectName, userNodeVersion: userNodeVersion ? userNodeVersion : nodeVersion };
 
     if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
@@ -147,7 +147,7 @@ export default {
     context.logger.debug(`context.config.serviceConfigFileName = ${context.config.configFileName}`);
     files.set(
       context.config.configFileName,
-      replaceNodeVersion(files.get(context.config.configFileName), userNodeVersion),
+      replaceNodeVersion(files.get(context.config.configFileName), userNodeVersion ?? nodeVersion),
     );
 
     context.logger.debug('try to install files');

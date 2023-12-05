@@ -439,9 +439,12 @@ export default {
       'Something went wrong, cannot get workspace with id: {{- id}}. Please contact support@8base.com if the error persists.',
 
     no_node_version_set: '⚠️ No node version set',
-    deploy_node_version_warning: '⚠️ Node version is not set in 8base.yml file. Default version 20 will be used.',
+    invalid_node_version_set:
+      '⚠️ The value you have provided for the nodeVersion parameter is invalid. Currently accepted values are 14, 18 and 20',
+    deploy_node_version_warning:
+      '⚠️ Custom functions cannot be deployed without first specifying a version of NodeJS to use. Add the nodeVersion parameter under settings in the 8base.yml file',
     local_node_version_mismatch:
-      "Your local node version doesn't match with the project node version, check your 8base.yml file",
+      'The NodeJS version specified in the 8base.yml file {{- project_version }} does not match your local NodeJS version {{- local_version }}. It is recommended that you change your local NodeJS version to match the NodeJS version functions will be deployed in. A difference in NodeJS versions could result in unexpected results.',
   },
 
   /**
