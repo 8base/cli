@@ -14,40 +14,45 @@ export default {
   handler: async (params: DeployParams, context: Context) => {
     context.initializeProject();
 
-    let confirmChangeVersion;
-
     let deployOptions = {
       mode: params.mode,
       nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
     };
-
-    if (params.forceNodeChange) {
-      context.logger.info(translations.i18n.t('deploy_node_version_warning_message'));
-      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
-      await executeDeploy(context, deployOptions);
-      return;
-    }
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
       context.logger.debug('upload source code complete');
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
     }
 
-    if (!Utils.validateExistNodeVersion(context)) {
+    if (params?.forceNodeChange) {
+      context.logger.info(translations.i18n.t('deploy_node_version_warning_message'));
+      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
+      await executeDeploy(context, deployOptions);
+      return;
+    }
+
+    let confirmChangeVersion;
+
+    const remoteRuntime = await context?.functionCheck();
+    const remoteVersion = remoteRuntime?.version?.match(/\d+/)?.[0];
+    if (
+      remoteVersion !== context.projectConfig?.settings?.nodeVersion.toString() &&
+      remoteRuntime.version !== 'not found'
+    ) {
+      ({ confirmChangeVersion } = await Interactive.ask({
+        name: 'confirmChangeVersion',
+        type: 'confirm',
+        message: translations.i18n.t('confirm_deploy_node_version_warning_message'),
+        initial: false,
+      }));
+      if (!confirmChangeVersion) {
+        throw new Error(translations.i18n.t(translations.i18n.t('deploy_cancelled')));
+      }
+    }
+
+    if (!Utils.validateExistNodeVersion(context, remoteRuntime.version === 'not found')) {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
       deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
-      const remoteVersion = await context?.functionCheck();
-      if (remoteVersion.version !== context.projectConfig?.settings?.nodeVersion.toString()) {
-        ({ confirmChangeVersion } = await Interactive.ask({
-          name: 'confirmChangeVersion',
-          type: 'confirm',
-          message: translations.i18n.t('confirm_deploy_node_version_warning_message'),
-          initial: false,
-        }));
-        if (!confirmChangeVersion) {
-          throw new Error(translations.i18n.t(translations.i18n.t('deploy_node_version_warning')));
-        }
-      }
       throw new Error(translations.i18n.t(translations.i18n.t('deploy_node_version_warning')));
     }
 
@@ -74,10 +79,8 @@ export default {
       })
       .option('forceNodeChange', {
         alias: 'f',
-        describe: translations.i18n.t('deploy_mode_describe'),
-        default: DeployModeType.project,
-        type: 'string',
-        choices: Object.values(DeployModeType),
-        requiresArg: true,
+        describe: translations.i18n.t('deploy_forcenodeversion_describe'),
+        type: 'boolean',
+        requiresArg: false,
       }),
 };

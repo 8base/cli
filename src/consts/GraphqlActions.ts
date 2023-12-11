@@ -24,7 +24,7 @@ export const GraphqlActions = {
   }`,
   versionCheck: `query {
     system {
-      functionsVersionCheck(name: "jj") {
+      functionsVersionCheck {
           version
       }
     }

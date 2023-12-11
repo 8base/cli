@@ -126,11 +126,15 @@ export namespace Utils {
 
   export const validNodeVersions = ['14', '18', '20'];
 
-  export const validateExistNodeVersion = (context: Context) => {
+  export const validateExistNodeVersion = (context: Context, isOld?: boolean) => {
     if (validNodeVersions.includes(context.projectConfig?.settings?.nodeVersion?.toString() as any)) {
       return !!context.projectConfig?.settings?.nodeVersion;
     } else {
-      throw new Error(translations.i18n.t(translations.i18n.t('invalid_node_version_set')));
+      throw new Error(
+        translations.i18n.t(translations.i18n.t('invalid_node_version_set'), {
+          versions: isOld ? '14, 18 and 20' : '18, 20',
+        }),
+      );
     }
   };
 

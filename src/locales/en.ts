@@ -84,6 +84,7 @@ export default {
       'Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.',
     deploy_plugins_describe: 'The list of plugins to deploy',
     deploy_mode_describe: 'Deploy mode',
+    deploy_forcenodeversion_describe: 'Force Node Change',
 
     /**
      * Config related messages
@@ -440,7 +441,7 @@ export default {
 
     no_node_version_set: '⚠️ No node version set',
     invalid_node_version_set:
-      '⚠️ The value you have provided for the nodeVersion parameter is invalid. Currently accepted values are 14, 18 and 20',
+      '⚠️ The value you have provided for the nodeVersion parameter is invalid. Currently accepted values are {{- versions }}',
     deploy_node_version_warning:
       '⚠️ Custom functions cannot be deployed without first specifying a version of NodeJS to use. Add the nodeVersion parameter under settings in the 8base.yml file',
     local_node_version_mismatch:
@@ -451,6 +452,7 @@ export default {
       '⚠️  Custom functions are being deployed using a new version of NodeJS. Make sure to test your functions extensively as a change in NodeJS versions could affect the code in your function.',
     confirm_deploy_node_version_warning_message:
       '⚠️  Custom functions are being deployed using a new version of NodeJS. Make sure to test your functions extensively as a change in NodeJS versions could affect the code in your function. Do you still want to deploy your functions with the new NodeJS Version (y/N)?',
+    deploy_cancelled: 'Deploy cancelled',
   },
 
   /**
