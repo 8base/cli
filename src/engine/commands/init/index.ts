@@ -65,7 +65,9 @@ export default {
       ({ userNodeVersion } = await Interactive.ask({
         name: 'userNodeVersion',
         type: 'select',
-        message: translations.i18n.t('init_select_nodeVersion'),
+        message: translations.i18n.t('invalid_node_version_set', {
+          versions: '18 and 20',
+        }),
         choices: [
           { title: 'Node 18x', value: 18 },
           { title: 'Node 20x', value: 20 },
