@@ -17,6 +17,8 @@ import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { StaticConfig } from '../../../config';
 
+const pkg = require('../../../../package.json');
+
 type InitParams = {
   name: string;
   functions: string[];
@@ -73,9 +75,11 @@ export default {
           { title: 'Node 20x', value: 20 },
         ],
       }));
+    } else {
+      userNodeVersion = nodeVersion ?? 20;
     }
 
-    const project = { fullPath, name: projectName, userNodeVersion: userNodeVersion ? userNodeVersion : nodeVersion };
+    const project = { fullPath, name: projectName, userNodeVersion: userNodeVersion };
 
     if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
@@ -149,7 +153,7 @@ export default {
     context.logger.debug(`context.config.serviceConfigFileName = ${context.config.configFileName}`);
     files.set(
       context.config.configFileName,
-      replaceNodeVersion(files.get(context.config.configFileName), userNodeVersion ?? nodeVersion),
+      replaceNodeVersion(files.get(context.config.configFileName), userNodeVersion),
     );
 
     context.logger.debug('try to install files');
@@ -191,6 +195,7 @@ export default {
         workspaceId,
         environmentName: DEFAULT_ENVIRONMENT_NAME,
         apiHost: host || StaticConfig.apiAddress,
+        cli_Version: pkg.version,
       },
       project.fullPath,
     );

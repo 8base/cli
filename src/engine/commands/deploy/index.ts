@@ -13,6 +13,9 @@ export default {
   command: 'deploy',
   handler: async (params: DeployParams, context: Context) => {
     context.initializeProject();
+    const remoteRuntime = await context?.functionCheck();
+    const remoteVersion = remoteRuntime?.version?.match(/\d+/)?.[0];
+    let confirmChangeVersion;
 
     let deployOptions = {
       mode: params.mode,
@@ -24,17 +27,21 @@ export default {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
     }
 
+    const isOldProject = !context?.workspaceConfig?.cli_Version && remoteRuntime.version === 'not found';
+
+    if (!Utils.validateExistNodeVersion(context, isOldProject)) {
+      deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
+      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
+      throw new Error(translations.i18n.t(translations.i18n.t('deploy_node_version_warning')));
+    }
+
     if (params?.forceNodeChange) {
       context.logger.info(translations.i18n.t('deploy_node_version_warning_message'));
-      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
+      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion?.toString());
       await executeDeploy(context, deployOptions);
       return;
     }
 
-    let confirmChangeVersion;
-
-    const remoteRuntime = await context?.functionCheck();
-    const remoteVersion = remoteRuntime?.version?.match(/\d+/)?.[0];
     if (
       remoteVersion !== context.projectConfig?.settings?.nodeVersion.toString() &&
       remoteRuntime.version !== 'not found'
@@ -48,12 +55,6 @@ export default {
       if (!confirmChangeVersion) {
         throw new Error(translations.i18n.t(translations.i18n.t('deploy_cancelled')));
       }
-    }
-
-    if (!Utils.validateExistNodeVersion(context, remoteRuntime.version === 'not found')) {
-      deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
-      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
-      throw new Error(translations.i18n.t(translations.i18n.t('deploy_node_version_warning')));
     }
 
     await executeDeploy(context, deployOptions);

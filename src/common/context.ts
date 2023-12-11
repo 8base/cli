@@ -28,6 +28,7 @@ export type WorkspaceConfig = {
   readonly workspaceId: string;
   readonly environmentName: string;
   readonly apiHost: string;
+  readonly cli_Version?: string;
 };
 
 export type Plugin = { name: string; path: string };
