@@ -8,6 +8,10 @@ export type EnvironmentInfo = {
   name: string;
 };
 
+export type IFunctionCheck = {
+  version: string;
+};
+
 export enum MigrateMode {
   FULL = 'FULL',
   SYSTEM = 'SYSTEM',

@@ -5,18 +5,28 @@ import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
 import { Utils } from '../../../common/utils';
 import { executeDeploy } from '../../../common/execute';
+import { Interactive } from 'src/common/interactive';
 
-type DeployParams = { plugins?: string[]; mode: DeployModeType };
+type DeployParams = { plugins?: string[]; mode: DeployModeType; forceNodeChange?: boolean };
 
 export default {
   command: 'deploy',
   handler: async (params: DeployParams, context: Context) => {
     context.initializeProject();
 
+    let confirmChangeVersion;
+
     let deployOptions = {
       mode: params.mode,
       nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
     };
+
+    if (params.forceNodeChange) {
+      context.logger.info(translations.i18n.t('deploy_node_version_warning_message'));
+      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
+      await executeDeploy(context, deployOptions);
+      return;
+    }
 
     if (Array.isArray(params.plugins) && params.plugins.length > 0) {
       context.logger.debug('upload source code complete');
@@ -25,7 +35,19 @@ export default {
 
     if (!Utils.validateExistNodeVersion(context)) {
       deployOptions = _.set(deployOptions, 'pluginNames', params.plugins);
-      deployOptions = _.set(deployOptions, 'nodeVersion', '20');
+      deployOptions = _.set(deployOptions, 'nodeVersion', context.projectConfig.settings.nodeVersion.toString());
+      const remoteVersion = await context?.functionCheck();
+      if (remoteVersion.version !== context.projectConfig?.settings?.nodeVersion.toString()) {
+        ({ confirmChangeVersion } = await Interactive.ask({
+          name: 'confirmChangeVersion',
+          type: 'confirm',
+          message: translations.i18n.t('confirm_deploy_node_version_warning_message'),
+          initial: false,
+        }));
+        if (!confirmChangeVersion) {
+          throw new Error(translations.i18n.t(translations.i18n.t('deploy_node_version_warning')));
+        }
+      }
       throw new Error(translations.i18n.t(translations.i18n.t('deploy_node_version_warning')));
     }
 
@@ -44,6 +66,14 @@ export default {
       })
       .option('mode', {
         alias: 'm',
+        describe: translations.i18n.t('deploy_mode_describe'),
+        default: DeployModeType.project,
+        type: 'string',
+        choices: Object.values(DeployModeType),
+        requiresArg: true,
+      })
+      .option('forceNodeChange', {
+        alias: 'f',
         describe: translations.i18n.t('deploy_mode_describe'),
         default: DeployModeType.project,
         type: 'string',

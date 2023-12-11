@@ -22,6 +22,14 @@ export const GraphqlActions = {
       count
     }
   }`,
+  versionCheck: `query {
+    system {
+      functionsVersionCheck(name: "jj") {
+          version
+      }
+    }
+  }
+  `,
   environmentsList: `
     query EnvironmentsList {
       system {

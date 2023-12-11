@@ -444,7 +444,13 @@ export default {
     deploy_node_version_warning:
       '⚠️ Custom functions cannot be deployed without first specifying a version of NodeJS to use. Add the nodeVersion parameter under settings in the 8base.yml file',
     local_node_version_mismatch:
-      'The NodeJS version specified in the 8base.yml file {{- project_version }} does not match your local NodeJS version {{- local_version }}. It is recommended that you change your local NodeJS version to match the NodeJS version functions will be deployed in. A difference in NodeJS versions could result in unexpected results.',
+      '⚠️  The NodeJS version specified in the 8base.yml file {{- projectversion }} does not match your local NodeJS version {{- localversion }}. It is recommended that you change your local NodeJS version to match the NodeJS version functions will be deployed in. A difference in NodeJS versions could result in unexpected results.',
+    init_node_version_required:
+      '⚠️  Custom functions cannot be deployed without first specifying a version of NodeJS to use. Add the nodeVersion parameter under settings in the 8base.yml file. Currently accepted values are 14. 18 and 20',
+    deploy_node_version_warning_message:
+      '⚠️  Custom functions are being deployed using a new version of NodeJS. Make sure to test your functions extensively as a change in NodeJS versions could affect the code in your function.',
+    confirm_deploy_node_version_warning_message:
+      '⚠️  Custom functions are being deployed using a new version of NodeJS. Make sure to test your functions extensively as a change in NodeJS versions could affect the code in your function. Do you still want to deploy your functions with the new NodeJS Version (y/N)?',
   },
 
   /**

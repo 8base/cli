@@ -24,9 +24,9 @@ const getLocalFunction = async (functionName: string, context: Context) => {
 
   if (!Utils.currentLocalNodeVersionIsProjectVersion(context)) {
     context.logger.info(
-      translations.i18n.t('local_node_version_mismatch', {
-        project_version: context.projectConfig.settings.nodeVersion,
-        current_version: process.version.slice(1, 4),
+      context.i18n.t('local_node_version_mismatch', {
+        projectversion: context.projectConfig.settings.nodeVersion,
+        localversion: process.version.slice(1, 3),
       }),
     );
   }
@@ -55,10 +55,6 @@ const getLocalFunction = async (functionName: string, context: Context) => {
 export default {
   command: 'invoke-local <name>',
   handler: async (params: InvokeLocalParams, context: Context) => {
-    if (!Utils.currentIsVersionValid(context)) {
-      throw new Error(translations.i18n.t('local_node_version_mismatch'));
-    }
-
     context.initializeProject();
 
     dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });

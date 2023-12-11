@@ -17,7 +17,7 @@ import { ProjectController } from '../engine/controllers/projectController';
 import { StorageParameters } from '../consts/StorageParameters';
 import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
-import { EnvironmentInfo, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
+import { EnvironmentInfo, IFunctionCheck, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
 import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
 import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
@@ -88,6 +88,15 @@ export class Context {
     }
 
     return null;
+  }
+
+  async functionCheck(): Promise<IFunctionCheck> {
+    const { system } = await this.request(GraphqlActions.versionCheck, null, {
+      customWorkspaceId: this.workspaceId,
+      customEnvironment: this.environmentName,
+    });
+
+    return system.functionsVersionCheck;
   }
 
   async getEnvironments(): Promise<EnvironmentInfo[]> {

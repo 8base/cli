@@ -143,7 +143,7 @@ export namespace Utils {
   };
 
   export const currentLocalNodeVersionIsProjectVersion = (context: Context) => {
-    return process.version.slice(1, 4) === context.projectConfig?.settings?.nodeVersion ?? false;
+    return process.version.slice(1, 3) == context.projectConfig?.settings?.nodeVersion;
   };
 
   export const currentIsVersionValid = (context: Context) => {

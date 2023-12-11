@@ -61,7 +61,7 @@ export default {
       );
     }
 
-    if (!nodeVersion || (nodeVersion !== 18 && nodeVersion !== 20)) {
+    if (nodeVersion && nodeVersion !== 18 && nodeVersion !== 20) {
       ({ userNodeVersion } = await Interactive.ask({
         name: 'userNodeVersion',
         type: 'select',
@@ -71,6 +71,8 @@ export default {
           { title: 'Node 20x', value: 20 },
         ],
       }));
+    } else {
+      userNodeVersion = 20;
     }
 
     const project = { fullPath, name: projectName, userNodeVersion: userNodeVersion ? userNodeVersion : nodeVersion };
