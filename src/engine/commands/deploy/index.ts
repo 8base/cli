@@ -5,7 +5,7 @@ import { translations } from '../../../common/translations';
 import { DeployModeType } from '../../../interfaces/Extensions';
 import { Utils } from '../../../common/utils';
 import { executeDeploy } from '../../../common/execute';
-import { Interactive } from 'src/common/interactive';
+import { Interactive } from '../../../common/interactive';
 
 type DeployParams = { plugins?: string[]; mode: DeployModeType; forceNodeChange?: boolean };
 
