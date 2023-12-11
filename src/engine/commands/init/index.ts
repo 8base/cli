@@ -71,8 +71,6 @@ export default {
           { title: 'Node 20x', value: 20 },
         ],
       }));
-    } else {
-      userNodeVersion = 20;
     }
 
     const project = { fullPath, name: projectName, userNodeVersion: userNodeVersion ? userNodeVersion : nodeVersion };
