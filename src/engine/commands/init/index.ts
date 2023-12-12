@@ -63,7 +63,7 @@ export default {
       );
     }
 
-    if (nodeVersion && nodeVersion !== 18 && nodeVersion !== 20) {
+    if (typeof nodeVersion === 'number' && nodeVersion !== 18 && nodeVersion !== 20) {
       ({ userNodeVersion } = await Interactive.ask({
         name: 'userNodeVersion',
         type: 'select',
