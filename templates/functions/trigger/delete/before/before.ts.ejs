@@ -29,13 +29,12 @@
  */
 
 import {
-  BeforeDeleteTriggerFunction,
   BeforeDeleteTriggerFunctionEvent,
   BeforeDeleteTriggerResponse,
   FunctionContext,
 } from '@8base/functions-types';
 
-const beforeDeleteTrigger: BeforeDeleteTriggerFunction = async (
+const beforeDeleteTrigger = async (
   event: BeforeDeleteTriggerFunctionEvent,
   ctx: FunctionContext,
 ): BeforeDeleteTriggerResponse => {

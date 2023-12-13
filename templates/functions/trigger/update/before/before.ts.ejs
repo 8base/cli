@@ -29,7 +29,6 @@
  */
 
 import {
-  BeforeUpdateTriggerFunction,
   BeforeUpdateTriggerFunctionEvent,
   BeforeUpdateTriggerResponse,
   FunctionContext,
@@ -40,7 +39,7 @@ type User = {
   email: string;
 };
 
-const beforeUpdateTrigger: BeforeUpdateTriggerFunction = async (
+const beforeUpdateTrigger = async (
   event: BeforeUpdateTriggerFunctionEvent<User, User>,
   ctx: FunctionContext,
 ): BeforeUpdateTriggerResponse<User> => {

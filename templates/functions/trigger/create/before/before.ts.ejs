@@ -31,7 +31,7 @@
 import {
   FunctionContext,
   BeforeCreateTriggerFunctionEvent,
-  BeforeCreateTriggerFunction, BeforeCreateTriggerResponse
+  BeforeCreateTriggerResponse
 } from '@8base/functions-types';
 
 type User = {
@@ -39,7 +39,7 @@ type User = {
   email: string;
 };
 
-const beforeCreateTrigger: BeforeCreateTriggerFunction = async (
+const beforeCreateTrigger = async (
   event: BeforeCreateTriggerFunctionEvent<User>,
   ctx: FunctionContext,
 ): BeforeCreateTriggerResponse<User> => {

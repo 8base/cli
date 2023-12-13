@@ -29,13 +29,12 @@
  */
 
 import {
- AfterUpdateTriggerFunction,
  AfterUpdateTriggerFunctionEvent,
  AfterUpdateTriggerResponse,
  FunctionContext,
 } from '@8base/functions-types';
 
-const afterUpdateTrigger: AfterUpdateTriggerFunction = async (
+const afterUpdateTrigger = async (
   event: AfterUpdateTriggerFunctionEvent,
   ctx: FunctionContext,
 ): AfterUpdateTriggerResponse => {

@@ -31,9 +31,9 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, WebhookFunction, WebhookFunctionEvent, WebhookResponse } from '@8base/functions-types';
+import { FunctionContext, WebhookFunctionEvent, WebhookResponse } from '@8base/functions-types';
 
-const webhook: WebhookFunction = async (event: WebhookFunctionEvent, ctx: FunctionContext): WebhookResponse => {
+const webhook = async (event: WebhookFunctionEvent, ctx: FunctionContext): WebhookResponse => {
   const { foo } = JSON.parse(event.body);
 
   return {
