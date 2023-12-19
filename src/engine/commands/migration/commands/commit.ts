@@ -52,7 +52,10 @@ export default {
       );
     }
 
-    const options: RequestOptions = { customEnvironment: environment, nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString() };
+    const options: RequestOptions = {
+      customEnvironment: environment,
+      nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
+    };
     await executeDeploy(context, { mode: DeployModeType.migrations }, options);
 
     context.spinner.start(context.i18n.t('migration_commit_in_progress'));
