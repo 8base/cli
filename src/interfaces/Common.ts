@@ -28,6 +28,7 @@ export interface RequestOptions {
   readonly customWorkspaceId?: string;
   readonly customEnvironment?: string;
   readonly address?: string;
+  readonly nodeVersion?: string
 }
 
 export interface Workspace {
