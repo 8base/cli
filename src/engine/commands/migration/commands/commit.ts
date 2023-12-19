@@ -55,7 +55,7 @@ export default {
     const options: RequestOptions = {
       customEnvironment: environment,
       nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
-    };  
+    };
     await executeDeploy(context, { mode: DeployModeType.migrations }, options);
 
     context.spinner.start(context.i18n.t('migration_commit_in_progress'));
@@ -68,7 +68,12 @@ export default {
     await executeAsync(
       context,
       GraphqlAsyncActions.commit,
-      { mode: params.mode, build: buildName, migrationNames: migrationNames, nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString() },
+      {
+        mode: params.mode,
+        build: buildName,
+        migrationNames: migrationNames,
+        nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
+      },
       { customEnvironment: environment },
     );
 
