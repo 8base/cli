@@ -17,7 +17,7 @@ const pkg = require('../package.json');
 
 const start = async (translations: Translations) => {
   const pathToYmlConfig = path.join(process.cwd(), '8base.yml');
-  const loadProjectPackage = <ProjectConfig>yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'))
+  const loadProjectPackage = <ProjectConfig>yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'));
   if (parseInt(loadProjectPackage.settings.nodeVersion) <= 14) {
     console.log(chalk.yellow(translations.i18n.t('nodeversion_deprecation_advice')));
   }
