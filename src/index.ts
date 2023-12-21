@@ -7,18 +7,19 @@ import chalk from 'chalk';
 import { StaticConfig } from './config';
 import { Utils } from './common/utils';
 import { translations, Translations } from './common/translations';
-import { Context } from './common/context';
+import { Context, ProjectConfig } from './common/context';
+import * as yaml from 'js-yaml';
+import * as fs from 'fs-extra';
+
+import * as path from 'path';
 
 const pkg = require('../package.json');
 
-const start = async (translations: Translations, context: Context) => {
-  if (!Utils.currentLocalNodeVersionIsProjectVersion(context)) {
-    context.logger.info(
-      context.i18n.t('nodeversion_deprecation_advice', {
-        projectversion: context.projectConfig.settings.nodeVersion,
-        localversion: process.version.slice(1, 3),
-      }),
-    );
+const start = async (translations: Translations) => {
+  const pathToYmlConfig = path.join(process.cwd(), '8base.yml');
+  const loadProjectPackage = <ProjectConfig>yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'))
+  if (parseInt(loadProjectPackage.settings.nodeVersion) <= 14) {
+    console.log(chalk.yellow(translations.i18n.t('nodeversion_deprecation_advice')));
   }
   const argv = await yargs
     .scriptName('8base')
