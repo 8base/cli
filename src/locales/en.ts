@@ -453,6 +453,7 @@ export default {
     confirm_deploy_node_version_warning_message:
       '⚠️  Custom functions are being deployed using a new version of NodeJS. Make sure to test your functions extensively as a change in NodeJS versions could affect the code in your function. Do you still want to deploy your functions with the new NodeJS Version (y/N)?',
     deploy_cancelled: 'Deploy cancelled',
+    nodeversion_deprecation_advice: 'WARNING: Node.js 14.x End-of-Life Notice ⚠️ Starting May 1, 2024, the AWS SDK for JavaScript (v3) will no longer actively support Node.js 14.x, which reached its end-of-life on April 30, 2023. Please consider upgrading your Node.js version to a supported and actively maintained release to ensure compatibility and security updates for the AWS SDK. Continuing to use Node.js 14.x beyond this date might result in compatibility issues and potential security vulnerabilities. For more information on supported Node.js versions, refer to the Node.js release schedule and AWS SDK documentation. Thank you for your attention to this matter.'
   },
 
   /**

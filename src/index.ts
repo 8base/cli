@@ -7,10 +7,19 @@ import chalk from 'chalk';
 import { StaticConfig } from './config';
 import { Utils } from './common/utils';
 import { translations, Translations } from './common/translations';
+import { Context } from './common/context';
 
 const pkg = require('../package.json');
 
-const start = async (translations: Translations) => {
+const start = async (translations: Translations, context: Context) => {
+  if (!Utils.currentLocalNodeVersionIsProjectVersion(context)) {
+    context.logger.info(
+      context.i18n.t('nodeversion_deprecation_advice', {
+        projectversion: context.projectConfig.settings.nodeVersion,
+        localversion: process.version.slice(1, 3),
+      }),
+    );
+  }
   const argv = await yargs
     .scriptName('8base')
     .usage(translations.i18n.t('8base_usage'))
