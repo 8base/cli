@@ -19,7 +19,7 @@ export default {
 
   handler: async (params: TriggerGenerateParams, context: Context) => {
     const { tableName, type, operation, mocks, syntax, silent } = params;
-
+    context.logger.debug('data', params);
     await ProjectController.generateFunction(
       context,
       {

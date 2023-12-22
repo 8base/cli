@@ -57,6 +57,7 @@ const generateFunctionDeclaration = (
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
+  console.log('==========>', options);
   switch (type) {
     case ExtensionType.resolver:
       return {

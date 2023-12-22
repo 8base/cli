@@ -37,6 +37,6 @@ it.each([
   [['migration', 'status']],
 ])('As a user, I can use help flag for see help information about `%s`.', async cmd => {
   const { stdout } = await runner()(...cmd, '--help');
-
+  console.log(stdout)
   expect(stdout).toMatchSnapshot();
 });
