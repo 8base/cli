@@ -21,10 +21,10 @@ import { ProjectDefinition } from '../../interfaces/Project';
 import { Context, Plugin, ProjectConfig } from '../../common/context';
 
 type FunctionDeclarationOptions = {
-  operation?: TriggerOperation;
-  method?: WebhookMethod;
+  operation?: string;
+  method?: string;
   path?: string;
-  type?: TriggerType;
+  type?: string;
   schedule?: string;
 };
 
