@@ -301,8 +301,8 @@ POSITIONALS
 OPTIONS
   -d, --debug      Turn on debug logs  [boolean]
   -h, --help       Show help  [boolean]
-  -t, --type       The trigger type  [string] [choices: "before", "after"] [default: "before"]
-  -o, --operation  Operation that invokes the trigger  [string] [choices: "create", "update", "delete"] [default: "create"]
+  -t, --type       The trigger type  [string] [choices: "before", "after"]
+  -o, --operation  Operation that invokes the trigger  [string]
   -x, --mocks      Included mocks dir and files  [boolean] [default: true]
   -s, --syntax     Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
       --silent     Disable printing extra info to the console  [boolean] [default: false]"
