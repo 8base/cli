@@ -296,7 +296,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'gene
 "8base generate trigger <name> [OPTIONS]
 
 POSITIONALS
-  tableName  The name of table to make trigger for  [string] [required]
+  8base generate trigger <name>
 
 OPTIONS
   -d, --debug      Turn on debug logs  [boolean]
