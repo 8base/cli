@@ -293,29 +293,35 @@ OPTIONS
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'trigger' ]\`. 1`] = `
-"8base generate trigger [FUNCTION_NAME] [OPTIONS]
+"8base generate trigger <tableName> [OPTIONS]
+
+POSITIONALS
+  tableName  The name of table to make trigger for  [string] [required]
 
 OPTIONS
-  --debug, -d      Turn on debug logs  [boolean]
-  --help, -h       Show help  [boolean]
-  --type, -t       The trigger type  [string] [choices: \\"before\\", \\"after\\"]
-  --operation, -o  Operation that invokes the trigger  [string]
-  --mocks, -x      Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s     Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
-  --silent         Disable printing extra info to the console  [boolean] [default: false]"
+  -d, --debug      Turn on debug logs  [boolean]
+  -h, --help       Show help  [boolean]
+  -t, --type       The trigger type  [string] [choices: "before", "after"] [default: "before"]
+  -o, --operation  Operation that invokes the trigger  [string] [choices: "create", "update", "delete"] [default: "create"]
+  -x, --mocks      Included mocks dir and files  [boolean] [default: true]
+  -s, --syntax     Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
+      --silent     Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`generate,webhook\`. 1`] = `
-"8base generate webhook [FUNCTION_NAME] [OPTIONS]
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'webhook' ]\`. 1`] = `
+"8base generate webhook <name> [OPTIONS]
+
+POSITIONALS
+  name  The name of the webhook  [string] [required]
 
 OPTIONS
-  --debug, -d   Turn on debug logs  [boolean]
-  --help, -h    Show help  [boolean]
-  --path, -p    Path for the url (https:<endpoint>/<path>)  [string]
-  --method, -m  HTTP verb to invoke the function  [string] [choices: \\"POST\\", \\"GET\\", \\"DELETE\\", \\"PUT\\"]
-  --mocks, -x   Included mocks dir and files  [boolean] [default: true]
-  --syntax, -s  Syntax for the generated file  [string] [choices: \\"js\\", \\"ts\\"] [default: \\"ts\\"]
-  --silent      Disable printing extra info to the console  [boolean] [default: false]"
+  -d, --debug   Turn on debug logs  [boolean]
+  -h, --help    Show help  [boolean]
+  -p, --path    Path for the url (https:<endpoint>/<path>)  [string]
+  -m, --method  HTTP verb to invoke the function  [string] [choices: "POST", "GET", "DELETE", "PUT"] [default: "POST"]
+  -x, --mocks   Included mocks dir and files  [boolean] [default: true]
+  -s, --syntax  Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
+      --silent  Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'import' ]\`. 1`] = `
