@@ -293,7 +293,7 @@ OPTIONS
 `;
 
 exports[`As a user, I can use help flag for see help information about \`generate,trigger\`. 1`] = `
-"8base generate trigger [FUNCTION_NAME] [OPTIONS]
+"8base generate trigger <name> [OPTIONS]
 
 OPTIONS
   -d, --debug      Turn on debug logs  [boolean]
