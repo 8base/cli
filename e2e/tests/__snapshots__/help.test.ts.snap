@@ -293,7 +293,7 @@ OPTIONS
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'trigger' ]\`. 1`] = `
-"8base generate trigger <tableName> [OPTIONS]
+"8base generate trigger <name>
 
 OPTIONS
   -d, --debug      Turn on debug logs  [boolean]
