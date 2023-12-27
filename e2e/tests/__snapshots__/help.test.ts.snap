@@ -292,8 +292,8 @@ OPTIONS
       --silent           Disable printing extra info to the console  [boolean] [default: false]"
 `;
 
-exports[`As a user, I can use help flag for see help information about \`generate,trigger\`. 1`] = `
-"8base generate trigger <name> [OPTIONS]
+exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'trigger' ]\`. 1`] = `
+"8base generate trigger <tableName> [OPTIONS]
 
 OPTIONS
   -d, --debug      Turn on debug logs  [boolean]
