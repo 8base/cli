@@ -258,7 +258,7 @@ export default {
     /**
      * Generate trigger related messages
      */
-    generate_trigger_usage: '8base generate trigger <tableName>',
+    generate_trigger_usage: '8base generate trigger <name>',
     generate_trigger_describe: 'Generator for a custom trigger function.',
     generate_trigger_type_describe: 'The trigger type',
     generate_trigger_operation_describe: 'Operation that invokes the trigger',
