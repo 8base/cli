@@ -57,49 +57,33 @@ const generateFunctionDeclaration = (
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
-  switch (type) {
-    case ExtensionType.resolver:
-      return {
-        type,
-        handler: {
-          code: `${dirPath}/handler.${syntax}`,
-        },
-        schema: `${dirPath}/schema.graphql`,
-      };
+  let declaration = {
+    type,
+    handler: {
+      code: `${dirPath}/handler.${syntax}`,
+    },
+  };
 
-    case ExtensionType.task: {
-      const declaration = {
-        type,
-        handler: {
-          code: `${dirPath}/handler.${syntax}`,
-        },
-      };
-      if (options.schedule) {
-        _.assign(declaration, {
-          schedule: options.schedule,
-        });
-      }
-      return declaration;
-    }
+  if (type === ExtensionType.resolver) {
+    declaration = _.merge(declaration, {
+      schema: `${dirPath}/schema.graphql`,
+    });
+  } else if (type === ExtensionType.task && options.schedule) {
+    declaration = _.merge(declaration, {
+      schedule: options.schedule,
+    });
+  } else if (type === ExtensionType.trigger) {
+    declaration = _.merge(declaration, {
+      type: `trigger.${options.type || 'before'}`,
+      operation: options.operation || 'Users.create',
+    });
+  } else if (type === ExtensionType.webhook) {
+    declaration = _.merge(declaration, {
+      path: options.path || '/webhook',
+      method: options.method || 'POST',
+    });
 
-    case ExtensionType.trigger:
-      return {
-        handler: {
-          code: `${dirPath}/${options.type}.${syntax}`,
-        },
-        type: `trigger.${options.type}`,
-        operation: `${name}.${options.operation}`,
-      };
-
-    case ExtensionType.webhook:
-      return {
-        type,
-        handler: {
-          code: `${dirPath}/handler.${syntax}`,
-        },
-        path: options.path || '/webhook',
-        method: options.method || 'POST',
-      };
+    return declaration;
   }
 };
 
@@ -377,23 +361,22 @@ export class ProjectController {
     ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
-  static async generateFunction(
+  static generateFunction(
     context: Context,
     { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGenerationOptions,
     options: FunctionDeclarationOptions = {},
   ) {
-    const dirPath = FunctionUtils.resolveFunctionDir(type, name, options);
-    const functionName = FunctionUtils.resolveFunctionName(type, name, options);
+    const dirPath = `src/${type}s/${name}`;
 
-    await ProjectController.addFunctionDeclaration(
+    ProjectController.addFunctionDeclaration(
       context,
-      functionName,
+      name,
       generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
       projectPath,
       silent,
     );
 
-    const functionTemplatePath = FunctionUtils.resolveTemplatePath(context, type, options);
+    const functionTemplatePath = path.resolve(context.config.functionTemplatesPath, type);
 
     processTemplate(
       context,
@@ -402,14 +385,14 @@ export class ProjectController {
         templatePath: functionTemplatePath,
       },
       { syntax, mocks, silent },
-      { functionName, type, extendType, mockName: 'request' },
+      { functionName: name, type, extendType },
     );
 
     if (!silent) {
       context.logger.info('');
 
       context.logger.info(
-        context.i18n.t('generate_function_success', {
+        context.i18n.t('generate_function_grettings', {
           name,
         }),
       );
