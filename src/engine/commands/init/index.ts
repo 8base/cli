@@ -96,7 +96,7 @@ export default {
 
     if (!empty && Array.isArray(functions)) {
       functions.forEach(declaration => {
-        const [type, name, triggerOperation, triggerType] = declaration.split(':');
+        const [type, name] = declaration.split(':');
 
         if (!(type in ExtensionType)) {
           throw new Error(translations.i18n.t('init_invalid_function_type', { type }));
@@ -104,10 +104,6 @@ export default {
 
         if (!name) {
           throw new Error(translations.i18n.t('init_undefined_function_name'));
-        }
-
-        if (type === ExtensionType.trigger && !(triggerOperation in TriggerOperation && triggerType in TriggerType)) {
-          throw new Error(translations.i18n.t('init_incorrect_trigger'));
         }
       });
     }
@@ -226,7 +222,7 @@ export default {
         alias: 'f',
         describe: translations.i18n.t('init_functions_describe'),
         type: 'array',
-        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:Users:create:before'],
+        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:trigger'],
       })
       .option('empty', {
         alias: 'e',
