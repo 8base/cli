@@ -28,6 +28,16 @@ type FunctionDeclarationOptions = {
   schedule?: string;
 };
 
+type FunctionGeneratationOptions = {
+  type: ExtensionType;
+  name: string;
+  mocks: boolean;
+  syntax: SyntaxType;
+  projectPath?: string;
+  silent?: boolean;
+  extendType?: string;
+};
+
 type FunctionGenerationOptions = {
   type: ExtensionType;
   name: string;
@@ -53,10 +63,11 @@ type PluginGenerationOptions = {
 };
 
 const generateFunctionDeclaration = (
-  { type, name, syntax }: FunctionGenerationOptions,
+  { type, name, mocks, syntax }: FunctionGeneratationOptions,
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
+
   let declaration = {
     type,
     handler: {
@@ -82,9 +93,9 @@ const generateFunctionDeclaration = (
       path: options.path || '/webhook',
       method: options.method || 'POST',
     });
-
-    return declaration;
   }
+
+  return declaration;
 };
 
 export class ProjectController {
@@ -232,7 +243,7 @@ export class ProjectController {
   }
 
   private static loadExtensions(config: ProjectConfig, projectPath?: string): ExtensionsContainer {
-    return _.reduce(
+    return _.reduce<any, ExtensionsContainer>(
       config.functions,
       (extensions, data, functionName) => {
         FunctionUtils.validateFunctionDefinition(data, functionName, projectPath);
@@ -240,7 +251,7 @@ export class ProjectController {
         extensions.functions.push({
           name: functionName,
           // TODO: create class FunctionDefinition
-          handler: `${functionName}.handler`, // this handler generate in compile step
+          handler: functionName + '.handler', // this handler generate in compile step
           pathToFunction: FunctionUtils.resolveHandler(functionName, data.handler),
         });
 
@@ -265,16 +276,16 @@ export class ProjectController {
             if (_.isNil(data.operation)) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
-                `operation field not present in trigger ${functionName}`,
+                'operation field not present in trigger ' + functionName,
               );
             }
 
-            const [tableName, operation] = data.operation.split('.');
+            const operation = data.operation.split('.'); // TableName.TriggerType
 
             extensions.triggers.push({
               name: functionName,
-              operation: TriggerUtils.resolveTriggerOperation(operation, functionName),
-              tableName,
+              operation: TriggerUtils.resolveTriggerOperation(operation[1], functionName),
+              tableName: operation[0],
               functionName,
               type: TriggerUtils.resolveTriggerType(data.type, functionName),
             });
@@ -284,7 +295,7 @@ export class ProjectController {
             if (!data.method) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
-                `Parameter "method" is missing in webhook "${functionName}"`,
+                "Parameter 'method' is missing in webhook '" + functionName + "'",
               );
             }
 
@@ -361,14 +372,14 @@ export class ProjectController {
     ProjectController.saveConfigFile(context, config, projectPath, silent);
   }
 
-  static generateFunction(
+  static async generateFunction(
     context: Context,
     { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGenerationOptions,
     options: FunctionDeclarationOptions = {},
   ) {
     const dirPath = `src/${type}s/${name}`;
 
-    ProjectController.addFunctionDeclaration(
+    await ProjectController.addFunctionDeclaration(
       context,
       name,
       generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
@@ -392,7 +403,7 @@ export class ProjectController {
       context.logger.info('');
 
       context.logger.info(
-        context.i18n.t('generate_function_grettings', {
+        context.i18n.t('generate_function_success', {
           name,
         }),
       );
@@ -562,16 +573,16 @@ const processTemplate = (
       return;
     }
 
-    const data = fs.readFileSync(path.resolve(templatePath, file), { encoding: 'utf8' });
+    const data = fs.readFileSync(path.resolve(templatePath, file));
 
-    const content = ejs.compile(data)({
+    const content = ejs.compile(data.toString())({
       ...options,
       _,
     });
 
     let fileName = file.replace(/\.ejs$/, '');
 
-    fileName = fileName.replace('request', _.get(options, 'mockName'));
+    fileName = fileName.replace('mockName', _.get(options, 'mockName'));
 
     fs.writeFileSync(path.resolve(dirPath, fileName), content);
 
