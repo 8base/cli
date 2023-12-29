@@ -350,7 +350,7 @@ POSITIONALS
 OPTIONS
   -d, --debug        Turn on debug logs  [boolean]
   -h, --help         Show help  [boolean]
-  -f, --functions    List of functions  [array] [default: ["resolver:resolver","task:task","webhook:webhook","trigger:Users:create:before"]]
+  -f, --functions    List of functions  [array] [default: ["resolver:resolver","task:task","webhook:webhook","trigger:trigger"]]
   -e, --empty        Skip examples  [boolean] [default: false]
   -x, --mocks        Included mocks dir and files  [boolean] [default: true]
   -s, --syntax       Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
