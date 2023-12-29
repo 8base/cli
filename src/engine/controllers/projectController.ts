@@ -67,7 +67,6 @@ const generateFunctionDeclaration = (
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
-
   let declaration = {
     type,
     handler: {
