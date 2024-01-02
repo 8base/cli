@@ -116,7 +116,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'desc
 DESCRIPTION
   Describes your 8base project’s functions and their types through 8base.yml file.
 
-Positionals
+Positionals:
   name  The function name to describe  [string]
 
 OPTIONS
@@ -230,7 +230,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'app' ]\`. 1`] = `
 "8base generate app <name>
 
-Positionals
+Positionals:
   name  The name of the app  [string] [required]
 
 OPTIONS
@@ -241,7 +241,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'mock' ]\`. 1`] = `
 "Generator for a mock for the function.
 
-Positionals
+Positionals:
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -254,7 +254,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'resolver' ]\`. 1`] = `
 "8base generate resolver <name> [OPTIONS]
 
-Positionals
+Positionals:
   name  The name of the resolver  [string] [required]
 
 OPTIONS
@@ -268,7 +268,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'scaffold' ]\`. 1`] = `
 "8base generate scaffold <tableName> [OPTIONS]
 
-Positionals
+Positionals:
   tableName  The name of the table  [string] [required]
 
 OPTIONS
@@ -280,7 +280,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'task' ]\`. 1`] = `
 "8base generate task <name> [OPTIONS]
 
-Positionals
+Positionals:
   name  The name of the task  [string] [required]
 
 OPTIONS
@@ -308,7 +308,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'webhook' ]\`. 1`] = `
 "8base generate webhook <name> [OPTIONS]
 
-Positionals
+Positionals:
   name  The name of the webhook  [string] [required]
 
 OPTIONS
@@ -344,7 +344,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'init
 DESCRIPTION
   Initializes a new project with example directory structure and custom functions.
 
-Positionals
+Positionals:
   name  The name of the project  [string]
 
 OPTIONS
@@ -371,7 +371,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'invo
 DESCRIPTION
   Invokes a custom function in the production workspace.
 
-Positionals
+Positionals:
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -389,7 +389,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'invo
 DESCRIPTION
   Invokes a custom function in the production workspace.
 
-Positionals
+Positionals:
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -438,7 +438,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'logs
 DESCRIPTION
   Shows logs for the functions or migrations
 
-Positionals
+Positionals:
   name  Name parameter is now deprecated  [deprecated] [string]
 
 OPTIONS
