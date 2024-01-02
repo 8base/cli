@@ -57,7 +57,6 @@ const start = async (translations: Translations) => {
       'Examples:': 'EXAMPLES',
       'Commands:': 'COMMANDS',
       'Options:': 'OPTIONS',
-      'Positionals:': 'POSITIONALS',
     })
     .wrap(yargs.terminalWidth()).argv;
 
