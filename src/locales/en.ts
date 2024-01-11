@@ -200,7 +200,6 @@ export default {
     logs_tail_failed: 'Failed to establish connection... Please try again in a few minutes.',
     logs_tail_success: 'Connection established. Tailing logs...',
 
-
     logs_name_describe: 'The name of the function',
     logs_usage:
       'COMMAND\n  8base logs [name] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.',
