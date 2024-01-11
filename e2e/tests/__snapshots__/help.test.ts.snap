@@ -433,21 +433,19 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`[ 'logs' ]\`. 1`] = `
 "COMMAND
-  8base logs [OPTIONS]
+  8base logs [name] [OPTIONS]
 
 DESCRIPTION
-  Shows logs for the functions or migrations
+  Authenticates the command line user by letting them log into an 8base account.
 
 Positionals:
-  name  Name parameter is now deprecated  [deprecated] [string]
+  name  The name of the function  [string] [required]
 
 OPTIONS
-  -d, --debug     Turn on debug logs  [boolean]
-  -h, --help      Show help  [boolean]
-  -n, --num       Number of lines to display  [number] [default: 10]
-  -t, --tail      Continually stream logs  [boolean]
-  -r, --resource  environment:extensions - deployed custom functions logs
-                  system:ci:migration - migration process logs  [string] [choices: "environment:extensions", "system:ci:commit"] [default: "environment:extensions"]"
+  -d, --debug  Turn on debug logs  [boolean]
+  -h, --help   Show help  [boolean]
+  -n, --num    Number of lines to display  [number] [default: 10]
+  -t, --tail   Continually stream logs  [boolean]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'migration' ]\`. 1`] = `
