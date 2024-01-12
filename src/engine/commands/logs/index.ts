@@ -1,11 +1,13 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as _ from 'lodash';
 import chalk from 'chalk';
-import { DateTime } from 'luxon';
 
 import { Context } from '../../../common/context';
 import { GraphqlActions } from '../../../consts/GraphqlActions';
 import { translations } from '../../../common/translations';
+import { Utils } from '../../../common/utils';
+
+type LogsParams = { name?: string; num: number; tail?: boolean; resource: string };
 
 export enum LogTagType {
   ERROR = 'ERROR',
@@ -30,6 +32,7 @@ const printTag = (tag: LogTagType) => {
 };
 
 const beautifyLogLine = (line: string) => {
+  console.log(line)
   line = line.replace(/\t/g, ' ');
 
   line = line.replace(/\n$/, '');
@@ -37,27 +40,26 @@ const beautifyLogLine = (line: string) => {
   if (/^START RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/.test(line)) {
     line = line.replace(
       /^START RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/,
-      (substr: string, id: string, text: string) => {
-        return printRequestId(id) + ` ${printTag(LogTagType.START)} ` + chalk.dim(text);
-      },
+      (substr: string, id: string, text: string) =>
+        `${printRequestId(id)} ${printTag(LogTagType.START)} ${chalk.dim(text)}`,
     );
   }
 
   if (/^REPORT RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/.test(line)) {
     line = line.replace(
       /^REPORT RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*([\s\S]*)/,
-      (substr: string, id: string, text: string) => {
-        return printRequestId(id) + ` ${printTag(LogTagType.REPORT)} ` + chalk.green(text);
-      },
+      (substr: string, id: string, text: string) =>
+        `${printRequestId(id)} ${printTag(LogTagType.REPORT)} ${chalk.green(text)}`,
     );
 
     line += '\n';
   }
 
   if (/^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/.test(line)) {
-    line = line.replace(/^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/, (substr: string, id: string) => {
-      return printRequestId(id) + ` ${printTag(LogTagType.END)}`;
-    });
+    line = line.replace(
+      /^END RequestId: (\w{8}-\w{4}-\w{4}-\w{4}-\w{12})\s*/,
+      (substr: string, id: string) => `${printRequestId(id)} ${printTag(LogTagType.END)}`,
+    );
   }
 
   if (
@@ -72,13 +74,9 @@ const beautifyLogLine = (line: string) => {
           text = JSON.stringify(JSON.parse(text), null, 2);
         } catch (e) {}
 
-        return (
-          printRequestId(id) +
-          ' ' +
-          printTag(LogTagType.ERROR) +
-          chalk.red(` Datetime: ${DateTime.fromISO(dt).toFormat('F')}\n`) +
-          text
-        );
+        return `${printRequestId(id)} ${printTag(LogTagType.ERROR)}${chalk.red(
+          ` Datetime: ${new Date(dt).toLocaleString()}\n`,
+        )}${text}`;
       },
     );
   }
@@ -91,13 +89,9 @@ const beautifyLogLine = (line: string) => {
           text = JSON.stringify(JSON.parse(text), null, 2);
         } catch (e) {}
 
-        return (
-          printRequestId(id) +
-          ' ' +
-          printTag(LogTagType.INFO) +
-          chalk.cyan(` Datetime: ${DateTime.fromISO(dt).toFormat('F')} \n`) +
-          text
-        );
+        return `${printRequestId(id)} ${printTag(LogTagType.INFO)}${chalk.cyan(
+          ` Datetime: ${new Date(dt).toLocaleString()} \n`,
+        )}${text}`;
       },
     );
   }
@@ -107,15 +101,11 @@ const beautifyLogLine = (line: string) => {
 
 const printLogs = (logs: string[]) => {
   logs
-    .map((line: string) => beautifyLogLine(line))
+    .map((line: any) => beautifyLogLine(line.message as string))
     .forEach((line: string) => {
       // eslint-disable-next-line no-console
       console.log(line);
     });
-};
-
-const sleep = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 let lastMessage: string = '';
@@ -136,7 +126,7 @@ const filterMessage = (messages: string[]): string[] => {
   return _.slice(messages, index + 1);
 };
 
-const readLogs = async (functionName: string, context: Context) => {
+const readLogs = async (resource: string, context: Context) => {
   let attempt = 0;
   let error = null;
 
@@ -153,8 +143,8 @@ const readLogs = async (functionName: string, context: Context) => {
 
     try {
       result = await context.request(GraphqlActions.logs, {
-        functionName,
         startTime: start.toISOString(),
+        resource,
       });
     } catch (e) {
       error = e;
@@ -171,7 +161,7 @@ const readLogs = async (functionName: string, context: Context) => {
       }
     }
 
-    const logs = filterMessage(result.logs);
+    const logs = filterMessage(result.system.logs.items);
 
     if (logs.length > 0) {
       printLogs(logs);
@@ -181,7 +171,7 @@ const readLogs = async (functionName: string, context: Context) => {
       context.spinner.start(translations.i18n.t('logs_tail_wait'));
     }
 
-    await sleep(1000);
+    await Utils.sleep(1000);
 
     attempt = attempt + 1;
   }
@@ -189,44 +179,59 @@ const readLogs = async (functionName: string, context: Context) => {
 
 export default {
   command: 'logs [name]',
-  handler: async (params: any, context: Context) => {
-    if (params.n > 100) {
-      params.n = 100;
+  handler: async (params: LogsParams, context: Context) => {
+    if (params.name) {
+      context.logger.warn(context.i18n.t('logs_name_deprecation'));
     }
 
-    if (params['t']) {
-      return await readLogs(params.name, context);
+    if (params.num > 100) {
+      params.num = 100;
+    }
+
+    if (params.tail) {
+      return readLogs(params.resource, context);
     }
 
     context.spinner.start(context.i18n.t('logs_in_progress'));
 
     const result = await context.request(GraphqlActions.logs, {
-      functionName: params.name,
-      limit: params.n,
+      limit: params.num,
+      resource: params.resource,
     });
     context.spinner.stop();
 
-    printLogs(result.logs);
+    printLogs(result.system.logs.items);
   },
   describe: translations.i18n.t('logs_describe'),
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t('logs_usage'))
       .positional('name', {
-        describe: translations.i18n.t('logs_name_describe'),
+        describe: translations.i18n.t('logs_name_deprecation'),
         type: 'string',
       })
-      .demandOption('name')
+      .deprecateOption('name')
       .option('num', {
         alias: 'n',
         default: 10,
         describe: translations.i18n.t('logs_num_describe'),
         type: 'number',
+        requiresArg: true,
+        conflicts: 'tail',
       })
       .option('tail', {
         alias: 't',
         describe: translations.i18n.t('logs_tail_describe'),
         type: 'boolean',
+        conflicts: 'num',
+      })
+      .option('resource', {
+        alias: 'r',
+        describe: translations.i18n.t('logs_resource_describe'),
+        type: 'string',
+        choices: ['environment:extensions', 'system:ci:commit'],
+        default: 'environment:extensions',
+        requiresArg: true,
       });
   },
 };
