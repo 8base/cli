@@ -439,13 +439,15 @@ DESCRIPTION
   Authenticates the command line user by letting them log into an 8base account.
 
 Positionals:
-  name  The name of the function  [string] [required]
+  name  Name parameter is now deprecated  [deprecated] [string]
 
 OPTIONS
-  -d, --debug  Turn on debug logs  [boolean]
-  -h, --help   Show help  [boolean]
-  -n, --num    Number of lines to display  [number] [default: 10]
-  -t, --tail   Continually stream logs  [boolean]"
+  -d, --debug     Turn on debug logs  [boolean]
+  -h, --help      Show help  [boolean]
+  -n, --num       Number of lines to display  [number] [default: 10]
+  -t, --tail      Continually stream logs  [boolean]
+  -r, --resource  environment:extensions - deployed custom functions logs
+                  system:ci:migration - migration process logs  [string] [choices: "environment:extensions", "system:ci:commit"] [default: "environment:extensions"]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'migration' ]\`. 1`] = `
