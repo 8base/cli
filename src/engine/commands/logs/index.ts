@@ -32,7 +32,6 @@ const printTag = (tag: LogTagType) => {
 };
 
 const beautifyLogLine = (line: string) => {
-  console.log(line)
   line = line.replace(/\t/g, ' ');
 
   line = line.replace(/\n$/, '');
