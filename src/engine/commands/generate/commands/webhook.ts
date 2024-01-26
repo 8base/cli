@@ -1,14 +1,14 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 
 import { Context } from '../../../../common/context';
 import { translations } from '../../../../common/translations';
-import { ExtensionType, SyntaxType } from '../../../../interfaces/Extensions';
+import { ExtensionType, SyntaxType, WebhookMethod } from '../../../../interfaces/Extensions';
 import { ProjectController } from '../../../controllers/projectController';
 
-type TaskParams = {
+type WebhookGenerateParams = {
   name: string;
-  path?: string;
-  method?: string;
+  path: string;
+  method: WebhookMethod;
   mocks: boolean;
   syntax: SyntaxType;
   silent: boolean;
@@ -17,10 +17,10 @@ type TaskParams = {
 export default {
   command: 'webhook <name>',
 
-  handler: async (params: TaskParams, context: Context) => {
-    let { name, path, method, mocks, syntax, silent } = params;
+  handler: async (params: WebhookGenerateParams, context: Context) => {
+    const { name, path, method, mocks, syntax, silent } = params;
 
-    ProjectController.generateFunction(
+    await ProjectController.generateFunction(
       context,
       {
         type: ExtensionType.webhook,
@@ -41,16 +41,23 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv =>
     args
       .usage(translations.i18n.t('generate_webhook_usage'))
+      .positional('name', {
+        describe: translations.i18n.t('generate_webhook_name'),
+        type: 'string',
+      })
       .option('path', {
         alias: 'p',
         describe: translations.i18n.t('generate_webhook_path_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('method', {
         alias: 'm',
         describe: translations.i18n.t('generate_webhook_method_describe'),
         type: 'string',
-        choices: ['POST', 'GET', 'DELETE', 'PUT'],
+        choices: Object.values(WebhookMethod),
+        default: WebhookMethod.post,
+        requiresArg: true,
       })
       .option('mocks', {
         alias: 'x',
@@ -64,6 +71,7 @@ export default {
         default: 'ts',
         type: 'string',
         choices: Object.values(SyntaxType),
+        requiresArg: true,
       })
       .option('silent', {
         describe: translations.i18n.t('silent_describe'),

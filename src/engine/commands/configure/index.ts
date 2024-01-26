@@ -1,15 +1,17 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { Context } from '../../../common/context';
 import { translations } from '../../../common/translations';
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
+import * as _ from 'lodash';
 import { Workspace } from '../../../interfaces/Common';
-import _ = require('lodash');
+
+type ConfigureParams = { workspaceId: string; host: string };
 
 export default {
   command: 'configure',
 
-  handler: async (params: any, context: Context) => {
+  handler: async (params: ConfigureParams, context: Context) => {
     let { workspaceId, host = context.resolveMainServerAddress() } = params;
 
     if (!workspaceId) {
@@ -53,9 +55,11 @@ export default {
         alias: 'w',
         describe: translations.i18n.t('configure_workspace_id_describe'),
         type: 'string',
+        requiresArg: true,
       })
       .option('host', {
         describe: translations.i18n.t('configure_workspace_host_describe'),
         type: 'string',
+        requiresArg: true,
       }),
 };

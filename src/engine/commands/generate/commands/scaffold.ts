@@ -1,4 +1,4 @@
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import * as fs from 'fs-extra';
 import * as yaml from 'js-yaml';
 import { Context } from '../../../../common/context';
@@ -9,7 +9,7 @@ import { createQueryColumnsList, TableSchema } from '@8base/utils';
 import { generateScreen } from '@8base/generators';
 import { exportTables } from '@8base/api-client';
 
-type ViewCommandConfig = {
+type ScaffoldGenerateParams = {
   tableName: string;
   depth: number;
   all: boolean;
@@ -55,15 +55,13 @@ const getTable = (tables: TableSchema[], tableName: string): TableSchema => {
   return table;
 };
 
-const getColumnsNames = (params: { withMeta: boolean } & ViewCommandConfig, tables: TableSchema[]): string[] => {
+const getColumnsNames = (params: { withMeta: boolean } & ScaffoldGenerateParams, tables: TableSchema[]): string[] => {
   const { name } = getTable(tables, params.tableName);
   const table = getTable(tables, name);
 
   const columns = createQueryColumnsList(tables, table.id, { deep: params.depth, withMeta: params.withMeta });
 
-  const columnsNames = columns.map(({ name }) => name);
-
-  return columnsNames;
+  return columns.map(({ name }) => name);
 };
 
 const createTemplateFs = async (tables: TableSchema[], screen: Screen, config: { depth: number }, context: Context) => {
@@ -79,7 +77,7 @@ const createTemplateFs = async (tables: TableSchema[], screen: Screen, config: {
   );
 
   try {
-    if (fs.existsSync(Object.keys(fsObject)[0])) {
+    if (await fs.exists(Object.keys(fsObject)[0])) {
       throw new Error(translations.i18n.t('generate_scaffold_crud_exist_error'));
     }
 
@@ -96,16 +94,16 @@ const createTemplateFs = async (tables: TableSchema[], screen: Screen, config: {
 export default {
   command: 'scaffold <tableName>',
   describe: translations.i18n.t('generate_scaffold_describe'),
-  handler: async (params: ViewCommandConfig, context: Context) => {
+  handler: async (params: ScaffoldGenerateParams, context: Context) => {
     context.spinner.start('Fetching table data');
     const tables: TableSchema[] = await exportTables(context.request.bind(context), { withSystemTables: true });
     const { name, id } = getTable(tables, params.tableName);
 
     context.spinner.stop();
 
-    let eightBaseConfig: EightBaseConfig;
+    let eightBaseConfig;
     try {
-      eightBaseConfig = <any>yaml.safeLoad(await fs.readFile('.8base.yml', 'utf8'));
+      eightBaseConfig = <EightBaseConfig>yaml.load(await fs.readFile('.8base.yml', 'utf8'));
     } catch (err) {
       if (err.code === 'ENOENT') {
         throw new Error(translations.i18n.t('generate_scaffold_project_file_error', { projectFileName: '.8base.yml' }));
@@ -144,10 +142,15 @@ export default {
   builder: (args: yargs.Argv): yargs.Argv => {
     return args
       .usage(translations.i18n.t('generate_scaffold_usage'))
+      .positional('tableName', {
+        describe: translations.i18n.t('generate_scaffold_name'),
+        type: 'string',
+      })
       .option('depth', {
         describe: translations.i18n.t('generate_scaffold_depth_describe'),
         type: 'number',
         default: 1,
+        requiresArg: true,
       })
       .option('all', {
         type: 'boolean',

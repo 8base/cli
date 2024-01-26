@@ -1,4 +1,4 @@
-const prompts = require('prompts');
+import prompts from 'prompts';
 
 export type InteractiveInput = {
   name: string;

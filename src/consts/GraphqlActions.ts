@@ -22,6 +22,14 @@ export const GraphqlActions = {
       count
     }
   }`,
+  versionCheck: `query {
+    system {
+      functionsVersionCheck {
+          version
+      }
+    }
+  }
+  `,
   environmentsList: `
     query EnvironmentsList {
       system {
@@ -50,7 +58,6 @@ export const GraphqlActions = {
     $limit: Int,
     $startTime: DateTime,
     $endTime: DateTime){
-
       logs (
         functionName:$functionName
         limit: $limit
@@ -114,16 +121,16 @@ export const GraphqlActions = {
 
 export const GraphqlAsyncActions = {
   environmentBranch: `
-    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode) {
-      system { async: environmentBranch(name: $environmentName mode: $mode) { sessionId } }
+    mutation clone($environmentName: String!, $mode: SystemBranchEnvironmentMode, $force: Boolean) {
+      system { async: environmentBranch(name: $environmentName mode: $mode force: $force) { sessionId } }
     }`,
   environmentDelete: `
     mutation delete($environmentName: String!) {
       system { async: environmentDeleteAsync(environmentName: $environmentName) { sessionId } }
     }`,
   commit: `
-    mutation CommitMigration($mode: SystemCiCommitMode!, $build:String, $migrationNames:[String]) {
-      system { async: ciCommit(mode:$mode build:$build migrationNames:$migrationNames) { sessionId } }
+    mutation CommitMigration($mode: SystemCiCommitMode!, $build:String, $migrationNames:[String], $nodeVersion:String) {
+      system { async: ciCommit(mode:$mode build:$build migrationNames:$migrationNames, nodeVersion:$nodeVersion) { sessionId } }
     }
   `,
   backupCreate: `

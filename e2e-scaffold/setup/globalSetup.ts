@@ -2,13 +2,12 @@ import { generateScaffoldProject } from './helpers/generateScaffoldProject';
 import { startScaffoldProject } from './helpers/startScaffoldProject';
 
 import * as puppeteer from 'puppeteer';
-import * as fs from 'fs';
-import * as mkdirp from 'mkdirp';
+import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
-import gql from 'graphql-tag';
 import { Client } from '@8base/api-client';
+import gql from 'graphql-tag';
 
 const DIR = path.join(os.tmpdir(), 'jest_puppeteer_global_setup');
 
@@ -65,8 +64,7 @@ export default async () => {
     const launchOptions = getPuppeteerLaunchOptions();
 
     const browser = await puppeteer.launch(launchOptions);
-
-    mkdirp.sync(DIR);
+    fs.ensureDirSync(DIR);
     fs.writeFileSync(path.join(DIR, 'wsEndpoint'), browser.wsEndpoint());
 
     global.__BROWSER__ = browser;

@@ -38,7 +38,7 @@ export const executeAsync = async (
     context.spinner.start(
       context.i18n.t('async_in_progress', {
         status: result.status,
-        message: result.message,
+        message: result.message || '',
       }),
     );
   } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
@@ -48,7 +48,7 @@ export const executeAsync = async (
   if (result.status === AsyncStatus.completeError) {
     let gqlError;
     try {
-      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be threw as is
+      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be thrown as is
     } catch (e) {
       throw new Error(result.message);
     }
@@ -72,7 +72,7 @@ export const uploadProject = async (context: Context, options?: RequestOptions):
 };
 
 export const executeDeploy = async (context: Context, deployOptions: any, options?: RequestOptions) => {
-  context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload' }));
+  context.spinner.start(context.i18n.t('deploy_in_progress', { status: 'prepare to upload', message: '' }));
 
   const buildDir = await BuildController.package(context);
   context.logger.debug(`build dir: ${buildDir}`);
@@ -84,6 +84,8 @@ export const executeDeploy = async (context: Context, deployOptions: any, option
 
   await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
   context.logger.debug('upload source code complete');
+
+  deployOptions.nodeVersion = context?.projectConfig?.settings?.nodeVersion.toString();
 
   await context.request(
     GraphqlActions.deploy,
@@ -104,18 +106,18 @@ export const executeDeploy = async (context: Context, deployOptions: any, option
     context.spinner.start(
       context.i18n.t('deploy_in_progress', {
         status: result.status,
-        message: result.message,
+        message: result.message || '',
       }),
     );
   } while (result.status !== AsyncStatus.completeSuccess && result.status !== AsyncStatus.completeError);
 
-  BuildController.clearBuild(context);
+  await BuildController.clearBuild(context);
   context.spinner.stop();
 
   if (result.status === AsyncStatus.completeError) {
     let gqlError;
     try {
-      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be threw as is
+      gqlError = JSON.parse(result.message); // result.message contains valid gqlError, should be thrown as is
     } catch (e) {
       throw new Error(result.message);
     }

@@ -1,5 +1,5 @@
 import { UserDataStorage } from '../../../common/userDataStorage';
-import * as yargs from 'yargs';
+import yargs from 'yargs';
 import { StorageParameters } from '../../../consts/StorageParameters';
 import { translations } from '../../../common/translations';
 
