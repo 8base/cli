@@ -8,6 +8,7 @@ import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
 import archiver from 'archiver';
 import MemoryStream from 'memorystream';
+import axios from 'axios';
 import { HttpError } from '../errors';
 import * as yaml from 'js-yaml';
 
@@ -67,6 +68,26 @@ export namespace Utils {
     context.logger.debug('upload file success');
   };
 
+  export const download = async (url: string, context: Context): Promise<void> => {
+    context.logger.debug('start download file');
+    context.logger.debug(`url: ${url}`);
+
+    const response = await axios({
+      method: 'GET',
+      url: url,
+      responseType: 'stream',
+    });
+
+    const writer = fs.createWriteStream('./file.zip');
+
+    response.data.pipe(writer);
+
+    return new Promise((resolve, reject) => {
+      writer.on('finish', resolve);
+      writer.on('error', reject);
+    });
+  };
+
   export const archiveToMemory = async (
     directories: { source: string; dist?: string }[],
     context: Context,
@@ -124,6 +145,29 @@ export namespace Utils {
     return url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
   };
 
+  export const commandDirMiddleware =
+    (commandsDirPath: string) =>
+    (commandObject: { [key: string]: any }, pathName: string): Object => {
+      const cmd = commandObject.default || commandObject;
+      const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
+
+      if (fileDepth <= 2 && !!cmd.command) {
+        return {
+          ...cmd,
+          handler: CommandController.wrapHandler(cmd.handler, translations),
+        };
+      }
+    };
+
+  export const checkHttpResponse = async (httpResponse: Promise<Response>): Promise<Response> => {
+    const response = await httpResponse;
+    if (!response.ok) {
+      throw new HttpError(await response.text(), response.status, response as any);
+    }
+
+    return response;
+  };
+
   export const validNodeVersions = ['14', '18', '20'];
 
   export const validateExistNodeVersion = (context: Context, isOld?: boolean) => {
@@ -153,28 +197,5 @@ export namespace Utils {
   export const currentIsVersionValid = (context: Context) => {
     const yamlNodeVersion = context.projectConfig?.settings?.nodeVersion;
     return validateExistNodeVersion ? yamlNodeVersion === '18' || yamlNodeVersion === '20' : false;
-  };
-
-  export const commandDirMiddleware =
-    (commandsDirPath: string) =>
-    (commandObject: { [key: string]: any }, pathName: string): Object => {
-      const cmd = commandObject.default || commandObject;
-      const fileDepth = path.relative(commandsDirPath, pathName).split(path.sep).length;
-
-      if (fileDepth <= 2 && !!cmd.command) {
-        return {
-          ...cmd,
-          handler: CommandController.wrapHandler(cmd.handler, translations),
-        };
-      }
-    };
-
-  export const checkHttpResponse = async (httpResponse: Promise<Response>): Promise<Response> => {
-    const response = await httpResponse;
-    if (!response.ok) {
-      throw new HttpError(await response.text(), response.status, response);
-    }
-
-    return response;
   };
 }

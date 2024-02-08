@@ -21,21 +21,11 @@ import { ProjectDefinition } from '../../interfaces/Project';
 import { Context, Plugin, ProjectConfig } from '../../common/context';
 
 type FunctionDeclarationOptions = {
-  operation?: string;
-  method?: string;
+  operation?: TriggerOperation;
+  method?: WebhookMethod;
   path?: string;
-  type?: string;
+  type?: TriggerType;
   schedule?: string;
-};
-
-type FunctionGeneratationOptions = {
-  type: ExtensionType;
-  name: string;
-  mocks: boolean;
-  syntax: SyntaxType;
-  projectPath?: string;
-  silent?: boolean;
-  extendType?: string;
 };
 
 type FunctionGenerationOptions = {
@@ -63,38 +53,54 @@ type PluginGenerationOptions = {
 };
 
 const generateFunctionDeclaration = (
-  { type, name, mocks, syntax }: FunctionGeneratationOptions,
+  { type, name, syntax }: FunctionGenerationOptions,
   dirPath: string,
   options: FunctionDeclarationOptions,
 ) => {
-  let declaration = {
-    type,
-    handler: {
-      code: `${dirPath}/handler.${syntax}`,
-    },
-  };
+  switch (type) {
+    case ExtensionType.resolver:
+      return {
+        type,
+        handler: {
+          code: `${dirPath}/handler.${syntax}`,
+        },
+        schema: `${dirPath}/schema.graphql`,
+      };
 
-  if (type === ExtensionType.resolver) {
-    declaration = _.merge(declaration, {
-      schema: `${dirPath}/schema.graphql`,
-    });
-  } else if (type === ExtensionType.task && options.schedule) {
-    declaration = _.merge(declaration, {
-      schedule: options.schedule,
-    });
-  } else if (type === ExtensionType.trigger) {
-    declaration = _.merge(declaration, {
-      type: `trigger.${options.type || 'before'}`,
-      operation: options.operation || 'Users.create',
-    });
-  } else if (type === ExtensionType.webhook) {
-    declaration = _.merge(declaration, {
-      path: options.path || '/webhook',
-      method: options.method || 'POST',
-    });
+    case ExtensionType.task: {
+      const declaration = {
+        type,
+        handler: {
+          code: `${dirPath}/handler.${syntax}`,
+        },
+      };
+      if (options.schedule) {
+        _.assign(declaration, {
+          schedule: options.schedule,
+        });
+      }
+      return declaration;
+    }
+
+    case ExtensionType.trigger:
+      return {
+        handler: {
+          code: `${dirPath}/${options.type}.${syntax}`,
+        },
+        type: `trigger.${options.type}`,
+        operation: `${name}.${options.operation}`,
+      };
+
+    case ExtensionType.webhook:
+      return {
+        type,
+        handler: {
+          code: `${dirPath}/handler.${syntax}`,
+        },
+        path: options.path || '/webhook',
+        method: options.method || 'POST',
+      };
   }
-
-  return declaration;
 };
 
 export class ProjectController {
@@ -250,7 +256,7 @@ export class ProjectController {
         extensions.functions.push({
           name: functionName,
           // TODO: create class FunctionDefinition
-          handler: functionName + '.handler', // this handler generate in compile step
+          handler: `${functionName}.handler`, // this handler generate in compile step
           pathToFunction: FunctionUtils.resolveHandler(functionName, data.handler),
         });
 
@@ -275,16 +281,16 @@ export class ProjectController {
             if (_.isNil(data.operation)) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
-                'operation field not present in trigger ' + functionName,
+                `operation field not present in trigger ${functionName}`,
               );
             }
 
-            const operation = data.operation.split('.'); // TableName.TriggerType
+            const [tableName, operation] = data.operation.split('.');
 
             extensions.triggers.push({
               name: functionName,
-              operation: TriggerUtils.resolveTriggerOperation(operation[1], functionName),
-              tableName: operation[0],
+              operation: TriggerUtils.resolveTriggerOperation(operation, functionName),
+              tableName,
               functionName,
               type: TriggerUtils.resolveTriggerType(data.type, functionName),
             });
@@ -294,7 +300,7 @@ export class ProjectController {
             if (!data.method) {
               throw new InvalidConfiguration(
                 StaticConfig.serviceConfigFileName,
-                "Parameter 'method' is missing in webhook '" + functionName + "'",
+                `Parameter "method" is missing in webhook "${functionName}"`,
               );
             }
 
@@ -376,17 +382,18 @@ export class ProjectController {
     { type, name, mocks, syntax, extendType = 'Query', projectPath = '.', silent }: FunctionGenerationOptions,
     options: FunctionDeclarationOptions = {},
   ) {
-    const dirPath = `src/${type}s/${name}`;
+    const dirPath = FunctionUtils.resolveFunctionDir(type, name, options);
+    const functionName = FunctionUtils.resolveFunctionName(type, name, options);
 
     await ProjectController.addFunctionDeclaration(
       context,
-      name,
+      functionName,
       generateFunctionDeclaration({ type, name, syntax, mocks }, dirPath, options),
       projectPath,
       silent,
     );
 
-    const functionTemplatePath = path.resolve(context.config.functionTemplatesPath, type);
+    const functionTemplatePath = FunctionUtils.resolveTemplatePath(context, type, options);
 
     processTemplate(
       context,
@@ -395,7 +402,7 @@ export class ProjectController {
         templatePath: functionTemplatePath,
       },
       { syntax, mocks, silent },
-      { functionName: name, type, extendType },
+      { functionName, type, extendType, mockName: 'request' },
     );
 
     if (!silent) {
@@ -572,16 +579,16 @@ const processTemplate = (
       return;
     }
 
-    const data = fs.readFileSync(path.resolve(templatePath, file));
+    const data = fs.readFileSync(path.resolve(templatePath, file), { encoding: 'utf8' });
 
-    const content = ejs.compile(data.toString())({
+    const content = ejs.compile(data)({
       ...options,
       _,
     });
 
     let fileName = file.replace(/\.ejs$/, '');
 
-    fileName = fileName.replace('mockName', _.get(options, 'mockName'));
+    fileName = fileName.replace('request', _.get(options, 'mockName'));
 
     fs.writeFileSync(path.resolve(dirPath, fileName), content);
 

@@ -120,10 +120,14 @@ export default {
     init_workspace_host_describe: 'The workspace host of the project',
     init_node_version_describe: 'The node version for compile your functions default: (18 LTS)',
     init_select_workspace: 'What workspace does this project belong to?',
+    init_cloning_question:
+      'Would you like to import project files and custom functions from the <workspaceId> backend? Your existing 8base.yml configuration and contents of the project will be overwritten with the new data. Proceed? (Y/N)',
     init_select_nodeVersion: 'What node version you want use?',
     init_prevent_select_workspace: 'Workspace selection canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
     init_canceled: 'Project init canceled',
+    no_permission_error:
+      "n⚠️  You need 'Deploy' permissions for custom functions in both the parent and current project to execute the import",
 
     /**
      * Invoke related messages
@@ -189,6 +193,7 @@ export default {
     /**
      * Logs related messages
      */
+    logs_usage: 'COMMAND\n  8base logs [OPTIONS]\n\nDESCRIPTION\n  Shows logs for the functions or migrations',
     logs_describe: 'Shows logs for the functions or migrations.',
     logs_num_describe: 'Number of lines to display',
     logs_name_deprecation: 'Name parameter is now deprecated',
@@ -261,13 +266,11 @@ export default {
     /**
      * Generate trigger related messages
      */
-    generate_trigger_usage: '8base generate trigger <name>',
+    generate_trigger_usage: '8base generate trigger <tableName> [OPTIONS]',
+    generate_trigger_table_name: 'The name of table to make trigger for',
     generate_trigger_describe: 'Generator for a custom trigger function.',
     generate_trigger_type_describe: 'The trigger type',
     generate_trigger_operation_describe: 'Operation that invokes the trigger',
-    generate_trigger_table_name_describe: 'Trigger table name',
-    generate_trigger_invalid_type: 'Invalid trigger type, available types: `before` and `after`',
-    generate_trigger_invalid_operation: 'Invalid trigger operation, valid example: `Users.create`',
 
     /**
      * Generate webhook related messages
@@ -412,6 +415,19 @@ export default {
     environment_show_usage: 'COMMAND\n  8base environment show\n\nDESCRIPTION\n Displays current environment.',
     environment_show_describe: 'Displays currently selected environment',
     environment_show_text: 'Environment: {{-environment}}',
+
+    /**
+     * Sync status related messages
+     */
+
+    environment_sync_usage:
+      'COMMAND\n  8base environment sync\n\nDESCRIPTION\n Imports project files and custom functions from the latest deployed version of current active environment.',
+    environment_sync_describe:
+      'Imports project files and custom functions from the latest deployed version of current active environment.',
+    environment_sync_text: 'Environment: {{-environment}}',
+    environment_sync_warning:
+      'Do you really want to import project files and custom functions from the {{- environment }} ? Contents of your local project will be completely overwritten with the new data. Proceed? (Y/N)',
+    environment_sync_no_functions: '⚠️  There are no custom functions available to sync in the current environment',
 
     /**
      * Plugin related messages

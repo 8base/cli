@@ -135,6 +135,7 @@ COMMANDS
   8base environment list    Lists all the environments of current workspace.
   8base environment set     Allows you to set the environment of your current project
   8base environment show    Displays currently selected environment
+  8base environment sync    Imports project files and custom functions from the latest deployed version of current active environment.
 
 OPTIONS
   -d, --debug  Turn on debug logs  [boolean]
@@ -219,7 +220,7 @@ COMMANDS
   8base generate resolver <name>       Generator for a custom resolver function.
   8base generate scaffold <tableName>  Generates CRUD screens for a table in a specific framework (framework availability: react)
   8base generate task <name>           Generator for a custom task function.
-  8base generate trigger <name>        Generator for a custom trigger function.
+  8base generate trigger <tableName>   Generator for a custom trigger function.
   8base generate webhook <name>        Generator for a custom webhook function.
 
 OPTIONS
@@ -371,7 +372,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'invo
 DESCRIPTION
   Invokes a custom function in the production workspace.
 
-Positionals:
+POSITIONALS
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -389,7 +390,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'invo
 DESCRIPTION
   Invokes a custom function in the production workspace.
 
-Positionals:
+POSITIONALS
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -433,13 +434,13 @@ OPTIONS
 
 exports[`As a user, I can use help flag for see help information about \`[ 'logs' ]\`. 1`] = `
 "COMMAND
-  8base logs [name] [OPTIONS]
+  8base logs [OPTIONS]
 
 DESCRIPTION
-  Authenticates the command line user by letting them log into an 8base account.
+  Shows logs for the functions or migrations
 
-Positionals:
-  name  The name of the function  [string] [required]
+POSITIONALS
+  name  Name parameter is now deprecated  [deprecated] [string]
 
 OPTIONS
   -d, --debug  Turn on debug logs  [boolean]

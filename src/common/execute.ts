@@ -5,6 +5,9 @@ import { BuildController } from '../engine/controllers/buildController';
 import { Context } from './context';
 import { RequestOptions } from '../interfaces/Common';
 import { REQUEST_HEADER_IGNORED } from '../consts/request';
+import unzipper from 'unzipper';
+import * as fs from 'fs';
+import { StaticConfig } from '../config';
 
 export const executeAsync = async (
   context: Context,
@@ -69,6 +72,53 @@ export const uploadProject = async (context: Context, options?: RequestOptions):
   await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
   context.logger.debug('upload source code complete');
   return { buildName: prepareDeploy.buildName };
+};
+
+export const downloadProject = async (context: Context, path: string, options?: RequestOptions): Promise<any> => {
+  const { prepareDownload } = await context.request(GraphqlActions.prepareDownload, {}, options);
+  // Decode the base64 contenthow
+  const decodedContent = Buffer.from(prepareDownload.downloadMetaDataUrl.content, 'base64');
+
+  const workspaceConfig = context.workspaceConfig;
+
+  context.logger.debug('download succesfully, writing to file and unziping');
+  const unzipPath = `${path}/${prepareDownload.downloadMetaDataUrl.key}`;
+  fs.writeFileSync(unzipPath, decodedContent);
+  try {
+    await unzipper.Open.file(unzipPath).then(async d => {
+      await d.extract({ path: path, concurrency: 5 });
+    });
+
+    fs.unlinkSync(unzipPath);
+
+    if (fs.existsSync(`${path}/__migration_handler`)) {
+      fs.rmSync(`${path}/__migration_handler`, { recursive: true });
+    }
+
+    if (fs.existsSync(`${path}/___source_migrations`)) {
+      fs.rmSync(`${path}/___source_migrations`, { recursive: true });
+    }
+
+    if (fs.existsSync(`${path}/handler.js`)) {
+      fs.rmSync(`${path}/handler.js`, { recursive: true });
+    }
+
+    if (fs.existsSync(`${path}/.workspace.json`)) {
+      fs.rmSync(`${path}/.workspace.json`, { recursive: true });
+
+      await context.createWorkspaceConfig(
+        {
+          workspaceId: workspaceConfig.workspaceId,
+          environmentName: workspaceConfig.environmentName,
+          apiHost: workspaceConfig.apiHost,
+        },
+        context.config.rootExecutionDir,
+      );
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('🚀 ~ file: execute.ts:90 ~ downloadProject ~ error:', error);
+  }
 };
 
 export const executeDeploy = async (context: Context, deployOptions: any, options?: RequestOptions) => {

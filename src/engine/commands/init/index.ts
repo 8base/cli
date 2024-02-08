@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as _ from 'lodash';
 import yargs from 'yargs';
 import * as path from 'path';
@@ -6,6 +7,7 @@ import chalk from 'chalk';
 import tree from 'tree-node-cli';
 import validatePackageName from 'validate-npm-package-name';
 
+import { cyan, green, red, yellow, bold, blue } from 'picocolors';
 import { getFileProvider } from './providers';
 import { install } from './installer';
 import { Context } from '../../../common/context';
@@ -16,8 +18,8 @@ import { ExtensionType, SyntaxType, TriggerOperation, TriggerType } from '../../
 import { Interactive } from '../../../common/interactive';
 import { DEFAULT_ENVIRONMENT_NAME } from '../../../consts/Environment';
 import { StaticConfig } from '../../../config';
-
-const pkg = require('../../../../package.json');
+import { GraphqlActions } from '../../../consts/GraphqlActions';
+import { downloadProject } from '../../../common/execute';
 
 type InitParams = {
   name: string;
@@ -96,7 +98,7 @@ export default {
 
     if (!empty && Array.isArray(functions)) {
       functions.forEach(declaration => {
-        const [type, name] = declaration.split(':');
+        const [type, name, triggerOperation, triggerType] = declaration.split(':');
 
         if (!(type in ExtensionType)) {
           throw new Error(translations.i18n.t('init_invalid_function_type', { type }));
@@ -105,9 +107,12 @@ export default {
         if (!name) {
           throw new Error(translations.i18n.t('init_undefined_function_name'));
         }
+
+        if (type === ExtensionType.trigger && !(triggerOperation in TriggerOperation && triggerType in TriggerType)) {
+          throw new Error(translations.i18n.t('init_incorrect_trigger'));
+        }
       });
     }
-
     if (!workspaceId) {
       const workspaces = await context.getWorkspaces();
 
@@ -124,7 +129,7 @@ export default {
       if (!workspaceId) {
         throw new Error(translations.i18n.t('init_prevent_select_workspace'));
       }
-
+      context.spinner.start('Retrieving workspace information.... \n');
       const workspace = _.find(await context.getWorkspaces(), { id: workspaceId });
       if (!workspace) {
         throw new Error(context.i18n.t('workspace_with_id_doesnt_exist', { id: workspaceId }));
@@ -133,11 +138,24 @@ export default {
       host = workspace.apiHost;
     }
 
-    context.spinner.start(`Initializing new project ${chalk.hex(Colors.yellow)(project.name)}`);
+    context.logger.debug('checking current project files');
 
-    context.logger.debug('start initialize init command');
+    context.spinner.start(`Checking your project files.... \n`);
 
-    context.logger.debug(`initialize success: initialize repository: ${project.name}`);
+    const actualProjectFiles = await context
+      .request(
+        GraphqlActions.functionsList,
+        {},
+        {
+          customWorkspaceId: workspaceId,
+        },
+      )
+      .catch(e => {
+        if (e.response.errors[0].code === 'NotAuthorizedError') {
+          context.logger.info(translations.i18n.t('no_permission_error'));
+          process.exit();
+        }
+      });
 
     let files = getFileProvider().provide(context);
     context.logger.debug(`files provided count = ${files.size}`);
@@ -155,35 +173,40 @@ export default {
     context.logger.debug('try to install files');
     install(project.fullPath, files, context);
 
-    context.spinner.stop();
-
     /* Creating new project message */
     const chalkedName = chalk.hex(Colors.yellow)(project.name);
 
-    if (!silent) {
-      context.logger.info(`Building a new project called ${chalkedName} 🚀`);
-    }
+    context.spinner.stop();
+    if (actualProjectFiles && actualProjectFiles?.functionsList?.items.length > 0) {
+      context.logger.debug('downloading project files.');
+      context.spinner.start('Downloading project files.... \n');
+      await downloadProject(context, project.fullPath, {
+        customWorkspaceId: workspaceId,
+      });
+      context.logger.debug('creating workspace configuration.');
+      context.spinner.start('Creating workspace configuration.... \n');
+    } else {
+      /* Generate project files before printing tree */
+      if (!empty && Array.isArray(functions)) {
+        await Promise.all(
+          functions.map(async (declaration: string) => {
+            const [type, functionName, triggerOperation, triggerType] = declaration.split(':');
 
-    /* Generate project files before printing tree */
-    if (!empty && Array.isArray(functions)) {
-      await Promise.all(
-        functions.map(async (declaration: string) => {
-          const [type, functionName, triggerOperation, triggerType] = declaration.split(':');
-
-          await ProjectController.generateFunction(
-            context,
-            {
-              type: <ExtensionType>type,
-              name: functionName,
-              mocks,
-              syntax,
-              projectPath: name,
-              silent: true,
-            },
-            { type: <TriggerType>triggerType, operation: <TriggerOperation>triggerOperation },
-          );
-        }),
-      );
+            await ProjectController.generateFunction(
+              context,
+              {
+                type: <ExtensionType>type,
+                name: functionName,
+                mocks,
+                syntax,
+                projectPath: name,
+                silent: true,
+              },
+              { type: <TriggerType>triggerType, operation: <TriggerOperation>triggerOperation },
+            );
+          }),
+        );
+      }
     }
 
     await context.createWorkspaceConfig(
@@ -191,11 +214,11 @@ export default {
         workspaceId,
         environmentName: DEFAULT_ENVIRONMENT_NAME,
         apiHost: host || StaticConfig.apiAddress,
-        cli_Version: pkg.version,
       },
       project.fullPath,
     );
 
+    context.spinner.stop();
     if (!silent) {
       const fileTree = tree(project.fullPath, {
         allFiles: true,
@@ -207,7 +230,7 @@ export default {
       context.logger.info(fileTree.replace(/[^\n]+\n/, ''));
 
       /* Print project created message */
-      context.logger.info(`🎉 Project ${chalkedName} was successfully created 🎉`);
+      context.logger.info(`\n🎉 Project ${chalkedName} was successfully created 🎉\n`);
     }
   },
   describe: translations.i18n.t('init_describe'),
@@ -222,7 +245,7 @@ export default {
         alias: 'f',
         describe: translations.i18n.t('init_functions_describe'),
         type: 'array',
-        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:trigger'],
+        default: ['resolver:resolver', 'task:task', 'webhook:webhook', 'trigger:Users:create:before'],
       })
       .option('empty', {
         alias: 'e',

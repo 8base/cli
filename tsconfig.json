@@ -10,6 +10,7 @@
     "resolveJsonModule": true,
     "target": "ES2016",
     "noImplicitAny": true,
+    "skipLibCheck": true,
     "lib": [
       "es2017",
       "esnext.asynciterable",
@@ -26,5 +27,8 @@
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "node_modules/@types"
   ]
 }

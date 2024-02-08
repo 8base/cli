@@ -19,8 +19,9 @@ import { Translations } from './translations';
 import { Colors } from '../consts/Colors';
 import { EnvironmentInfo, IFunctionCheck, RequestOptions, SessionInfo, Workspace } from '../interfaces/Common';
 import { GraphqlActions } from '../consts/GraphqlActions';
-import { DEFAULT_ENVIRONMENT_NAME, DEFAULT_REMOTE_ADDRESS } from '../consts/Environment';
+import { DEFAULT_ENVIRONMENT_NAME } from '../consts/Environment';
 import { REQUEST_HEADER_IGNORED, REQUEST_HEADER_NOT_SET } from '../consts/request';
+import dotenv from 'dotenv';
 
 const pkg = require('../../package.json');
 
@@ -58,6 +59,7 @@ export class Context {
   spinner: any;
 
   constructor(params: any, translations: Translations) {
+    dotenv.config();
     this.logger = winston.createLogger({
       level: params.d ? 'debug' : 'info',
       format: winston.format.printf((info: TransformableInfo) => {
@@ -190,7 +192,7 @@ export class Context {
   }
 
   resolveMainServerAddress(): string {
-    return this.storage.getValue(StorageParameters.serverAddress) || DEFAULT_REMOTE_ADDRESS;
+    return process.env.HOST || StaticConfig.apiAddress;
   }
 
   get storage(): typeof UserDataStorage {
@@ -240,6 +242,12 @@ export class Context {
     }
 
     return workspaces;
+  }
+
+  async getFunctions(): Promise<any[]> {
+    const { functionsList } = await this.request(GraphqlActions.functionsList);
+
+    return functionsList.items;
   }
 
   async checkWorkspace(workspaceId: string) {
@@ -343,7 +351,6 @@ export class Context {
         },
       ]);
     }
-
     return result;
   }
 

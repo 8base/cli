@@ -81,6 +81,16 @@ export const GraphqlActions = {
       uploadBuildUrl uploadMetaDataUrl buildName
     }
   }`,
+  prepareDownload: `mutation PrepareDownload {
+    prepareDownload {
+      downloadBuildUrl
+      downloadMetaDataUrl {
+        key
+        content
+      }
+      buildName
+    }
+  }`,
   deploy: `mutation Deploy($data: DeployingBuildInput) {
     deploy(data: $data)
   }`,
@@ -148,4 +158,5 @@ export const GraphqlAsyncActions = {
 export type GraphqlAsyncActionsType =
   | typeof GraphqlAsyncActions.commit
   | typeof GraphqlAsyncActions.environmentBranch
-  | typeof GraphqlAsyncActions.backupCreate;
+  | typeof GraphqlAsyncActions.backupCreate
+  | typeof GraphqlAsyncActions.backupRestore;

@@ -72,3 +72,5 @@ lib/
 .DS_Store
 temp
 __diff_output__
+
+dist
