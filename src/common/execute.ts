@@ -135,6 +135,8 @@ export const executeDeploy = async (context: Context, deployOptions: any, option
   await Utils.upload(prepareDeploy.uploadBuildUrl, buildDir.build, context);
   context.logger.debug('upload source code complete');
 
+  deployOptions.nodeVersion = context?.projectConfig?.settings?.nodeVersion.toString();
+
   await context.request(
     GraphqlActions.deploy,
     { data: { buildName: prepareDeploy.buildName, options: deployOptions } },

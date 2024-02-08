@@ -30,6 +30,7 @@ type InitParams = {
   silent: boolean;
   workspaceId?: string;
   host: string;
+  nodeVersion: number;
 };
 
 const isEmptyDir = async (path: string): Promise<boolean> => {
@@ -46,11 +47,10 @@ export default {
   command: 'init [name]',
 
   handler: async (params: InitParams, context: Context) => {
-    const { name, functions, empty, syntax, mocks, silent } = params;
-
-    console.log(green('\n' + bold('Starting process!')) + '\n');
+    const { name, functions, empty, syntax, mocks, silent, nodeVersion } = params;
 
     let { workspaceId, host } = params;
+    let userNodeVersion;
 
     const projectName = name || path.basename(context.config.rootExecutionDir);
     const fullPath = name ? path.join(context.config.rootExecutionDir, projectName) : context.config.rootExecutionDir;
@@ -65,7 +65,23 @@ export default {
       );
     }
 
-    const project = { fullPath, name: projectName };
+    if (typeof nodeVersion === 'number' && nodeVersion !== 18 && nodeVersion !== 20) {
+      ({ userNodeVersion } = await Interactive.ask({
+        name: 'userNodeVersion',
+        type: 'select',
+        message: translations.i18n.t('invalid_node_version_set', {
+          versions: '18 and 20',
+        }),
+        choices: [
+          { title: 'Node 18x', value: 18 },
+          { title: 'Node 20x', value: 20 },
+        ],
+      }));
+    } else {
+      userNodeVersion = nodeVersion ?? 20;
+    }
+
+    const project = { fullPath, name: projectName, userNodeVersion: userNodeVersion };
 
     if (!(await isEmptyDir(project.fullPath))) {
       const { confirm } = await Interactive.ask({
@@ -142,11 +158,16 @@ export default {
       });
 
     let files = getFileProvider().provide(context);
-    
-
+    context.logger.debug(`files provided count = ${files.size}`);
     files.set(
       context.config.packageFileName,
       replaceServiceName(files.get(context.config.packageFileName), project.name),
+    );
+    context.logger.debug(`context.config.serviceConfigFileName = ${context.config.packageFileName}`);
+    context.logger.debug(`context.config.serviceConfigFileName = ${context.config.configFileName}`);
+    files.set(
+      context.config.configFileName,
+      replaceNodeVersion(files.get(context.config.configFileName), userNodeVersion),
     );
 
     context.logger.debug('try to install files');
@@ -257,6 +278,13 @@ export default {
         type: 'string',
         requiresArg: true,
       })
+      .option('nodeVersion', {
+        alias: 'n',
+        describe: translations.i18n.t('init_node_version_describe'),
+        type: 'number',
+        // default: StaticConfig.defaultNodeVersion,
+        requiresArg: true,
+      })
       .option('host', {
         describe: translations.i18n.t('init_workspace_host_describe'),
         type: 'string',
@@ -272,4 +300,8 @@ const replaceServiceName = (packageFile: string, repositoryName: string) => {
   let packageData = JSON.parse(packageFile);
   packageData.name = repositoryName;
   return JSON.stringify(packageData, null, 2);
+};
+
+const replaceNodeVersion = (ymlFile: string, nodeVersion: string) => {
+  return ymlFile.replace('[NODE_VERSION]', nodeVersion);
 };

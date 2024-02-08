@@ -84,6 +84,7 @@ export default {
       'Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.',
     deploy_plugins_describe: 'The list of plugins to deploy',
     deploy_mode_describe: 'Deploy mode',
+    deploy_forcenodeversion_describe: 'Force Node Change',
 
     /**
      * Config related messages
@@ -117,9 +118,11 @@ export default {
     init_empty_describe: 'Skip examples',
     init_workspace_id_describe: 'The workspace ID of the project',
     init_workspace_host_describe: 'The workspace host of the project',
+    init_node_version_describe: 'The node version for compile your functions default: (18 LTS)',
     init_select_workspace: 'What workspace does this project belong to?',
     init_cloning_question:
       'Would you like to import project files and custom functions from the <workspaceId> backend? Your existing 8base.yml configuration and contents of the project will be overwritten with the new data. Proceed? (Y/N)',
+    init_select_nodeVersion: 'What node version you want use?',
     init_prevent_select_workspace: 'Workspace selection canceled',
     init_confirm_not_empty_dir: 'Selected directory is not empty. Are you sure you want to continue?',
     init_canceled: 'Project init canceled',
@@ -201,6 +204,10 @@ export default {
     logs_tail_in_progress: 'Establishing connection with server...',
     logs_tail_failed: 'Failed to establish connection... Please try again in a few minutes.',
     logs_tail_success: 'Connection established. Tailing logs...',
+
+    logs_name_describe: 'The name of the function',
+    logs_usage:
+      'COMMAND\n  8base logs [name] [OPTIONS]\n\nDESCRIPTION\n  Authenticates the command line user by letting them log into an 8base account.',
 
     /**
      * Generate related messages
@@ -452,6 +459,23 @@ export default {
 
     workspace_with_id_doesnt_exist:
       'Something went wrong, cannot get workspace with id: {{- id}}. Please contact support@8base.com if the error persists.',
+
+    no_node_version_set: '⚠️ No node version set',
+    invalid_node_version_set:
+      '⚠️ The value you have provided for the nodeVersion parameter is invalid. Currently accepted values are {{- versions }}',
+    deploy_node_version_warning:
+      '⚠️ Custom functions cannot be deployed without first specifying a version of NodeJS to use. Add the nodeVersion parameter under settings in the 8base.yml file',
+    local_node_version_mismatch:
+      '⚠️  The NodeJS version specified in the 8base.yml file {{- projectversion }} does not match your local NodeJS version {{- localversion }}. It is recommended that you change your local NodeJS version to match the NodeJS version functions will be deployed in. A difference in NodeJS versions could result in unexpected results.',
+    init_node_version_required:
+      '⚠️  Custom functions cannot be deployed without first specifying a version of NodeJS to use. Add the nodeVersion parameter under settings in the 8base.yml file. Currently accepted values are 14. 18 and 20',
+    deploy_node_version_warning_message:
+      '⚠️  Custom functions are being deployed using a new version of NodeJS. Make sure to test your functions extensively as a change in NodeJS versions could affect the code in your function.',
+    confirm_deploy_node_version_warning_message:
+      '⚠️  Custom functions are being deployed using a new version of NodeJS. Make sure to test your functions extensively as a change in NodeJS versions could affect the code in your function. Do you still want to deploy your functions with the new NodeJS Version (y/N)?',
+    deploy_cancelled: 'Deploy cancelled',
+    nodeversion_deprecation_advice:
+      '\nWARNING: Node.js 14.x End-of-Life Notice ⚠️ Starting May 1, 2024, the AWS SDK for JavaScript (v3) will no longer actively support Node.js 14.x, which reached its end-of-life on April 30, 2023. Please consider upgrading your Node.js version to a supported and actively maintained release to ensure compatibility and security updates for the AWS SDK. Continuing to use Node.js 14.x beyond this date might result in compatibility issues and potential security vulnerabilities.\nFor more information on supported Node.js versions, refer to the Node.js release schedule and AWS SDK documentation.\nThank you for your attention to this matter.\n',
   },
 
   /**

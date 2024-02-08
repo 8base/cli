@@ -22,6 +22,15 @@ type InvokeLocalParams = {
 const getLocalFunction = async (functionName: string, context: Context) => {
   const { compiledFiles } = await BuildController.compile(context);
 
+  if (!Utils.currentLocalNodeVersionIsProjectVersion(context)) {
+    context.logger.info(
+      context.i18n.t('local_node_version_mismatch', {
+        projectversion: context.projectConfig.settings.nodeVersion,
+        localversion: process.version.slice(1, 3),
+      }),
+    );
+  }
+
   const functionInfo = context.project.extensions.functions.find(r => r.name === functionName);
 
   if (!functionInfo) {

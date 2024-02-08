@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "8base Custom Logic",
   "dependencies": {
+    "8base-cli-types": "^0.3.3",
     "@8base/functions-types": "^2.0.1",
     "graphql-request": "^6.1.0"
   }

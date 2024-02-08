@@ -22,6 +22,14 @@ export const GraphqlActions = {
       count
     }
   }`,
+  versionCheck: `query {
+    system {
+      functionsVersionCheck {
+          version
+      }
+    }
+  }
+  `,
   environmentsList: `
     query EnvironmentsList {
       system {
@@ -45,15 +53,17 @@ export const GraphqlActions = {
       responseData
     }
   }`,
-  logs: `query Logs($limit: Int, $startTime: DateTime, $resource: String) {
-    system {
-      logs: logsListFiltered(limit: $limit, startTime: $startTime, resource: $resource) {
-        items {
-          message
-          timestamp
-        }
-      }
-    }
+  logs: `query Logs(
+    $functionName: String!,
+    $limit: Int,
+    $startTime: DateTime,
+    $endTime: DateTime){
+      logs (
+        functionName:$functionName
+        limit: $limit
+        startTime: $startTime
+        endTime: $endTime
+      )
   }`,
   asyncSessionStatus: `
     query status($sessionId: String!)  {
@@ -129,8 +139,8 @@ export const GraphqlAsyncActions = {
       system { async: environmentDeleteAsync(environmentName: $environmentName) { sessionId } }
     }`,
   commit: `
-    mutation CommitMigration($mode: SystemCiCommitMode!, $build:String, $migrationNames:[String]) {
-      system { async: ciCommit(mode:$mode build:$build migrationNames:$migrationNames) { sessionId } }
+    mutation CommitMigration($mode: SystemCiCommitMode!, $build:String, $migrationNames:[String], $nodeVersion:String) {
+      system { async: ciCommit(mode:$mode build:$build migrationNames:$migrationNames, nodeVersion:$nodeVersion) { sessionId } }
     }
   `,
   backupCreate: `

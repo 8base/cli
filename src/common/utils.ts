@@ -2,7 +2,7 @@ import * as path from 'path';
 import 'isomorphic-fetch';
 import * as fs from 'fs';
 import * as _ from 'lodash';
-import { Context } from './context';
+import { Context, ProjectConfig } from './context';
 import { Readable } from 'stream';
 import { CommandController } from '../engine/controllers/commandController';
 import { translations } from './translations';
@@ -10,6 +10,7 @@ import archiver from 'archiver';
 import MemoryStream from 'memorystream';
 import axios from 'axios';
 import { HttpError } from '../errors';
+import * as yaml from 'js-yaml';
 
 export namespace Utils {
   export const undefault = (m: any) => {
@@ -165,5 +166,36 @@ export namespace Utils {
     }
 
     return response;
+  };
+
+  export const validNodeVersions = ['14', '18', '20'];
+
+  export const validateExistNodeVersion = (context: Context, isOld?: boolean) => {
+    if (validNodeVersions.includes(context.projectConfig?.settings?.nodeVersion?.toString() as any)) {
+      return !!context.projectConfig?.settings?.nodeVersion;
+    } else {
+      throw new Error(
+        translations.i18n.t(translations.i18n.t('invalid_node_version_set'), {
+          versions: isOld ? '14, 18 and 20' : '18, 20',
+        }),
+      );
+    }
+  };
+
+  export const validateNodeVersion = (context: Context) => {
+    return context.projectConfig?.settings?.nodeVersion;
+  };
+
+  export const currentLocalNodeVersionValid = (context: Context) => {
+    return validateExistNodeVersion ? process.version.slice(1) > context.projectConfig?.settings?.nodeVersion : false;
+  };
+
+  export const currentLocalNodeVersionIsProjectVersion = (context: Context) => {
+    return process.version.slice(1, 3) == context.projectConfig?.settings?.nodeVersion;
+  };
+
+  export const currentIsVersionValid = (context: Context) => {
+    const yamlNodeVersion = context.projectConfig?.settings?.nodeVersion;
+    return validateExistNodeVersion ? yamlNodeVersion === '18' || yamlNodeVersion === '20' : false;
   };
 }

@@ -17,7 +17,11 @@ export default {
 
   handler: async (params: MigrationStatusParams, context: Context) => {
     await ProjectConfigurationState.expectHasProject(context);
-    await executeDeploy(context, { mode: DeployModeType.migrations }, { customEnvironment: params.environment });
+    await executeDeploy(
+      context,
+      { mode: DeployModeType.migrations },
+      { customEnvironment: params.environment, nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString() },
+    );
     context.spinner.start(context.i18n.t('migration_status_in_progress'));
     const { system } = await context.request(
       GraphqlActions.migrationStatus,

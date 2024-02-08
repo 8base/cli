@@ -34,7 +34,11 @@ export default {
 
     try {
       resultResponse = await context.request(GraphqlActions.invoke, {
-        data: { functionName: params.name, inputArgs: args },
+        data: {
+          functionName: params.name,
+          inputArgs: args,
+          nodeVersion: context?.projectConfig?.settings?.nodeVersion.toString(),
+        },
       });
     } catch (e) {
       resultError = e;

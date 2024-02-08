@@ -7,6 +7,11 @@ import chalk from 'chalk';
 import { StaticConfig } from './config';
 import { Utils } from './common/utils';
 import { translations, Translations } from './common/translations';
+import { Context, ProjectConfig } from './common/context';
+import * as yaml from 'js-yaml';
+import * as fs from 'fs-extra';
+
+import * as path from 'path';
 
 const pkg = require('../package.json');
 
@@ -70,6 +75,13 @@ translations
       if (pkg.version !== last && process.env.SKIP_VERSION_CHECK !== 'true') {
         // eslint-disable-next-line no-console
         console.log(chalk.yellow(translations.i18n.t('8base_new_version', { last })));
+
+        const pathToYmlConfig = path.join(process.cwd(), '8base.yml');
+        const loadProjectPackage = <ProjectConfig>yaml.load(fs.readFileSync(pathToYmlConfig, 'utf8'));
+        if (parseInt(loadProjectPackage.settings.nodeVersion) <= 14 && process.env.SKIP_VERSION_CHECK !== 'true') {
+          // eslint-disable-next-line no-console
+          console.log(chalk.yellow(translations.i18n.t('nodeversion_deprecation_advice')));
+        }
       }
     } catch (e) {}
 

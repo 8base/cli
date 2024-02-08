@@ -102,10 +102,11 @@ DESCRIPTION
   Deploys project described in 8base.yml config file from your current local directory to 8base server. You must be in the root directory of your local 8base project to use this command.
 
 OPTIONS
-  -d, --debug    Turn on debug logs  [boolean]
-  -h, --help     Show help  [boolean]
-  -p, --plugins  The list of plugins to deploy  [array]
-  -m, --mode     Deploy mode  [string] [choices: "FULL", "ONLY_PLUGINS", "ONLY_PROJECT", "MIGRATIONS"] [default: "ONLY_PROJECT"]"
+  -d, --debug            Turn on debug logs  [boolean]
+  -h, --help             Show help  [boolean]
+  -p, --plugins          The list of plugins to deploy  [array]
+  -m, --mode             Deploy mode  [string] [choices: "FULL", "ONLY_PLUGINS", "ONLY_PROJECT", "MIGRATIONS"] [default: "ONLY_PROJECT"]
+  -f, --forceNodeChange  Force Node Change  [boolean]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'describe' ]\`. 1`] = `
@@ -115,7 +116,7 @@ exports[`As a user, I can use help flag for see help information about \`[ 'desc
 DESCRIPTION
   Describes your 8base project’s functions and their types through 8base.yml file.
 
-POSITIONALS
+Positionals:
   name  The function name to describe  [string]
 
 OPTIONS
@@ -230,7 +231,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'app' ]\`. 1`] = `
 "8base generate app <name>
 
-POSITIONALS
+Positionals:
   name  The name of the app  [string] [required]
 
 OPTIONS
@@ -241,7 +242,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'mock' ]\`. 1`] = `
 "Generator for a mock for the function.
 
-POSITIONALS
+Positionals:
   name  The name of the function  [string] [required]
 
 OPTIONS
@@ -254,7 +255,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'resolver' ]\`. 1`] = `
 "8base generate resolver <name> [OPTIONS]
 
-POSITIONALS
+Positionals:
   name  The name of the resolver  [string] [required]
 
 OPTIONS
@@ -268,7 +269,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'scaffold' ]\`. 1`] = `
 "8base generate scaffold <tableName> [OPTIONS]
 
-POSITIONALS
+Positionals:
   tableName  The name of the table  [string] [required]
 
 OPTIONS
@@ -280,7 +281,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'task' ]\`. 1`] = `
 "8base generate task <name> [OPTIONS]
 
-POSITIONALS
+Positionals:
   name  The name of the task  [string] [required]
 
 OPTIONS
@@ -293,16 +294,13 @@ OPTIONS
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'trigger' ]\`. 1`] = `
-"8base generate trigger <tableName> [OPTIONS]
-
-POSITIONALS
-  tableName  The name of table to make trigger for  [string] [required]
+"8base generate trigger <name>
 
 OPTIONS
   -d, --debug      Turn on debug logs  [boolean]
   -h, --help       Show help  [boolean]
-  -t, --type       The trigger type  [string] [choices: "before", "after"] [default: "before"]
-  -o, --operation  Operation that invokes the trigger  [string] [choices: "create", "update", "delete"] [default: "create"]
+  -t, --type       The trigger type  [string] [choices: "before", "after"]
+  -o, --operation  Operation that invokes the trigger  [string]
   -x, --mocks      Included mocks dir and files  [boolean] [default: true]
   -s, --syntax     Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
       --silent     Disable printing extra info to the console  [boolean] [default: false]"
@@ -311,7 +309,7 @@ OPTIONS
 exports[`As a user, I can use help flag for see help information about \`[ 'generate', 'webhook' ]\`. 1`] = `
 "8base generate webhook <name> [OPTIONS]
 
-POSITIONALS
+Positionals:
   name  The name of the webhook  [string] [required]
 
 OPTIONS
@@ -347,18 +345,19 @@ exports[`As a user, I can use help flag for see help information about \`[ 'init
 DESCRIPTION
   Initializes a new project with example directory structure and custom functions.
 
-POSITIONALS
+Positionals:
   name  The name of the project  [string]
 
 OPTIONS
   -d, --debug        Turn on debug logs  [boolean]
   -h, --help         Show help  [boolean]
-  -f, --functions    List of functions  [array] [default: ["resolver:resolver","task:task","webhook:webhook","trigger:Users:create:before"]]
+  -f, --functions    List of functions  [array] [default: ["resolver:resolver","task:task","webhook:webhook","trigger:trigger"]]
   -e, --empty        Skip examples  [boolean] [default: false]
   -x, --mocks        Included mocks dir and files  [boolean] [default: true]
   -s, --syntax       Syntax for the generated file  [string] [choices: "js", "ts"] [default: "ts"]
       --silent       Disable printing extra info to the console  [boolean] [default: false]
   -w, --workspaceId  The workspace ID of the project  [string]
+  -n, --nodeVersion  The node version for compile your functions default: (18 LTS)  [number]
       --host         The workspace host of the project  [string] [default: "https://api.8base.com"]
 
 EXAMPLES
@@ -444,12 +443,10 @@ POSITIONALS
   name  Name parameter is now deprecated  [deprecated] [string]
 
 OPTIONS
-  -d, --debug     Turn on debug logs  [boolean]
-  -h, --help      Show help  [boolean]
-  -n, --num       Number of lines to display  [number] [default: 10]
-  -t, --tail      Continually stream logs  [boolean]
-  -r, --resource  environment:extensions - deployed custom functions logs
-                  system:ci:migration - migration process logs  [string] [choices: "environment:extensions", "system:ci:commit"] [default: "environment:extensions"]"
+  -d, --debug  Turn on debug logs  [boolean]
+  -h, --help   Show help  [boolean]
+  -n, --num    Number of lines to display  [number] [default: 10]
+  -t, --tail   Continually stream logs  [boolean]"
 `;
 
 exports[`As a user, I can use help flag for see help information about \`[ 'migration' ]\`. 1`] = `

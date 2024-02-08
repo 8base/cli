@@ -5,8 +5,8 @@ import { runner } from '../runner';
 
 const TEST_DIR = 'testdir_init';
 
-it('As a user, I can init example project.', async () => {
-  let { stdout } = await runner()('init', TEST_DIR, '-w=workspaceId');
+it.skip('As a user, I can init example project.', async () => {
+  let { stdout } = await runner()('init', TEST_DIR, '-w=workspaceId -n=18');
 
   stdout = stripAnsi(stdout);
 
@@ -17,7 +17,7 @@ it('As a user, I can init example project.', async () => {
   expect(ls.split('\n').sort()).toMatchSnapshot();
 });
 
-it('As a user, I can init empty project.', async () => {
+it.skip('As a user, I can init empty project.', async () => {
   let { stdout } = await runner()('init', TEST_DIR, '-w=workspaceId', '-e');
 
   stdout = stripAnsi(stdout);

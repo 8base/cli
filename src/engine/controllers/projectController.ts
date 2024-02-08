@@ -248,7 +248,7 @@ export class ProjectController {
   }
 
   private static loadExtensions(config: ProjectConfig, projectPath?: string): ExtensionsContainer {
-    return _.reduce(
+    return _.reduce<any, ExtensionsContainer>(
       config.functions,
       (extensions, data, functionName) => {
         FunctionUtils.validateFunctionDefinition(data, functionName, projectPath);

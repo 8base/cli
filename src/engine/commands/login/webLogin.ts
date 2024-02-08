@@ -19,12 +19,12 @@ export const webLogin = async (params: { w: string }, context: Context): Promise
   let res: any = null;
   while (--retryCount > 0) {
     context.logger.debug(`try to fetch session ${session}`);
+    context.logger.debug(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`);
     try {
       const response = await Utils.checkHttpResponse(
-        fetch(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`) as any,
+        fetch(`${Utils.trimLastSlash(context.resolveMainServerAddress())}/loginSessionGet/${session}`),
       );
       res = await response.json();
-      context.logger.debug(`session result: ${JSON.stringify(res)}`);
     } catch (e) {
       if (e.statusCode === 404) {
         context.logger.debug(`session not present`);

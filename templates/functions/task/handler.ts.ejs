@@ -28,12 +28,12 @@
  *    8base generate mock <%= functionName %> -m [MOCK_FILE_NAME]
  */
 
-import { FunctionContext, TaskFunctionEvent, TaskResponse, TaskFunction } from "@8base/functions-types";
+import { FunctionContext, TaskFunctionEvent, TaskResponse } from "@8base/functions-types";
 
 type TaskInput = TaskFunctionEvent<{ foo: string }>;
 type TaskOutput = TaskResponse<{ result: string }>;
 
-const task: TaskFunction = async (event: TaskInput, ctx: FunctionContext): TaskOutput => {
+const task = async (event: TaskInput, ctx: FunctionContext): TaskOutput => {
   return {
     result: `Task received: ${event.foo}`,
   };
